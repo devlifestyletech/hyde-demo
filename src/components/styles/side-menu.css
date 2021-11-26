@@ -1,0 +1,31 @@
+.side-menu {
+	text-align: center;
+	padding-top: 80px;
+	background-color: rgba(32, 38, 58, 1);
+	border-top-right-radius: 50px;
+	border-bottom-right-radius: 50px;
+	height: 100%;
+}
+.menu-group {
+	margin-top: 65px;
+	margin-bottom: 65px;
+	text-align: left;
+}
+
+.group-name {
+	color: rgba(255, 255, 255, 1);
+	font-size: 18px;
+	padding-left: 24px;
+}
+.menu-group .ant-menu-inline {
+	border: 0;
+	color: rgba(255, 255, 255, 1);
+}
+.menu-group .ant-menu-sub {
+	border: 0;
+	color: rgba(255, 255, 255, 1);
+	border-left: 5px solid rgba(216, 170, 129, 1);
+}
+.menu-group .ant-menu-submenu-arrow {
+	color: rgba(255, 255, 255, 1);
+}

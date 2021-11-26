@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from "react";
+import MainLayout from "./layout/MainLayout";
+import SignInPage from "./apps/signin.page";
+import Loading from "./layout/Loading";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [session, setSession] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+	if (loading) {
+		return <Loading />;
+	}
+	if (session) {
+		return <MainLayout />;
+	}
+	return (
+		<SignInPage
+			fakeAuth={() => {
+				setLoading(true);
+				setTimeout(() => {
+					setSession(true);
+					setLoading(false);
+				}, 500);
+			}}
+		/>
+	);
 }
 
 export default App;

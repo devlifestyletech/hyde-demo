@@ -1,0 +1,12 @@
+.heading {
+	height: 90px;
+	border-bottom: 2px solid rgba(112, 111, 108, 1);
+}
+.title {
+	font-size: 48px;
+	font-weight: bold;
+}
+.bell {
+	margin-top: 20px;
+	float: right;
+}

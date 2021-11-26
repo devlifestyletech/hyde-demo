@@ -1,0 +1,31 @@
+.bg {
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(32, 38, 58, 1);
+}
+.hyde-logo {
+	width: auto;
+	text-align: center;
+	padding-top: 150px;
+}
+.login-form {
+	width: 580px;
+	margin: 100px auto;
+}
+.login-form .ant-form-item-label > label {
+	color: rgba(255, 255, 255, 1);
+	font-size: 22px;
+}
+.login-form .ant-input-affix-wrapper {
+	border-radius: 5px;
+}
+.login-form .ant-btn {
+	margin-top: 50px;
+	background-color: rgba(216, 170, 129, 1);
+	border-radius: 5px;
+	border: 1px solid rgba(216, 170, 129, 1);
+	color: rgba(255, 255, 255, 1);
+	font-size: 24px;
+	width: 345px;
+	height: 55px;
+}

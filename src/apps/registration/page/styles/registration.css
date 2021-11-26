@@ -1,0 +1,39 @@
+.regis-helper {
+	width: 100%;
+	margin-top: 15px;
+}
+.regis-helper .ant-input-affix-wrapper {
+	float: left;
+	width: 400px;
+	border-radius: 30px;
+}
+.regis-helper .ant-btn {
+	float: right;
+	background: rgba(216, 170, 129, 1);
+	color: rgba(255, 255, 255, 1);
+}
+.regis-table {
+	margin-top: 20px;
+}
+.regis-table .ant-tabs-tab {
+	justify-content: center;
+	width: 100px;
+}
+.regis-table .ant-tabs-tab-active .ant-tabs-tab-btn {
+	color: rgba(0, 0, 0, 1);
+	font-weight: bold;
+}
+.regis-table .ant-tabs-ink-bar {
+	border-bottom: 5px solid rgba(216, 170, 129, 1);
+	background: rgba(216, 170, 129, 1);
+}
+.regis-table .ant-table table {
+	border-radius: 10px 10px 0px 0px;
+}
+.regis-table .ant-table-thead > tr > th {
+	background-color: rgba(211, 211, 211, 1);
+}
+.regis-table .ant-table-container {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
