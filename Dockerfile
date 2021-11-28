@@ -1,17 +1,18 @@
-# base image
-FROM node:14.18
+# 1st Stage
+FROM node:10.15.1 AS builder
 
-# set working directory
-RUN mkdir /usr/src/app
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install --ignore-platform
+COPY . .
+RUN yarn build
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+# 2nd Stage
+FROM nginx:1.14.2-alpine
 
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install react-scripts -g
+COPY --from=0 /usr/src/app/build /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
 
-# start app
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
