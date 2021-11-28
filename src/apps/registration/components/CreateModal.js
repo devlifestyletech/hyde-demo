@@ -107,10 +107,17 @@ function CreateModal({ visible, onCancel }) {
 								<Input placeholder='Please input address' />
 							</Form.Item>
 							<Form.Item label='Resident Class'>
-								<Input placeholder='Please select resident class' />
+								<Select placeholder="Please select resident class">
+									<Select.Option value="privilege">rivilege</Select.Option>
+									<Select.Option value="general">General</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='Resident Type'>
-								<Input placeholder='Please select resident type' />
+								<Select placeholder="Please select resident type">
+									<Select.Option value="Owner">Owner</Select.Option>
+									<Select.Option value="Inhabitant">Inhabitant</Select.Option>
+									<Select.Option value="Tenant">Tenant</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='Telephone Number'>
 								<Input placeholder='Please input phone number' />
@@ -119,7 +126,10 @@ function CreateModal({ visible, onCancel }) {
 								<Input placeholder='Please input email' />
 							</Form.Item>
 							<Form.Item label='Vehicle Type'>
-								<Input placeholder='Please select vehicle type' />
+								<Select placeholder="Please select vehicle type">
+									<Select.Option value="car">Car</Select.Option>
+									<Select.Option value="bike">Bike</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='License Plate'>
 								<Input placeholder='Please input license plate' />
