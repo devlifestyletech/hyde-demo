@@ -125,10 +125,17 @@ export default function EditModal({ user, visible, onCancel }) {
 								<Input />
 							</Form.Item>
 							<Form.Item label='Resident Class' name='userClass'>
-								<Input />
+								<Select placeholder='Please select resident class'>
+									<Select.Option value='privilege'>Privilege</Select.Option>
+									<Select.Option value='general'>General</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='Resident Type' name='type'>
-								<Input />
+								<Select placeholder='Please select resident type'>
+									<Select.Option value='Owner'>Owner</Select.Option>
+									<Select.Option value='Inhabitant'>Inhabitant</Select.Option>
+									<Select.Option value='Tenant'>Tenant</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='Telephone Number' name='tel'>
 								<Input />
@@ -137,7 +144,10 @@ export default function EditModal({ user, visible, onCancel }) {
 								<Input />
 							</Form.Item>
 							<Form.Item label='Vehicle Type' name='vehicleType'>
-								<Input />
+								<Select placeholder='Please select vehicle type'>
+									<Select.Option value='car'>Car</Select.Option>
+									<Select.Option value='bike'>Bike</Select.Option>
+								</Select>
 							</Form.Item>
 							<Form.Item label='License Plate' name='licensePlate'>
 								<Input />

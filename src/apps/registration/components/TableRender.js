@@ -7,7 +7,7 @@ import editIcon from "../assets/icons/edit.svg";
 import trashIcon from "../assets/icons/trash.svg";
 import EditModal from "./EditModal";
 
-export default function TableRender({ data }) {
+export default function TableRender({ data, key }) {
 	const [EditModalVisibility, setEditModalVisibility] = useState(false);
 	const [handleId, setHandleId] = useState(null);
 
@@ -51,20 +51,17 @@ export default function TableRender({ data }) {
 		{
 			title: "Owner",
 			dataIndex: "fullname",
-			key: "index",
-			sorter: (a, b) => a.fullname - b.fullname
+			key: "index"
 		},
 		{
 			title: "Nationality",
 			dataIndex: "nationality",
-			key: "index",
-			sorter: (a, b) => a.nationality - b.nationality
+			key: "index"
 		},
 		{
 			title: "Type",
 			dataIndex: "type",
-			key: "index",
-			sorter: (a, b) => a.type - b.type
+			key: "index"
 		},
 		{
 			title: "Tel",
@@ -74,8 +71,7 @@ export default function TableRender({ data }) {
 		{
 			title: "E-mail",
 			dataIndex: "email",
-			key: "index",
-			sorter: (a, b) => a.email - b.email
+			key: "index"
 		},
 		{
 			title: "Action",
@@ -91,9 +87,14 @@ export default function TableRender({ data }) {
 		}
 	];
 	return (
-		<div>
+		<div key={key}>
 			<Table dataSource={data} columns={columns} />
-			<EditModal visible={EditModalVisibility} onCancel={() => setEditModalVisibility(false)} user={data.find((user) => user.id === handleId)} />
+			<EditModal
+				key={key}
+				visible={EditModalVisibility}
+				onCancel={() => setEditModalVisibility(false)}
+				user={data.find((user) => user.id === handleId)}
+			/>
 		</div>
 	);
 }
