@@ -2,6 +2,7 @@ import React from "react";
 import { Menu } from "antd";
 import "./styles/side-menu.css";
 import MenuLogo from "./assets/menu-logo.svg";
+import nearbyImg from "./assets/nearby.svg";
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import groupIcon from "./assets/group.svg";
@@ -36,6 +37,16 @@ function SideMenu() {
 								<Link to='/members/registration'>Registration</Link>
 							</Menu.Item>
 						</SubMenu>
+						<SubMenu
+          className="sub-menu"
+          key="nearby-service"
+          icon={<img src={nearbyImg} alt="nearby" />}
+          title="Nearby Service"
+        >
+          <Menu.Item key="3" className="menu-item">
+            <Link to="/nearby">Service Lists</Link>
+          </Menu.Item>
+        </SubMenu>
 					</Menu>
 				</div>
 			</div>

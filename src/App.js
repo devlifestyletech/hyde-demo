@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import MainLayout from "./layout/MainLayout";
 import SignInPage from "./apps/signin.page";
 import Loading from "./layout/Loading";
+import "./App.less";
+
 function App() {
 	const [session, setSession] = useState(false);
 	const [loading, setLoading] = useState(false);

@@ -1,0 +1,30 @@
+.inputImage {
+  border: 1px solid #d9d9d9;
+  border-radius: 20px;
+  height: 40vh;
+  align-items: center;
+}
+
+.nearbyInputImage {
+  border: 1px solid #d9d9d9;
+  border-radius: 20px;
+  height: 20vh;
+  align-items: center;
+}
+
+.child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nearbyChild {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
