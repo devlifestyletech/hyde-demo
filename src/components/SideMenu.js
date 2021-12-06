@@ -3,6 +3,8 @@ import { Menu } from "antd";
 import "./styles/side-menu.css";
 import MenuLogo from "./assets/menu-logo.svg";
 import nearbyImg from "./assets/nearby.svg";
+import announcement from "./assets/announcement.svg";
+
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import groupIcon from "./assets/group.svg";
@@ -38,15 +40,25 @@ function SideMenu() {
 							</Menu.Item>
 						</SubMenu>
 						<SubMenu
-          className="sub-menu"
-          key="nearby-service"
-          icon={<img src={nearbyImg} alt="nearby" />}
-          title="Nearby Service"
-        >
-          <Menu.Item key="3" className="menu-item">
-            <Link to="/nearby">Service Lists</Link>
-          </Menu.Item>
-        </SubMenu>
+							className="sub-menu"
+							key="nearby-service"
+							icon={<img src={nearbyImg} alt="nearby" />}
+							title="Nearby Service"
+						>
+							<Menu.Item key="3" className="menu-item">
+								<Link to="/nearby">Service Lists</Link>
+							</Menu.Item>
+						</SubMenu>
+						<SubMenu
+							className="sub-menu"
+							key="announcement"
+							icon={<img src={announcement} alt="announcement" />}
+							title="Announcement"
+						>
+							<Menu.Item key="4" className="menu-item">
+								<Link to="/announcement">Announcement Lists</Link>
+							</Menu.Item>
+						</SubMenu>
 					</Menu>
 				</div>
 			</div>

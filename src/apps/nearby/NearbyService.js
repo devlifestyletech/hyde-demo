@@ -14,7 +14,7 @@ import {
   Form,
   Select,
   Col,
-  Row,
+  Row, Divider,
 } from "antd";
 import {
   PlusOutlined,
@@ -22,6 +22,10 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+
+import editIcon from "./assets/icons/edit.svg";
+import trashIcon from "./assets/icons/trash.svg";
+import noImg from "./assets/images/noImg.jpg";
 
 import "./style/nearbyStyle.css";
 
@@ -124,6 +128,7 @@ function NearbyService() {
       sorter: (a, b) => (a.type > b.type ? 1 : -1),
     },
     {
+      width: 100,
       title: "operation",
       dataIndex: "operation",
       render: (_, record) => (
@@ -134,11 +139,11 @@ function NearbyService() {
               title="Sure to Edit?"
               onConfirm={() => handleEdit(record)}
             >
-              <img src="/main/icons/edit.png" alt="Edit" />
+              <img src={editIcon} alt="Edit" />
             </Popconfirm>
           </Col>
           <Col>
-            <img src="/main/icons/sep.png" alt="Separate" />
+            <Divider type='vertical' style={{ height: 30 }} />
           </Col>
           <Col>
             <Popconfirm
@@ -146,7 +151,7 @@ function NearbyService() {
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.key)}
             >
-              <img src="/main/icons/trash.png" alt="Trash" />
+              <img src={trashIcon} alt="Trash" />
             </Popconfirm>
           </Col>
         </Row>
@@ -171,7 +176,7 @@ function NearbyService() {
             picture:
               item["place_image"].length > 0
                 ? `${process.env.REACT_APP_IMG_URL}${item["place_image"][0]["url"]}`
-                : "/main/images/artani-logo.png",
+                : noImg,
             name: item["place_name"],
             location: item["address"],
             tel: item["telephone_number"],
@@ -396,7 +401,7 @@ function NearbyService() {
               address: `${address}`,
               latitude: `${latitude}`,
               longitude: `${longitude}`,
-            },headers
+            }, headers
           )
           .then((result) => {
             fetchData();
@@ -426,7 +431,7 @@ function NearbyService() {
                   address: `${address}`,
                   latitude: `${latitude}`,
                   longitude: `${longitude}`,
-                },headers
+                }, headers
               )
               .then((result) => {
                 fetchData();
@@ -774,7 +779,7 @@ function NearbyService() {
                 address: `${address}`,
                 latitude: `${latitude}`,
                 longitude: `${longitude}`,
-              },headers
+              }, headers
             )
             .then((res) => {
               fetchData();
@@ -981,11 +986,12 @@ function NearbyService() {
           Add New Service
         </Button>
       </div>
-      <Tabs defaultActiveKey="All Service" onChange={callback}>
-        {types.map((type, index) => (
-          <TabPane tab={type} key={index} />
-        ))}
-      </Tabs>
+      <div className='regis-table'>
+        <Tabs defaultActiveKey="All Service" onChange={callback}>
+          {types.map((type, index) => (
+            <TabPane tab={type} key={index} />
+          ))}
+        </Tabs></div>
       <Search
         placeholder="Search by name"
         allowClear
