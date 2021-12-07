@@ -14,7 +14,9 @@ import {
   Form,
   Select,
   Col,
-  Row, Divider,
+  Row,
+  Divider,
+  Spin
 } from "antd";
 import {
   PlusOutlined,
@@ -964,8 +966,15 @@ function NearbyService() {
     );
   });
 
-  if (loadError) return "Loading Map";
-  if (!isLoaded) return "Loading Map";
+  const Loading = () => {
+    return <div style={{ width: "80vw", height: "100vh", textAlign: "center", paddingTop: 300 }}>
+      <Spin size='large' />
+      <p style={{ color: "#20263A", fontSize: 30 }}>Loading map...</p>
+    </div>
+  }
+
+  if (loadError) return <Loading />;
+  if (!isLoaded) return <Loading />;
 
   return (
     <>
