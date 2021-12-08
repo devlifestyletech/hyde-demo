@@ -14,7 +14,7 @@ import {
   Row,
   DatePicker,
   TimePicker,
-  Popconfirm, 
+  Popconfirm,
   Divider
 } from "antd";
 import {
@@ -50,6 +50,7 @@ function Announcement() {
   const { Option } = Select;
   const { MonthPicker } = DatePicker;
   const [data, setData] = useState([]);
+  const [month, setMonth] = useState();
   const [searchName, setSearchName] = useState("");
   const [searchTag, setSearchTag] = useState("All Post");
   const [newVisible, setNewVisible] = useState(false);
@@ -90,25 +91,28 @@ function Announcement() {
 
   let columns = [
     {
+      // width: '2vw',
       title: "No.",
       dataIndex: "number",
       key: "number",
+      sorter: (a, b) => a.number - b.number,
     },
     {
+      // width: '10vw',
       title: "Picture",
       dataIndex: "picture",
       key: "picture",
       render: (text) => (
         <>
-          <Image width={200} src={text} />
+          <Image width={200} height={100} src={text} />
         </>
       ),
     },
     {
+      // width: '30vw',
       title: "Title",
       dataIndex: "title",
       key: "title",
-      sorter: (a, b) => (a.name > b.name ? 1 : -1),
     },
     {
       hidden: true,
@@ -117,9 +121,11 @@ function Announcement() {
       key: "detail",
     },
     {
+      width: 200,
       title: "Post Status",
       dataIndex: "post_status",
       key: "post_status",
+      sorter: (a, b) => (a.post_status > b.post_status ? 1 : -1),
     },
     {
       width: 200,
@@ -127,11 +133,10 @@ function Announcement() {
       dataIndex: "published",
       key: "published",
       // fixed: "left",
-      sorter: (a, b) => (a.type > b.type ? 1 : -1),
     },
     {
-      width:100,
-      title: "operation",
+      width: 100,
+      title: "Action",
       dataIndex: "operation",
       render: (_, record) => (
         <Row justify="space-between">
@@ -152,7 +157,7 @@ function Announcement() {
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.key)}
             >
-              <img src={trashIcon}alt="Trash" />
+              <img src={trashIcon} alt="Trash" />
             </Popconfirm>
           </Col>
         </Row>
@@ -181,13 +186,13 @@ function Announcement() {
   };
 
   useEffect(() => {
-    console.log('REACT_APP_GOOGLE_MAPS_KEY')
-    console.log(process.env.REACT_APP_GOOGLE_MAPS_KEY)
-    console.log(process.env.REACT_APP_SECRET_KEY)
-    console.log(process.env.REACT_APP_API_URL)
-    console.log(process.env.REACT_APP_IMG_URL)
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(month);
+    data.forEach((data, index) => { console.log(index, " ", data) })
+  }, [month]);
 
   const fetchData = () => {
     axios
@@ -219,7 +224,7 @@ function Announcement() {
               }/${parseInt(item["date_announce"].split("-")[0]) + 543} ${item[
                 "time_announce"
               ].substring(0, 5)} ${item["announcer"]}`
-              : "xxxx",
+              : "no data",
           });
         });
         setData(originData);
@@ -493,6 +498,7 @@ function Announcement() {
           </div>
           <div style={{ width: 45 }}></div>
           <div style={{ flex: 1 }}>
+
             <Form.Item
               name="detail"
               label="Details"
@@ -508,7 +514,6 @@ function Announcement() {
                 style={{ minHeight: "40vh" }}
               />
             </Form.Item>
-
             <Form.Item
               name="publish_status"
               label="Publish"
@@ -527,6 +532,7 @@ function Announcement() {
                 ))}
               </Select>
             </Form.Item>
+
             {publishPicked === "Scheduled" ? (
               <div className="flex-container">
                 <div style={{ flex: 1 }}>
@@ -566,6 +572,8 @@ function Announcement() {
                 </div>
               </div>
             ) : null}
+
+
           </div>
         </Form>
       </Modal>
@@ -849,15 +857,53 @@ function Announcement() {
                 </div>
               </div>
             ) : null}
+            <div className="flex-container">
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name="expire_date"
+                  label="Expiration date"
+                  rules={[
+                    {
+                      type: "date",
+                      required: true,
+                      message: "Please select date",
+                    },
+                  ]}
+                >
+                  <DatePicker className="dateTime" onChange={onDateChange} />
+                </Form.Item>
+              </div>
+              <div style={{ width: 10 }}></div>
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name="expire_time"
+                  label="Expiration Time"
+                  rules={[
+                    {
+                      type: "object",
+                      required: true,
+                      message: "Please select time",
+                    },
+                  ]}
+                >
+                  <TimePicker
+                    className="dateTime"
+                    onChange={onTimeChange}
+                    format="HH:mm"
+                  />
+                </Form.Item>
+              </div>
+            </div>
           </div>
         </Form>
       </Modal>
     );
   };
 
-  function onChange(date, dateString) {
+  function onMonthChange(date, dateString) {
     console.log("date", date);
     console.log("dateString", dateString);
+    setMonth(dateString)
   }
 
   return (
@@ -879,16 +925,16 @@ function Announcement() {
           Create Announcement
         </Button>
       </div>
-      <div className='regis-table'>
+      {/* <div className='regis-table'>
         <Tabs defaultActiveKey="All Post" onChange={callback}>
           {types.map((type, index) => (
             <TabPane tab={type} key={index} />
           ))}
         </Tabs>
-      </div>
+      </div> */}
       <MonthPicker
         style={{ width: 369, marginBottom: 19, marginRight: 10 }}
-        onChange={onChange}
+        onChange={onMonthChange}
         placeholder="Select month"
       />
       <Search
