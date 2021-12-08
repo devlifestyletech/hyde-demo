@@ -15,6 +15,7 @@
     "craco-less": "^1.20.0",
     "craco-less-plugin": "^0.0.3",
     "date-fns": "^2.27.0",
+    "encrypt-storage": "^2.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-geocode": "^0.2.3",
