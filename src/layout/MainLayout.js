@@ -23,7 +23,7 @@ function MainLayout() {
 				</Sider>
 				<Content style={{ backgroundColor: "white", padding: 35 }}>
 					<Routes>
-						<Route index element={<Dashboard />} />
+						<Route index element={<MainPage />} />
 						<Route path='/members' element={<Dashboard />} />
 						<Route path='/members/registration' element={<Registration />} />
 						<Route path='/nearby' element={<Nearby />} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 //import antd component
-import { Row, Col, Form, Input, Button } from "antd";
+import { Row, Col, Form, Input, Button, Modal } from "antd";
 //import customize css
 import "./styles/signin.css";
 
@@ -18,12 +18,40 @@ import authService from "./services/auth.service";
 import { encryptStorage } from "../utils/encryptStorage";
 
 function SignInPage({ fakeAuth }) {
+	const [LoginForm] = Form.useForm();
+
 	const onFinish = (value) => {
-		console.log(value);
-		authService.signIn(value).then((res) => {
-			console.log(res.data);
-			fakeAuth();
-		});
+		authService
+			.signIn(value)
+			.then((res) => {
+				console.log(res.data);
+				if (res.data.user.role.type === "resident") {
+					Modal.error({
+						title: "Error !",
+						content: "This web application available for juristic account only.",
+						onOk: () => {
+							LoginForm.resetFields();
+						}
+					});
+				} else {
+					try {
+						encryptStorage.setItem("user_session", JSON.stringify(res.data));
+						window.location.href = "/";
+					} catch (e) {
+						console.error(e.message);
+					}
+					fakeAuth();
+				}
+			})
+			.catch((err) =>
+				Modal.error({
+					title: "Error !",
+					content: "Username or password is incorrect",
+					onOk: () => {
+						LoginForm.resetFields();
+					}
+				})
+			);
 	};
 	const onFinishFailed = (error) => {
 		console.log(error);
@@ -65,7 +93,13 @@ function SignInPage({ fakeAuth }) {
 					<div className='hyde-logo'>
 						<img src={HydeLogo} alt='hyde logo' />
 						<div className='login-form'>
-							<Form layout='vertical' style={{ color: "white" }} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
+							<Form
+								layout='vertical'
+								style={{ color: "white" }}
+								onFinish={onFinish}
+								onFinishFailed={onFinishFailed}
+								autoComplete='off'
+								form={LoginForm}>
 								<Form.Item
 									label='Username'
 									name='identifier'
