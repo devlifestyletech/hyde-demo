@@ -40,8 +40,9 @@ export default function TableRender({ data, key }) {
 	const columns = [
 		{
 			title: "No.",
-			dataIndex: "id",
-			key: "index"
+			dataIndex: "number",
+			key: "index",
+			// render: (id) => <div>{id}</div>
 		},
 		{
 			title: "Address",
@@ -93,7 +94,7 @@ export default function TableRender({ data, key }) {
 				key={key}
 				visible={EditModalVisibility}
 				onCancel={() => setEditModalVisibility(false)}
-				user={data.find((user) => user.id === handleId)}
+				// user={data.find((user) => user.id === handleId)}
 			/>
 		</div>
 	);

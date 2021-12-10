@@ -11,8 +11,8 @@ import groupIcon from "./assets/group.svg";
 const { SubMenu } = Menu;
 
 function SideMenu() {
-	const rootSubmenuKeys = ["member"];
-	const [openKeys, setOpenKeys] = React.useState(["member"]);
+	const rootSubmenuKeys = ["member", "nearby-service", "announcement"];
+	const [openKeys, setOpenKeys] = React.useState([]);
 
 	const onOpenChange = (keys) => {
 		const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -39,24 +39,14 @@ function SideMenu() {
 								<Link to='/members/registration'>Registration</Link>
 							</Menu.Item>
 						</SubMenu>
-						<SubMenu
-							className="sub-menu"
-							key="nearby-service"
-							icon={<img src={nearbyImg} alt="nearby" />}
-							title="Nearby Service"
-						>
-							<Menu.Item key="3" className="menu-item">
-								<Link to="/nearby">Service Lists</Link>
+						<SubMenu className='sub-menu' key='nearby-service' icon={<img src={nearbyImg} alt='nearby' />} title='Nearby Service'>
+							<Menu.Item key='3' className='menu-item'>
+								<Link to='/nearby'>Service Lists</Link>
 							</Menu.Item>
 						</SubMenu>
-						<SubMenu
-							className="sub-menu"
-							key="announcement"
-							icon={<img src={announcement} alt="announcement" />}
-							title="Announcement"
-						>
-							<Menu.Item key="4" className="menu-item">
-								<Link to="/announcement">Announcement Lists</Link>
+						<SubMenu className='sub-menu' key='announcement' icon={<img src={announcement} alt='announcement' />} title='Announcement'>
+							<Menu.Item key='4' className='menu-item'>
+								<Link to='/announcement'>Announcement Lists</Link>
 							</Menu.Item>
 						</SubMenu>
 					</Menu>

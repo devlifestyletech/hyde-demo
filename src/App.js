@@ -23,17 +23,7 @@ function App() {
 	if (session) {
 		return <MainLayout />;
 	}
-	return (
-		<SignInPage
-			fakeAuth={() => {
-				setLoading(true);
-				setTimeout(() => {
-					setSession(true);
-					setLoading(false);
-				}, 500);
-			}}
-		/>
-	);
+	return <SignInPage />;
 }
 
 export default App;

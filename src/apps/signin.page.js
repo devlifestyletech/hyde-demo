@@ -40,7 +40,6 @@ function SignInPage({ fakeAuth }) {
 					} catch (e) {
 						console.error(e.message);
 					}
-					fakeAuth();
 				}
 			})
 			.catch((err) =>
