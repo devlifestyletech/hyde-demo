@@ -60,7 +60,7 @@ const libraries = ["places"];
 
 function NearbyService() {
   const URLreScrpit = process.env.REACT_APP_API_URL + "/nearby-recommends/";
-  const headers = { headers: { Authorization: "Bearer " + session.jwt }, }
+  const headers = { headers: { Authorization: "Bearer " + session.jwt } }
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
     libraries,
@@ -103,7 +103,7 @@ function NearbyService() {
       key: "picture",
       render: (text) => (
         <>
-          <Image width={300} height={200} src={text} />
+          <Image width={300} height={200} src={text} alt={text} />
         </>
       ),
     },
@@ -178,8 +178,8 @@ function NearbyService() {
             key: item["id"] + "," + item["latitude"] + "," + item["longitude"],
             number: idx + 1,
             picture:
-              item["place_image"].length > 0
-                ? `${process.env.REACT_APP_IMG_URL}${item["place_image"][0]["url"]}`
+              item["place_image"]
+                ? `${process.env.REACT_APP_API_URL}${item["place_image"]["url"]}`
                 : noImg,
             name: item["place_name"],
             location: item["address"],
@@ -420,7 +420,7 @@ function NearbyService() {
         let dataImage = new FormData();
         dataImage.append("files", imageFile);
         await axios
-          .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+          .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
           .then((res) => {
             console.log("res", res);
             let imageId = res.data[0];
@@ -764,22 +764,22 @@ function NearbyService() {
       ))
     );
 
-    const handleTest = async () => {
-      let dataImage = new FormData();
-      dataImage.append("files", imageFile);
-      await axios
-        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers).then((res) => {
-          console.log("handleTest", res)
-        }).catch((err) => {
-          console.log("ERROR", err);
-        });
-    };
+    // const handleTest = async () => {
+    //   let dataImage = new FormData();
+    //   dataImage.append("files", imageFile);
+    //   await axios
+    //     .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers).then((res) => {
+    //       console.log("handleTest", res)
+    //     }).catch((err) => {
+    //       console.log("ERROR", err);
+    //     });
+    // };
 
     const handleOnAdd = async (value) => {
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
       await axios
-        .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
         .then((res) => {
           console.log("res", res);
           let imageId = res.data[0];
@@ -838,19 +838,19 @@ function NearbyService() {
           >
             Add
           </Button>,
-          <Button
-            style={{
-              backgroundColor: "#D8AA81",
-              color: "#F5F4EC",
-            }}
-            className="add-btn"
-            key="add"
-            onClick={() => {
-              handleTest()
-            }}
-          >
-            test
-          </Button>,
+          // <Button
+          //   style={{
+          //     backgroundColor: "#D8AA81",
+          //     color: "#F5F4EC",
+          //   }}
+          //   className="add-btn"
+          //   key="add"
+          //   onClick={() => {
+          //     handleTest()
+          //   }}
+          // >
+          //   test
+          // </Button>,
         ]}
         onCancel={onCancel}
         width={633}
