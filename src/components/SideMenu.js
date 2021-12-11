@@ -1,9 +1,12 @@
 import React from "react";
-import { Menu } from "antd";
+import { Menu, Button } from "antd";
 import "./styles/side-menu.css";
 import MenuLogo from "./assets/menu-logo.svg";
 import nearbyImg from "./assets/nearby.svg";
 import announcement from "./assets/announcement.svg";
+import logoutIcon from "./assets/logout.svg";
+import pieIcon from "./assets/pie.svg";
+import authService from "../services/auth.service";
 
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -11,8 +14,8 @@ import groupIcon from "./assets/group.svg";
 const { SubMenu } = Menu;
 
 function SideMenu() {
-	const rootSubmenuKeys = ["member", "nearby-service", "announcement"];
-	const [openKeys, setOpenKeys] = React.useState([]);
+	const rootSubmenuKeys = ["overview", "member", "nearby-service", "announcement"];
+	const [openKeys, setOpenKeys] = React.useState(["overview"]);
 
 	const onOpenChange = (keys) => {
 		const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -22,6 +25,7 @@ function SideMenu() {
 			setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
 		}
 	};
+
 	return (
 		<>
 			<div className='side-menu'>
@@ -29,8 +33,14 @@ function SideMenu() {
 					<img src={MenuLogo} alt='menu-logo' />
 				</div>
 				<div className='menu-group'>
-					<p className='group-name'>User Management</p>
 					<Menu mode='inline' openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 300, backgroundColor: "rgba(32, 38, 58, 1)" }}>
+						<div className='group-name'>Overview</div>
+						<SubMenu key='overview' icon={<img src={pieIcon} alt='member' />} title='Monitoring'>
+							<Menu.Item key='0'>
+								<Link to='/'>Summary Dashboard</Link>
+							</Menu.Item>
+						</SubMenu>
+						<div className='group-name'>User Management</div>
 						<SubMenu key='member' icon={<img src={groupIcon} alt='member' />} title='Members'>
 							<Menu.Item key='1'>
 								<Link to='/members'>User Management Dashboard</Link>
@@ -49,6 +59,15 @@ function SideMenu() {
 								<Link to='/announcement'>Announcement Lists</Link>
 							</Menu.Item>
 						</SubMenu>
+						<div className='group-name'>Settings</div>
+						<div className='logout'>
+							<img src={logoutIcon} alt='logout' style={{ float: "left", paddingTop: 5 }} />
+							<div className='menu-txt'>
+								<a href='/' onClick={() => authService.logout()}>
+									Logout
+								</a>
+							</div>
+						</div>
 					</Menu>
 				</div>
 			</div>

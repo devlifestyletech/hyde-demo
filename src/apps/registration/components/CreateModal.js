@@ -5,8 +5,8 @@ import ImageIcon from "../assets/icons/image.svg";
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 
 //import services from "../services"
-import addressService from "../../services/address.service";
-import authService from "../../services/auth.service";
+import addressService from "../../../services/address.service";
+import authService from "../../../services/auth.service";
 
 //import svg icon
 import successsIcon from "../assets/icons/success.svg";

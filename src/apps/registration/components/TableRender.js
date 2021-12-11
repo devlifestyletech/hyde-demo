@@ -41,12 +41,12 @@ export default function TableRender({ data, key }) {
 		{
 			title: "No.",
 			dataIndex: "number",
-			key: "index",
+			key: "index"
 			// render: (id) => <div>{id}</div>
 		},
 		{
 			title: "Address",
-			dataIndex: "address",
+			dataIndex: "address_no",
 			key: "index"
 		},
 		{
@@ -61,7 +61,7 @@ export default function TableRender({ data, key }) {
 		},
 		{
 			title: "Type",
-			dataIndex: "type",
+			dataIndex: "class",
 			key: "index"
 		},
 		{
@@ -89,12 +89,12 @@ export default function TableRender({ data, key }) {
 	];
 	return (
 		<div key={key}>
-			<Table dataSource={data} columns={columns} />
+			<Table key={key} dataSource={data} columns={columns} />
 			<EditModal
 				key={key}
 				visible={EditModalVisibility}
 				onCancel={() => setEditModalVisibility(false)}
-				// user={data.find((user) => user.id === handleId)}
+				user={data.find((user) => user.id === handleId)}
 			/>
 		</div>
 	);

@@ -4,7 +4,7 @@ import TableRender from "../components/TableRender";
 import Header from "../../../components/Header";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import "./styles/registration.css";
-import authService from "../../services/auth.service";
+import authService from "../../../services/auth.service";
 import CreateModal from "../components/CreateModal";
 
 const { TabPane } = Tabs;

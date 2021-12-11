@@ -12,7 +12,7 @@ import UserIcon from "./assets/icons/user.svg";
 import PasswordIcon from "./assets/icons/password.svg";
 
 //import service file
-import authService from "./services/auth.service";
+import authService from "../services/auth.service";
 
 //import encrypt Storage configure
 import { encryptStorage } from "../utils/encryptStorage";

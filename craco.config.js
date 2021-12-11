@@ -15,7 +15,6 @@ module.exports = {
 							"@table-header-bg": "#D3D3D3",
 							"@table-border-radius-base": "10px",
 							"@menu-item-color": "#1D1C1C",
-							"@border-radius-base": "20px",
 							"@font-family": "SukhumvitSet"
 						},
 						javascriptEnabled: true

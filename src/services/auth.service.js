@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
-import { encryptStorage } from "../../utils/encryptStorage";
+import { encryptStorage } from "../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 export default {
@@ -24,9 +24,19 @@ export default {
 	},
 	getAllResident: async function () {
 		try {
-			return await axios.get(`${process.env.REACT_APP_API_URL}/users?_where[role]=4`, {
+			return await axios.get(`${process.env.REACT_APP_API_URL}/users?_where[role]=61b32a96268f0d019c9c0dff`, {
 				headers: { Authorization: "Bearer " + session.jwt }
 			});
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+	logout: async function () {
+		try {
+			encryptStorage.removeItem("user_session");
+			console.log("remove");
+			window.location.href = "/";
 		} catch (error) {
 			console.error(error);
 			throw error;

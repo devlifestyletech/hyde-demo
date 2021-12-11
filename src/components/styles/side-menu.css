@@ -11,7 +11,6 @@
 	margin-bottom: 65px;
 	text-align: left;
 }
-
 .group-name {
 	color: rgba(255, 255, 255, 1);
 	font-size: 18px;
@@ -27,5 +26,24 @@
 	border-left: 5px solid rgba(216, 170, 129, 1);
 }
 .menu-group .ant-menu-submenu-arrow {
+	color: rgba(255, 255, 255, 1);
+}
+.group-name {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.logout {
+	margin-left: 24px;
+	align-items: center;
+	height: 40px;
+}
+.menu-txt {
+	float: left;
+	padding-left: 10px;
+	padding-top: 12px;
+	height: 40px;
+}
+.logout a:link,
+a:visited {
 	color: rgba(255, 255, 255, 1);
 }
