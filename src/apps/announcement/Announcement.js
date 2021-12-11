@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import Heading from "../../components/Header";
 import {
-  Tabs,
   Button,
   Table,
   Image,
@@ -26,18 +25,21 @@ import {
 import axios from "axios";
 import moment from "moment";
 import "./style/announcementsStyle.css";
-import { format } from "date-fns";
+// import { format } from "date-fns";
+import { format, utcToZonedTime } from 'date-fns-tz'
+
 
 import editIcon from "./assets/icons/edit.svg";
 import trashIcon from "./assets/icons/trash.svg";
 import noImg from "./assets/images/noImg.jpg";
 
-// import { encryptStorage } from "../../config/encrypt";
-// const session = encryptStorage.getItem("user_session");
+import { encryptStorage } from "../../utils/encryptStorage";
+const session = encryptStorage.getItem("user_session");
 
 function Announcement() {
-  const URLreScript = process.env.REACT_APP_API_URL + "announcements/";
-  const headers = { headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTYzODY3OTM5MywiZXhwIjoxNjQxMjcxMzkzfQ.VLIVBlmmrndpf6SMvs2s4givIFEGWSJ5zJVvT0nY3nk" }, }
+  const URLreScript = process.env.REACT_APP_API_URL + "/announcements/";
+  const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+
   const types = [
     "All Post",
     "Published to All",
@@ -45,7 +47,6 @@ function Announcement() {
   ];
 
   const publish = ["Now", "Scheduled"];
-  const { TabPane } = Tabs;
   const { Search } = Input;
   const { Option } = Select;
   const { MonthPicker } = DatePicker;
@@ -73,12 +74,6 @@ function Announcement() {
     setNewVisible(false);
   };
 
-  const callback = (key) => {
-    console.log("All Post", key, types[parseInt(key)]);
-    setSearchTag(types[parseInt(key)]);
-    setSearchName("");
-  };
-
   const handleSearch = (value) => {
     setSearchName(value.toLowerCase());
   };
@@ -102,9 +97,14 @@ function Announcement() {
       title: "Picture",
       dataIndex: "picture",
       key: "picture",
-      render: (text) => (
+      render: (_, image) => (
         <>
-          <Image width={200} height={100} src={text} />
+          <Image width={200} height={100}
+            src={
+              image?.image?.url
+                ? process.env.REACT_APP_API_URL + image.image.url
+                : noImg
+            } alt={image.image.url} />
         </>
       ),
     },
@@ -133,6 +133,20 @@ function Announcement() {
       dataIndex: "published",
       key: "published",
       // fixed: "left",
+    },
+    {
+      title: "Date Announced",
+      dataIndex: "date_announced",
+      key: "arrival_date",
+      render: (record) => {
+        const date = new Date(record)
+        const thTimeZone = 'Asia/Bangkok'
+        const thDate = utcToZonedTime(date, thTimeZone)
+        // console.log('datt', format(thDate, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: 'Asia/Bangkok' }))
+          (<>
+          { format(thDate, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: 'Asia/Bangkok' })}
+          </>)
+      },
     },
     {
       width: 100,
@@ -196,37 +210,43 @@ function Announcement() {
 
   const fetchData = () => {
     axios
-      .get(URLreScript,
-        headers)
+      .get(URLreScript, headers)
       .then((response) => {
         console.log("data", response.data);
         let originData = [];
 
-        response.data.map((item, idx) => {
-          if (item["date_announce"]) {
-            console.log(
-              "date_announce",
-              parseInt(item["date_announce"].split("-")[0]) + 543
-            );
-          }
+        response.data.forEach((announce, index) => {
+          let announceData = { key: index, number: index + 1, ...announce };
+          console.log(index, announceData)
+          originData.push(announceData)
+        })
 
-          return originData.push({
-            key: item["id"],
-            number: idx + 1,
-            picture: item["image"]
-              ? `${process.env.REACT_APP_IMG_URL}${item["image"]["url"]}`
-              : noImg,
-            title: item["title_name"],
-            detail: item["detail"],
-            post_status: item["post_status"],
-            published: item["time_announce"]
-              ? `${item["date_announce"].split("-")[2]}/${item["date_announce"].split("-")[1]
-              }/${parseInt(item["date_announce"].split("-")[0]) + 543} ${item[
-                "time_announce"
-              ].substring(0, 5)} ${item["announcer"]}`
-              : "no data",
-          });
-        });
+
+        // response.data.map((item, idx) => {
+        //   if (item["date_announce"]) {
+        //     console.log(
+        //       "date_announce",
+        //       parseInt(item["date_announce"].split("-")[0]) + 543
+        //     );
+        //   }
+
+        //   return originData.push({
+        //     key: item["id"],
+        //     number: idx + 1,
+        //     picture: item["image"]
+        //       ? `${process.env.REACT_APP_IMG_URL}${item["image"]["url"]}`
+        //       : noImg,
+        //     title: item["title_name"],
+        //     detail: item["detail"],
+        //     post_status: item["post_status"],
+        //     published: item["time_announce"]
+        //       ? `${item["date_announce"].split("-")[2]}/${item["date_announce"].split("-")[1]
+        //       }/${parseInt(item["date_announce"].split("-")[0]) + 543} ${item[
+        //         "time_announce"
+        //       ].substring(0, 5)} ${item["announcer"]}`
+        //       : "no data",
+        //   });
+        // });
         setData(originData);
       });
   };
@@ -925,13 +945,6 @@ function Announcement() {
           Create Announcement
         </Button>
       </div>
-      {/* <div className='regis-table'>
-        <Tabs defaultActiveKey="All Post" onChange={callback}>
-          {types.map((type, index) => (
-            <TabPane tab={type} key={index} />
-          ))}
-        </Tabs>
-      </div> */}
       <MonthPicker
         style={{ width: 369, marginBottom: 19, marginRight: 10 }}
         onChange={onMonthChange}
