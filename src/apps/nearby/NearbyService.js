@@ -50,16 +50,17 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 
-// import { encryptStorage } from "../../config/encrypt";
-// const session = encryptStorage.getItem("user_session");
+
+import { encryptStorage } from "../../utils/encryptStorage";
+const session = encryptStorage.getItem("user_session");
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
 Geocode.setLanguage("th");
 const libraries = ["places"];
 
 function NearbyService() {
-  const URLreScrpit = process.env.REACT_APP_API_URL + "nearby-recommends/";
-  const headers = { headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTYzODY3OTM5MywiZXhwIjoxNjQxMjcxMzkzfQ.VLIVBlmmrndpf6SMvs2s4givIFEGWSJ5zJVvT0nY3nk" }, }
+  const URLreScrpit = process.env.REACT_APP_API_URL + "/nearby-recommends/";
+  const headers = { headers: { Authorization: "Bearer " + session.jwt }, }
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
     libraries,
@@ -86,7 +87,7 @@ function NearbyService() {
   const [editVisible, setEditVisible] = useState(false);
 
   useEffect(() => {
-    console.log('URLreScrpit', URLreScrpit)
+    console.log('session.jwt', session.jwt)
     fetchData();
   }, []);
 
@@ -163,6 +164,7 @@ function NearbyService() {
 
   const fetchData = () => {
     axios
+      // .get('http://54.179.47.77:1337/nearby-recommends',
       .get(URLreScrpit,
         headers
       )
@@ -762,6 +764,17 @@ function NearbyService() {
       ))
     );
 
+    const handleTest = async () => {
+      let dataImage = new FormData();
+      dataImage.append("files", imageFile);
+      await axios
+        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers).then((res) => {
+          console.log("handleTest", res)
+        }).catch((err) => {
+          console.log("ERROR", err);
+        });
+    };
+
     const handleOnAdd = async (value) => {
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
@@ -772,7 +785,7 @@ function NearbyService() {
           let imageId = res.data[0];
           axios
             .post(
-              process.env.REACT_APP_API_URL + "nearby-recommends",
+              process.env.REACT_APP_API_URL + "/nearby-recommends",
               {
                 place_name: `${value["place_name"]}`,
                 type: `${value["type"]}`,
@@ -824,6 +837,19 @@ function NearbyService() {
             }}
           >
             Add
+          </Button>,
+          <Button
+            style={{
+              backgroundColor: "#D8AA81",
+              color: "#F5F4EC",
+            }}
+            className="add-btn"
+            key="add"
+            onClick={() => {
+              handleTest()
+            }}
+          >
+            test
           </Button>,
         ]}
         onCancel={onCancel}
