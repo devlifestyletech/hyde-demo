@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Button, Divider, Table, Modal, message } from "antd";
+import React, { useState } from "react";
+import { Button, Divider, Table, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 //image import from
 import editIcon from "../assets/icons/edit.svg";
 import trashIcon from "../assets/icons/trash.svg";
 import EditModal from "./EditModal";
-import authService from "../../../services/auth.service";
 
-export default function TableRender({ data, key, onEvent }) {
-	const [user, setUser] = useState();
+export default function TableRender({ data, key }) {
 	const [EditModalVisibility, setEditModalVisibility] = useState(false);
 	const [handleId, setHandleId] = useState(null);
 
-	useEffect(() => {
-		authService.getUserData(handleId).then((res) => setUser(res.data));
-	}, [handleId]);
-
 	const handleClickEdit = (id) => {
-		setHandleId(id);
 		setEditModalVisibility(true);
+		setHandleId(id);
 	};
-
 	function handleClickDelete(id) {
 		Modal.confirm({
 			maskStyle: {
@@ -35,10 +28,7 @@ export default function TableRender({ data, key, onEvent }) {
 			okButtonProps: { shape: "round" },
 			cancelButtonProps: { shape: "round" },
 			onOk() {
-				authService.deleteUser(id).then((res) => {
-					message.success("Delete success!");
-					onEvent();
-				});
+				console.log("OK");
 			},
 			onCancel() {
 				console.log("Cancel");
@@ -46,18 +36,18 @@ export default function TableRender({ data, key, onEvent }) {
 		});
 	}
 
-	console.log(user);
+	console.log(data);
 	const columns = [
 		{
 			title: "No.",
 			dataIndex: "number",
 			key: "index"
+			// render: (id) => <div>{id}</div>
 		},
 		{
 			title: "Address",
-			dataIndex: "address",
-			key: "index",
-			render: (address) => <div>{address.address_number}</div>
+			dataIndex: "address_no",
+			key: "index"
 		},
 		{
 			title: "Owner",
@@ -71,9 +61,8 @@ export default function TableRender({ data, key, onEvent }) {
 		},
 		{
 			title: "Type",
-			dataIndex: "project",
-			key: "index",
-			render: (project) => <div>{project.project_type}</div>
+			dataIndex: "class",
+			key: "index"
 		},
 		{
 			title: "Tel",
@@ -101,7 +90,12 @@ export default function TableRender({ data, key, onEvent }) {
 	return (
 		<div key={key}>
 			<Table key={key} dataSource={data} columns={columns} />
-			<EditModal key={key} visible={EditModalVisibility} onCancel={() => setEditModalVisibility(false)} user={user} />
+			<EditModal
+				key={key}
+				visible={EditModalVisibility}
+				onCancel={() => setEditModalVisibility(false)}
+				user={data.find((user) => user.id === handleId)}
+			/>
 		</div>
 	);
 }

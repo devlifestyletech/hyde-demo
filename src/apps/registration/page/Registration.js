@@ -11,7 +11,6 @@ const { TabPane } = Tabs;
 function Registration() {
 	const [residents, setResidents] = useState([]);
 	const [addNewModalVisibility, setAddNewModalVisibility] = useState(false);
-	const [refresh, setRefresh] = useState(false);
 
 	useEffect(() => {
 		authService.getAllResident().then((res) => {
@@ -25,11 +24,9 @@ function Registration() {
 			});
 			setResidents(data);
 		});
-	}, [refresh]);
+	}, []);
 
-	let owner_users = residents.filter((user) => user.resident_type === "Owner");
-	let inhabitant_users = residents.filter((user) => user.resident_type === "Inhabitant");
-	let tenant_users = residents.filter((user) => user.resident_type === "Tenant");
+	console.log(residents);
 
 	return (
 		<>
@@ -44,9 +41,9 @@ function Registration() {
 			<div className='regis-table'>
 				<Tabs>
 					<TabPane tab='All' key='1'>
-						<TableRender data={residents} key='1' onEvent={() => setRefresh(!refresh)} />
+						<TableRender data={residents} key='1' />
 					</TabPane>
-					<TabPane tab='Owner' key='2'>
+					{/* <TabPane tab='Owner' key='2'>
 						<TableRender data={owner_users} key='2' />
 					</TabPane>
 					<TabPane tab='Inhabitant' key='3'>
@@ -54,16 +51,10 @@ function Registration() {
 					</TabPane>
 					<TabPane tab='Tenant' key='4'>
 						<TableRender data={tenant_users} key='4' />
-					</TabPane>
+					</TabPane> */}
 				</Tabs>
 			</div>
-			<CreateModal
-				visible={addNewModalVisibility}
-				onCancel={() => {
-					setAddNewModalVisibility(false);
-					setRefresh(!refresh);
-				}}
-			/>
+			<CreateModal visible={addNewModalVisibility} onCancel={()=> setAddNewModalVisibility(false)}/>
 		</>
 	);
 }

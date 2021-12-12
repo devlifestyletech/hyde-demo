@@ -3,12 +3,12 @@ import { Layout } from "antd";
 import SideMenu from "../components/SideMenu";
 import { BrowserRouter, Routes, Route, Outlet, Link } from "react-router-dom";
 
-import Dashboard from "../apps/registration/views/Dashboard";
-import Registration from "../apps/registration/views/Registration";
+import Dashboard from "../apps/registration/page/Dashboard";
+import Registration from "../apps/registration/page/Registration";
 import MainPage from "../apps/main.page";
 
 //NearbyService
-import Nearby from "../apps/nearby/NearbyService";
+import Nearby from "../apps/nearby/NearbyService"
 
 //Announcement
 import Announcement from "../apps/announcement/Announcement";
