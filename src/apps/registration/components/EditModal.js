@@ -66,15 +66,21 @@ export default function EditModal({ user, visible, onCancel }) {
 			okButtonProps: { shape: "round" },
 			cancelButtonProps: { shape: "round" },
 			onOk() {
-				message.loading("Action in progress..");
-				uploadService.uploadImage(imageData).then((res) => {
-					let new_value = { image: res.data[0], ...value };
-					console.log(new_value);
-					authService.editUserData(user.id, new_value).then(() => {
+				if (pickedImage) {
+					uploadService.uploadImage(imageData).then((res) => {
+						let new_value = { image: res.data[0], ...value };
+						console.log(new_value);
+						authService.editUserData(user.id, new_value).then(() => {
+							message.success("Save finished");
+							onCancel();
+						});
+					});
+				} else {
+					authService.editUserData(user.id, value).then(() => {
 						message.success("Save finished");
 						onCancel();
 					});
-				});
+				}
 			},
 			onCancel() {
 				onCancel();
@@ -122,7 +128,7 @@ export default function EditModal({ user, visible, onCancel }) {
 								showConfirm(submit_value, imageData);
 							});
 						}}>
-						Add
+						Save Change
 					</Button>
 				]}>
 				<Form form={EditResidentForm} layout='vertical'>

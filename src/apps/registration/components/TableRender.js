@@ -101,7 +101,15 @@ export default function TableRender({ data, key, onEvent }) {
 	return (
 		<div key={key}>
 			<Table key={key} dataSource={data} columns={columns} />
-			<EditModal key={key} visible={EditModalVisibility} onCancel={() => setEditModalVisibility(false)} user={user} />
+			<EditModal
+				key={key}
+				visible={EditModalVisibility}
+				onCancel={() => {
+					setEditModalVisibility(false);
+					onEvent();
+				}}
+				user={user}
+			/>
 		</div>
 	);
 }
