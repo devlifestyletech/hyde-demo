@@ -50,17 +50,16 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 
-
-import { encryptStorage } from "../../utils/encryptStorage";
-const session = encryptStorage.getItem("user_session");
+// import { encryptStorage } from "../../config/encrypt";
+// const session = encryptStorage.getItem("user_session");
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
 Geocode.setLanguage("th");
 const libraries = ["places"];
 
 function NearbyService() {
-  const URLreScrpit = process.env.REACT_APP_API_URL + "/nearby-recommends/";
-  const headers = { headers: { Authorization: "Bearer " + session.jwt } }
+  const URLreScrpit = process.env.REACT_APP_API_URL + "nearby-recommends/";
+  const headers = { headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTYzODY3OTM5MywiZXhwIjoxNjQxMjcxMzkzfQ.VLIVBlmmrndpf6SMvs2s4givIFEGWSJ5zJVvT0nY3nk" }, }
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
     libraries,
@@ -87,7 +86,7 @@ function NearbyService() {
   const [editVisible, setEditVisible] = useState(false);
 
   useEffect(() => {
-    console.log('session.jwt', session.jwt)
+    console.log('URLreScrpit', URLreScrpit)
     fetchData();
   }, []);
 
@@ -103,7 +102,7 @@ function NearbyService() {
       key: "picture",
       render: (text) => (
         <>
-          <Image width={300} height={200} src={text} alt={text} />
+          <Image width={300} height={200} src={text} />
         </>
       ),
     },
@@ -164,7 +163,6 @@ function NearbyService() {
 
   const fetchData = () => {
     axios
-      // .get('http://54.179.47.77:1337/nearby-recommends',
       .get(URLreScrpit,
         headers
       )
@@ -178,8 +176,8 @@ function NearbyService() {
             key: item["id"] + "," + item["latitude"] + "," + item["longitude"],
             number: idx + 1,
             picture:
-              item["place_image"]
-                ? `${process.env.REACT_APP_API_URL}${item["place_image"]["url"]}`
+              item["place_image"].length > 0
+                ? `${process.env.REACT_APP_IMG_URL}${item["place_image"][0]["url"]}`
                 : noImg,
             name: item["place_name"],
             location: item["address"],
@@ -420,7 +418,7 @@ function NearbyService() {
         let dataImage = new FormData();
         dataImage.append("files", imageFile);
         await axios
-          .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
+          .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
           .then((res) => {
             console.log("res", res);
             let imageId = res.data[0];
@@ -764,28 +762,17 @@ function NearbyService() {
       ))
     );
 
-    // const handleTest = async () => {
-    //   let dataImage = new FormData();
-    //   dataImage.append("files", imageFile);
-    //   await axios
-    //     .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers).then((res) => {
-    //       console.log("handleTest", res)
-    //     }).catch((err) => {
-    //       console.log("ERROR", err);
-    //     });
-    // };
-
     const handleOnAdd = async (value) => {
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
       await axios
-        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
+        .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
         .then((res) => {
           console.log("res", res);
           let imageId = res.data[0];
           axios
             .post(
-              process.env.REACT_APP_API_URL + "/nearby-recommends",
+              process.env.REACT_APP_API_URL + "nearby-recommends",
               {
                 place_name: `${value["place_name"]}`,
                 type: `${value["type"]}`,
@@ -838,19 +825,6 @@ function NearbyService() {
           >
             Add
           </Button>,
-          // <Button
-          //   style={{
-          //     backgroundColor: "#D8AA81",
-          //     color: "#F5F4EC",
-          //   }}
-          //   className="add-btn"
-          //   key="add"
-          //   onClick={() => {
-          //     handleTest()
-          //   }}
-          // >
-          //   test
-          // </Button>,
         ]}
         onCancel={onCancel}
         width={633}
