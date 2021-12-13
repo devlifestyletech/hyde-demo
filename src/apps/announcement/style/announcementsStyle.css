@@ -4,6 +4,12 @@
   height: 40vh;
   align-items: center;
 }
+.inputNoImage {
+  border: 1px solid #ff4d4f;
+  border-radius: 20px;
+  height: 40vh;
+  align-items: center;
+}
 
 .search-box {
   width: 392px;
