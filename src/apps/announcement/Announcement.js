@@ -40,11 +40,11 @@ function Announcement() {
   const URLreScript = process.env.REACT_APP_API_URL + "/announcements/";
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
-  const types = [
-    "All Post",
-    "Published to All",
-    "Scheduled",
-  ];
+  // const types = [
+  //   "All Post",
+  //   "Published to All",
+  //   "Scheduled",
+  // ];
 
   const publish = ["Now", "Scheduled"];
   const { Search } = Input;
@@ -54,7 +54,7 @@ function Announcement() {
   const [data, setData] = useState([]);
   const [month, setMonth] = useState();
   const [searchName, setSearchName] = useState("");
-  const [searchTag, setSearchTag] = useState("All Post");
+  // const [searchTag, setSearchTag] = useState("All Post");
   const [newVisible, setNewVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [editVisible, setEditVisible] = useState(false);
@@ -95,9 +95,9 @@ function Announcement() {
     },
     {
       width: '10vw',
-      title: "Picture",
-      dataIndex: "picture",
-      key: "picture",
+      title: "Image",
+      dataIndex: "image",
+      key: "image",
       render: (_, image) => (
         <>
           <Image width={200} height={100}
@@ -119,6 +119,10 @@ function Announcement() {
       title: "Post Status",
       dataIndex: "post_status",
       key: "post_status",
+      render: (_, item) => (
+        item.post_status === 'Scheduled' ?
+          <span style={{ color: 'red' }}>{item.post_status}</span>
+          : <span>{item.post_status}</span>),
       sorter: (a, b) => (a.post_status > b.post_status ? 1 : -1),
     },
     {
@@ -160,7 +164,7 @@ function Announcement() {
             <Popconfirm
               icon={<DeleteOutlined style={{ color: "red" }} />}
               title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
+              onConfirm={() => handleDelete(record.id)}
             >
               <img src={trashIcon} alt="Trash" />
             </Popconfirm>
@@ -192,14 +196,12 @@ function Announcement() {
 
   useEffect(() => {
     console.log('session', session.user.fullname)
-    console.log('session', session.jwt)
+    console.log('session', session)
+    console.log('headers', headers)
     let today = new Date().toISOString()
-    var expires = moment(new Date()).toISOString(true)
     // let dateNow = format(today, "yyyy-MM-dd");
     // let timeNow = format(today, "HH:mm");
-    console.log("today", today, expires);
-    // console.log("Date", dateNow);
-    // console.log("Time", timeNow);
+    console.log("today", today);
     fetchData();
   }, []);
 
@@ -231,18 +233,17 @@ function Announcement() {
   const EditAnnouncement = ({ visible, editValue, onCancel }) => {
     const [form] = Form.useForm();
     const [publishPicked, setPublishPicked] = useState(editValue.post_status);
-    const [pickedImage, setPickedImage] = useState(editValue.picture);
+    const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
     const [imageFile, setImageFile] = useState(null);
-    const [datePicked, setDatePicked] = useState("");
-    const [timePicked, setTimePicked] = useState("");
-    console.log("editValue.date " + editValue.date_announced);
+    const [imageBorder, setImageBorder] = useState('inputImage');
+    console.log("editValue.date " + editValue);
 
     let date_an = format(utcToZonedTime(new Date(editValue.date_announced), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
     let date_ex = format(utcToZonedTime(new Date(editValue.date_expired), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
 
     const handleValue = () => {
       form.setFieldsValue({
-        title_name: editValue.title,
+        title_name: editValue.title_name,
         detail: editValue.detail,
         publish_status: editValue.post_status,
         schedule_date: editValue.post_status === "Scheduled" ? moment(date_an.split(' ')[0]) : "",
@@ -255,22 +256,22 @@ function Announcement() {
       });
     };
 
+    const isFirstRun = useRef(true);
+    useEffect(() => {
+      if (isFirstRun.current) {
+        isFirstRun.current = false;
+        return;
+      } else {
+        if (pickedImage) { setImageBorder('inputImage') }
+        else { setImageBorder('inputNoImage') }
+      }
+    }, [pickedImage]);
+
     useEffect(() => {
       handleValue();
       // setDatePicked(dateEdit);
       // setTimePicked(timeEdit);
     }, []);
-
-    function onDateChange(date, dateString) {
-      console.log("date", date);
-      console.log("dateString", dateString);
-      setDatePicked(dateString);
-    }
-    function onTimeChange(time, timeString) {
-      console.log("time", time);
-      console.log("timeString", timeString);
-      setTimePicked(timeString);
-    }
 
     const deleteHandle = () => {
       setPickedImage(null);
@@ -296,32 +297,22 @@ function Announcement() {
 
     const handleEditChange = async (value) => {
       console.log("value", value);
-      let today = Date.now();
-      let dateNow = format(today, "yyyy-MM-dd");
-      let timeNow = format(today, "HH:mm");
-      console.log("today", today);
-      console.log("Date", dateNow, datePicked);
-      console.log("Time", timeNow, timePicked);
+      let dateNow = new Date().toISOString()
+      console.log("today", dateNow);
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
 
       if (imageFile == null) {
         axios
           .put(
-            `${URLreScript}${editValue.key}`,
+            `${URLreScript}${editValue.id}`,
             {
-              title_name: `${value["title_name"]}`,
-              post_status: `${value["publish_status"]}`,
+              title_name: value.title_name,
+              post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
               announcer: session.user.fullname,
-              detail: `${value["detail"]}`,
-              date_announce:
-                editValue.post_status === "Scheduled"
-                  ? `${datePicked}`
-                  : `${dateNow}`,
-              time_announce:
-                editValue.post_status === "Scheduled"
-                  ? `${timePicked}:00.000+07:00`
-                  : `${timeNow}:00.000+07:00`,
+              detail: value.detail,
+              date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+              date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
             },
             headers
           )
@@ -340,20 +331,14 @@ function Announcement() {
             let imageId = res.data[0];
             axios
               .put(
-                `${URLreScript}${editValue.key}`,
+                `${URLreScript}${editValue.id}`,
                 {
-                  title_name: `${value["title_name"]}`,
-                  post_status: `${value["publish_status"]}`,
+                  title_name: value.title_name,
+                  post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
                   announcer: session.user.fullname,
-                  detail: `${value["detail"]}`,
-                  date_announce:
-                    editValue.post_status === "Scheduled"
-                      ? `${datePicked}`
-                      : `${dateNow}`,
-                  time_announce:
-                    editValue.post_status === "Scheduled"
-                      ? `${timePicked}:00.000`
-                      : `${timeNow}:00.000`,
+                  detail: value.detail,
+                  date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+                  date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
                   image: imageId,
                 }, headers
               )
@@ -372,6 +357,7 @@ function Announcement() {
     };
 
     return (
+
       <Modal
         visible={visible}
         title="Edit Announcement"
@@ -398,7 +384,7 @@ function Announcement() {
                 });
             }}
           >
-            Edit
+            Save
           </Button>,
         ]}
         onCancel={onCancel}
@@ -429,10 +415,12 @@ function Announcement() {
                 style={{ borderRadius: 20 }}
               />
             </Form.Item>
-            <Form.Item label="Image">
+            <Form.Item
+              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Image</div>}
+            >
               <div>
                 {pickedImage ? null : (
-                  <div className="inputImage">
+                  <div className={imageBorder}>
                     <label htmlFor="input">
                       <div
                         class="child"
@@ -469,12 +457,13 @@ function Announcement() {
                 {pickedImage ? (
                   <div>
                     <img
-                      style={{ width: "100%", height: "50vh" }}
+                      style={{ width: "100%", height: "40vh" }}
                       src={pickedImage}
                       alt="test"
                     />
                   </div>
                 ) : null}
+                {imageBorder === 'inputNoImage' ? <span style={{ color: '#ff4d4f' }}>Please input details</span> : null}
                 <div style={{ marginTop: 12 }}>
                   {pickedImage ? (
                     <div className="delete">
@@ -489,7 +478,6 @@ function Announcement() {
           </div>
           <div style={{ width: 45 }}></div>
           <div style={{ flex: 1 }}>
-
             <Form.Item
               name="detail"
               label="Details"
@@ -502,7 +490,7 @@ function Announcement() {
             >
               <Input.TextArea
                 placeholder="Please input details"
-                style={{ minHeight: "40vh" }}
+                style={{ minHeight: "20vh" }}
               />
             </Form.Item>
             <Form.Item
@@ -523,7 +511,6 @@ function Announcement() {
                 ))}
               </Select>
             </Form.Item>
-
             {publishPicked === "Scheduled" ? (
               <div className="flex-container">
                 <div style={{ flex: 1 }}>
@@ -538,14 +525,14 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker className="dateTime" onChange={onDateChange} />
+                    <DatePicker className="dateTime" />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
                 <div style={{ flex: 1 }}>
                   <Form.Item
                     name="schedule_time"
-                    label="Schedule Time"
+                    label="Scheduled Time"
                     rules={[
                       {
                         type: "object",
@@ -556,7 +543,6 @@ function Announcement() {
                   >
                     <TimePicker
                       className="dateTime"
-                      onChange={onTimeChange}
                       format="HH:mm"
                     />
                   </Form.Item>
@@ -576,10 +562,10 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker className="dateTime" onChange={onDateChange} />
+                  <DatePicker className="dateTime" />
                 </Form.Item>
               </div>
-              <div style={{ width: 10 }}></div>
+              <div style={{ width: 10 }} />
               <div style={{ flex: 1 }}>
                 <Form.Item
                   name="expire_time"
@@ -594,17 +580,14 @@ function Announcement() {
                 >
                   <TimePicker
                     className="dateTime"
-                    onChange={onTimeChange}
                     format="HH:mm"
                   />
                 </Form.Item>
               </div>
             </div>
-
-
           </div>
-        </Form>
-      </Modal>
+        </Form >
+      </Modal >
     );
   };
 
@@ -614,19 +597,6 @@ function Announcement() {
     const [pickedImage, setPickedImage] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImage');
-    const [datePicked, setDatePicked] = useState("");
-    const [timePicked, setTimePicked] = useState("");
-
-    function onDateChange(date, dateString) {
-      console.log("date", date);
-      console.log("dateString", dateString);
-      setDatePicked(dateString);
-    }
-    function onTimeChange(time, timeString) {
-      console.log("time", time);
-      console.log("timeString", timeString);
-      setTimePicked(timeString);
-    }
 
     const deleteHandle = () => {
       setPickedImage(null);
@@ -663,35 +633,44 @@ function Announcement() {
       }
     }, [pickedImage]);
 
+    // const handleTest = async () => {
+    //   console.log('testeee')
+    //   await axios
+    //     .post(
+    //       "http://54.179.47.77:1337/announcements",
+    //       {
+    //         title_name: "bbbbb",
+    //       }, headers).then((res) => {
+    //         console.log(res)
+    //       })
+    //     .catch((err) => {
+    //       console.error("Can't add data: ", err);
+    //     });
+    // }
+
     const handleOnAdd = async (value) => {
       console.log("value", value);
-      let today = Date.now();
-      let dateNow = format(today, "yyyy-MM-dd");
-      let timeNow = format(today, "HH:mm");
-      console.log("today", today);
-      console.log("Date", dateNow, datePicked);
-      console.log("Time", timeNow, timePicked);
+      let dateNow = new Date().toISOString()
+      console.log("dateNow", dateNow);
+      console.log("dateNowEX", `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`);
 
-      // console.log("value time", value["time"]);
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
       await axios
-        .post(process.env.REACT_APP_API_URL + " /upload/", dataImage)
+        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
         .then((res) => {
           console.log("res", res);
           let imageId = res.data[0];
           axios
             .post(
-              `${URLreScript}`,
+              URLreScript,
               {
-                title_name: `${value["title_name"]}`,
-                post_status: `${value["publish_status"]}`,
+                title_name: value.title_name,
+                post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
                 announcer: session.user.fullname,
-                detail: `${value["detail"]}`,
-                date_announce: datePicked ? `${datePicked}` : `${dateNow}`,
-                time_announce: timePicked
-                  ? `${timePicked}:00.000`
-                  : `${timeNow}:00.000`,
+                detail: value.detail,
+                date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+                date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
                 image: imageId,
               }, headers
             )
@@ -728,7 +707,7 @@ function Announcement() {
                     let newValues = {
                       ...values,
                     };
-                    form.resetFields();
+                    // form.resetFields();
                     handleOnAdd(newValues);
                   } else { setImageBorder('inputNoImage') }
                 })
@@ -879,7 +858,7 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker className="dateTime" onChange={onDateChange} />
+                    <DatePicker className="dateTime" />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
@@ -897,7 +876,6 @@ function Announcement() {
                   >
                     <TimePicker
                       className="dateTime"
-                      onChange={onTimeChange}
                       format="HH:mm"
                     />
                   </Form.Item>
@@ -917,7 +895,7 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker className="dateTime" onChange={onDateChange} />
+                  <DatePicker className="dateTime" />
                 </Form.Item>
               </div>
               <div style={{ width: 10 }} />
@@ -935,7 +913,6 @@ function Announcement() {
                 >
                   <TimePicker
                     className="dateTime"
-                    onChange={onTimeChange}
                     format="HH:mm"
                   />
                 </Form.Item>
@@ -988,19 +965,11 @@ function Announcement() {
       <Table
         columns={columns}
         dataSource={
-          searchTag === "All Post"
-            ? searchName === ""
-              ? data
-              : data.filter((item) =>
-                item.title.toLowerCase().includes(searchName)
-              )
-            : searchName === ""
-              ? data.filter((item) => item.post_status.includes(searchTag))
-              : data.filter(
-                (item) =>
-                  item.post_status.includes(searchTag) &&
-                  item.title.toLowerCase().includes(searchName)
-              )
+          searchName === ""
+            ? data
+            : data.filter((item) =>
+              item.title.toLowerCase().includes(searchName)
+            )
         }
       />
       {value != null ? (
