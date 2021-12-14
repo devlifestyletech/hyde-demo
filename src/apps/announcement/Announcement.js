@@ -14,7 +14,8 @@ import {
   DatePicker,
   TimePicker,
   Popconfirm,
-  Divider
+  Divider,
+  Spin
 } from "antd";
 import {
   PlusOutlined,
@@ -58,6 +59,7 @@ function Announcement() {
   const [newVisible, setNewVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [editVisible, setEditVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const showEditModal = () => {
     setEditVisible(true);
@@ -195,17 +197,11 @@ function Announcement() {
   };
 
   useEffect(() => {
-    // console.log('session', session.user.fullname)
-    // console.log('session', session)
-    // console.log('headers', headers)
-    let today = new Date().toISOString()
-    // let dateNow = format(today, "yyyy-MM-dd");
-    // let timeNow = format(today, "HH:mm");
-    console.log("today", URLreScript);
     fetchData();
   }, [month]);
 
   const fetchData = async () => {
+    setLoading(true)
     let gte, lt;
     if (month.split('-')[1] === '12') {
       gte = month + '-01'
@@ -213,14 +209,13 @@ function Announcement() {
     }
     else {
       gte = month + '-01'
-      lt = `${month.split('-')[0]}-${parseInt(month.split('-')[1]) + 1}-01`
+      lt = `${month.split('-')[0]}-${(parseInt(month.split('-')[1]) + 1 < 10) ? `0${parseInt(month.split('-')[1]) + 1}` : `${parseInt(month.split('-')[1]) + 1}`}-01`
     }
-    console.log('gte', gte, lt)
-    let url = month === "" ? (URLreScript + "?_sort=createdAt:desc") : (URLreScript + `?createdAt_gte=${gte}&createdAt_lt=${lt}&_sort=createdAt:desc`)
-    let url2 = `${URLreScript}${month === "" ? "?" : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`}_sort=createdAt:desc`
-    console.log('url2', url2)
+
+    let url = `${URLreScript}${month === "" ? "?" : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`}_sort=createdAt:desc`
+    console.log(url)
     await axios
-      .get(url2, headers)
+      .get(url, headers)
       .then((response) => {
         console.log("data", response.data);
         let originData = [];
@@ -234,6 +229,7 @@ function Announcement() {
           originData.push(announceData)
         })
         setData(originData);
+        setLoading(false)
       });
   };
 
@@ -932,10 +928,19 @@ function Announcement() {
   };
 
   function onMonthChange(date, dateString) {
-    console.log("date", date);
-    console.log("dateString", dateString);
+    // console.log("date", date);
+    // console.log("dateString", dateString);
     setMonth(dateString)
   }
+
+  const Loading = () => {
+    return <div style={{ width: "80vw", height: "100vh", textAlign: "center", paddingTop: 300 }}>
+      <Spin size='large' />
+      <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
+    </div>
+  }
+
+
 
   return (
     <>
@@ -969,7 +974,7 @@ function Announcement() {
         onChange={handleSearchChange}
         className="search-box"
       />
-      <Table
+      {loading ? <Loading /> : <Table
         columns={columns}
         dataSource={
           searchName === ""
@@ -978,7 +983,7 @@ function Announcement() {
               item.title_name.toLowerCase().includes(searchName)
             )
         }
-      />
+      />}
       {value != null ? (
         <EditAnnouncement
           visible={editVisible}
