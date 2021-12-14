@@ -37,7 +37,7 @@ import { encryptStorage } from "../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 function Announcement() {
-  const URLreScript = process.env.REACT_APP_API_URL + "/announcements/";
+  const URLreScript = process.env.REACT_APP_API_URL + "/announcements";
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
   // const types = [
@@ -52,7 +52,7 @@ function Announcement() {
   const { MonthPicker } = DatePicker;
   const thTimeZone = 'Asia/Bangkok'
   const [data, setData] = useState([]);
-  const [month, setMonth] = useState();
+  const [month, setMonth] = useState("");
   const [searchName, setSearchName] = useState("");
   // const [searchTag, setSearchTag] = useState("All Post");
   const [newVisible, setNewVisible] = useState(false);
@@ -195,35 +195,42 @@ function Announcement() {
   };
 
   useEffect(() => {
-    console.log('session', session.user.fullname)
-    console.log('session', session)
-    console.log('headers', headers)
+    // console.log('session', session.user.fullname)
+    // console.log('session', session)
+    // console.log('headers', headers)
     let today = new Date().toISOString()
     // let dateNow = format(today, "yyyy-MM-dd");
     // let timeNow = format(today, "HH:mm");
-    console.log("today", today);
+    console.log("today", URLreScript);
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    // console.log(month);
   }, [month]);
 
-  const fetchData = () => {
-    axios
-      .get(URLreScript, headers)
+  const fetchData = async () => {
+    let gte, lt;
+    if (month.split('-')[1] === '12') {
+      gte = month + '-01'
+      lt = `${parseInt(month.split('-')[0]) + 1}-01-01`
+    }
+    else {
+      gte = month + '-01'
+      lt = `${month.split('-')[0]}-${parseInt(month.split('-')[1]) + 1}-01`
+    }
+    console.log('gte', gte, lt)
+    let url = month === "" ? (URLreScript + "?_sort=createdAt:desc") : (URLreScript + `?createdAt_gte=${gte}&createdAt_lt=${lt}&_sort=createdAt:desc`)
+    let url2 = `${URLreScript}${month === "" ? "?" : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`}_sort=createdAt:desc`
+    console.log('url2', url2)
+    await axios
+      .get(url2, headers)
       .then((response) => {
         console.log("data", response.data);
         let originData = [];
 
-
-
         response.data.forEach((announce, index) => {
           let date_an = format(utcToZonedTime(new Date(announce.date_announced), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
           let date_ex = format(utcToZonedTime(new Date(announce.date_expired), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
-          console.log('date', date_an, date_ex)
+          // console.log('date', date_an, date_ex)
           let announceData = { key: index, number: index + 1, date_announced_show: date_an, date_expired_show: date_ex, ...announce };
-          console.log(index, announceData)
+          // console.log(index, announceData)
           originData.push(announceData)
         })
         setData(originData);
@@ -968,7 +975,7 @@ function Announcement() {
           searchName === ""
             ? data
             : data.filter((item) =>
-              item.title.toLowerCase().includes(searchName)
+              item.title_name.toLowerCase().includes(searchName)
             )
         }
       />
