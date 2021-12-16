@@ -76,7 +76,8 @@ export default function EditModal({ user, visible, onCancel }) {
 						});
 					});
 				} else {
-					authService.editUserData(user.id, value).then(() => {
+					let new_value = { image: "61bab50dbbf38e05d8a666fd", ...value };
+					authService.editUserData(user.id, new_value).then(() => {
 						message.success("Save finished");
 						onCancel();
 					});
