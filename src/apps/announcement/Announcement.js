@@ -197,6 +197,7 @@ function Announcement() {
   };
 
   useEffect(() => {
+    console.log('session', session)
     fetchData();
   }, [month]);
 
@@ -239,7 +240,7 @@ function Announcement() {
     const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImage');
-    console.log("editValue.date " + editValue);
+    console.log('editValue.id',editValue.id)
 
     let date_an = format(utcToZonedTime(new Date(editValue.date_announced), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
     let date_ex = format(utcToZonedTime(new Date(editValue.date_expired), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
@@ -281,7 +282,7 @@ function Announcement() {
     };
 
     function publishPickedHandle(key) {
-      console.log("publishPickedHandle", key);
+      // console.log("publishPickedHandle", key);
       setPublishPicked(key);
     }
 
@@ -301,14 +302,15 @@ function Announcement() {
     const handleEditChange = async (value) => {
       console.log("value", value);
       let dateNow = new Date().toISOString()
-      console.log("today", dateNow);
+      // console.log("today", dateNow);
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
+      console.log('editValue.id', editValue.id)
 
       if (imageFile == null) {
         axios
           .put(
-            `${URLreScript}${editValue.id}`,
+            `${URLreScript}/${editValue.id}`,
             {
               title_name: value.title_name,
               post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
@@ -328,13 +330,13 @@ function Announcement() {
           });
       } else {
         await axios
-          .post(process.env.REACT_APP_API_URL + " /upload/", dataImage)
+          .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
           .then((res) => {
             console.log("res", res);
             let imageId = res.data[0];
             axios
               .put(
-                `${URLreScript}${editValue.id}`,
+                `${URLreScript}/${editValue.id}`,
                 {
                   title_name: value.title_name,
                   post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
@@ -607,7 +609,7 @@ function Announcement() {
     };
 
     function publishPickedHandle(key) {
-      console.log("publishPickedHandle", key);
+      // console.log("publishPickedHandle", key);
       setPublishPicked(key);
     }
 
@@ -636,25 +638,10 @@ function Announcement() {
       }
     }, [pickedImage]);
 
-    // const handleTest = async () => {
-    //   console.log('testeee')
-    //   await axios
-    //     .post(
-    //       "http://54.179.47.77:1337/announcements",
-    //       {
-    //         title_name: "bbbbb",
-    //       }, headers).then((res) => {
-    //         console.log(res)
-    //       })
-    //     .catch((err) => {
-    //       console.error("Can't add data: ", err);
-    //     });
-    // }
-
     const handleOnAdd = async (value) => {
-      console.log("value", value);
+      // console.log("value", value);
       let dateNow = new Date().toISOString()
-      console.log("dateNow", dateNow);
+      // console.log("dateNow", dateNow);
       console.log("dateNowEX", `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`);
 
       let dataImage = new FormData();
