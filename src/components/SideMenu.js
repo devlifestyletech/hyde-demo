@@ -4,6 +4,7 @@ import "./styles/side-menu.css";
 import MenuLogo from "./assets/menu-logo.svg";
 import nearbyImg from "./assets/nearby.svg";
 import announcement from "./assets/announcement.svg";
+import service from "./assets/service.svg";
 import logoutIcon from "./assets/logout.svg";
 import pieIcon from "./assets/pie.svg";
 import authService from "../services/auth.service";
@@ -57,6 +58,18 @@ function SideMenu() {
 						<SubMenu className='sub-menu' key='announcement' icon={<img src={announcement} alt='announcement' />} title='Announcement'>
 							<Menu.Item key='4' className='menu-item'>
 								<Link to='/announcement'>Announcement Lists</Link>
+							</Menu.Item>
+						</SubMenu>
+						<div className='group-name'>Maintenance</div>
+						<SubMenu className='sub-menu' key='maintenance' icon={<img src={service} alt='service' />} title='Service Center'>
+							<Menu.Item key='5' className='menu-item'>
+								<Link to='/service-center-dashBoard'>Service Center Dashboard</Link>
+							</Menu.Item>
+							<Menu.Item key='6' className='menu-item'>
+								<Link to='/service-center-reports'>Service Center lists</Link>
+							</Menu.Item>
+							<Menu.Item key='7' className='menu-item'>	
+							<Link to='/service-center-massage'>Massage</Link>
 							</Menu.Item>
 						</SubMenu>
 						<div className='group-name'>Settings</div>

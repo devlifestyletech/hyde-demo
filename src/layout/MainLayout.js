@@ -13,6 +13,11 @@ import Nearby from "../apps/nearby/NearbyService";
 //Announcement
 import Announcement from "../apps/announcement/Announcement";
 
+//Fixing
+
+import FixingReports from "../apps/fixing_report/view/Fixing_Reports"
+import FixingReportDashBoard from "../apps/fixing_report/view/Fixing_Report_DashBoard"
+
 const { Sider, Content } = Layout;
 function MainLayout() {
 	return (
@@ -28,6 +33,8 @@ function MainLayout() {
 						<Route path='/members/registration' element={<Registration />} />
 						<Route path='/nearby' element={<Nearby />} />
 						<Route path='/announcement' element={<Announcement />} />
+						<Route path='/service-center-reports' element={<FixingReports />} />
+						<Route path='/service-center-dashBoard' element={<FixingReportDashBoard />} />
 					</Routes>
 				</Content>
 			</Layout>

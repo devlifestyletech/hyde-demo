@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import Heading from "../../components/Heading";
+import Heading from "../../../components/Header";
 import {
   Button, Table, Image, Input, Row, Col, DatePicker, Form, Modal, Select,
   TimePicker,
@@ -9,7 +9,7 @@ import { PictureOutlined } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
 
-import { encryptStorage } from "../../utils/encryptStorage";
+import { encryptStorage } from "../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 const FixingReports = () => {
@@ -18,7 +18,7 @@ const FixingReports = () => {
   const [searchName, setSearchName] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [reportValue, setReportValue] = useState(null);
-  const auth = session.jwt;
+  const headers = { headers: { Authorization: "Bearer " + session.jwt } }
   const URLreScript = process.env.REACT_APP_API_URL + "fixing-reports/";
   const { format } = require('date-fns');
   const { Option } = Select;
@@ -185,8 +185,6 @@ const FixingReports = () => {
     setReportValue(record);
     setVisible(true);
     console.log('URLreScript', `${URLreScript}${record.key}`)
-
-
   };
 
   const handleSearch = (value) => {
@@ -325,9 +323,7 @@ const FixingReports = () => {
             cause: value.cause,
             solution: value.solution,
           },
-          {
-            headers: { Authorization: "Bearer " + session.jwt },
-          }
+          headers
         )
         .then((res) => {
           console.log('res', res)
@@ -363,10 +359,7 @@ const FixingReports = () => {
                     {
                       image_pending: arr,
 
-                    },
-                    {
-                      headers: { Authorization: "Bearer " + session.jwt },
-                    }
+                    },headers
                   )
                   .then((res) => {
                     fetchData();
@@ -404,10 +397,7 @@ const FixingReports = () => {
                     {
                       image_repairing: arr,
 
-                    },
-                    {
-                      headers: { Authorization: "Bearer " + session.jwt },
-                    }
+                    },headers
                   )
                   .then((res) => {
                     fetchData();
@@ -445,10 +435,7 @@ const FixingReports = () => {
                     {
                       image_success: arr,
 
-                    },
-                    {
-                      headers: { Authorization: "Bearer " + session.jwt },
-                    }
+                    },headers
                   )
                   .then((res) => {
                     fetchData();
@@ -848,12 +835,9 @@ const FixingReports = () => {
     let combinesData = [];
 
     await axios
-      .get(process.env.REACT_APP_API_URL + "addresses", {
-        headers: {
-          Authorization: "Bearer " + auth,
-        },
-      })
+      .get(process.env.REACT_APP_API_URL + "/addresses",headers)
       .then((res) => {
+        console.log('resData',res.data)
         residencesData = res.data;
         residencesData
           .filter((item) => item.owner != null && item.owner !== undefined)
@@ -863,7 +847,7 @@ const FixingReports = () => {
               let newReport = { key: residence.fixing_reports[index].id, number: index + 1, address_no: residence.address_no, owner: (residence.owner.first_name_en + ' ' + residence.owner.last_name_en), ...report };
               residence.fixing_reports[index] = newReport;
             });
-            //console.log('residenceData');
+            console.log('residenceData');
             console.log(residenceData.fixing_reports);
             combinesData.push(residenceData);
           });

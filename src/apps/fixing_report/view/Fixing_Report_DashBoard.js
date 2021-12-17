@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import Heading from "../../components/Heading";
+import Heading from "../../../components/Header";
 import { Row, Col, Card, Table, DatePicker, Button } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { Pie, G2 } from "@ant-design/charts";
@@ -8,7 +8,7 @@ import "../style/fixingStyle.css";
 import axios from "axios";
 import moment from "moment";
 
-import { encryptStorage } from "../../utils/encryptStorage";
+import { encryptStorage } from "../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 export default function FixingReportDashBoard() {
@@ -17,6 +17,7 @@ export default function FixingReportDashBoard() {
   const [year, setYear] = useState(new Date().getFullYear());
   const day = new Date().setHours(0, 0, 0, 0);
   const [monthData, setMonthData] = useState([]);
+  const headers = { headers: { Authorization: "Bearer " + session.jwt } }
 
   const { registerTheme } = G2;
   registerTheme('custom-theme', {
@@ -238,20 +239,14 @@ export default function FixingReportDashBoard() {
     },
   ];
 
-  const auth = session.jwt;
   // function
-
   const fetchData = async () => {
     console.log("========== FETCHING ==========");
     await axios
       .get(
         process.env.REACT_APP_API_URL +
         'fixing-reports',
-        {
-          headers: {
-            Authorization: "Bearer " + auth,
-          },
-        }
+       headers
       )
       .then((res) => {
         console.log(res.data);
@@ -302,7 +297,7 @@ export default function FixingReportDashBoard() {
 
   // action
   useEffect(() => {
-    fetchData();
+    // fetchData();
     console.log('year', year, new Date(`01-01-${year}`).getTime())
     console.log('day', day)
   }, [year]);
