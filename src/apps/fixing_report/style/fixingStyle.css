@@ -37,7 +37,7 @@
   overflow-y:scroll;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 30px;
+  border-radius: 10px;
   min-height: 20vh;
   max-height: 20vh;
   width: 100%;

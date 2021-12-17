@@ -22,7 +22,7 @@ const FixingReports = () => {
   const URLreScript = process.env.REACT_APP_API_URL + "fixing-reports/";
   const { format } = require('date-fns');
   const { Option } = Select;
-  const status = { Pending: '#CA0000', Repairing: '#CCCF1F', Success: '#84BA40' };
+  const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
 
   const { Search } = Input;
 
@@ -34,9 +34,9 @@ const FixingReports = () => {
     },
     {
       title: "Address",
-      dataIndex: "address_no",
-      key: "address_no",
-      render: (index, record) => <div>{record.address_no}</div>,
+      dataIndex: "address_number",
+      key: "address_number",
+      render: (index, record) => <div>{record.address_number}</div>,
     },
     {
       title: "Owner",
@@ -95,9 +95,12 @@ const FixingReports = () => {
             width={150} height={100}
             src={
               record?.image_pending[0]
-                ? process.env.REACT_APP_IMG_URL + record.image_pending[0].url
+                ? process.env.REACT_APP_API_URL + record.image_pending[0].url
                 : "/main/images/artani-logo.png"
             }
+            alt={record?.image_pending[0]
+              ? process.env.REACT_APP_API_URL + record.image_pending[0].url
+              : "/main/images/artani-logo.png"}
           />
         </>
       ),
@@ -134,8 +137,8 @@ const FixingReports = () => {
     {
       hidden: true,
       title: "Address",
-      dataIndex: "address_no",
-      key: "address_no",
+      dataIndex: "address_number",
+      key: "address_number",
     },
     {
       hidden: true,
@@ -161,7 +164,7 @@ const FixingReports = () => {
       render: (_, record) => (
         <Button
           style={{
-            backgroundColor: "#B2A37A",
+            backgroundColor: "#D8AA81",
             color: "#F5F4EC",
             borderRadius: 20
           }}
@@ -359,7 +362,7 @@ const FixingReports = () => {
                     {
                       image_pending: arr,
 
-                    },headers
+                    }, headers
                   )
                   .then((res) => {
                     fetchData();
@@ -397,7 +400,7 @@ const FixingReports = () => {
                     {
                       image_repairing: arr,
 
-                    },headers
+                    }, headers
                   )
                   .then((res) => {
                     fetchData();
@@ -435,7 +438,7 @@ const FixingReports = () => {
                     {
                       image_success: arr,
 
-                    },headers
+                    }, headers
                   )
                   .then((res) => {
                     fetchData();
@@ -459,7 +462,7 @@ const FixingReports = () => {
         {reportValue.image_pending.map((item, index) => {
           return <Image
             style={imagePreviewSty}
-            src={process.env.REACT_APP_IMG_URL + item.url}
+            src={process.env.REACT_APP_API_URL + item.url}
             alt={"reportPendingImg" + index}
           />
         })}
@@ -505,7 +508,7 @@ const FixingReports = () => {
         {reportValue.image_repairing.map((item, index) => {
           return <Image
             style={imagePreviewSty}
-            src={process.env.REACT_APP_IMG_URL + item.url}
+            src={process.env.REACT_APP_API_URL + item.url}
             alt={"reportRepairingImg" + index}
           />
         })}
@@ -551,7 +554,7 @@ const FixingReports = () => {
         {reportValue.image_success.map((item, index) => {
           return <Image
             style={imagePreviewSty}
-            src={process.env.REACT_APP_IMG_URL + item.url}
+            src={process.env.REACT_APP_API_URL + item.url}
             alt={"reportSuccessImg" + index}
           />
         })}
@@ -600,7 +603,7 @@ const FixingReports = () => {
         footer={[
           <Button
             style={{
-              backgroundColor: "#B2A37A",
+              backgroundColor: "#D8AA81",
               color: "#F5F4EC",
             }}
             className="add-btn"
@@ -611,7 +614,7 @@ const FixingReports = () => {
           </Button>,
           <Button
             style={{
-              backgroundColor: "#B2A37A",
+              backgroundColor: "#D8AA81",
               color: "#F5F4EC",
             }}
             className="add-btn"
@@ -739,7 +742,7 @@ const FixingReports = () => {
               label="Address"
             >
               <div className='divText'
-              ><p className='disableText'>{reportValue.address_no}</p></div>
+              ><p className='disableText'>{reportValue.address_number}</p></div>
             </Form.Item>
             <Form.Item
               name="pick_up_date"
@@ -773,7 +776,7 @@ const FixingReports = () => {
             >
               <Input.TextArea
                 placeholder="Please input details"
-                style={{ padding: '8px', borderRadius: '30px', minHeight: "20vh" }}
+                style={{ padding: '8px', borderRadius: '10px', minHeight: "20vh" }}
               />
             </Form.Item>
             <Form.Item
@@ -782,7 +785,7 @@ const FixingReports = () => {
             >
               <Input.TextArea
                 placeholder="Please input details"
-                style={{ padding: '8px', borderRadius: '30px', minHeight: "20vh" }}
+                style={{ padding: '8px', borderRadius: '10px', minHeight: "20vh" }}
               />
             </Form.Item>
             {publishPicked === "Scheduled" ? (
@@ -835,20 +838,21 @@ const FixingReports = () => {
     let combinesData = [];
 
     await axios
-      .get(process.env.REACT_APP_API_URL + "/addresses",headers)
+      .get(process.env.REACT_APP_API_URL + "/addresses", headers)
       .then((res) => {
-        console.log('resData',res.data)
+        console.log('resData', res.data)
         residencesData = res.data;
         residencesData
-          .filter((item) => item.owner != null && item.owner !== undefined)
+          // .filter((item) => item.owner != null && item.owner !== undefined)
+          .filter((item) => item.fixing_reports.length > 0)
           .forEach((residence, index) => {
             let residenceData = { key: index, number: index + 1, ...residence };
             residence.fixing_reports.forEach((report, index) => {
-              let newReport = { key: residence.fixing_reports[index].id, number: index + 1, address_no: residence.address_no, owner: (residence.owner.first_name_en + ' ' + residence.owner.last_name_en), ...report };
+              let newReport = { key: residence.fixing_reports[index].id, number: index + 1, address_number: residence.address_number, owner: residence.owner.fullname, ...report };
               residence.fixing_reports[index] = newReport;
             });
-            console.log('residenceData');
-            console.log(residenceData.fixing_reports);
+            // console.log('residenceData');
+            // console.log(residenceData.fixing_reports);
             combinesData.push(residenceData);
           });
       });
@@ -880,12 +884,13 @@ const FixingReports = () => {
         className="tableContainer"
         expandable={{
           expandedRowRender: (record) => (
-            <Table
-              columns={extendsColumns}
-              dataSource={record?.fixing_reports}
-              pagination={false}
-              rowClassName="expand-table"
-            />
+            <div>
+              <Table
+                columns={extendsColumns}
+                dataSource={record?.fixing_reports}
+                pagination={false}
+              />
+            </div>
           ),
           rowExpandable: (record) => record.fixing_reports != null,
         }}

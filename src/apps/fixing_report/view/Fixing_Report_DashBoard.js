@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Heading from "../../../components/Header";
 import { Row, Col, Card, Table, DatePicker, Button } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
 import { Pie, G2 } from "@ant-design/charts";
 import "../style/fixingStyle.css";
 import axios from "axios";
@@ -22,9 +21,9 @@ export default function FixingReportDashBoard() {
   const { registerTheme } = G2;
   registerTheme('custom-theme', {
     colors10: [
-      '#ED1C24',
-      '#DDE03D',
-      '#84BA40',
+      '#E86A6B',
+      '#EEC84D',
+      '#79CA6C',
     ],
   });
 
@@ -305,12 +304,6 @@ export default function FixingReportDashBoard() {
   return (
     <>
       <Heading title="Fixing Reports Dashboard" />
-      <Row>
-        <Col span={24} style={{ textAlign: "end" }}>
-          <SettingOutlined style={{ fontSize: 27, color: "#1D1C1C" }} />
-        </Col>
-      </Row>
-
       {/* Card View */}
       <Row gutter={16} style={{ paddingTop: 18 }}>
         <Col span={6}>
@@ -320,7 +313,7 @@ export default function FixingReportDashBoard() {
             className="card"
             headStyle={headStyle}
             bodyStyle={{
-              ...bodyStyle, background: "#ED1C24",
+              ...bodyStyle, background: "#E86A6B",
               color: "#F5F4EC",
             }}
           >
@@ -338,7 +331,7 @@ export default function FixingReportDashBoard() {
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
-              background: "#DDE03D",
+              background: "#EEC84D",
             }}
           >
             Repairing
@@ -353,7 +346,7 @@ export default function FixingReportDashBoard() {
             bordered={false}
             className="card"
             headStyle={headStyle}
-            bodyStyle={{ ...bodyStyle, background: "#84BA40" }}
+            bodyStyle={{ ...bodyStyle, background: "#79CA6C" }}
           >
             Success
           </Card>
@@ -395,8 +388,8 @@ export default function FixingReportDashBoard() {
             picker="year"
             defaultValue={moment()}
           />
-        </Row>
         <Button style={{ alignSelf: "flex-end" }}>Export</Button>
+        </Row>
       </Row>
 
       {/* Chart View */}
@@ -407,7 +400,7 @@ export default function FixingReportDashBoard() {
             bordered={false}
             className="card"
             headStyle={{
-              backgroundColor: "#CBB989",
+              backgroundColor: "#D3D3D3",
               height: 20,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
@@ -427,7 +420,7 @@ export default function FixingReportDashBoard() {
             className="card"
             style={{ marginTop: 28 }}
             headStyle={{
-              backgroundColor: "#CBB989",
+              backgroundColor: "#D3D3D3",
               height: 20,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
@@ -450,7 +443,7 @@ export default function FixingReportDashBoard() {
             bordered={false}
             className="card"
             headStyle={{
-              backgroundColor: "#CBB989",
+              backgroundColor: "#D3D3D3",
               height: 20,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,

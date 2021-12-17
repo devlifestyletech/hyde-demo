@@ -66,7 +66,7 @@ function SideMenu() {
 								<Link to='/service-center-dashBoard'>Service Center Dashboard</Link>
 							</Menu.Item>
 							<Menu.Item key='6' className='menu-item'>
-								<Link to='/service-center-reports'>Service Center lists</Link>
+								<Link to='/service-center-reports'>Service Center Lists</Link>
 							</Menu.Item>
 							<Menu.Item key='7' className='menu-item'>	
 							<Link to='/service-center-massage'>Massage</Link>

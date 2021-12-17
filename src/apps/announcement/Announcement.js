@@ -185,7 +185,7 @@ function Announcement() {
   const handleDelete = async (key) => {
     console.log("record.name", key);
     await axios
-      .delete(`${URLreScript}${key}`, headers)
+      .delete(`${URLreScript}/${key}`, headers)
       .then((result) => {
         fetchData();
         console.log("delete:", result);
@@ -240,7 +240,7 @@ function Announcement() {
     const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImage');
-    console.log('editValue.id',editValue.id)
+    console.log('editValue.id', editValue.id)
 
     let date_an = format(utcToZonedTime(new Date(editValue.date_announced), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
     let date_ex = format(utcToZonedTime(new Date(editValue.date_expired), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
@@ -932,37 +932,41 @@ function Announcement() {
   return (
     <>
       <Heading title="Announcements" />
-      <div align="right">
-        <Button
-          size="large"
-          shape="round"
-          icon={<PlusOutlined />}
-          style={{
-            marginTop: 10,
-            backgroundColor: "#D8AA81",
-            color: "#F5F4EC",
-            alignSelf: "end",
-          }}
-          onClick={showModal}
-        >
-          Create Announcement
-        </Button>
-      </div>
-      <MonthPicker
-        style={{ width: 369, marginBottom: 19, marginRight: 10 }}
-        onChange={onMonthChange}
-        placeholder="Select month"
-      />
-      <Search
-        placeholder="Search by title"
-        allowClear
-        onSearch={handleSearch}
-        style={{ width: 200, marginBottom: 19 }}
-        onChange={handleSearchChange}
-        className="search-box"
-      />
+      <Row>
+        <MonthPicker
+          style={{ width: 369, marginBottom: 19, marginRight: 10,borderRadius:20 }}
+          onChange={onMonthChange}
+          placeholder="Select month"
+          // className="search-box"
+        />
+        <Search
+          placeholder="Search by title"
+          allowClear
+          onSearch={handleSearch}
+          style={{ width: 369, marginBottom: 19, marginRight: 10,borderRadius:20 }}
+          onChange={handleSearchChange}
+          // className="search-box"
+        />
+        <div align="right">
+          <Button
+            size="large"
+            shape="round"
+            icon={<PlusOutlined />}
+            style={{
+              marginTop: 10,
+              backgroundColor: "#D8AA81",
+              color: "#F5F4EC",
+              alignSelf: "end",
+            }}
+            onClick={showModal}
+          >
+            Create Announcement
+          </Button>
+        </div>
+      </Row>
       {loading ? <Loading /> : <Table
         columns={columns}
+        scroll={{ x: 1500 }}
         dataSource={
           searchName === ""
             ? data
