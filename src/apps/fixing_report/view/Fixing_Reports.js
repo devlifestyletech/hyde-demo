@@ -8,7 +8,7 @@ import {
 import { PictureOutlined } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
-
+import { format, utcToZonedTime } from 'date-fns-tz'
 import { encryptStorage } from "../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
@@ -19,8 +19,8 @@ const FixingReports = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [reportValue, setReportValue] = useState(null);
   const headers = { headers: { Authorization: "Bearer " + session.jwt } }
-  const URLreScript = process.env.REACT_APP_API_URL + "fixing-reports/";
-  const { format } = require('date-fns');
+  const URLreScript = process.env.REACT_APP_API_URL + "/fixing-reports";
+  const thTimeZone = 'Asia/Bangkok'
   const { Option } = Select;
   const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
 
@@ -107,16 +107,9 @@ const FixingReports = () => {
     },
     {
       width: 120,
-      title: "Date",
-      dataIndex: "submission_date",
-      key: "submission_date",
-      render: (text) => {
-        const { format } = require('date-fns');
-        const today = format(parseInt(text, 10), 'dd MMM yyyy');
-        return (
-          <span >{today}</span>
-        )
-      },
+      title: "Submission Date",
+      dataIndex: "submission_date_show",
+      key: "submission_date_show",
     },
     {
       title: "Problem",
@@ -187,7 +180,7 @@ const FixingReports = () => {
     setIsEdit(true);
     setReportValue(record);
     setVisible(true);
-    console.log('URLreScript', `${URLreScript}${record.key}`)
+    // console.log('URLreScript', `${URLreScript}${record.key}`)
   };
 
   const handleSearch = (value) => {
@@ -206,25 +199,24 @@ const FixingReports = () => {
 
   const ManageReport = ({ visible, reportValue, onCancel }) => {
     const [form] = Form.useForm();
-    const [publishPicked, setPublishPicked] = useState();
-    const [pickedImage, setPickedImage] = useState(null);
+    const [reportStatus, setReportStatus] = useState(reportValue.status);
+    const [repairReq, setRepairReq] = useState(true);
+    const [successReq, setSuccessReq] = useState(true);
     const [pendingImg, setPendingImg] = useState([]);
     const [repairingImg, setRepairingImg] = useState([]);
     const [successImg, setSuccessImg] = useState([]);
     const [pendingImgFile, setPendingImgFile] = useState([]);
     const [repairingImgFile, setRepairingImgFile] = useState([]);
     const [successImgFile, setSuccessImgFile] = useState([]);
-    const [datePicked, setDatePicked] = useState("");
-    const [timePicked, setTimePicked] = useState("");
-    const { format } = require('date-fns');
-    const dateReport = format(parseInt(reportValue.submission_date, 10), 'dd MMM yyyy');
+    // const dateReport = format(parseInt(reportValue.submission_date, 10), 'dd MMM yyyy');
 
     const handleValue = () => {
+
       form.setFieldsValue({
-        pick_up_date: reportValue.pick_up_date ? moment(format(parseInt(reportValue.pick_up_date, 10), 'yyyy-MM-dd')) : "",
-        opening_date: reportValue.opening_date ? moment(format(parseInt(reportValue.opening_date, 10), 'yyyy-MM-dd')) : "",
-        closing_date: reportValue.closing_date ? moment(format(parseInt(reportValue.closing_date, 10), 'yyyy-MM-dd')) : "",
-        status: reportValue.status,
+        pick_up_date: (reportValue.pick_up_date) ? moment(format(utcToZonedTime(new Date(reportValue.pick_up_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
+        opening_date: (reportValue.opening_date) ? moment(format(utcToZonedTime(new Date(reportValue.opening_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
+        closing_date: (reportValue.closing_date) ? moment(format(utcToZonedTime(new Date(reportValue.closing_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
+        status: reportStatus,
         cause: reportValue.cause,
         solution: reportValue.solution,
       });
@@ -232,9 +224,24 @@ const FixingReports = () => {
 
     useEffect(() => {
       handleValue();
-
-      reportValue.opening_date ? console.log('moment reportValue.opening_date', format(parseInt(reportValue.opening_date, 10), 'yyyy-MM-dd')) : console.log('reportValue', reportValue)
     }, []);
+
+    useEffect(() => {
+      if (reportStatus === 'Repairing') {
+        setRepairReq(false)
+        setSuccessReq(true);
+      }
+      else if (reportStatus === 'Success') {
+        setRepairReq(false);
+        setSuccessReq(false);
+      }
+      else {
+        setRepairReq(true);
+        setSuccessReq(true);
+      }
+      console.log(repairReq, (reportValue.pick_up_date && !repairReq))
+      console.log(successReq, (reportValue.pick_up_date && !successReq))
+    }, [reportStatus]);
 
     const imagePreviewSty = {
       border: "1px solid #959595",
@@ -244,31 +251,12 @@ const FixingReports = () => {
       height: "16vh"
     };
 
-    function onDateChange(date, dateString) {
-      //console.log("date", date);
-      //console.log("dateString", dateString);
-      setDatePicked(dateString);
-    }
-
-    function onTimeChange(time, timeString) {
-      //console.log("time", time);
-      //console.log("timeString", timeString);
-      setTimePicked(timeString);
-    }
-
-    const deleteHandle = () => {
-      setPickedImage(null);
-      setPendingImgFile([]);
-      // console.log('preImage', preImage)
-    };
-
-    function publishPickedHandle(key) {
-      //console.log("publishPickedHandle", key);
-      setPublishPicked(key);
+    function statusHandle(status) {
+      console.log("statusHandle", status);
+      setReportStatus(status);
     }
 
     console.log("reportValue", reportValue);
-    console.log("image_repairing", reportValue.image_repairing);
 
     const selectPendingImg = (e) => {
       setPendingImgFile([...pendingImgFile, e.target.files[0]]);
@@ -309,20 +297,18 @@ const FixingReports = () => {
       reader.readAsDataURL(e.target.files[0]);
     };
 
-    const handleOnAdd = async (value) => {
-      console.log("value", value);
-      var opening_date = new Date(value.opening_date).getTime();
-      opening_date ? console.log("newDate", opening_date) : console.log("value.key", reportValue.key);
+    const handleEditReport = async (value) => {
+      console.log("value", value, value.status);
 
       axios
         .put(
-          `${URLreScript}${reportValue.key}`,
+          `${URLreScript}/${reportValue.key}`,
           {
 
-            pick_up_date: value.pick_up_date ? `${new Date(value.pick_up_date).getTime()}` : "",
-            opening_date: value.opening_date ? `${new Date(value.opening_date).getTime()}` : "",
-            closing_date: value.closing_date ? `${new Date(value.closing_date).getTime()}` : "",
-            status: value.status,
+            pick_up_date: value.pick_up_date ? `${value.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
+            opening_date: value.opening_date ? `${value.opening_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
+            closing_date: value.closing_date ? `${value.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
+            status: reportStatus,
             cause: value.cause,
             solution: value.solution,
           },
@@ -330,9 +316,13 @@ const FixingReports = () => {
         )
         .then((res) => {
           console.log('res', res)
-          uploadImg();
-          // fetchData();
-          // closeModal();
+          if (pendingImgFile.length > 0 && repairingImgFile.length > 0 && successImgFile.length > 0) { uploadImg(); } else {
+            uploadImg();
+            fetchData();
+            closeModal();
+          }
+
+
         })
         .catch((err) => {
           console.error("Can't add data: ", err);
@@ -350,7 +340,7 @@ const FixingReports = () => {
           console.log('pendingImgFile', i, pendingImgFile[i])
           dataImage ?
             await axios
-              .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+              .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
               .then((res) => {
                 let imageId = res.data[0];
                 console.log("imageId", imageId);
@@ -358,7 +348,7 @@ const FixingReports = () => {
                 console.log("arr", arr);
                 axios
                   .put(
-                    `${URLreScript}${reportValue.key}`,
+                    `${URLreScript}/${reportValue.key}`,
                     {
                       image_pending: arr,
 
@@ -388,7 +378,7 @@ const FixingReports = () => {
           console.log('repairingImgFile', i, repairingImgFile[i])
           dataImage ?
             await axios
-              .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+              .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
               .then((res) => {
                 let imageId = res.data[0];
                 console.log("imageId", imageId);
@@ -396,7 +386,7 @@ const FixingReports = () => {
                 console.log("arr", arr);
                 axios
                   .put(
-                    `${URLreScript}${reportValue.key}`,
+                    `${URLreScript}/${reportValue.key}`,
                     {
                       image_repairing: arr,
 
@@ -426,7 +416,7 @@ const FixingReports = () => {
           console.log('successImgFile', i, successImgFile[i])
           dataImage ?
             await axios
-              .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+              .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
               .then((res) => {
                 let imageId = res.data[0];
                 console.log("imageId", imageId);
@@ -434,7 +424,7 @@ const FixingReports = () => {
                 console.log("arr", arr);
                 axios
                   .put(
-                    `${URLreScript}${reportValue.key}`,
+                    `${URLreScript}/${reportValue.key}`,
                     {
                       image_success: arr,
 
@@ -627,7 +617,7 @@ const FixingReports = () => {
                     ...values,
                   };
                   form.resetFields();
-                  handleOnAdd(newValues);
+                  handleEditReport(newValues);
                 })
                 .catch((info) => {
                   //console.log("Validate Failed:", info);
@@ -649,7 +639,7 @@ const FixingReports = () => {
           }}
           style={{ display: "flex" }}
         >
-          <div style={{ flex: 1 }}>
+          <div className='report-form' style={{ flex: 1 }}>
             <Form.Item
               label="Owner"
             >
@@ -658,18 +648,24 @@ const FixingReports = () => {
               ><p className='disableText'>{reportValue.owner}</p></div>
             </Form.Item>
             <Form.Item
-              label="วันที่ส่งเรื่อง"
+              label="Submission Date"
               name="submission_date"
             >
               <div className='divText'
 
-              ><p className='disableText'>{dateReport}</p></div>
+              ><p className='disableText'>{reportValue.submission_date_show}</p></div>
             </Form.Item>
             <Form.Item
               name="opening_date"
-              label="วันเปิดใบงาน"
+              label="Opening Date"
+              rules={[
+                {
+                  required: repairReq ? false : true,
+                  message: "Please select opening date",
+                },
+              ]}
             >
-              <DatePicker className="dateTime" onChange={onDateChange} />
+              <DatePicker className="dateTime" disabled={repairReq ? true : false} />
             </Form.Item>
             <Form.Item
               name="status"
@@ -681,9 +677,9 @@ const FixingReports = () => {
                 },
               ]}
             >
-              <Select style={{ width: "100%" }}>
+              <Select style={{ width: "100%" }} onChange={statusHandle}>
                 {Object.keys(status).map((type, index) => (
-                  <Option value={type} key={index}>
+                  <Option value={type} key={index} >
                     {type}
                   </Option>
                 ))}
@@ -693,7 +689,6 @@ const FixingReports = () => {
               label="Problem"
             >
               <div className='divText'
-
               ><p className='disableText'>{reportValue.problem}</p></div>
             </Form.Item>
             <Form.Item label="Pending">
@@ -737,7 +732,7 @@ const FixingReports = () => {
             </Form.Item>
           </div>
           <div style={{ width: 45 }}></div>
-          <div style={{ flex: 1 }}>
+          <div className='report-form' style={{ flex: 1 }}>
             <Form.Item
               label="Address"
             >
@@ -746,21 +741,32 @@ const FixingReports = () => {
             </Form.Item>
             <Form.Item
               name="pick_up_date"
-              label="วันที่รับเรื่อง"
+              label="Receive Date"
+              rules={[
+                {
+                  required: repairReq ? false : true,
+                  message: "Please select receive date",
+                },
+              ]}
             >
-              <DatePicker className="dateTime" onChange={onDateChange} />
+              <DatePicker className="dateTime" disabled={repairReq ? true : false} />
             </Form.Item>
             <Form.Item
               name="closing_date"
-              label="วันปิดใบงาน"
+              label="Closing Date"
+              rules={[
+                {
+                  required: successReq ? false : true,
+                  message: "Please select closing date",
+                },
+              ]}
             >
-              <DatePicker className="dateTime" onChange={onDateChange} />
+              <DatePicker className="dateTime" disabled={successReq ? true : false} />
             </Form.Item>
             <Form.Item
               label="Type"
             >
               <div className='divText'
-
               ><p className='disableText'>{reportValue.type}</p></div>
             </Form.Item>
             <Form.Item
@@ -773,60 +779,35 @@ const FixingReports = () => {
             <Form.Item
               name="cause"
               label="Cause"
+              rules={[
+                {
+                  required: successReq ? false : true,
+                  message: "Please enter cause",
+                },
+              ]}
             >
               <Input.TextArea
                 placeholder="Please input details"
                 style={{ padding: '8px', borderRadius: '10px', minHeight: "20vh" }}
+                disabled={repairReq ? true : false}
               />
             </Form.Item>
             <Form.Item
               name="solution"
               label="Solution"
+              rules={[
+                {
+                  required: successReq ? false : true,
+                  message: "Please enter solution",
+                },
+              ]}
             >
               <Input.TextArea
                 placeholder="Please input details"
                 style={{ padding: '8px', borderRadius: '10px', minHeight: "20vh" }}
+                disabled={successReq ? true : false}
               />
             </Form.Item>
-            {publishPicked === "Scheduled" ? (
-              <div className="flex-container">
-                <div style={{ flex: 1 }}>
-                  <Form.Item
-                    name="date"
-                    label="Date"
-                    rules={[
-                      {
-                        type: "date",
-                        required: true,
-                        message: "Please select date",
-                      },
-                    ]}
-                  >
-                    <DatePicker className="dateTime" onChange={onDateChange} />
-                  </Form.Item>
-                </div>
-                <div style={{ width: 10 }}></div>
-                <div style={{ flex: 1 }}>
-                  <Form.Item
-                    name="time"
-                    label="Time"
-                    rules={[
-                      {
-                        type: "object",
-                        required: true,
-                        message: "Please select time",
-                      },
-                    ]}
-                  >
-                    <TimePicker
-                      className="dateTime"
-                      onChange={onTimeChange}
-                      format="HH:mm"
-                    />
-                  </Form.Item>
-                </div>
-              </div>
-            ) : null}
           </div>
         </Form>
       </Modal >
@@ -843,12 +824,15 @@ const FixingReports = () => {
         console.log('resData', res.data)
         residencesData = res.data;
         residencesData
-          // .filter((item) => item.owner != null && item.owner !== undefined)
+          // .filter((item) => item.owner != null && item.owner !== undefined)  
           .filter((item) => item.fixing_reports.length > 0)
           .forEach((residence, index) => {
             let residenceData = { key: index, number: index + 1, ...residence };
             residence.fixing_reports.forEach((report, index) => {
-              let newReport = { key: residence.fixing_reports[index].id, number: index + 1, address_number: residence.address_number, owner: residence.owner.fullname, ...report };
+
+              let date_show = format(utcToZonedTime(new Date(report.submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
+
+              let newReport = { key: residence.fixing_reports[index].id, number: index + 1, submission_date_show: date_show, address_number: residence.address_number, owner: residence.owner.fullname, ...report };
               residence.fixing_reports[index] = newReport;
             });
             // console.log('residenceData');
