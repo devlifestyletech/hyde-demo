@@ -1,13 +1,15 @@
 import React from "react";
 import "./styles/header.css";
 import { Button } from "antd";
-import NotiIcon from "./assets/bell.svg";
+
+import notiIcon from "./assets/bell.svg";
+
 function Header({ title }) {
 	return (
 		<div className='heading'>
 			<div className='title'>
 				{title}
-				<Button className='bell' type='link' icon={<img src={NotiIcon} alt='notification' />} />
+				<Button className='bell' type='link' icon={<img src={notiIcon} alt='notification' />} />
 			</div>
 		</div>
 	);

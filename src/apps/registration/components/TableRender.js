@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Divider, Table, Modal, message } from "antd";
+import { Button, Divider, Table, Modal, message, Spin } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 //image import from
@@ -14,7 +14,9 @@ export default function TableRender({ data, key, onEvent }) {
 	const [handleId, setHandleId] = useState(null);
 
 	useEffect(() => {
-		authService.getUserData(handleId).then((res) => setUser(res.data));
+		authService.getUserData(handleId).then((res) => {
+			setUser(res.data);
+		});
 	}, [handleId]);
 
 	const handleClickEdit = (id) => {
@@ -98,15 +100,15 @@ export default function TableRender({ data, key, onEvent }) {
 			)
 		}
 	];
+
 	return (
-		<div key={key}>
+		<div>
 			<Table key={key} dataSource={data} columns={columns} />
 			<EditModal
 				key={key}
 				visible={EditModalVisibility}
 				onCancel={() => {
 					setEditModalVisibility(false);
-					onEvent();
 				}}
 				user={user}
 			/>

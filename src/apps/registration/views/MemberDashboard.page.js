@@ -9,7 +9,7 @@ import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import moment from "moment";
 const { RangePicker } = DatePicker;
 
-function Dashboard() {
+function MemberDashboardPage() {
 	const monthFormat = "MMMM ,YYYY";
 
 	const customMonthStartEndFormat = (value) => `All of Month: ${moment(value).startOf("month").format(monthFormat)}`;
@@ -19,7 +19,7 @@ function Dashboard() {
 			<Statistic />
 			<Row style={{ justifyContent: "space-between" }}>
 				<div className='range' style={{ fontSize: 24, fontWeight: "bold", marginTop: 20 }}>
-					Select Month :  <DatePicker picker='month' format={customMonthStartEndFormat} />
+					Select Month : <DatePicker picker='month' format={customMonthStartEndFormat} />
 				</div>
 				<div>
 					<Button
@@ -50,4 +50,4 @@ function Dashboard() {
 	);
 }
 
-export default Dashboard;
+export default MemberDashboardPage;

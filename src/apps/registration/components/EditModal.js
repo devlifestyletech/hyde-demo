@@ -19,6 +19,7 @@ export default function EditModal({ user, visible, onCancel }) {
 	const [addresses, setAddresses] = useState();
 
 	useEffect(() => {
+		setImg(true);
 		addressService.getAllAddresses().then((res) => setAddresses(res.data));
 	}, []);
 	if (user) {
@@ -140,7 +141,7 @@ export default function EditModal({ user, visible, onCancel }) {
 									{img ? (
 										<div className='picked-avatar'>
 											<img className='picked-avatar-image' src={process.env.REACT_APP_API_URL + user?.image.url} alt='picked' />
-											<Button type='link' icon={<DeleteOutlined />} onClick={() => setPickedImage(null)} style={{ float: "right" }}>
+											<Button type='link' icon={<DeleteOutlined />} onClick={() => setImg(null)} style={{ float: "right" }}>
 												Change image
 											</Button>
 										</div>

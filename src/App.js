@@ -4,6 +4,7 @@ import SignInPage from "./apps/signin.page";
 import Loading from "./layout/Loading";
 import "./App.less";
 import { encryptStorage } from "./utils/encryptStorage";
+import "devextreme/dist/css/dx.light.css";
 
 function App() {
 	const [session, setSession] = useState(false);
