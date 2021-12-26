@@ -57,6 +57,7 @@ export default function EditModal({ user, visible, onCancel }) {
 
 	function showConfirm(value, imageData) {
 		Modal.confirm({
+			centered: true,
 			title: "Do you Want to save these change?",
 			icon: <ExclamationCircleOutlined />,
 			content: "That all your change will update",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../../../components/Header";
 import { Select, Button } from "antd";
-import "../styles/main.style.css";
+import "./styles/main.style.css";
 import { PlusOutlined } from "@ant-design/icons";
 
 //components import

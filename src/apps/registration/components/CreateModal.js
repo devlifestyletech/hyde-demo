@@ -43,6 +43,7 @@ function CreateModal({ visible, onCancel }) {
 
 	function showConfirm(value, imageData) {
 		confirm({
+			centered: true,
 			title: "Are you sure you want to add?",
 			icon: null,
 			okButtonProps: { shape: "round", size: "large" },

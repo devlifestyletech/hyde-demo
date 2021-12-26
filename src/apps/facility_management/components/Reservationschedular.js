@@ -31,6 +31,7 @@ export default function SchedularComponent() {
 
 	function showDeleteConfirm(id) {
 		Modal.confirm({
+			center: true,
 			title: "Are you sure delete this booking?",
 			// icon: <ExclamationCircleOutlined />,
 			content: "This booking will remove form database",

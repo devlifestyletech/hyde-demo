@@ -20,6 +20,7 @@
 	border-radius: 30px;
 }
 .md-form .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+	width: 100%;
 	border-radius: 20px;
 }
 

@@ -6,6 +6,7 @@ import qrIcon from "../assets/qr.svg";
 import editIcon from "../assets/edit.svg";
 import delIcon from "../assets/trash-2.svg";
 import EditReservation from "./EditReservation";
+import QrReservationModal from "./QrReservationModal";
 
 export default function ReservationTable() {
 	const [editReservationModalVisibility, setEditReservationModalVisibility] = useState(false);
@@ -14,6 +15,7 @@ export default function ReservationTable() {
 
 	function showConfirmDelete(id) {
 		Modal.confirm({
+			centered: true,
 			title: "Are you sure you want to delete reservation?",
 			icon: null,
 			autoFocusButton: null,
@@ -109,6 +111,7 @@ export default function ReservationTable() {
 		<div>
 			<Table dataSource={reservations} columns={columns} />
 			<EditReservation visible={editReservationModalVisibility} id={handleId} onCancel={() => setEditReservationModalVisibility(false)} />
+			<QrReservationModal visible={showQrReservationModalVisible} id={handleId} onCancel={() => setShowQrReservationModalVisible(false)} />
 		</div>
 	);
 }
