@@ -2,15 +2,14 @@ import React from "react";
 import QRCode from "qrcode.react";
 import { Modal, Row, Col, Button } from "antd";
 import { format } from "date-fns";
-
-// imageSettings={{ src: qrlogo, height: 50, width: 50 }}
+import qrlogo from "../assets/hyde_2.svg";
 
 export default function QrReservationModal({ id, visible, onCancel }) {
 	return (
 		<>
 			<Modal centered title='Reservation' visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
 				<div style={{ textAlign: "center" }}>
-					<QRCode value={id} size={200} />
+					<QRCode value={id} size={200} imageSettings={{ src: qrlogo, height: 50, width: 50 }} />
 				</div>
 				<div style={{ paddingLeft: 30, marginTop: 20 }}>
 					<Row>
