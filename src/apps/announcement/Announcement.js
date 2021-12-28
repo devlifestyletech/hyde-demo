@@ -10,10 +10,9 @@ import {
   Form,
   Select,
   Col,
-  Row,
   DatePicker,
   TimePicker,
-  Popconfirm,
+  message,
   Divider,
   Spin
 } from "antd";
@@ -21,7 +20,6 @@ import {
   PlusOutlined,
   PictureOutlined,
   DeleteOutlined,
-  EditOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
@@ -146,32 +144,23 @@ function Announcement() {
       key: "announcer",
     },
     {
-      width: 100,
+      align: "center",
       title: "Action",
       dataIndex: "operation",
       render: (_, record) => (
-        <Row justify="space-between">
-          <Col>
-            <Popconfirm
-              icon={<EditOutlined />}
-              title="Sure to Edit?"
-              onConfirm={() => handleEdit(record)}
-            >
-              <img src={editIcon} alt="Edit" />
-            </Popconfirm>
-          </Col>
-          <Col> <Divider type='vertical' style={{ height: 30 }} />
-          </Col>
-          <Col>
-            <Popconfirm
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.id)}
-            >
-              <img src={trashIcon} alt="Trash" />
-            </Popconfirm>
-          </Col>
-        </Row>
+        <div class="flex-container">
+        <Button
+          type='link'
+          icon={<img src={editIcon} alt='Edit' />}
+          onClick={() => handleEdit(record)}
+        />
+        <Divider type='vertical' style={{ height: 30 }} />
+        <Button
+          type='link'
+          icon={<img src={trashIcon} alt='delete' />}
+          onClick={() => onDelete(record.key)}
+        />
+      </div>
       ),
     },
   ].filter((item) => !item.hidden);
@@ -182,12 +171,29 @@ function Announcement() {
     showEditModal();
   };
 
+  const onDelete = (key) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this service?",
+      okButtonProps: { shape: "round", size: "large", type: "primary" },
+      cancelButtonProps: { shape: "round", size: "large" },
+      icon: <DeleteOutlined style={{ color: "red" }} />,
+      autoFocusButton: null,
+      centered: true,
+      onOk() {
+        handleDelete(key)
+      },
+      onCancel() {
+      }
+    });
+  };
+
   const handleDelete = async (key) => {
     console.log("record.name", key);
     await axios
       .delete(`${URLreScript}/${key}`, headers)
       .then((result) => {
         fetchData();
+        message.error("Service has been deleted successfully.");
         console.log("delete:", result);
         return result.status === 200 ? true : false;
       })

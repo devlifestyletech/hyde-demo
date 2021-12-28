@@ -132,33 +132,23 @@ function NearbyService() {
       sorter: (a, b) => (a.type > b.type ? 1 : -1),
     },
     {
-      width: 100,
-      title: "operation",
+      align: "center",
+      title: "Action",
       dataIndex: "operation",
       render: (_, record) => (
-        <Row justify="space-between">
-          <Col>
-            <Popconfirm
-              icon={<EditOutlined />}
-              title="Sure to Edit?"
-              onConfirm={() => handleEdit(record)}
-            >
-              <img src={editIcon} alt="Edit" />
-            </Popconfirm>
-          </Col>
-          <Col>
-            <Divider type='vertical' style={{ height: 30 }} />
-          </Col>
-          <Col>
-            <Popconfirm
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <img src={trashIcon} alt="Trash" />
-            </Popconfirm>
-          </Col>
-        </Row>
+        <div class="flex-container">
+          <Button
+            type='link'
+            icon={<img src={editIcon} alt='Edit' />}
+            onClick={() => handleEdit(record)}
+          />
+          <Divider type='vertical' style={{ height: 30 }} />
+          <Button
+            type='link'
+            icon={<img src={trashIcon} alt='delete' />}
+            onClick={() => onDelete(record.key)}
+          />
+        </div>
       ),
     },
   ];
@@ -230,19 +220,37 @@ function NearbyService() {
     }
   };
 
-  const handleEdit = async (record) => {
+  const handleEdit = (record) => {
     console.log("Edit", record);
     setValue(record);
     showEditModal();
   };
 
+  const onDelete = (key) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this service?",
+      okButtonProps: { shape: "round", size: "large", type: "primary" },
+      cancelButtonProps: { shape: "round", size: "large" },
+      icon: <DeleteOutlined style={{ color: "red" }} />,
+      autoFocusButton: null,
+      centered: true,
+      onOk() {
+        // console.log("record.name", key.split(",")[0]);
+        handleDelete(key)
+      },
+      onCancel() {
+        // onCancel()
+      }
+    });
+  };
+
   const handleDelete = async (key) => {
-    console.log("record.name", key.split(",")[0]);
     const keyId = key.split(",")[0];
     await axios
       .delete(`${URLreScrpit}${keyId}`, headers)
       .then((result) => {
         fetchData();
+        message.error("Service has been deleted successfully.");
         console.log("delete:", result);
         return result.status === 200 ? true : false;
       })
@@ -265,7 +273,7 @@ function NearbyService() {
     const [address, setAddress] = useState(editValue.location);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImageNB');
-    console.log("value", imageFile);
+    const [mapBorder, setMapBorder] = useState("");
 
     const handleValue = () => {
       form.setFieldsValue({
@@ -354,7 +362,6 @@ function NearbyService() {
           radius: 200 * 100,
         },
       });
-      console.log("dataMAp", data);
 
       const [options, setOptions] = useState([]);
 
@@ -414,7 +421,6 @@ function NearbyService() {
         autoFocusButton: null,
         centered: true,
         onOk() {
-          message.success("Service has been successfully updated.");
           form.resetFields();
           handleEditChange(newValues);
         },
@@ -442,6 +448,7 @@ function NearbyService() {
           .then((result) => {
             fetchData();
             closeEditModal();
+            message.success("Service has been successfully updated.");
             console.log("put:", result);
             return result.status === 200 ? true : false;
           })
@@ -503,15 +510,29 @@ function NearbyService() {
                 form
                   .validateFields()
                   .then((values) => {
-                    if (pickedImage) {
+                    if (pickedImage && address !== "") {
                       let newValues = {
                         ...values,
                       };
                       onConfirm(newValues)
-                    } else { setImageBorder('inputNoImageNB') }
+                    } else {
+                      if (!pickedImage) {
+                        setImageBorder('inputNoImageNB');
+                      }
+                      if (address === "") {
+                        console.log('setMapBorder')
+                        setMapBorder('mapBorder');
+                      }
+                    }
                   })
                   .catch((info) => {
-                    setImageBorder('inputNoImageNB')
+                    if (!pickedImage) {
+                      setImageBorder('inputNoImageNB');
+                    }
+                    if (address === "") {
+                      console.log('setMapBorder')
+                      setMapBorder('mapBorder');
+                    }
                     console.log("Validate Failed:", info);
                   });
               }}
@@ -654,15 +675,18 @@ function NearbyService() {
             <Form.Item
               label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Map</div>}
             >
-              <div className={imageBorder}>
-                <SearchMap />
+              <SearchMap />
+
+              <div className={mapBorder}>
                 <MapWithAMarker
                   googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`}
                   loadingElement={<div style={{ height: `100%` }} />}
-                  containerElement={<div style={{ height: `250px` }} />}
-                  mapElement={<div style={{ height: `100%` }} />}
+                  containerElement={<div style={{ height: `40vh` }} />}
+                  mapElement={<div style={{ height: `100%`, borderRadius: `20px` }} />}
                 />
               </div>
+              {mapBorder === 'mapBorder' ? <span style={{ color: '#ff4d4f' }}>Please input address</span> : null}
+
             </Form.Item>
           </div>
         </Form>
@@ -687,9 +711,9 @@ function NearbyService() {
         return;
       } else {
         if (pickedImage) { console.log("inputImageNB"); setImageBorder('inputImageNB') }
-        else { console.log("inputNoImageNB"); setImageBorder('inputNoImageNB') }
-        if (address === "") { console.log("noMap"); setMapBorder('mapBorder') }
-        else { console.log("map"); setMapBorder("") }
+        else { console.log("inputNoImageNB"); setImageBorder('inputNoImageNB'); }
+        if (address === "") { console.log("noMap"); setMapBorder('mapBorder'); }
+        else { console.log("map"); setMapBorder(""); }
       }
     }, [pickedImage, address]);
 
@@ -816,7 +840,6 @@ function NearbyService() {
         autoFocusButton: null,
         centered: true,
         onOk() {
-          message.success("New service has been added successfully");
           form.resetFields();
           handleOnAdd(newValues);
         },
@@ -850,6 +873,7 @@ function NearbyService() {
             .then((res) => {
               fetchData();
               closeModal();
+              message.success("New service has been added successfully.");
             })
             .catch((err) => {
               console.error("Can't add data: ", err);
@@ -876,16 +900,29 @@ function NearbyService() {
               form
                 .validateFields()
                 .then((values) => {
-                  if (pickedImage) {
-
+                  if (pickedImage && address !== "") {
                     let newValues = {
                       ...values,
                     };
                     onConfirm(newValues)
-                  } else { setImageBorder('inputNoImageNB') }
+                  } else {
+                    if (!pickedImage) {
+                      setImageBorder('inputNoImageNB');
+                    }
+                    if (address === "") {
+                      console.log('setMapBorder')
+                      setMapBorder('mapBorder');
+                    }
+                  }
                 })
                 .catch((info) => {
-                  setImageBorder('inputNoImageNB')
+                  if (!pickedImage) {
+                    setImageBorder('inputNoImageNB');
+                  }
+                  if (address === "") {
+                    console.log('setMapBorder')
+                    setMapBorder('mapBorder');
+                  }
                   console.log("Validate Failed:", info);
                 });
             }}
@@ -1034,6 +1071,7 @@ function NearbyService() {
                   mapElement={<div style={{ height: `100%`, borderRadius: `20px` }} />}
                 />
               </div>
+              {mapBorder === 'mapBorder' ? <span style={{ color: '#ff4d4f' }}>Please input address</span> : null}
             </Form.Item>
           </div>
         </Form>
@@ -1054,36 +1092,35 @@ function NearbyService() {
   return (
     <>
       <Heading title="Nearby Service" />
-      <div align="right">
+      <div className='regis-table'>
+        <Tabs defaultActiveKey="All Service" onChange={callback}>
+          {types.map((type, index) => (
+            <TabPane tab={type} key={index} />
+          ))}
+        </Tabs>
+      </div>
+      <div className='flex-container'>
+        <Search
+          placeholder="Search by name"
+          allowClear
+          onSearch={handleSearch}
+          style={{ width: 300, marginBottom: 20 }}
+          onChange={handleSearchChange}
+        />
         <Button
           size="large"
           shape="round"
           icon={<PlusOutlined />}
           style={{
-            marginTop: 10,
             backgroundColor: "#D8AA81",
             color: "#F5F4EC",
-            alignSelf: "end",
           }}
           onClick={showModal}
         >
           Add New Service
         </Button>
       </div>
-      <div className='regis-table'>
-        <Tabs defaultActiveKey="All Service" onChange={callback}>
-          {types.map((type, index) => (
-            <TabPane tab={type} key={index} />
-          ))}
-        </Tabs></div>
-      <Search
-        placeholder="Search by name"
-        allowClear
-        onSearch={handleSearch}
-        style={{ width: 200, marginBottom: 19 }}
-        onChange={handleSearchChange}
-        className="search-box"
-      />
+
       <Table
         columns={columns}
         dataSource={

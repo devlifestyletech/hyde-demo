@@ -17,14 +17,6 @@
   border-radius:20px;
 }
 
-.ant-input-search
-  > .ant-input-group
-  > 
-  .ant-input-group-addon:last-child
-  .ant-input-search-button {
-  border-radius: 0 30px 30px 0;
-}
-
 .ant-picker {
   border-color: #030;
   height: 40px;
