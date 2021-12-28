@@ -479,6 +479,7 @@ function NearbyService() {
               .then((result) => {
                 fetchData();
                 closeEditModal();
+                message.success("Service has been successfully updated.");
                 console.log("put:", result);
                 return result.status === 200 ? true : false;
               })

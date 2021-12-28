@@ -149,18 +149,18 @@ function Announcement() {
       dataIndex: "operation",
       render: (_, record) => (
         <div class="flex-container">
-        <Button
-          type='link'
-          icon={<img src={editIcon} alt='Edit' />}
-          onClick={() => handleEdit(record)}
-        />
-        <Divider type='vertical' style={{ height: 30 }} />
-        <Button
-          type='link'
-          icon={<img src={trashIcon} alt='delete' />}
-          onClick={() => onDelete(record.key)}
-        />
-      </div>
+          <Button
+            type='link'
+            icon={<img src={editIcon} alt='Edit' />}
+            onClick={() => handleEdit(record)}
+          />
+          <Divider type='vertical' style={{ height: 30 }} />
+          <Button
+            type='link'
+            icon={<img src={trashIcon} alt='delete' />}
+            onClick={() => onDelete(record.id)}
+          />
+        </div>
       ),
     },
   ].filter((item) => !item.hidden);
@@ -173,7 +173,7 @@ function Announcement() {
 
   const onDelete = (key) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this service?",
+      title: "Are you sure you want to delete this announcement?",
       okButtonProps: { shape: "round", size: "large", type: "primary" },
       cancelButtonProps: { shape: "round", size: "large" },
       icon: <DeleteOutlined style={{ color: "red" }} />,
@@ -193,7 +193,7 @@ function Announcement() {
       .delete(`${URLreScript}/${key}`, headers)
       .then((result) => {
         fetchData();
-        message.error("Service has been deleted successfully.");
+        message.error("Announcement has been deleted successfully.");
         console.log("delete:", result);
         return result.status === 200 ? true : false;
       })
@@ -243,6 +243,7 @@ function Announcement() {
   const EditAnnouncement = ({ visible, editValue, onCancel }) => {
     const [form] = Form.useForm();
     const [publishPicked, setPublishPicked] = useState(editValue.post_status);
+    const [postDisable, setPostDisable] = useState(false);
     const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImage');
@@ -279,6 +280,7 @@ function Announcement() {
 
     useEffect(() => {
       handleValue();
+      if (editValue.post_status === 'Published') { setPostDisable(true) }
       // setDatePicked(dateEdit);
       // setTimePicked(timeEdit);
     }, []);
@@ -303,6 +305,24 @@ function Announcement() {
         }
       };
       reader.readAsDataURL(e.target.files[0]);
+    };
+
+    const onConfirm = (newValues) => {
+      Modal.confirm({
+        title: "Are you sure you want to update this Announcement?",
+        okButtonProps: { shape: "round", size: "large", type: "primary" },
+        cancelButtonProps: { shape: "round", size: "large" },
+        icon: null,
+        autoFocusButton: null,
+        centered: true,
+        onOk() {
+          form.resetFields();
+          handleEditChange(newValues);
+        },
+        onCancel() {
+          // onCancel()
+        }
+      });
     };
 
     const handleEditChange = async (value) => {
@@ -330,6 +350,7 @@ function Announcement() {
           .then((res) => {
             fetchData();
             closeEditModal();
+            message.success("Announcement has been successfully updated.");
           })
           .catch((err) => {
             console.error("Can't add data: ", err);
@@ -356,6 +377,7 @@ function Announcement() {
               .then((res) => {
                 fetchData();
                 closeEditModal();
+                message.success("Announcement has been successfully updated.");
               })
               .catch((err) => {
                 console.error("Can't add data: ", err);
@@ -368,7 +390,6 @@ function Announcement() {
     };
 
     return (
-
       <Modal
         visible={visible}
         title="Edit Announcement"
@@ -387,10 +408,10 @@ function Announcement() {
                   let newValues = {
                     ...values,
                   };
-                  form.resetFields();
-                  handleEditChange(newValues);
+                  onConfirm(newValues)
                 })
                 .catch((info) => {
+                  if (!pickedImage) { setImageBorder('inputNoImage') }
                   console.log("Validate Failed:", info);
                 });
             }}
@@ -514,7 +535,7 @@ function Announcement() {
                 },
               ]}
             >
-              <Select style={{ width: "100%" }} onChange={publishPickedHandle}>
+              <Select style={{ width: "100%" }} onChange={publishPickedHandle} disabled={postDisable}>
                 {publish.map((type, index) => (
                   <Option value={type} key={index}>
                     {type}
@@ -644,6 +665,21 @@ function Announcement() {
       }
     }, [pickedImage]);
 
+    const onConfirm = (newValues) => {
+      Modal.confirm({
+        title: "Are you sure you want to add new Announcement?",
+        okButtonProps: { shape: "round", size: "large", type: "primary" },
+        cancelButtonProps: { shape: "round", size: "large" },
+        icon: null,
+        autoFocusButton: null,
+        centered: true,
+        onOk() {
+          form.resetFields();
+          handleOnAdd(newValues);
+        },
+      });
+    };
+
     const handleOnAdd = async (value) => {
       // console.log("value", value);
       let dateNow = new Date().toISOString()
@@ -673,6 +709,7 @@ function Announcement() {
             .then((res) => {
               fetchData();
               closeModal();
+              message.success("Announcement has been added successfully.");
             })
             .catch((err) => {
               console.error("Can't add data: ", err);
@@ -703,12 +740,12 @@ function Announcement() {
                     let newValues = {
                       ...values,
                     };
-                    form.resetFields();
-                    handleOnAdd(newValues);
+                    onConfirm(newValues)
                   } else { setImageBorder('inputNoImage') }
+
                 })
                 .catch((info) => {
-                  setImageBorder('inputNoImage')
+                  if (!pickedImage) { setImageBorder('inputNoImage') }
                   console.log("Validate Failed:", info);
                 });
             }}
