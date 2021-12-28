@@ -1,24 +1,25 @@
-.inputImage {
-  border: 1px solid #d9d9d9;
-  border-radius: 20px;
-  height: 40vh;
-  align-items: center;
-}
-
-.nearbyInputImage {
+.inputImageNB {
   border: 1px solid #d9d9d9;
   border-radius: 20px;
   height: 20vh;
   align-items: center;
 }
 
-.child {
-  display: flex;
-  justify-content: center;
+.inputNoImageNB {
+  border: 1px solid #ff4d4f;
+  border-radius: 20px;
+  height: 20vh;
   align-items: center;
 }
 
-.nearbyChild {
+.mapBorder {
+  border: 1px solid #ff4d4f;
+  border-radius: 20px;
+  height: 40.2vh;
+  align-items: center;
+}
+
+.child {
   display: flex;
   justify-content: center;
   align-items: center;

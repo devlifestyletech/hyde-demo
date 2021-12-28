@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Heading from "../../components/Header";
 import {
   Tabs,
@@ -16,7 +16,8 @@ import {
   Col,
   Row,
   Divider,
-  Spin
+  Spin,
+  message
 } from "antd";
 import {
   PlusOutlined,
@@ -263,6 +264,7 @@ function NearbyService() {
     );
     const [address, setAddress] = useState(editValue.location);
     const [imageFile, setImageFile] = useState(null);
+    const [imageBorder, setImageBorder] = useState('inputImageNB');
     console.log("value", imageFile);
 
     const handleValue = () => {
@@ -275,6 +277,17 @@ function NearbyService() {
     useEffect(() => {
       handleValue();
     }, []);
+
+    const isFirstRun = useRef(true);
+    useEffect(() => {
+      if (isFirstRun.current) {
+        isFirstRun.current = false;
+        return;
+      } else {
+        if (pickedImage) { setImageBorder('inputImageNB') }
+        else { setImageBorder('inputNoImageNB') }
+      }
+    }, [pickedImage]);
 
     const deleteHandle = () => {
       setPickedImage(null);
@@ -392,6 +405,25 @@ function NearbyService() {
       );
     }
 
+    const onConfirm = (newValues) => {
+      Modal.confirm({
+        title: "Are you sure you want to update this service?",
+        okButtonProps: { shape: "round", size: "large", type: "primary" },
+        cancelButtonProps: { shape: "round", size: "large" },
+        icon: null,
+        autoFocusButton: null,
+        centered: true,
+        onOk() {
+          message.success("Service has been successfully updated.");
+          form.resetFields();
+          handleEditChange(newValues);
+        },
+        onCancel() {
+          // onCancel()
+        }
+      });
+    };
+
     const handleEditChange = async (value) => {
       if (imageFile == null) {
         console.log("no Img");
@@ -465,36 +497,26 @@ function NearbyService() {
                 color: "#F5F4EC",
               }}
               className="add-btn"
-              onClick={() => {
-                closeEditModal();
-              }}
-            >
-              Close
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "#D8AA81",
-                color: "#F5F4EC",
-              }}
-              className="add-btn"
               key="add"
               onClick={() => {
                 console.log("form", form);
                 form
                   .validateFields()
                   .then((values) => {
-                    let newValues = {
-                      ...values,
-                    };
-                    form.resetFields();
-                    handleEditChange(newValues);
+                    if (pickedImage) {
+                      let newValues = {
+                        ...values,
+                      };
+                      onConfirm(newValues)
+                    } else { setImageBorder('inputNoImageNB') }
                   })
                   .catch((info) => {
+                    setImageBorder('inputNoImageNB')
                     console.log("Validate Failed:", info);
                   });
               }}
             >
-              Edit
+              Save
             </Button>
           </Row>,
         ]}
@@ -569,21 +591,15 @@ function NearbyService() {
                 </Form.Item>
               </Col>
             </div>
-            <Form.Item label="Image">
+            <Form.Item
+              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Image</div>}
+            >
               <div>
-                {pickedImage ? (
-                  <div>
-                    <img
-                      style={{ width: "100%", height: "50vh" }}
-                      src={pickedImage}
-                      alt="test"
-                    />
-                  </div>
-                ) : (
-                  <div className="nearbyInputImage">
+                {pickedImage ? null : (
+                  <div className={imageBorder}>
                     <label htmlFor="input">
                       <div
-                        class="nearbyChild"
+                        class="child"
                         style={{
                           width: "100%",
                           height: "20vh",
@@ -598,7 +614,7 @@ function NearbyService() {
                               color: "#818282",
                             }}
                           />
-                          Click file to this area to upload
+                          Click to this area to upload
                         </Col>
                       </div>
                     </label>
@@ -614,6 +630,16 @@ function NearbyService() {
                   }}
                   style={{ display: "none", float: "left" }}
                 />
+                {pickedImage ? (
+                  <div>
+                    <img
+                      style={{ width: "100%", height: "20vh", borderRadius: 20 }}
+                      src={pickedImage}
+                      alt="test"
+                    />
+                  </div>
+                ) : null}
+                {imageBorder === 'inputNoImageNB' ? <span style={{ color: '#ff4d4f' }}>Please input details</span> : null}
                 <div style={{ marginTop: 12 }}>
                   {pickedImage ? (
                     <div className="delete">
@@ -625,14 +651,18 @@ function NearbyService() {
                 </div>
               </div>
             </Form.Item>
-            <Form.Item name="map" label="Map">
-              <SearchMap />
-              <MapWithAMarker
-                googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQW30GN_VJgAAoZxI6cKJCfQkOypYP4nI&v=3.exp&libraries=geometry,drawing,places"
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `250px` }} />}
-                mapElement={<div style={{ height: `100%` }} />}
-              />
+            <Form.Item
+              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Map</div>}
+            >
+              <div className={imageBorder}>
+                <SearchMap />
+                <MapWithAMarker
+                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`}
+                  loadingElement={<div style={{ height: `100%` }} />}
+                  containerElement={<div style={{ height: `250px` }} />}
+                  mapElement={<div style={{ height: `100%` }} />}
+                />
+              </div>
             </Form.Item>
           </div>
         </Form>
@@ -640,14 +670,28 @@ function NearbyService() {
     );
   };
 
-  const AddNewService = memo(({ visible, onCancel }) => {
-    console.log("rerender modal");
+  const AddNewService = ({ visible, onCancel }) => {
     const [form] = Form.useForm();
     const [pickedImage, setPickedImage] = useState(null);
     const [latitude, setLatitude] = useState(13.787664624326442);
     const [longitude, setLongitude] = useState(100.48204490167899);
     const [address, setAddress] = useState("");
     const [imageFile, setImageFile] = useState(null);
+    const [imageBorder, setImageBorder] = useState('inputImageNB');
+    const [mapBorder, setMapBorder] = useState("");
+
+    const isFirstRun = useRef(true);
+    useEffect(() => {
+      if (isFirstRun.current) {
+        isFirstRun.current = false;
+        return;
+      } else {
+        if (pickedImage) { console.log("inputImageNB"); setImageBorder('inputImageNB') }
+        else { console.log("inputNoImageNB"); setImageBorder('inputNoImageNB') }
+        if (address === "") { console.log("noMap"); setMapBorder('mapBorder') }
+        else { console.log("map"); setMapBorder("") }
+      }
+    }, [pickedImage, address]);
 
     const deleteHandle = () => {
       setPickedImage(null);
@@ -694,7 +738,6 @@ function NearbyService() {
           radius: 200 * 100,
         },
       });
-      // console.log("dataMAp", data);
 
       const [options, setOptions] = useState([]);
 
@@ -764,16 +807,24 @@ function NearbyService() {
       ))
     );
 
-    // const handleTest = async () => {
-    //   let dataImage = new FormData();
-    //   dataImage.append("files", imageFile);
-    //   await axios
-    //     .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers).then((res) => {
-    //       console.log("handleTest", res)
-    //     }).catch((err) => {
-    //       console.log("ERROR", err);
-    //     });
-    // };
+    const onConfirm = (newValues) => {
+      Modal.confirm({
+        title: "Are you sure you want to add new service?",
+        okButtonProps: { shape: "round", size: "large", type: "primary" },
+        cancelButtonProps: { shape: "round", size: "large" },
+        icon: null,
+        autoFocusButton: null,
+        centered: true,
+        onOk() {
+          message.success("New service has been added successfully");
+          form.resetFields();
+          handleOnAdd(newValues);
+        },
+        onCancel() {
+          // onCancel()
+        }
+      });
+    };
 
     const handleOnAdd = async (value) => {
       let dataImage = new FormData();
@@ -825,32 +876,22 @@ function NearbyService() {
               form
                 .validateFields()
                 .then((values) => {
-                  let newValues = {
-                    ...values,
-                  };
-                  form.resetFields();
-                  handleOnAdd(newValues);
+                  if (pickedImage) {
+
+                    let newValues = {
+                      ...values,
+                    };
+                    onConfirm(newValues)
+                  } else { setImageBorder('inputNoImageNB') }
                 })
                 .catch((info) => {
+                  setImageBorder('inputNoImageNB')
                   console.log("Validate Failed:", info);
                 });
             }}
           >
             Add
           </Button>,
-          // <Button
-          //   style={{
-          //     backgroundColor: "#D8AA81",
-          //     color: "#F5F4EC",
-          //   }}
-          //   className="add-btn"
-          //   key="add"
-          //   onClick={() => {
-          //     handleTest()
-          //   }}
-          // >
-          //   test
-          // </Button>,
         ]}
         onCancel={onCancel}
         width={633}
@@ -921,18 +962,12 @@ function NearbyService() {
                 </Form.Item>
               </Col>
             </div>
-            <Form.Item label="Image">
+            <Form.Item
+              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Image</div>}
+            >
               <div>
-                {pickedImage ? (
-                  <div>
-                    <img
-                      style={{ width: "100%", height: "50vh" }}
-                      src={pickedImage}
-                      alt="test"
-                    />
-                  </div>
-                ) : (
-                  <div className="nearbyInputImage">
+                {pickedImage ? null : (
+                  <div className={imageBorder}>
                     <label htmlFor="input">
                       <div
                         class="child"
@@ -950,7 +985,7 @@ function NearbyService() {
                               color: "#818282",
                             }}
                           />
-                          Click file to this area to upload
+                          Click to this area to upload
                         </Col>
                       </div>
                     </label>
@@ -966,6 +1001,16 @@ function NearbyService() {
                   }}
                   style={{ display: "none", float: "left" }}
                 />
+                {pickedImage ? (
+                  <div>
+                    <img
+                      style={{ width: "100%", height: "20vh", borderRadius: 20 }}
+                      src={pickedImage}
+                      alt="test"
+                    />
+                  </div>
+                ) : null}
+                {imageBorder === 'inputNoImageNB' ? <span style={{ color: '#ff4d4f' }}>Please input details</span> : null}
                 <div style={{ marginTop: 12 }}>
                   {pickedImage ? (
                     <div className="delete">
@@ -977,20 +1022,24 @@ function NearbyService() {
                 </div>
               </div>
             </Form.Item>
-            <Form.Item name="map" label="Map">
+            <Form.Item
+              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Map</div>}
+            >
               <SearchMap />
-              <MapWithAMarker
-                googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQW30GN_VJgAAoZxI6cKJCfQkOypYP4nI&v=3.exp&libraries=geometry,drawing,places"
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `250px` }} />}
-                mapElement={<div style={{ height: `100%` }} />}
-              />
+              <div className={mapBorder}>
+                <MapWithAMarker
+                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`}
+                  loadingElement={<div style={{ height: `100%` }} />}
+                  containerElement={<div style={{ height: `40vh` }} />}
+                  mapElement={<div style={{ height: `100%`, borderRadius: `20px` }} />}
+                />
+              </div>
             </Form.Item>
           </div>
         </Form>
       </Modal>
     );
-  });
+  };
 
   const Loading = () => {
     return <div style={{ width: "80vw", height: "100vh", textAlign: "center", paddingTop: 300 }}>
@@ -1061,7 +1110,6 @@ function NearbyService() {
       {newVisible ? (
         <AddNewService
           visible={newVisible}
-          // onAdd={handleOnAdd}
           onCancel={closeModal}
         />
       ) : null}

@@ -697,7 +697,7 @@ function Announcement() {
                     let newValues = {
                       ...values,
                     };
-                    // form.resetFields();
+                    form.resetFields();
                     handleOnAdd(newValues);
                   } else { setImageBorder('inputNoImage') }
                 })
@@ -932,21 +932,23 @@ function Announcement() {
   return (
     <>
       <Heading title="Announcements" />
-      <Row>
-        <MonthPicker
-          style={{ width: 369, marginBottom: 19, marginRight: 10,borderRadius:20 }}
-          onChange={onMonthChange}
-          placeholder="Select month"
+      <div className='flex-container'>
+        <div>
+          <MonthPicker
+            style={{ marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20 }}
+            onChange={onMonthChange}
+            placeholder="Select month"
           // className="search-box"
-        />
-        <Search
-          placeholder="Search by title"
-          allowClear
-          onSearch={handleSearch}
-          style={{ width: 369, marginBottom: 19, marginRight: 10,borderRadius:20 }}
-          onChange={handleSearchChange}
+          />
+          <Search
+            placeholder="Search by title"
+            allowClear
+            onSearch={handleSearch}
+            style={{ marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20 }}
+            onChange={handleSearchChange}
           // className="search-box"
-        />
+          /></div>
+
         <div align="right">
           <Button
             size="large"
@@ -963,7 +965,7 @@ function Announcement() {
             Create Announcement
           </Button>
         </div>
-      </Row>
+      </div>
       {loading ? <Loading /> : <Table
         columns={columns}
         scroll={{ x: 1500 }}
