@@ -4,12 +4,12 @@ import Heading from "../../../components/Header";
 import { Row, Col, Card, Table, DatePicker, Button } from "antd";
 import { Pie, G2 } from "@ant-design/charts";
 import "../style/fixingStyle.css";
+import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
 
 import { encryptStorage } from "../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
-
 export default function FixingReportDashBoard() {
   const [fixingData, setFixingData] = useState([]);
   const [todayData, setTodayData] = useState([]);
@@ -243,31 +243,24 @@ export default function FixingReportDashBoard() {
     console.log("========== FETCHING ==========");
     await axios
       .get(
-        process.env.REACT_APP_API_URL +
-        'fixing-reports',
-       headers
+        `${process.env.REACT_APP_API_URL}/fixing-reports?submission_date_gte=${year}-01-01&submission_date_lt=${parseInt(year) + 1}-01-01`,
+        headers
       )
       .then((res) => {
-        console.log(res.data);
-        let timeLower = new Date(`01-01-${year}`).getTime();
-        let timeUpper = new Date(`01-01-${parseInt(year) + 1}`).getTime();
-        let tempData = [];
+        console.log('res', res.data);
+        console.log('new', new Date().toISOString().slice(0, 10));
+        setFixingData(res.data);
         let todayTemp = [];
-        res.data.forEach(data => {
-          console.log(new Date(parseInt(data.submission_date)).setHours(0, 0, 0, 0))
-          if (parseInt(data.submission_date) >= timeLower && parseInt(data.submission_date) < timeUpper) {
-            tempData.push(data);
-            if (new Date(parseInt(data.submission_date)).setHours(0, 0, 0, 0) === day) { todayTemp.push(data) }
-          }
-        });
-        setFixingData(tempData);
-        setTodayData(todayTemp);
+        res.data.forEach((data) => {
+          let month = parseInt(data.submission_date.substring(5, 7))-1;
 
-        // set data for every month
-        tempData.forEach((data) => {
-          let month = new Date(parseInt(data.submission_date)).getMonth();
+          if (data.submission_date.split('T')[0] === new Date().toISOString().slice(0, 10)) {
+            todayTemp.push(data)
+          }
 
           for (let i = 0; i < 12; i++) {
+            console.log('month', month, i)
+
             if (month === i) {
               if (data.status === "Pending") {
                 console.log('Pending')
@@ -286,6 +279,7 @@ export default function FixingReportDashBoard() {
             }
           }
         });
+        setTodayData(todayTemp);
         setMonthData(mockData);
       });
   };
@@ -296,14 +290,14 @@ export default function FixingReportDashBoard() {
 
   // action
   useEffect(() => {
-    // fetchData();
+    fetchData();
     console.log('year', year, new Date(`01-01-${year}`).getTime())
     console.log('day', day)
   }, [year]);
 
   return (
     <>
-      <Heading title="Fixing Reports Dashboard" />
+      <Heading title="Service Center Dashboard" />
       {/* Card View */}
       <Row gutter={16} style={{ paddingTop: 18 }}>
         <Col span={6}>
@@ -370,33 +364,26 @@ export default function FixingReportDashBoard() {
       </Row>
 
       {/* Year Picker */}
-      <Row
-        gutter={16}
-        style={{
-          paddingTop: 30,
-          paddingBottom: 20,
-          paddingLeft: 10,
-          paddingRight: 10,
-          justifyContent: "space-between",
-          alignContent: "center",
-        }}
-      >
-        <Row>
-          <h1 style={{ marginRight: 10 }}>Fixing Management Date: </h1>
-          <DatePicker
-            onChange={onChange}
-            picker="year"
-            defaultValue={moment()}
-          />
-        <Button style={{ alignSelf: "flex-end" }}>Export</Button>
-        </Row>
+      <Row style={{ marginTop: 30, marginBottom: 30 }}>
+        <h1 style={{ marginRight: 10 }}>Fixing Management Date: </h1>
+        <DatePicker
+          style={{ width: 250 }}
+          onChange={onChange}
+          picker="year"
+          defaultValue={moment()}
+        />
+        <Col push={14} >
+          <Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round' style={{ float: "right" }}>
+            Export
+          </Button>
+        </Col>
       </Row>
 
       {/* Chart View */}
       <Row gutter={[16, 16]} align="top">
         <Col span={12}>
           <Card
-            title="Today's fixing status"
+            title="Today's service status"
             bordered={false}
             className="card"
             headStyle={{
@@ -415,7 +402,7 @@ export default function FixingReportDashBoard() {
             />
           </Card>
           <Card
-            title="2021's fixing status"
+            title={`${year}'s service status`}
             bordered={false}
             className="card"
             style={{ marginTop: 28 }}
@@ -438,27 +425,14 @@ export default function FixingReportDashBoard() {
 
 
         <Col span={12}>
-          <Card
-            title="Status of fixing sorted by month"
-            bordered={false}
-            className="card"
-            headStyle={{
-              backgroundColor: "#D3D3D3",
-              height: 20,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-            }}
-            bodyStyle={{
-              ...bodyStyle,
-            }}
-          >
-            <Table
-              columns={columns}
-              dataSource={monthData}
-              pagination={false}
-              style={{ padding: 5 }}
-            />
-          </Card>
+          <Table
+            className="styTableControl"
+            columns={columns}
+            title={() => "Status of service sorted by month"}
+            dataSource={monthData}
+            pagination={false}
+            style={{ backgroundColor: 'transparent' }}
+          />
         </Col>
       </Row>
     </>

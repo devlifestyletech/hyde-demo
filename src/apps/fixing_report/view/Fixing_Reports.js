@@ -853,7 +853,7 @@ const FixingReports = () => {
 
   return (
     <>
-      <Heading title="Fixing Reports" />
+      <Heading title="Service Center Lists" />
 
       <Search
         placeholder="Search by name"
