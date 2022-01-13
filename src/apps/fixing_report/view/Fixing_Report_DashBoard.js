@@ -252,7 +252,7 @@ export default function FixingReportDashBoard() {
         setFixingData(res.data);
         let todayTemp = [];
         res.data.forEach((data) => {
-          let month = parseInt(data.submission_date.substring(5, 7))-1;
+          let month = parseInt(data.submission_date.substring(5, 7)) - 1;
 
           if (data.submission_date.split('T')[0] === new Date().toISOString().slice(0, 10)) {
             todayTemp.push(data)
@@ -364,20 +364,20 @@ export default function FixingReportDashBoard() {
       </Row>
 
       {/* Year Picker */}
-      <Row style={{ marginTop: 30, marginBottom: 30 }}>
-        <h1 style={{ marginRight: 10 }}>Fixing Management Date: </h1>
-        <DatePicker
-          style={{ width: 250 }}
-          onChange={onChange}
-          picker="year"
-          defaultValue={moment()}
-        />
-        <Col push={14} >
-          <Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round' style={{ float: "right" }}>
-            Export
-          </Button>
-        </Col>
-      </Row>
+      <div className='flex-container' style={{ marginTop: 30, marginBottom: 30 }}>
+        <Row> 
+          <h1 style={{ marginRight: 10 }}>Fixing Management Date: </h1>
+          <DatePicker
+            style={{ width: 250 }}
+            onChange={onChange}
+            picker="year"
+            defaultValue={moment()}
+          /></Row>
+
+        <Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round' style={{ float: "right" }}>
+          Export
+        </Button>
+      </div>
 
       {/* Chart View */}
       <Row gutter={[16, 16]} align="top">

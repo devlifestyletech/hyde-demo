@@ -856,10 +856,10 @@ const FixingReports = () => {
       <Heading title="Service Center Lists" />
 
       <Search
-        placeholder="Search by name"
+        placeholder="Search by address number"
         allowClear
         onSearch={handleSearch}
-        style={{ width: 200, marginBottom: 19, marginTop: 10 }}
+        style={{ width: 250, marginBottom: 19, marginTop: 10 }}
         onChange={handleSearchChange}
         className="search-box"
       />
@@ -882,8 +882,9 @@ const FixingReports = () => {
           searchName === ""
             ? data
             : data.filter((item) =>
-              item.owner.first_name_en.toLowerCase().includes(searchName) ||
-              item.owner.last_name_en.toLowerCase().includes(searchName)
+              item.address_number.includes(searchName) 
+              // item.owner.rom.toLowerCase().includes(searchName) 
+              // || item.owner.last_name_en.toLowerCase().includes(searchName)
             )
         }
 

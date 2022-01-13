@@ -1124,6 +1124,7 @@ function NearbyService() {
 
       <Table
         columns={columns}
+        scroll={{ x: 1500 }}
         dataSource={
           searchTag === "All Service"
             ? searchName === ""
