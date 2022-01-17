@@ -91,7 +91,7 @@ export default function CreateReservation({ visible, onCancel }) {
 										<RangePicker showTime />
 									</Form.Item>
 									<Form.Item label='Note'>
-										<TextArea placeholder='' autoSize={{ minRows: 2, maxRows: 6 }} />
+										<TextArea placeholder='' autoSize={{ minRows: 4, maxRows: 6 }} />
 									</Form.Item>
 								</div>
 							</div>
