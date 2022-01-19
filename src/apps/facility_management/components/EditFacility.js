@@ -43,7 +43,64 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			autoFocusButton: null,
 			centered: true,
 			onOk() {
-				handleOK();
+				return new Promise((resolve, reject) => {
+					const documentRef = doc(db, "facilities", id);
+					if (pickedImage) {
+						let file = imageFile;
+						const storage = getStorage();
+						const storageRef = ref(storage, "upload/" + file.name);
+						uploadBytes(storageRef, file).then((snapshot) => {
+							getDownloadURL(snapshot.ref).then((downloadURL) => {
+								editFacilities.validateFields().then((val) => {
+									console.log(val);
+									let newValues = {
+										name: val.name,
+										accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
+										cover: downloadURL,
+										daily_start: dailyStart ? dailyStart : value.daily_start,
+										daily_stop: dailyStop ? dailyStop : value.daily_stop,
+										description: val.description,
+										detail: val.detail,
+										max_hours: val.max_hours,
+										max_users: val.max_users,
+										rules: val.rules === value.rules ? val.rules : val.rules.split(",")
+									};
+									console.log(newValues);
+									updateDoc(documentRef, newValues)
+										.catch((err) => console.log(err))
+										.then(() => {
+											resolve("SUCCESS");
+											message.success("Save Change Successfully");
+											onCancel();
+										});
+								});
+							});
+						});
+					} else {
+						editFacilities.validateFields().then((val) => {
+							console.log(val);
+							let newValues = {
+								name: val.name,
+								accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
+								daily_start: dailyStart ? dailyStart : value.daily_start,
+								daily_stop: dailyStop ? dailyStop : value.daily_stop,
+								description: val.description,
+								detail: val.detail,
+								max_hours: val.max_hours,
+								max_users: val.max_users,
+								rules: val.rules === value.rules ? val.rules : val.rules.split(",")
+							};
+							console.log(newValues);
+							updateDoc(documentRef, newValues)
+								.catch((err) => console.log(err))
+								.then(() => {
+									resolve("SUCCESS");
+									message.success("Save Change Successfully");
+									onCancel();
+								});
+						});
+					}
+				});
 			},
 			onCancel() {
 				console.log("Cancel");
