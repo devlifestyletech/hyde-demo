@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./fonts/SukhumvitSet-Text.ttf";
+import firebase from "firebase/app";
 
 ReactDOM.render(
 	<React.StrictMode>
