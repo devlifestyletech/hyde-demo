@@ -28,6 +28,7 @@ function RegistrationPage() {
 			setLoading(false);
 		});
 	}, [refresh]);
+	console.log(residents);
 
 	let owner_users = residents.filter((user) => user.resident_type === "Owner");
 	let inhabitant_users = residents.filter((user) => user.resident_type === "Inhabitant");
@@ -43,7 +44,7 @@ function RegistrationPage() {
 				</Button>
 			</div>
 			<br />
-			{residents ? (
+			{loading ? (
 				<div style={{ textAlign: "center", margin: 80 }}>
 					<Spin />
 					<p>Please wait...</p>
