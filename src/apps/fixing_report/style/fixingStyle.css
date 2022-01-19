@@ -4,10 +4,10 @@
   height: 16vh;
   width: 16vh;
   align-items: center;
-  margin:4px;
+  margin: 4px;
 }
 .inputReportImage:hover {
-  border: 1px dotted #CBB989;
+  border: 1px dotted #cbb989;
 }
 .previewReportImage {
   border: 1px solid #959595;
@@ -15,7 +15,7 @@
   height: 16vh;
   width: 16vh;
   align-items: center;
-  margin:4px;
+  margin: 4px;
 }
 
 .divText {
@@ -25,16 +25,16 @@
   max-height: 4vh;
   width: 100%;
   align-items: center;
-  padding-left:8px;
-  padding-top:4px;
+  padding-left: 8px;
+  padding-top: 4px;
 }
 
 .disableText {
-  color: #706F6C;
+  color: #706f6c;
 }
 
 .divArea {
-  overflow-y:scroll;
+  overflow-y: scroll;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -42,7 +42,7 @@
   max-height: 20vh;
   width: 100%;
   align-items: center;
-  padding:8px;
+  padding: 8px;
 }
 
 .nearbyInputImage {
@@ -52,7 +52,7 @@
   align-items: center;
 }
 
-.ant-row .ant-image-mask{
+.ant-row .ant-image-mask {
   border-radius: 10px;
 }
 
@@ -81,18 +81,18 @@
 }
 
 .ant-picker {
-  border-radius:20px  !important;
+  border-radius: 20px !important;
 }
 
 .report-form .ant-input {
-	border-radius: 30px;
+  border-radius: 30px;
 }
 .report-form .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-	border-radius: 20px;
+  border-radius: 20px;
 }
 
 .styTableControl .ant-table-title {
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
   text-align: center;
   border-bottom: solid rgba(0, 0, 0, 0.06) 1px;
   font-weight: 500;
@@ -100,4 +100,8 @@
 }
 .styTableControl {
   box-shadow: 0px 5px 20px rgb(0 0 0 / 15%);
+}
+
+.ant-table-wrapper.styTableControl {
+  border-radius: 20px;
 }

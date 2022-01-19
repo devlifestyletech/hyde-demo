@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import MainLayout from "./layout/MainLayout";
 import SignInPage from "./apps/signin.page";
 import Loading from "./layout/Loading";
@@ -14,6 +14,21 @@ function App() {
 	const [loading, setLoading] = useState(true);
 
 	const auth = getAuth();
+
+	function useWindowSize() {
+		const [size, setSize] = useState([0, 0]);
+		useLayoutEffect(() => {
+			function updateSize() {
+				setSize([window.innerWidth, window.innerHeight]);
+			}
+			window.addEventListener('resize', updateSize);
+			updateSize();
+			return () => window.removeEventListener('resize', updateSize);
+		}, []);
+		return size;
+	}
+
+	const [width] = useWindowSize();
 
 	useEffect(() => {
 		signInAnonymously(auth)
@@ -31,13 +46,18 @@ function App() {
 		setLoading(false);
 	}, []);
 
-	if (loading) {
-		return <Loading />;
+	if (width <= 520) { return <>Please use desktop</> }
+	else {
+		if (loading) {
+			return <Loading />;
+		}
+		if (session) {
+			return <MainLayout />;
+		}
+		return <SignInPage />;
 	}
-	if (session) {
-		return <MainLayout />;
-	}
-	return <SignInPage />;
+
+
 }
 
 export default App;

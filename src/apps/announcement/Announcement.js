@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
 import Heading from "../../components/Header";
 import {
   Button,
@@ -39,12 +39,6 @@ function Announcement() {
   const URLreScript = process.env.REACT_APP_API_URL + "/announcements";
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
-  // const types = [
-  //   "All Post",
-  //   "Published to All",
-  //   "Scheduled",
-  // ];
-
   const publish = ["Now", "Scheduled"];
   const { Search } = Input;
   const { Option } = Select;
@@ -58,6 +52,19 @@ function Announcement() {
   const [value, setValue] = useState(null);
   const [editVisible, setEditVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  function useWindowSize() {
+    const [size, setSize] = useState([0, 0]);
+    useLayoutEffect(() => {
+      function updateSize() {
+        setSize([window.innerWidth, window.innerHeight]);
+      }
+      window.addEventListener('resize', updateSize);
+      updateSize();
+      return () => window.removeEventListener('resize', updateSize);
+    }, []);
+    return size;
+  }
 
   const showEditModal = () => {
     setEditVisible(true);
@@ -970,11 +977,11 @@ function Announcement() {
     </div>
   }
 
-
+  const [width, height] = useWindowSize();
 
   return (
     <>
-      <Heading title="Announcements" />
+      <Heading title='Announcements' />
       <div className='flex-container'>
         <div>
           <MonthPicker
