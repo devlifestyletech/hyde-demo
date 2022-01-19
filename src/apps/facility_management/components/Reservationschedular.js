@@ -13,7 +13,7 @@ export default function SchedularComponent() {
 	const Appointment = (model) => {
 		const { appointmentData } = model.data;
 		return (
-			<div className='showtime-preview'>
+			<div className="showtime-preview">
 				<div>
 					<strong>{appointmentData.topic}</strong>
 					<br />
@@ -50,7 +50,7 @@ export default function SchedularComponent() {
 	const AppointmentTooltip = (model) => {
 		const { appointmentData } = model.data;
 		return (
-			<div className='appointment-tooltip' onClick={() => null}>
+			<div className="appointment-tooltip" onClick={() => null}>
 				<Row>
 					<Col>
 						<div style={{ height: 50, width: 50, borderRadius: 25, backgroundColor: "rgba(216, 170, 129, 1)", marginRight: 10 }} />
@@ -75,8 +75,8 @@ export default function SchedularComponent() {
 					<Col>
 						<div>
 							<Button
-								type='link'
-								icon={<img src={trashIcon} alt='Delete' />}
+								type="link"
+								icon={<img src={trashIcon} alt="Delete" />}
 								onClick={() => showDeleteConfirm(appointmentData.id)}
 								style={{ marginLeft: 115, float: "right", zIndex: 2000 }}
 							/>
@@ -89,7 +89,7 @@ export default function SchedularComponent() {
 
 	return (
 		<Scheduler
-			timeZone='Asia/Bangkok'
+			timeZone="Asia/Bangkok"
 			dataSource={reservations}
 			views={views}
 			showAllDayPanel={false}
@@ -102,6 +102,7 @@ export default function SchedularComponent() {
 			allowDragging={false}
 			allowResizing={false}
 			allowTimeZoneEditing={false}
+			editing={false}
 			style={{ fontFamily: "SukhumvitSet" }}
 		/>
 	);

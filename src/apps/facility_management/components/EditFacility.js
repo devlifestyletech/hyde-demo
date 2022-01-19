@@ -48,7 +48,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 					if (pickedImage) {
 						let file = imageFile;
 						const storage = getStorage();
-						const storageRef = ref(storage, "upload/" + file.name);
+						const storageRef = ref(storage, "facilities_image/" + file.name);
 						uploadBytes(storageRef, file).then((snapshot) => {
 							getDownloadURL(snapshot.ref).then((downloadURL) => {
 								editFacilities.validateFields().then((val) => {
@@ -107,65 +107,6 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			}
 		});
 	};
-
-	const handleOK = async () => {
-		const documentRef = doc(db, "facilities", id);
-		if (pickedImage) {
-			let file = imageFile;
-			const storage = getStorage();
-			const storageRef = ref(storage, "upload/" + file.name);
-			uploadBytes(storageRef, file).then((snapshot) => {
-				getDownloadURL(snapshot.ref).then((downloadURL) => {
-					editFacilities.validateFields().then((val) => {
-						console.log(val);
-						let newValues = {
-							name: val.name,
-							accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
-							cover: downloadURL,
-							daily_start: dailyStart ? dailyStart : value.daily_start,
-							daily_stop: dailyStop ? dailyStop : value.daily_stop,
-							description: val.description,
-							detail: val.detail,
-							max_hours: val.max_hours,
-							max_users: val.max_users,
-							rules: val.rules === value.rules ? val.rules : val.rules.split(",")
-						};
-						console.log(newValues);
-						updateDoc(documentRef, newValues)
-							.catch((err) => console.log(err))
-							.then(() => {
-								message.success("Save Change Successfully");
-								onCancel();
-							});
-					});
-				});
-			});
-		} else {
-			editFacilities.validateFields().then((val) => {
-				console.log(val);
-				let newValues = {
-					name: val.name,
-					accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
-					daily_start: dailyStart ? dailyStart : value.daily_start,
-					daily_stop: dailyStop ? dailyStop : value.daily_stop,
-					description: val.description,
-					detail: val.detail,
-					max_hours: val.max_hours,
-					max_users: val.max_users,
-					rules: val.rules === value.rules ? val.rules : val.rules.split(",")
-				};
-				console.log(newValues);
-				updateDoc(documentRef, newValues)
-					.catch((err) => console.log(err))
-					.then(() => {
-						message.success("Save Change Successfully");
-						onCancel();
-					});
-			});
-		}
-	};
-
-	function uploadHandle() {}
 
 	const hours = [];
 	for (let i = 0; i < 24; i++) {
