@@ -77,9 +77,9 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 						} else {
 							createError("Error unavailable", "Time schedule you picked is not available");
 						}
-					} else if (differenceInMinutes(new Date(val.range[0]), new Date(daily_startTime)) <= 0) {
+					} else if (differenceInMinutes(new Date(val.range[0]), new Date(daily_startTime)) < 0) {
 						createError("Error daily start time", "Start time you picked is not available");
-					} else if (differenceInMinutes(new Date(daily_stopTime), new Date(val.range[1])) <= 0) {
+					} else if (differenceInMinutes(new Date(daily_stopTime), new Date(val.range[1])) < 0) {
 						createError("Error daily stop time", "End time you picked is not available");
 					} else {
 						createReservation(data).then((docRef) => {

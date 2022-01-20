@@ -37,7 +37,6 @@ export default function BookingCalendarPage() {
 				facility.push(data);
 			});
 			setFacilities(facility);
-			setLoading(false);
 		});
 		onSnapshot(queryReservations, (QuerySnapshot) => {
 			let reservation = [];
@@ -50,7 +49,7 @@ export default function BookingCalendarPage() {
 		});
 	}, [selectedFacilities]);
 
-	console.log(timeSlot);
+	console.log(reservations);
 
 	return (
 		<>
@@ -82,7 +81,7 @@ export default function BookingCalendarPage() {
 						<p>Please wait...</p>
 					</div>
 				) : (
-					<SchedularComponent reservation={reservations} />
+					<SchedularComponent reserves={reservations} />
 				)}
 				<CreateReservation
 					visible={createModalVisible}
