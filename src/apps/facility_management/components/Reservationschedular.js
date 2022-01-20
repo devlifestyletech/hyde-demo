@@ -7,7 +7,7 @@ import { reservations } from "../utils/reservation.data";
 import "./styles/appointment.css";
 import trashIcon from "../assets/trash-2.svg";
 
-export default function SchedularComponent() {
+export default function SchedularComponent({ reservation }) {
 	const views = ["day", "week", "month"];
 
 	const Appointment = (model) => {

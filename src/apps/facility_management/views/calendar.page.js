@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
-import { Select, Button } from "antd";
+import { Select, Button, Spin } from "antd";
 import "./styles/main.style.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { db } from "../../../utils/firebaseConfig";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, where, query, onSnapshot } from "firebase/firestore";
+import addressService from "../../../services/address.service";
 
 //components import
 import SchedularComponent from "../components/Reservationschedular";
 import CreateReservation from "../components/CreateReservation";
 
 const { Option } = Select;
-// constraint
-const queryFacilities = query(collection(db, "facilities"));
-const queryReservations = query(collection(db, "reservations"));
 
 export default function BookingCalendarPage() {
 	const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -21,9 +19,17 @@ export default function BookingCalendarPage() {
 	const [reservations, setReservations] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [selectedFacilities, setSelectedFacilities] = useState("aPntKgd7dqVmG6qe2mk9");
+	const [addresses, setAddresses] = useState();
+
+	let selectedFacility = facilities.find((facility) => facility.id === selectedFacilities);
+	let timeSlot = reservations.map(({ start_time, end_time }) => ({ start: start_time, end: end_time }));
+	console.log(selectedFacility);
 
 	useEffect(() => {
+		const queryFacilities = query(collection(db, "facilities"));
+		const queryReservations = query(collection(db, "reservations"), where("facility_id", "==", selectedFacilities));
 		setLoading(true);
+		addressService.getAllAddresses().then((res) => setAddresses(res.data));
 		onSnapshot(queryFacilities, (QuerySnapshot) => {
 			let facility = [];
 			QuerySnapshot.forEach((doc) => {
@@ -42,8 +48,9 @@ export default function BookingCalendarPage() {
 			setReservations(reservation);
 			setLoading(false);
 		});
-	}, []);
-	console.log(facilities)
+	}, [selectedFacilities]);
+
+	console.log(reservations);
 
 	return (
 		<>
@@ -69,8 +76,21 @@ export default function BookingCalendarPage() {
 				</Button>
 			</div>
 			<div className="content-container">
-				<SchedularComponent />
-				<CreateReservation visible={createModalVisible} onCancel={() => setCreateModalVisible(false)} />
+				{loading ? (
+					<div style={{ textAlign: "center", margin: 80 }}>
+						<Spin />
+						<p>Please wait...</p>
+					</div>
+				) : (
+					<SchedularComponent reservation={reservations} />
+				)}
+				<CreateReservation
+					visible={createModalVisible}
+					onCancel={() => setCreateModalVisible(false)}
+					facility={selectedFacility}
+					time_slot={timeSlot}
+					addresses={addresses}
+				/>
 			</div>
 		</>
 	);
