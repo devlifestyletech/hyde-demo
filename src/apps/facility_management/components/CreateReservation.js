@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Row, Col, Form, Select, Input, InputNumber, DatePicker, message } from "antd";
 import QrReservationModal from "./QrReservationModal";
 import "./styles/create_modal.css";
-import { areIntervalsOverlapping } from "date-fns";
+import { areIntervalsOverlapping, differenceInMinutes, hoursToMinutes } from "date-fns";
 import moment from "moment";
 
 //firebase firestore components
@@ -38,30 +38,67 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 			autoFocusButton: null,
 			centered: true,
 			onOk() {
+				let data = {
+					user: user.id,
+					facility_id: facility.id,
+					facility_cover: facility.cover,
+					name: user.firstname + " " + user.lastname,
+					facility_name: facility.name,
+					startDateTime: val.range[0]._d,
+					endDateTime: val.range[1]._d,
+					user_amount: val.number_of_people,
+					note: val.note ? val.note : "",
+					booked: val.booked,
+					status: 0
+				};
+				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) };
+				let daily_startTime = new Date(val.range[0]).setHours(facility.daily_start, 0, 0, 0);
+				let daily_stopTime = new Date(val.range[0]).setHours(facility.daily_stop, 0, 0, 0);
 				return new Promise((resolve, reject) => {
-					if (!time_slot.length) {
-						let data = {
-							user: user.id,
-							facility_id: facility.id,
-							facility_cover: facility.cover,
-							name: user.firstname + " " + user.lastname,
-							facility_name: facility.name,
-							startDateTime: val.range[0]._d,
-							endDateTime: val.range[1]._d,
-							user_amount: val.number_of_people,
-							note: val.note ? val.note : "",
-							booked: val.booked,
-							status: 0
-						};
+					if (differenceInMinutes(new Date(val.range[1]), new Date(val.range[0])) > hoursToMinutes(facility.max_hours)) {
+						createError("Error Time schedule", "Time schedule you picked is over max hours limit");
+					} else if (time_slot.length > 0) {
+						let available = false;
+						for (const interval of time_slot) {
+							if (!areIntervalsOverlapping(interval, timeSlot)) {
+								available = true;
+							} else {
+								available = false;
+								break;
+							}
+						}
+						if (available) {
+							createReservation(data).then((docRef) => {
+								resolve();
+								message.success("Create Booking Successfully");
+								setResId({ id: docRef.id, tel: user ? user.tel : null, ...data });
+								setQrModalVisible(true);
+							});
+						} else {
+							createError("Error unavailable", "Time schedule you picked is not available");
+						}
+					} else if (differenceInMinutes(new Date(val.range[0]), new Date(daily_startTime)) <= 0) {
+						createError("Error daily start time", "Start time you picked is not available");
+					} else if (differenceInMinutes(new Date(daily_stopTime), new Date(val.range[1])) <= 0) {
+						createError("Error daily stop time", "End time you picked is not available");
+					} else {
 						createReservation(data).then((docRef) => {
 							resolve();
 							message.success("Create Booking Successfully");
 							setResId({ id: docRef.id, tel: user ? user.tel : null, ...data });
 							setQrModalVisible(true);
 						});
-					} else if (!checkTimeSlotAvailable()) {
-						createError("!Error unavailable", "Date time you picked is not available");
 					}
+					// if (!time_slot.length) {
+					// 	createReservation(data).then((docRef) => {
+					// 		resolve();
+					// 		message.success("Create Booking Successfully");
+					// 		setResId({ id: docRef.id, tel: user ? user.tel : null, ...data });
+					// 		setQrModalVisible(true);
+					// 	});
+					// } else if (!checkTimeSlotAvailable()) {
+					// 	createError("!Error unavailable", "Date time you picked is not available");
+					// }
 				});
 			},
 			onCancel() {}
@@ -83,25 +120,6 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 			}
 		});
 	}
-
-	const checkTimeSlotAvailable = (picked) => {
-		let available = false;
-		if (!time_slot.length) {
-			available = true;
-		} else {
-			for (const val of time_slot) {
-				if (val != null || undefined) {
-					if (!areIntervalsOverlapping(val, picked)) {
-						available = true;
-					} else {
-						available = false;
-						break;
-					}
-				}
-			}
-		}
-		return available;
-	};
 
 	function disabledDate(current) {
 		return current && current <= moment().startOf("day");

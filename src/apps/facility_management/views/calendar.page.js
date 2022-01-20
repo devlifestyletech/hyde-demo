@@ -22,7 +22,7 @@ export default function BookingCalendarPage() {
 	const [addresses, setAddresses] = useState();
 
 	let selectedFacility = facilities.find((facility) => facility.id === selectedFacilities);
-	let timeSlot = reservations.map(({ start_time, end_time }) => ({ start: start_time, end: end_time }));
+	let timeSlot = reservations.map(({ startDateTime, endDateTime }) => ({ start: startDateTime.toDate(), end: endDateTime.toDate() }));
 	console.log(selectedFacility);
 
 	useEffect(() => {
@@ -50,7 +50,7 @@ export default function BookingCalendarPage() {
 		});
 	}, [selectedFacilities]);
 
-	console.log(reservations);
+	console.log(timeSlot);
 
 	return (
 		<>
