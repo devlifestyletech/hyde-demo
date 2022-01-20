@@ -20,7 +20,7 @@ export default function BookingCalendarPage() {
 	const [facilities, setFacilities] = useState([]);
 	const [reservations, setReservations] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [selectedFacilities, setSelectedFacilities] = useState("47CYn2H2J0csqBMSWU5Q");
+	const [selectedFacilities, setSelectedFacilities] = useState("aPntKgd7dqVmG6qe2mk9");
 
 	useEffect(() => {
 		setLoading(true);
@@ -43,6 +43,7 @@ export default function BookingCalendarPage() {
 			setLoading(false);
 		});
 	}, []);
+	console.log(facilities)
 
 	return (
 		<>
