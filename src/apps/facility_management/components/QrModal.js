@@ -4,7 +4,7 @@ import { Modal, Row, Col, Button } from "antd";
 import { format } from "date-fns";
 import qrlogo from "../assets/hyde_2.svg";
 
-export default function QrReservationModal({ data, visible, onCancel }) {
+export default function QrModal({ data, visible, onCancel }) {
 	return (
 		<>
 			<Modal centered title="Reservation" visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
@@ -23,7 +23,7 @@ export default function QrReservationModal({ data, visible, onCancel }) {
 					<Row>
 						<Col span={12}>Time :</Col>
 						<Col span={12}>
-							{data ? format(new Date(data?.startDateTime), "HH:mm") : null} - {data ? format(new Date(data?.endDateTime), "HH:mm") : null}
+							{data ? format(data?.startDateTime.toDate(), "HH:mm") : null} - {data ? format(data.endDateTime.toDate(), "HH:mm") : null}
 						</Col>
 					</Row>
 					<Row>

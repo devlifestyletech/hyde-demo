@@ -27,7 +27,6 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 	if (selectedUser) {
 		var user = address.users.find((user) => user.id === selectedUser);
 	}
-	console.log(facility);
 
 	const onConfirm = (val) => {
 		Modal.confirm({
@@ -39,7 +38,10 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 			centered: true,
 			onOk() {
 				let data = {
+					topic: val.topic,
 					user: user.id,
+					tel: user.tel,
+					room_number: address.address_number,
 					facility_id: facility.id,
 					facility_cover: facility.cover,
 					name: user.firstname + " " + user.lastname,
@@ -89,16 +91,6 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 							setQrModalVisible(true);
 						});
 					}
-					// if (!time_slot.length) {
-					// 	createReservation(data).then((docRef) => {
-					// 		resolve();
-					// 		message.success("Create Booking Successfully");
-					// 		setResId({ id: docRef.id, tel: user ? user.tel : null, ...data });
-					// 		setQrModalVisible(true);
-					// 	});
-					// } else if (!checkTimeSlotAvailable()) {
-					// 	createError("!Error unavailable", "Date time you picked is not available");
-					// }
 				});
 			},
 			onCancel() {}
@@ -168,6 +160,17 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 										<div className="input-tel">{facility ? facility.name : "Select facility from top selection"}</div>
 									</Form.Item>
 									<Form.Item
+										label="Topic"
+										rules={[
+											{
+												required: true,
+												message: "Please select booked!"
+											}
+										]}
+										name="topic">
+										<Input />
+									</Form.Item>
+									<Form.Item
 										label="Number of people"
 										name="number_of_people"
 										rules={[
@@ -203,6 +206,12 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 												: null}
 										</Select>
 									</Form.Item>
+								</div>
+							</div>
+						</Col>
+						<Col span={12} style={{ padding: 10 }}>
+							<div className="md-form">
+								<div className="form-group">
 									<Form.Item
 										label="Name-Surname"
 										name="user"
@@ -230,12 +239,6 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 											)}
 										</Select>
 									</Form.Item>
-								</div>
-							</div>
-						</Col>
-						<Col span={12} style={{ padding: 10 }}>
-							<div className="md-form">
-								<div className="form-group">
 									<Form.Item label="Telephone Number">
 										<div className="input-tel">{user ? user.tel : "Please select resident user"}</div>
 									</Form.Item>

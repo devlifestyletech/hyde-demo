@@ -8,24 +8,30 @@ import trashIcon from "../assets/trash-2.svg";
 
 export default function SchedularComponent({ reserves }) {
 	const views = ["day", "week", "month"];
-	let data = reserves.map(({ name, startDateTime, endDateTime }) => ({
+	let data = reserves.map(({ topic, tel, room_number, name, startDateTime, endDateTime }) => ({
 		startDate: startDateTime.toDate(),
 		endDate: endDateTime.toDate(),
-		name: name
+		name: name,
+		topic: topic,
+		tel: tel,
+		room_number: room_number
 	}));
-	console.log(reserves);
 
 	const Appointment = (model) => {
 		const { appointmentData } = model.data;
 		return (
 			<div className="showtime-preview">
 				<div>
+					<strong style={{ fontFamily: "SukhumvitSet", fontSize: 16 }}>{appointmentData.topic}</strong>
+				</div>
+				<br />
+				<div style={{ fontFamily: "SukhumvitSet", fontSize: 16 }}>
 					{format(appointmentData.startDate, "hh:mm aa")}
 					{" - "}
 					{format(appointmentData.endDate, "hh:mm aa")}
 				</div>
 				<div>
-					<strong>{appointmentData.name}</strong>
+					<p style={{ fontFamily: "SukhumvitSet", fontSize: 16 }}>Name : {appointmentData.name}</p>
 				</div>
 			</div>
 		);
@@ -38,10 +44,10 @@ export default function SchedularComponent({ reserves }) {
 			views={views}
 			showAllDayPanel={false}
 			height={1000}
+			editing={false}
 			appointmentComponent={Appointment}
 			onAppointmentClick={(e) => (e.cancel = true)}
 			onAppointmentDblClick={(e) => (e.cancel = true)}
-			editing={false}
 			style={{ fontFamily: "SukhumvitSet" }}
 		/>
 	);

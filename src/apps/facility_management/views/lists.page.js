@@ -26,7 +26,6 @@ export default function BookingListsPage() {
 				facility.push(data);
 			});
 			setFacilities(facility);
-			setLoading(false);
 		});
 		onSnapshot(queryReservations, (QuerySnapshot) => {
 			let reservation = [];
@@ -39,7 +38,6 @@ export default function BookingListsPage() {
 		});
 	}, []);
 	console.log(facilities);
-
 	return (
 		<>
 			<Header title="Booking Lists" />
@@ -56,7 +54,7 @@ export default function BookingListsPage() {
 				<Input placeholder="Search by name or room number" style={{ width: 400, borderRadius: 20, height: 40, marginLeft: 10 }} />
 			</div>
 			<div className="content-container">
-				<ReservationTable />
+				<ReservationTable data={reservations} facility={facilities} />
 			</div>
 		</>
 	);
