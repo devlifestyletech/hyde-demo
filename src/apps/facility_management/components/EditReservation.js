@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, message, Spin, Button, Row, Col, Form, Select, Input, InputNumber, DatePicker } from "antd";
 import moment from "moment";
-import { areIntervalsOverlapping, differenceInMinutes, hoursToMinutes } from "date-fns";
+import { areIntervalsOverlapping, addDays, differenceInMinutes, hoursToMinutes } from "date-fns";
 import { db } from "../../../utils/firebaseConfig";
 import { doc, updateDoc, collection, query, onSnapshot } from "firebase/firestore";
 
@@ -62,7 +62,8 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 				console.log(newData);
 				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) };
 				let daily_startTime = new Date(val.range[0]).setHours(f?.daily_start, 0, 0, 0);
-				let daily_stopTime = new Date(val.range[0]).setHours(f?.daily_stop, 0, 0, 0);
+				let daily_stopTime =
+					f?.daily_stop === 0 ? addDays(new Date(val.range[0]).setHours(0, 0, 0, 0), 1) : new Date(val.range[0]).setHours(f?.daily_stop, 0, 0, 0);
 				console.log(daily_startTime);
 				console.log(daily_stopTime);
 

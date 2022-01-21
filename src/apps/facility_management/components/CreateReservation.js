@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Row, Col, Form, Select, Input, InputNumber, DatePicker, message } from "antd";
 import QrReservationModal from "./QrReservationModal";
 import "./styles/create_modal.css";
-import { areIntervalsOverlapping, differenceInMinutes, hoursToMinutes } from "date-fns";
+import { areIntervalsOverlapping, differenceInMinutes, hoursToMinutes, addDays } from "date-fns";
 import moment from "moment";
 
 //firebase firestore components
@@ -55,7 +55,10 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 				};
 				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) };
 				let daily_startTime = new Date(val.range[0]).setHours(facility.daily_start, 0, 0, 0);
-				let daily_stopTime = new Date(val.range[0]).setHours(facility.daily_stop, 0, 0, 0);
+				let daily_stopTime =
+					facility.daily_stop === 0
+						? addDays(new Date(val.range[0]).setHours(0, 0, 0, 0), 1)
+						: new Date(val.range[0]).setHours(facility.daily_stop, 0, 0, 0);
 				return new Promise((resolve, reject) => {
 					if (differenceInMinutes(new Date(val.range[1]), new Date(val.range[0])) > hoursToMinutes(facility.max_hours)) {
 						createError("Error Time schedule", "Time schedule you picked is over max hours limit");
