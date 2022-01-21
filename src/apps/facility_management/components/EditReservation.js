@@ -56,7 +56,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 					startDateTime: val.range[0]._d,
 					endDateTime: val.range[1]._d,
 					user_amount: val.number_of_people,
-					note: val.note ? val.note : "",
+					note: val.note,
 					booked: val.booked
 				};
 				console.log(newData);
@@ -189,7 +189,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 												}
 											]}
 											name="topic">
-											<Input defaultValue={data?.topic} />
+											<Input />
 										</Form.Item>
 										<Form.Item
 											label="Number of people"
@@ -207,7 +207,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 												defaultValue={data?.user_amount}
 											/>
 										</Form.Item>
-										<Form.Item label="Room Name">
+										<Form.Item label="Room Number">
 											<div className="input-tel">{data?.room_number}</div>
 										</Form.Item>
 										<Form.Item label="Name-Surname">

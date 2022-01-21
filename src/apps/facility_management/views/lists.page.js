@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
-import { Select, Input } from "antd";
+import { Select, Input, Spin } from "antd";
 import ReservationTable from "../components/ReservationTable";
 
 import { db } from "../../../utils/firebaseConfig";
@@ -38,8 +38,8 @@ export default function BookingListsPage() {
 			setLoading(false);
 		});
 	}, []);
-	console.log(facilities);
-	var newData = reservations.filter((item) => (item.room_number = search));
+	console.log(reservations);
+	// var newData = reservations.filter((item) => (item.room_number = search));
 	return (
 		<>
 			<Header title="Booking Lists" />
@@ -61,7 +61,13 @@ export default function BookingListsPage() {
 				/>
 			</div>
 			<div className="content-container">
-				<ReservationTable data={search.length ? newData : reservations} facility={facilities} />
+				{loading ? (
+					<div style={{ width: "100%", justifyContent: "center", alignContent: "center" }}>
+						<Spin />
+					</div>
+				) : (
+					<ReservationTable data={reservations} facility={facilities} />
+				)}
 			</div>
 		</>
 	);
