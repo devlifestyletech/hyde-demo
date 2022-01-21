@@ -14,8 +14,8 @@ export default function ReservationTable({ data, facility }) {
 	const [handleItem, setHandleItem] = useState();
 	const [showQrModalVisible, setShowQrModalVisible] = useState(false);
 
-	console.log(handleItem);
-	if (facility) console.log(facility);
+	// console.log(handleItem);
+	// if (facility) console.log(facility);
 
 	function showConfirmDelete(item) {
 		Modal.confirm({
@@ -41,7 +41,7 @@ export default function ReservationTable({ data, facility }) {
 				});
 			},
 			onCancel() {
-				console.log("Cancel");
+				// console.log("Cancel");
 			}
 		});
 	}

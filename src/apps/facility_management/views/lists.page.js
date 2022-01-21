@@ -38,7 +38,7 @@ export default function BookingListsPage() {
 			setLoading(false);
 		});
 	}, []);
-	console.log(reservations);
+	// console.log(reservations);
 	// var newData = reservations.filter((item) => (item.room_number = search));
 	return (
 		<>

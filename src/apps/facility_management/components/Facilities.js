@@ -33,10 +33,10 @@ export default function Facilities() {
 
 	if (handleId) {
 		var newValues = facilities.find((facility) => facility.id === handleId);
-		console.log(newValues);
+		// console.log(newValues);
 	}
 
-	console.log(facilities);
+	// console.log(facilities);
 
 	return (
 		<>

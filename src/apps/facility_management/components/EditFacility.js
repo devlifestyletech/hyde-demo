@@ -21,7 +21,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 	const [dailyStart, setDailyStart] = useState();
 	const [dailyStop, setDailyStop] = useState();
 
-	console.log(id, value);
+	// console.log(id, value);
 
 	const selectImage = (e) => {
 		setImageFile(e.target.files[0]);
@@ -52,7 +52,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 						uploadBytes(storageRef, file).then((snapshot) => {
 							getDownloadURL(snapshot.ref).then((downloadURL) => {
 								editFacilities.validateFields().then((val) => {
-									console.log(val);
+									// console.log(val);
 									let newValues = {
 										name: val.name,
 										accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
@@ -65,9 +65,9 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 										max_users: val.max_users,
 										rules: val.rules === value.rules ? val.rules : val.rules.split(",")
 									};
-									console.log(newValues);
+									// console.log(newValues);
 									updateDoc(documentRef, newValues)
-										.catch((err) => console.log(err))
+										.catch((err) => console.error(err))
 										.then(() => {
 											resolve("SUCCESS");
 											message.success("Save Change Successfully");
@@ -78,7 +78,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 						});
 					} else {
 						editFacilities.validateFields().then((val) => {
-							console.log(val);
+							// console.log(val);
 							let newValues = {
 								name: val.name,
 								accommodates: val.accommodates === value.accommodates ? val.accommodates : val.accommodates.split(","),
@@ -90,9 +90,9 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 								max_users: val.max_users,
 								rules: val.rules === value.rules ? val.rules : val.rules.split(",")
 							};
-							console.log(newValues);
+							// console.log(newValues);
 							updateDoc(documentRef, newValues)
-								.catch((err) => console.log(err))
+								.catch((err) => console.error(err))
 								.then(() => {
 									resolve("SUCCESS");
 									message.success("Save Change Successfully");
@@ -103,7 +103,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 				});
 			},
 			onCancel() {
-				console.log("Cancel");
+				// console.log("Cancel");
 			}
 		});
 	};

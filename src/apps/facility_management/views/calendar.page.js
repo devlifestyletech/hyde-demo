@@ -23,7 +23,7 @@ export default function BookingCalendarPage() {
 
 	let selectedFacility = facilities.find((facility) => facility.id === selectedFacilities);
 	let timeSlot = reservations.map(({ startDateTime, endDateTime }) => ({ start: startDateTime.toDate(), end: endDateTime.toDate() }));
-	console.log(selectedFacility);
+	// console.log(selectedFacility);
 
 	useEffect(() => {
 		const queryFacilities = query(collection(db, "facilities"));
@@ -49,7 +49,7 @@ export default function BookingCalendarPage() {
 		});
 	}, [selectedFacilities]);
 
-	console.log(reservations);
+	// console.log(reservations);
 
 	return (
 		<>
