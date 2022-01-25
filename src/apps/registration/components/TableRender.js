@@ -75,7 +75,7 @@ export default function TableRender({ data, key, onEvent }) {
 			title: "Type",
 			dataIndex: "project",
 			key: "index",
-			render: (project) => <div>{project.project_type}</div>
+			render: (project) => <div>{project ? project.project_type : null}</div>
 		},
 		{
 			title: "Tel",
@@ -93,9 +93,9 @@ export default function TableRender({ data, key, onEvent }) {
 			key: "index",
 			render: (id) => (
 				<div style={{ borderRadius: 20 }}>
-					<Button type='link' onClick={() => handleClickEdit(id)} icon={<img src={editIcon} alt='Edit' />} />
-					<Divider type='vertical' style={{ height: 30 }} />
-					<Button type='link' onClick={() => handleClickDelete(id)} icon={<img src={trashIcon} alt='Delete' />} />
+					<Button type="link" onClick={() => handleClickEdit(id)} icon={<img src={editIcon} alt="Edit" />} />
+					<Divider type="vertical" style={{ height: 30 }} />
+					<Button type="link" onClick={() => handleClickDelete(id)} icon={<img src={trashIcon} alt="Delete" />} />
 				</div>
 			)
 		}
