@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from "react";
+import { Form, Button, Select, Modal } from "antd";
+import ResidentService from "../services/resident.service";
+
+export default function AppendUserModal({ userRule, visible, onCancel, id }) {
+  const [users, setUsers] = useState();
+  const [form] = Form.useForm();
+  useEffect(() => {
+    ResidentService.getAllUsers().then((users) => setUsers(users));
+  }, []);
+  return (
+    <Modal
+      centered
+      title={"Add " + userRule + " user"}
+      visible={visible}
+      onCancel={() => onCancel()}
+      footer={[
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            form.validateFields().then((value) => {
+              let newValue = {
+                residence: id,
+                roles: userRule,
+                ...value,
+              };
+              console.log(newValue);
+              ResidentService.addUserToAddress(newValue).then((res) =>
+                onCancel()
+              );
+            });
+          }}
+        >
+          Add
+        </Button>,
+      ]}
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item name="users_permissions_user" label="Select user from list">
+          <Select
+            showSearch
+            placeholder="Search to Select"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            filterSort={(optionA, optionB) =>
+              optionA.children
+                .toLowerCase()
+                .localeCompare(optionB.children.toLowerCase())
+            }
+          >
+            {users
+              ? users.map((user, index) => (
+                  <Select.Option key={index} value={user.id}>
+                    {user.first_name_en + " " + user.last_name_en}
+                  </Select.Option>
+                ))
+              : null}
+          </Select>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+}

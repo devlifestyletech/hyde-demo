@@ -1,0 +1,45 @@
+.content {
+  margin-top: 10px;
+}
+.subHeading {
+  height: 30px;
+  margin-bottom: 10px;
+}
+.subHeading > .ant-input-affix-wrapper {
+  float: left;
+  width: 400px;
+  border-radius: 20px;
+}
+.subHeading > .ant-btn {
+  float: right;
+  background: #b2a37a;
+  color: #f5f4ec;
+}
+.createProjectModal > .ant-modal-content {
+  border-radius: 20px;
+}
+.createProjectModal > .ant-modal-content .ant-modal-header {
+  border-radius: 20px;
+}
+.condoSetting {
+  flex-direction: row;
+}
+.houseSetting {
+  flex-direction: row;
+}
+.topic {
+  margin-bottom: 20px;
+}
+.split {
+  padding: 20px;
+}
+.image {
+  height: 300px;
+  border-radius: 20px;
+  background-color: aqua;
+}
+.map {
+  height: 200px;
+  border-radius: 20px;
+  background-color: aqua;
+}
