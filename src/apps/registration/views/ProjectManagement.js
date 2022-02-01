@@ -6,7 +6,6 @@ import ProjectService from "../services/project.service";
 
 //import project component
 import Header from "../../../components/Header";
-import ProjectModal from "../components/ProjectModal";
 
 //import ant design component
 import { Input, Empty } from "antd";
@@ -20,17 +19,14 @@ import ProjectData from "../components/ProjectData";
 
 function ProjectManagementPage() {
   //initial react state
-  const [createProjectModalVisible, setCreateProjectModalVisible] =
-    useState(false);
   const [projects, setProjects] = useState(null);
-  const [fetchData, setFetchData] = useState(false);
 
   // fetch data from useEffect
   useEffect(() => {
     ProjectService.getProjectList().then((result) => {
       setProjects(result.data);
     });
-  }, [fetchData]);
+  }, []);
 
   return (
     <>
@@ -45,10 +41,7 @@ function ProjectManagementPage() {
         </div>
         <div>
           {projects ? (
-            <ProjectData
-              projectId={projects[0].id}
-              projectName={projects[0].project_name}
-            />
+            <ProjectData projectName={projects[0].project_name} />
           ) : (
             <div
               style={{
@@ -64,13 +57,6 @@ function ProjectManagementPage() {
           )}
         </div>
       </div>
-      <ProjectModal
-        visible={createProjectModalVisible}
-        onCancel={() => {
-          setCreateProjectModalVisible(false);
-          setFetchData(!fetchData);
-        }}
-      />
     </>
   );
 }

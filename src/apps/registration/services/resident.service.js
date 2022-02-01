@@ -8,11 +8,9 @@ export default {
     let data = [];
     try {
       await axios
-        .get(`http://13.229.197.2:1337/users`, {
+        .get(`${process.env.REACT_APP_API_URL}users`, {
           headers: {
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+            Authorization: "Bearer " + session.jwt,
           },
         })
         .then((response) => {
@@ -37,11 +35,9 @@ export default {
   deleteUser: async function (id) {
     try {
       await axios
-        .delete(`http://13.229.197.2:1337/users/${id}`, {
+        .delete(`${process.env.REACT_APP_API_URL}users/${id}`, {
           headers: {
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+            Authorization: "Bearer " + session.jwt,
           },
         })
         .then((res) => res.data);
@@ -53,11 +49,9 @@ export default {
 
   getAddress: async function () {
     try {
-      const data = await axios.get(`http://13.229.197.2:1337/projects`, {
+      const data = await axios.get(`${process.env.REACT_APP_API_URL}projects`, {
         headers: {
-          Authorization:
-            "Bearer " +
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+          Authorization: "Bearer " + session.jwt,
         },
       });
       return data;
@@ -74,13 +68,14 @@ export default {
 
   getUserData: async function (id) {
     try {
-      const data = await axios.get(`http://13.229.197.2:1337/users/${id}`, {
-        headers: {
-          Authorization:
-            "Bearer " +
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
-        },
-      });
+      const data = await axios.get(
+        `${process.env.REACT_APP_API_URL}users/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + session.jwt,
+          },
+        }
+      );
       return data;
     } catch (error) {
       console.error(error);
@@ -89,13 +84,11 @@ export default {
   addUserToAddress: async function (value) {
     try {
       return await axios.post(
-        `http://13.229.197.2:1337/resident-lists`,
+        `${process.env.REACT_APP_API_URL}resident-lists`,
         value,
         {
           headers: {
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+            Authorization: "Bearer " + session.jwt,
           },
         }
       );
@@ -107,12 +100,10 @@ export default {
   removeUserFromAddress: async function (id) {
     try {
       return await axios.delete(
-        `http://13.229.197.2:1337/resident-lists/${id}`,
+        `${process.env.REACT_APP_API_URL}resident-lists/${id}`,
         {
           headers: {
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+            Authorization: "Bearer " + session.jwt,
           },
         }
       );
@@ -124,13 +115,11 @@ export default {
   changeRoleUser: async function (value, id) {
     try {
       return await axios.put(
-        `http://13.229.197.2:1337/resident-lists/${id}`,
+        `${process.env.REACT_APP_API_URL}resident-lists/${id}`,
         value,
         {
           headers: {
-            Authorization:
-              "Bearer " +
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODRkZWEyYzI2NjJjMDQ5ZWE4NmY5MCIsImlhdCI6MTY0Mjk1ODU2MCwiZXhwIjoxNjQ1NTUwNTYwfQ.zEO4m3l4vyqVoJBlnqcJh3TplHbNZrPZf-zAwuSkvzY",
+            Authorization: "Bearer " + session.jwt,
           },
         }
       );

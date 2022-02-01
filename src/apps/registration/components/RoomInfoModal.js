@@ -6,17 +6,23 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import UsersInfo from "./UserInfo";
 const { TabPane } = Tabs;
 
-export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
+export const RoomInfoModal = ({
+  visible,
+  onCancel,
+  id,
+  // owner,
+  // inhabitant,
+  // tenant,
+  refresh,
+}) => {
   const [owner, setOwner] = useState([]);
   const [tenant, setTenant] = useState([]);
   const [inhabitant, setInhabitant] = useState([]);
-
   const [userRule, setUserRule] = useState(null);
   const [appendUserModalVisibility, setAppendUserModalVisibility] =
     useState(false);
   const [createUserModalVisibility, setCreateUserModalVisibility] =
     useState(false);
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     ProjectService.getResidentListByResidenceId(id).then((res) => {
@@ -42,10 +48,7 @@ export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
               {owner.length ? (
                 owner.map((owner, index) => (
                   <div key={index}>
-                    <UsersInfo
-                      user={owner}
-                      onEvent={() => setRefresh(!refresh)}
-                    />
+                    <UsersInfo user={owner} onEvent={() => refresh()} />
                   </div>
                 ))
               ) : (
@@ -80,10 +83,7 @@ export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
                 inhabitant.map((inhabitant, index) => (
                   <>
                     <div key={index}>
-                      <UsersInfo
-                        user={inhabitant}
-                        onEvent={() => setRefresh(!refresh)}
-                      />
+                      <UsersInfo user={inhabitant} onEvent={() => refresh()} />
                     </div>
                     {index < 3 ? (
                       <div style={{ textAlign: "center" }}>
@@ -136,10 +136,7 @@ export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
                 tenant.map((tenant, index) => (
                   <>
                     <div key={index}>
-                      <UsersInfo
-                        user={tenant}
-                        onEvent={() => setRefresh(!refresh)}
-                      />
+                      <UsersInfo user={tenant} onEvent={() => refresh()} />
                     </div>
                     {index < 3 ? (
                       <div style={{ textAlign: "center" }}>
@@ -197,7 +194,7 @@ export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
         id={id}
         onCancel={() => {
           setAppendUserModalVisibility(!appendUserModalVisibility);
-          setRefresh(!refresh);
+          refresh();
         }}
       />
       <CreateUserModal
@@ -205,7 +202,7 @@ export const RoomInfoModal = ({ visible, onCancel, id, re }) => {
         visible={createUserModalVisibility}
         onCancel={() => {
           setCreateUserModalVisibility(!createUserModalVisibility);
-          setRefresh(!refresh);
+          refresh();
         }}
       />
     </>
