@@ -15,14 +15,20 @@ export default function Addresses({ data }) {
   const [residentList, setResidentList] = useState([]);
   const [owner, setOwner] = useState([]);
   const [roomInfoModalVisibility, setRoomInfoModalVisibility] = useState(false);
+  const [inhabitant, setInhabitant] = useState([]);
+  const [tenant, setTenant] = useState([]);
 
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     ProjectService.getResidentListByResidenceId(data.id).then((res) => {
+      console.log(res.data);
       setResidentList(res.data);
-      setOwner(res.data.filter((user) => user.roles === "Owner"));
+      setOwner(res.data.filter((user) => user.resident_role === "Owner"));
+      setInhabitant(res.data.filter((user) => user.roles === "Inhabitant"));
+      setTenant(res.data.filter((user) => user.roles === "Tenant"));
     });
+    setRefresh(false);
   }, [data.id, refresh]);
 
   return (
@@ -40,14 +46,12 @@ export default function Addresses({ data }) {
               }}
             />
           </div>
-          <p>Address: {data.address_no}</p>
+          <p>Address: {data.address_number}</p>
           <div>
             {owner.length
               ? owner.map((owner, index) => (
                   <div key={index} style={{ fontSize: 16 }}>
-                    {owner.users_permissions_user.first_name_en +
-                      " " +
-                      owner.users_permissions_user.last_name_en}
+                    {owner.users_permissions_user.fullname}
                     <br />
                     <PhoneOutlined /> {owner.users_permissions_user.tel}
                   </div>
@@ -62,7 +66,7 @@ export default function Addresses({ data }) {
                       <div>
                         <img
                           src={
-                            "http://13.229.197.2:1337" +
+                            process.env.REACT_APP_API_URL +
                             resident.users_permissions_user.avatar.url
                           }
                           alt="avatar"
@@ -103,7 +107,7 @@ export default function Addresses({ data }) {
               }}
             />
           </div>
-          Address: {data.address_no}
+          Address: {data.address_number}
           <div className="room-empty">
             Available Room
             <Button
@@ -121,8 +125,13 @@ export default function Addresses({ data }) {
       <div>
         <RoomInfoModal
           id={data.id}
-          address_no={data.address_no}
+          owner={owner}
+          inhabitant={inhabitant}
+          tenant={tenant}
           visible={roomInfoModalVisibility}
+          refresh={() => {
+            setRefresh(true);
+          }}
           onCancel={() => {
             setRoomInfoModalVisibility(false);
             setRefresh(!refresh);

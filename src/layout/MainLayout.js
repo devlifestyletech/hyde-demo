@@ -9,6 +9,7 @@ import MainPage from "../apps/main.page";
 import MemberDashboardPage from "../apps/registration/views/MemberDashboard.page";
 import RegistrationPage from "../apps/registration/views/Registration.page";
 import RoomManagement from "../apps/registration/views/ProjectManagement";
+import RoomDashboardPage from "../apps/registration/views/RoomDashboard";
 
 //NearbyService
 import Nearby from "../apps/nearby/NearbyService";
@@ -79,6 +80,10 @@ function MainLayout() {
             <Route
               path="/members/roomManagement"
               element={<RoomManagement />}
+            />
+            <Route
+              path="/members/roomDashboard"
+              element={<RoomDashboardPage />}
             />
             {/* Nearby */}
             <Route path="/nearby" element={<Nearby />} />

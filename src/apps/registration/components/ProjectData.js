@@ -5,29 +5,37 @@ import ProjectService from "../services/project.service";
 import BuildingZone from "./BuildingZone";
 import "./styles/building_zone.css";
 
-export default function ProjectData({ projectId, projectName }) {
-  const [zones, setZones] = useState(null);
+export default function ProjectData({ projectName }) {
+  const [floors, setFloors] = useState(null);
+
+  const groupBy = (arr, key) => {
+    return arr.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
 
   useEffect(() => {
-    ProjectService.getZoneById(projectId).then((zone) => {
-      console.log(zone.data);
-      setZones(zone.data);
+    ProjectService.getResidences().then((res) => {
+      let floorsGroup = groupBy(res.data, "floor");
+      setFloors(floorsGroup);
     });
-  }, [projectId]);
+  }, []);
 
   return (
     <>
       <div className="zone">
         <div className="zone-name">{projectName}</div>
-        {zones ? (
-          zones.map((zone, index) => (
+        {floors ? (
+          Object.keys(floors).map((floor, index) => (
             <div
+              key={index}
               style={{
                 backgroundColor: index % 2 === 0 ? "#ECEBEB" : "#E4E4E4",
               }}
             >
-              <p className="floor">FLOOR {index + 8}</p>
-              <BuildingZone zoneData={zone} key={index} />
+              <p className="floor">FLOOR {floor.substring(1, 4)}</p>
+              <BuildingZone floorsData={floors[floor]} />
             </div>
           ))
         ) : (

@@ -40,6 +40,9 @@ export default function BookingListsPage() {
 	}, []);
 	// console.log(reservations);
 	// var newData = reservations.filter((item) => (item.room_number = search));
+	let reservation_data = reservations.filter((item) => item.facility_id === selectedFacilities);
+	console.log(reservation_data);
+
 	return (
 		<>
 			<Header title="Booking Lists" />
@@ -66,7 +69,7 @@ export default function BookingListsPage() {
 						<Spin />
 					</div>
 				) : (
-					<ReservationTable data={reservations} facility={facilities} />
+					<ReservationTable data={reservation_data} facility={facilities} />
 				)}
 			</div>
 		</>

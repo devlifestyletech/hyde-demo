@@ -129,6 +129,9 @@ function SideMenu() {
                 <Link to="/members/registration">Registration</Link>
               </Menu.Item>
               <Menu.Item key="10">
+                <Link to="/members/roomDashboard">Room Dashboard</Link>
+              </Menu.Item>
+              <Menu.Item key="11">
                 <Link to="/members/roomManagement">Room Management</Link>
               </Menu.Item>
             </SubMenu>

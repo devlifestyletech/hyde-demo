@@ -233,8 +233,8 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 											]}>
 											<RangePicker showTime={{ format: "HH:mm" }} format="YYYY-MM-DD HH:mm" minuteStep={10} disabledDate={disabledDate} />
 										</Form.Item>
-										<Form.Item label="Note">
-											<TextArea placeholder="" autoSize={{ minRows: 3, maxRows: 6 }} defaultValue={data?.note} />
+										<Form.Item label="Note" name="note">
+											<TextArea placeholder="" autoSize={{ minRows: 3, maxRows: 6 }} />
 										</Form.Item>
 									</div>
 								</div>
