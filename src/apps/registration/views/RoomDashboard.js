@@ -3,7 +3,7 @@ import Header from "../../../components/Header";
 import PieGraph from "../components/PieGraph";
 import { Column } from "@ant-design/plots";
 import "./styles/dashboard.css";
-import { Row, Button, DatePicker } from "antd";
+import { Row, Button, DatePicker, Col } from "antd";
 import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import moment from "moment";
 
@@ -462,28 +462,29 @@ function RoomDashboardPage() {
     <>
       <Header title="Room management dashboard" />
       <Row style={{ justifyContent: "center" }}>
-        <div className="owner-main">
+        <Col span={7} offset={1} className="owner-main">
           <div className="number">{totalRoom1}</div>
           <div className="tag tag-1">Room 1</div>
-        </div>
-        <div className="owner-main">
+        </Col>
+        <Col span={7} offset={1} className="owner-main">
           <div className="number">{totalRoom2}</div>
           <div className="tag tag-2">Room 2</div>
-        </div>
-        <div className="owner-main">
+        </Col>
+        <Col span={7} offset={1} className="owner-main">
           <div className="number">{totalRoom3}</div>
           <div className="tag tag-3">Room 3</div>
-        </div>
+        </Col>
       </Row>
-      <Row style={{ justifyContent: "space-between" }}>
-        <div
+      <Row style={{ justifyContent: "space-between", alignItems: "end" }}>
+        <Col
+          span={12}
           className="range"
           style={{ fontSize: 24, fontWeight: "bold", marginTop: 20 }}
         >
           Select Month :{" "}
           <DatePicker picker="month" format={customMonthStartEndFormat} />
-        </div>
-        <div>
+        </Col>
+        <Col offset={6} span={6}>
           <Button
             shape="round"
             size="large"
@@ -496,17 +497,27 @@ function RoomDashboardPage() {
           >
             Export
           </Button>
-        </div>
+        </Col>
       </Row>
       <br />
-      <div style={{ justifyContent: "center" }}>
-        <div className="bar">
+      <Row>
+        <Col
+          xs={{ span: 24 }}
+          xl={{ span: 24 }}
+          xxl={{ span: 11, offset: 1 }}
+          className="bar"
+        >
           <div className="title-graph">Statics of Room</div>
           <div className="graph">
             <Column {...config} />
           </div>
-        </div>
-        <div className="pie">
+        </Col>
+        <Col
+          xs={{ span: 24 }}
+          xl={{ span: 24 }}
+          xxl={{ span: 11, offset: 1 }}
+          className="pie"
+        >
           <div className="title-graph">Percentage</div>
           <div className="graph">
             <PieGraph
@@ -518,8 +529,8 @@ function RoomDashboardPage() {
               ]}
             />
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </>
   );
 }
