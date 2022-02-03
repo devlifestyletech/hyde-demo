@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Space, Card, Row, Col, Button, Divider, Switch } from "antd";
+import { Space, Card, Row, Col, Modal, Button, Divider, Switch } from "antd";
 // firebase
 import { db } from "../../../utils/firebaseConfig";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
 
 // css and components
 import "./styles/facilities.css";
@@ -37,6 +38,29 @@ export default function Facilities() {
 	}
 
 	// console.log(facilities);
+	const changeLockedState = (id, lockState) => {
+		const documentRef = doc(db, "facilities", id);
+		Modal.confirm({
+			title: "Are you sure you want to unlock this facility ?",
+			okButtonProps: { shape: "round", size: "large", type: "primary" },
+			cancelButtonProps: { shape: "round", size: "large" },
+			icon: null,
+			autoFocusButton: null,
+			centered: true,
+			onOk() {
+				return new Promise((resolve, reject) => {
+					updateDoc(documentRef, { locked: !lockState })
+						.then(() => {
+							resolve("Success");
+						})
+						.catch((error) => {
+							console.error(error);
+							reject("Error");
+						});
+				});
+			}
+		});
+	};
 
 	return (
 		<>
@@ -87,13 +111,18 @@ export default function Facilities() {
 								<div>
 									<div>
 										<div style={{ marginRight: 10, float: "left" }}>
-											<Switch checked={facility.locked} />
+											<Switch
+												checked={facility.locked}
+												onClick={() => changeLockedState(facility.id, facility.locked)}
+												checkedChildren={<LockOutlined />}
+												unCheckedChildren={<UnlockOutlined />}
+											/>
 										</div>
 										<div style={{ fontSize: 18, float: "left" }}>{facility.locked ? <>Lock</> : <>Unlock</>}</div>
 									</div>
 									<div style={{ float: "right", textAlign: "right" }}>
-										{facility.users ? (
-											<div style={{ fontSize: 18, color: "rgba(245, 27, 27, 1)" }}>Not Available ({facility.users})</div>
+										{facility.locked ? (
+											<div style={{ fontSize: 18, color: "rgba(245, 27, 27, 1)" }}>Not Available</div>
 										) : (
 											<div style={{ fontSize: 18, color: "rgba(118, 175, 46, 1)" }}>Available</div>
 										)}
