@@ -35,7 +35,7 @@ function App() {
 	const [width] = useWindowSize();
 
 	if (width <= 520) {
-		return <>Please use desktop</>;
+		return <div>Please use desktop</div>;
 	} else {
 		if (loading) {
 			return <Loading />;
