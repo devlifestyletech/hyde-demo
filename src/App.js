@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import MainLayout from "./layout/MainLayout";
 import SignInPage from "./apps/signin.page";
@@ -34,9 +36,30 @@ function App() {
 
 	const [width] = useWindowSize();
 
-	if (width <= 520) {
-		return <>Please use desktop</>;
-	} else {
+	useEffect(() => {
+		signInAnonymously(auth)
+			.then(() => {
+				console.log("Sign in with anonymously");
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+			});
+		const session = encryptStorage.getItem("user_session");
+		if (session) {
+			setSession(session);
+		}
+		setLoading(false);
+	}, []);
+
+	if (width <= 800) {
+		return < div
+			style={{
+				position: 'absolute', left: '50%', top: '50%',
+				transform: 'translate(-50%, -50%)'
+			}}>Please use desktop</div>
+	}
+	else {
 		if (loading) {
 			return <Loading />;
 		}
