@@ -477,14 +477,14 @@ function RoomDashboardPage() {
       </Row>
       <Row style={{ justifyContent: "space-between", alignItems: "end" }}>
         <Col
-          span={12}
+          span={8}
           className="range"
           style={{ fontSize: 24, fontWeight: "bold", marginTop: 20 }}
         >
           Select Month :{" "}
           <DatePicker picker="month" format={customMonthStartEndFormat} />
         </Col>
-        <Col offset={6} span={6}>
+        <Col offset={10} span={6}>
           <Button
             shape="round"
             size="large"
