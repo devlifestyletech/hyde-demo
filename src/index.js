@@ -5,10 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./fonts/SukhumvitSet-Text.ttf";
 import firebase from "firebase/app";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

@@ -94,11 +94,13 @@ function NearbyService() {
 
   let columns = [
     {
+      width: '2vw',
       title: "No.",
       dataIndex: "number",
       key: "number",
     },
     {
+      width: '5vw',
       title: "Picture",
       dataIndex: "picture",
       key: "picture",
@@ -109,29 +111,34 @@ function NearbyService() {
       ),
     },
     {
+      width: '15vw',
       title: "Name",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => (a.name > b.name ? 1 : -1),
     },
     {
+      width: '20vw',
       title: "Location",
       dataIndex: "location",
       key: "location",
-      sorter: (a, b) => (a.location > b.location ? 1 : -1),
+      // sorter: (a, b) => (a.location > b.location ? 1 : -1),
     },
     {
+      width: '5vw',
       title: "Tel",
       dataIndex: "tel",
       key: "tel",
     },
     {
+      width: '5vw',
       title: "Type",
       dataIndex: "type",
       key: "type",
-      sorter: (a, b) => (a.type > b.type ? 1 : -1),
+      // sorter: (a, b) => (a.type > b.type ? 1 : -1),
     },
     {
+      width: '5vw',
       align: "center",
       title: "Action",
       dataIndex: "operation",
@@ -1124,7 +1131,7 @@ function NearbyService() {
 
       <Table
         columns={columns}
-        scroll={{ x: 1500 }}
+        scroll={{ x: 1200 }}
         dataSource={
           searchTag === "All Service"
             ? searchName === ""

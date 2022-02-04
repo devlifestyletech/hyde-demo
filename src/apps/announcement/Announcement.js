@@ -101,7 +101,7 @@ function Announcement() {
       sorter: (a, b) => a.number - b.number,
     },
     {
-      width: '10vw',
+      width: '8vw',
       title: "Image",
       dataIndex: "image",
       key: "image",
@@ -1018,7 +1018,7 @@ function Announcement() {
       </div>
       {loading ? <Loading /> : <Table
         columns={columns}
-        scroll={{ x: 1500 }}
+        scroll={{ x: 1200 }}
         dataSource={
           searchName === ""
             ? data
