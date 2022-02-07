@@ -9,7 +9,7 @@ export default function QrModal({ data, visible, onCancel }) {
 		<>
 			<Modal centered title="Reservation" visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
 				<div style={{ textAlign: "center" }}>
-					<QRCode value={data?.id} size={200} imageSettings={{ src: qrlogo, height: 50, width: 50 }} />
+					<QRCode value={data?.id} size={200} />
 				</div>
 				<div style={{ paddingLeft: 30, marginTop: 20 }}>
 					<Row>

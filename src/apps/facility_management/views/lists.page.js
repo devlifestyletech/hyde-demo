@@ -4,12 +4,10 @@ import { Select, Input, Spin } from "antd";
 import ReservationTable from "../components/ReservationTable";
 
 import { db } from "../../../utils/firebaseConfig";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 // constraint
 const { Option } = Select;
-const queryFacilities = query(collection(db, "facilities"));
-const queryReservations = query(collection(db, "reservations"));
 
 export default function BookingListsPage() {
 	const [facilities, setFacilities] = useState([]);
@@ -19,6 +17,9 @@ export default function BookingListsPage() {
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
+		const queryFacilities = query(collection(db, "facilities"));
+		const queryReservations = query(collection(db, "reservations"), where("facility_id", "==", selectedFacilities));
+
 		setLoading(true);
 		onSnapshot(queryFacilities, (QuerySnapshot) => {
 			let facility = [];
@@ -37,9 +38,8 @@ export default function BookingListsPage() {
 			setReservations(reservation);
 			setLoading(false);
 		});
-	}, []);
-	// console.log(reservations);
-	// var newData = reservations.filter((item) => (item.room_number = search));
+	}, [selectedFacilities]);
+
 	return (
 		<>
 			<Header title="Booking Lists" />
