@@ -41,7 +41,7 @@ export default function Facilities() {
 	const changeLockedState = (id, lockState) => {
 		const documentRef = doc(db, "facilities", id);
 		Modal.confirm({
-			title: "Are you sure you want to unlock this facility ?",
+			title: lockState ? "Are you sure you want to unlock this facility ?" : "Are you sure you want to lock this facility ?",
 			okButtonProps: { shape: "round", size: "large", type: "primary" },
 			cancelButtonProps: { shape: "round", size: "large" },
 			icon: null,
