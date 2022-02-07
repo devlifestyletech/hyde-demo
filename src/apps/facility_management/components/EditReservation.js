@@ -56,10 +56,10 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 					startDateTime: val.range[0]._d,
 					endDateTime: val.range[1]._d,
 					user_amount: val.number_of_people,
-					note: val.note,
+					note: val.note ? val.note : "",
 					booked: val.booked
 				};
-				// console.log(newData);
+				console.log(newData);
 				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) };
 				let daily_startTime = new Date(val.range[0]).setHours(f?.daily_start, 0, 0, 0);
 				let daily_stopTime =
