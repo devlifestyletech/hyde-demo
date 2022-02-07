@@ -22,6 +22,7 @@ export default function EditModal({ user, visible, onCancel }) {
 		setImg(true);
 		addressService.getAllAddresses().then((res) => setAddresses(res.data));
 	}, []);
+	
 	if (user) {
 		// if (user.image !== undefined) {
 		// 	setPickedImage(`${process.env.REACT_APP_API_URL}${user.image.url}`);
@@ -278,10 +279,10 @@ export default function EditModal({ user, visible, onCancel }) {
 										placeholder='Please select address'>
 										{addresses
 											? addresses.map((address, index) => (
-													<Option key={index} value={address.id}>
-														{address.address_number}
-													</Option>
-											  ))
+												<Option key={index} value={address.id}>
+													{address.address_number}
+												</Option>
+											))
 											: null}
 									</Select>
 								</Form.Item>
