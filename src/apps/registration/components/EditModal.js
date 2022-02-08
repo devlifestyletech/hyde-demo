@@ -142,7 +142,7 @@ export default function EditModal({ user, visible, onCancel }) {
 								<Form.Item label='Image'>
 									{img ? (
 										<div className='picked-avatar'>
-											<img className='picked-avatar-image' src={process.env.REACT_APP_API_URL + user?.image.url} alt='picked' />
+											<img className='picked-avatar-image' src={process.env.REACT_APP_API_URL + user?.image?.url} alt='picked' />
 											<Button type='link' icon={<DeleteOutlined />} onClick={() => setImg(null)} style={{ float: "right" }}>
 												Change image
 											</Button>
