@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Divider, Table, Modal, message, Spin } from "antd";
+import { Button, Divider, Table, Modal, message } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 //image import from
@@ -102,16 +102,16 @@ export default function TableRender({ data, key, onEvent }) {
 	];
 
 	return (
-		<div>
-			<Table key={key} dataSource={data} columns={columns} />
+		<React.Fragment key={key}>
+			<Table dataSource={data} columns={columns} />
 			<EditModal
-				key={key}
 				visible={EditModalVisibility}
 				onCancel={() => {
 					setEditModalVisibility(false);
+					setUser();
 				}}
 				user={user}
 			/>
-		</div>
+		</React.Fragment>
 	);
 }
