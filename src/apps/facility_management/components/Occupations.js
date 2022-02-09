@@ -50,7 +50,7 @@ export default function Occupations() {
     if (files) {
       dataImage.append("files", files[0]);
       await axios
-        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage)
+        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, header)
         .then((res) => {
           imageId = res.data[0];
         })
@@ -66,7 +66,7 @@ export default function Occupations() {
           room_detail: value.roomDetail,
           low_status_people: value.mediumAt,
           medium_status_people: value.highAt,
-          // image: imageId,
+          image: imageId,
         },
         header
       )
