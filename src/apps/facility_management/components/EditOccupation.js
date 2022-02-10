@@ -99,9 +99,6 @@ export default function EditOccupation({
                     mediumAt: mediumClone,
                     highAt: highClone,
                   };
-                  //   console.log(newValues);
-                  //   console.log(imageFile);
-                  //   console.log(id);
                   form.resetFields();
                   onConfirm(newValues, imageFile, id);
                 })
@@ -130,26 +127,34 @@ export default function EditOccupation({
               <Input />
             </Form.Item>
             <Form.Item label="Medium status will show at" name="mediumAt">
-              <InputNumber
+              <Input
+                type={"number"}
                 value={mediumClone}
                 onChange={(val) => {
                   setMediumClone(val);
                 }}
                 min={0}
-                style={{ width: "80%", borderRadius: 20, marginRight: 20 }}
-              />{" "}
-              Persons
+                style={{
+                  borderRadius: 20,
+                  marginRight: 20,
+                }}
+                suffix="Persons"
+              />
             </Form.Item>
             <Form.Item label="High status will show at" name="highAt">
-              <InputNumber
+              <Input
+                type={"number"}
                 value={highClone}
                 onChange={(val) => {
                   setHighClone(val);
                 }}
                 min={0}
-                style={{ width: "80%", borderRadius: 20, marginRight: 20 }}
-              />{" "}
-              Persons
+                style={{
+                  borderRadius: 20,
+                  marginRight: 20,
+                }}
+                suffix="Persons"
+              />
             </Form.Item>
             <Form.Item label="Image" name="image">
               <div>
