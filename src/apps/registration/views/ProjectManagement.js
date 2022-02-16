@@ -35,7 +35,7 @@ function ProjectManagementPage() {
     <>
       <Header title="Room management" />
       <div className="content">
-        <div className="subHeader">
+        {/* <div className="subHeader">
           <Input
             style={{ maxWidth: 350 }}
             placeholder="Search by address"
@@ -45,7 +45,7 @@ function ProjectManagementPage() {
               setSearch(val);
             }}
           />
-        </div>
+        </div> */}
         {loading ? (
           <div style={{ textAlign: "center", marginTop: 30 }}>
             <Spin />
