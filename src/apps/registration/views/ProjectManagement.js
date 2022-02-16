@@ -19,6 +19,7 @@ import ProjectData from "../components/ProjectData";
 
 function ProjectManagementPage() {
   //initial react state
+  const { Search } = Input;
   const [projects, setProjects] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -35,17 +36,18 @@ function ProjectManagementPage() {
     <>
       <Header title="Room management" />
       <div className="content">
-        {/* <div className="subHeader">
-          <Input
+        <div className="subHeader">
+          <Search
             style={{ maxWidth: 350 }}
-            placeholder="Search by address"
-            prefix={<SearchOutlined />}
+            placeholder="Search by floor"
+            allowClear
             size="large"
-            onChange={(val) => {
+            onSearch={(val) => {
+              console.log(val);
               setSearch(val);
             }}
           />
-        </div> */}
+        </div>
         {loading ? (
           <div style={{ textAlign: "center", marginTop: 30 }}>
             <Spin />

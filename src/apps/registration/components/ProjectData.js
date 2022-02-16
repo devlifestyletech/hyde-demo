@@ -33,14 +33,24 @@ export default function ProjectData({ projectName, search = "" }) {
   useEffect(() => {
     ProjectService.getResidences().then((res) => {
       let floorsGroup = groupBy(res.data, "floor");
+      console.log(
+        Object.keys(floorsGroup).filter((item) =>
+          item.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+      // console.log(floorsGroup);
       setFloors(floorsGroup);
-      setTotalLength(Object.keys(floorsGroup).length);
+      setTotalLength(
+        Object.keys(floorsGroup).filter((item) =>
+          item.toLowerCase().includes(search.toLowerCase())
+        ).length
+      );
       // setTotalPage(Object.keys(floorsGroup).length / pageSize);
       setMinIndex(0);
       setMaxIndex(pageSize);
       setLoading(false);
     });
-  }, []);
+  }, [search]);
 
   return (
     <>
@@ -53,21 +63,26 @@ export default function ProjectData({ projectName, search = "" }) {
         <div className="zone">
           <div className="zone-name">{projectName}</div>
           {floors ? (
-            Object.keys(floors).map(
-              (floor, index) =>
-                index >= minIndex &&
-                index < maxIndex && (
-                  <div
-                    key={index}
-                    style={{
-                      backgroundColor: index % 2 === 0 ? "#ECEBEB" : "#E4E4E4",
-                    }}
-                  >
-                    <p className="floor">FLOOR {floor.substring(1, 4)}</p>
-                    <BuildingZone floorsData={floors[floor]} />
-                  </div>
-                )
-            )
+            Object.keys(floors)
+              .filter((item) =>
+                item.toLowerCase().includes(search.toLowerCase())
+              )
+              .map(
+                (floor, index) =>
+                  index >= minIndex &&
+                  index < maxIndex && (
+                    <div
+                      key={index}
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ECEBEB" : "#E4E4E4",
+                      }}
+                    >
+                      <p className="floor">FLOOR {floor.substring(1, 4)}</p>
+                      <BuildingZone floorsData={floors[floor]} />
+                    </div>
+                  )
+              )
           ) : (
             <Empty />
           )}

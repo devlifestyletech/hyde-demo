@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Empty, Space } from "antd";
 import "./styles/building_zone.css";
 import Addresses from "./Addresses";
 
 export default function BuildingZone({ floorsData }) {
-  const [residences] = useState(floorsData);
+  const [residences, setResidences] = useState(null);
+
+  useEffect(() => {
+    setResidences(floorsData);
+  }, [floorsData]);
 
   return (
     <>
