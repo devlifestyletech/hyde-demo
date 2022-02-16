@@ -8,7 +8,7 @@ export default {
     let data = [];
     try {
       await axios
-        .get(`${process.env.REACT_APP_API_URL}users`, {
+        .get(`${process.env.REACT_APP_API_URL}/users`, {
           headers: {
             Authorization: "Bearer " + session.jwt,
           },
@@ -35,7 +35,7 @@ export default {
   deleteUser: async function (id) {
     try {
       await axios
-        .delete(`${process.env.REACT_APP_API_URL}users/${id}`, {
+        .delete(`${process.env.REACT_APP_API_URL}/users/${id}`, {
           headers: {
             Authorization: "Bearer " + session.jwt,
           },
@@ -49,11 +49,14 @@ export default {
 
   getAddress: async function () {
     try {
-      const data = await axios.get(`${process.env.REACT_APP_API_URL}projects`, {
-        headers: {
-          Authorization: "Bearer " + session.jwt,
-        },
-      });
+      const data = await axios.get(
+        `${process.env.REACT_APP_API_URL}/projects`,
+        {
+          headers: {
+            Authorization: "Bearer " + session.jwt,
+          },
+        }
+      );
       return data;
     } catch (e) {
       console.error(e);
@@ -69,7 +72,7 @@ export default {
   getUserData: async function (id) {
     try {
       const data = await axios.get(
-        `${process.env.REACT_APP_API_URL}users/${id}`,
+        `${process.env.REACT_APP_API_URL}/users/${id}`,
         {
           headers: {
             Authorization: "Bearer " + session.jwt,
@@ -84,7 +87,7 @@ export default {
   addUserToAddress: async function (value) {
     try {
       return await axios.post(
-        `${process.env.REACT_APP_API_URL}resident-lists`,
+        `${process.env.REACT_APP_API_URL}/resident-lists`,
         value,
         {
           headers: {
@@ -100,7 +103,7 @@ export default {
   removeUserFromAddress: async function (id) {
     try {
       return await axios.delete(
-        `${process.env.REACT_APP_API_URL}resident-lists/${id}`,
+        `${process.env.REACT_APP_API_URL}/resident-lists/${id}`,
         {
           headers: {
             Authorization: "Bearer " + session.jwt,
@@ -115,7 +118,7 @@ export default {
   changeRoleUser: async function (value, id) {
     try {
       return await axios.put(
-        `${process.env.REACT_APP_API_URL}resident-lists/${id}`,
+        `${process.env.REACT_APP_API_URL}/resident-lists/${id}`,
         value,
         {
           headers: {

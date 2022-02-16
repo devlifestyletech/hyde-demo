@@ -17,18 +17,26 @@ export default function Addresses({ data }) {
   const [roomInfoModalVisibility, setRoomInfoModalVisibility] = useState(false);
   const [inhabitant, setInhabitant] = useState([]);
   const [tenant, setTenant] = useState([]);
+  const [qrCode, setQrCode] = useState(null);
+  const [addressId, setAddressId] = useState(null);
+  const [refresh, setRefresh] = useState(true);
 
-  const [refresh, setRefresh] = useState(false);
-
+  //actions
   useEffect(() => {
-    ProjectService.getResidentListByResidenceId(data.id).then((res) => {
-      console.log(res.data);
-      setResidentList(res.data);
-      setOwner(res.data.filter((user) => user.resident_role === "Owner"));
-      setInhabitant(res.data.filter((user) => user.roles === "Inhabitant"));
-      setTenant(res.data.filter((user) => user.roles === "Tenant"));
-    });
-    setRefresh(false);
+    if (refresh) {
+      ProjectService.getResidentListByResidenceId(data.id).then((res) => {
+        // console.log(res.data);
+        setResidentList(res.data);
+        setOwner(res.data.filter((user) => user.resident_role === "Owner"));
+        setInhabitant(
+          res.data.filter((user) => user.resident_role === "Inhabitant")
+        );
+        setTenant(res.data.filter((user) => user.resident_role === "Tenant"));
+        setQrCode(res.data[0]?.address.qr_parking.url ?? null);
+        setAddressId(res.data[0]?.address.id ?? null);
+      });
+      setRefresh(false);
+    }
   }, [data.id, refresh]);
 
   return (
@@ -46,7 +54,7 @@ export default function Addresses({ data }) {
               }}
             />
           </div>
-          <p>Address: {data.address_number}</p>
+          <p className="addressTxt">Address: {data.address_number}</p>
           <div>
             {owner.length
               ? owner.map((owner, index) => (
@@ -128,6 +136,8 @@ export default function Addresses({ data }) {
           owner={owner}
           inhabitant={inhabitant}
           tenant={tenant}
+          qrCode={qrCode}
+          addressId={addressId}
           visible={roomInfoModalVisibility}
           refresh={() => {
             setRefresh(true);

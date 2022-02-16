@@ -42,11 +42,14 @@ export default {
   },
   getResidences: async function () {
     try {
-      return axios.get(`${process.env.REACT_APP_API_URL}/addresses/?_limit=4`, {
-        headers: {
-          Authorization: "Bearer " + session.jwt,
-        },
-      });
+      return axios.get(
+        `${process.env.REACT_APP_API_URL}/addresses/?_limit=500`,
+        {
+          headers: {
+            Authorization: "Bearer " + session.jwt,
+          },
+        }
+      );
     } catch (error) {
       console.error(error);
       throw error;

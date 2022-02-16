@@ -10,7 +10,7 @@ import residentService from "../services/resident.service";
 import ChangeUserModal from "./ChangeUserModal";
 
 function UsersInfo({ user, onEvent }) {
-  console.log(user);
+  // console.log(user);
   const [appendUserModalVisibility, setAppendUserModalVisibility] =
     useState(false);
 
@@ -69,11 +69,11 @@ function UsersInfo({ user, onEvent }) {
             <div style={{ textAlign: "center", margin: 20 }}>
               <img
                 src={
-                  process.env.REACT_APP_IMG_URL +
+                  process.env.REACT_APP_API_URL +
                   user.users_permissions_user.avatar.url
                 }
                 alt="avatar"
-                style={{ borderRadius: 20, width: "100%" }}
+                style={{ borderRadius: 20, maxHeight: 250 }}
               />
             </div>
           ) : (
@@ -88,14 +88,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Firstname</strong>
                 <br />
-                {user ? user.users_permissions_user.first_name_en : null}
+                {user ? user.users_permissions_user.firstname ?? "-" : null}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Lastname</strong>
                 <br />
-                {user.users_permissions_user.last_name_en}
+                {user.users_permissions_user.lastname ?? "-"}
               </div>
             </Col>
           </Row>
@@ -104,14 +104,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Email address</strong>
                 <br />
-                {user.users_permissions_user.email}
+                {user.users_permissions_user.email ?? "-"}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Telephone number</strong>
                 <br />
-                {user.users_permissions_user.tel}
+                {user.users_permissions_user.tel ?? "-"}
               </div>
             </Col>
           </Row>
@@ -120,14 +120,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Gender</strong>
                 <br />
-                {user.users_permissions_user.gender}
+                {user.users_permissions_user.gender ?? "-"}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Nationality</strong>
                 <br />
-                {user.users_permissions_user.nationality}
+                {user.users_permissions_user.nationality ?? "-"}
               </div>
             </Col>
           </Row>
@@ -136,14 +136,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>ID Card number</strong>
                 <br />
-                {user.users_permissions_user.identification_card_number}
+                {user.users_permissions_user.id_number ?? "-"}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>License plate number</strong>
                 <br />
-                {user.users_permissions_user.license_plate}
+                {user.users_permissions_user.lp_number ?? "-"}
               </div>
             </Col>
           </Row>
@@ -152,7 +152,7 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Birth day</strong>
                 <br />
-                {user.users_permissions_user.date_of_birth}
+                {user.users_permissions_user.birth_day ?? "-"}
               </div>
             </Col>
           </Row>

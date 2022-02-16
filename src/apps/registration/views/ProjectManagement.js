@@ -8,7 +8,7 @@ import ProjectService from "../services/project.service";
 import Header from "../../../components/Header";
 
 //import ant design component
-import { Input, Empty } from "antd";
+import { Input, Empty, Spin } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 //import css file
@@ -20,11 +20,14 @@ import ProjectData from "../components/ProjectData";
 function ProjectManagementPage() {
   //initial react state
   const [projects, setProjects] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   // fetch data from useEffect
   useEffect(() => {
     ProjectService.getProjectList().then((result) => {
       setProjects(result.data);
+      setLoading(false);
     });
   }, []);
 
@@ -34,28 +37,42 @@ function ProjectManagementPage() {
       <div className="content">
         <div className="subHeader">
           <Input
-            placeholder="Search by name/address"
+            style={{ maxWidth: 350 }}
+            placeholder="Search by address"
             prefix={<SearchOutlined />}
             size="large"
+            onChange={(val) => {
+              setSearch(val);
+            }}
           />
         </div>
-        <div>
-          {projects ? (
-            <ProjectData projectName={projects[0].project_name} />
-          ) : (
-            <div
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                flex: 1,
-                marginTop: 100,
-              }}
-            >
-              <Empty />
-            </div>
-          )}
-        </div>
+        {loading ? (
+          <div style={{ textAlign: "center", marginTop: 30 }}>
+            <Spin />
+            <p>Loading...</p>
+          </div>
+        ) : (
+          <div>
+            {projects ? (
+              <ProjectData
+                search={search}
+                projectName={projects[0].project_name}
+              />
+            ) : (
+              <div
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  flex: 1,
+                  marginTop: 100,
+                }}
+              >
+                <Empty />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

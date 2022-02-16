@@ -20,14 +20,12 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
             e.preventDefault();
             form.validateFields().then((value) => {
               let newValue = {
-                residence: id,
-                roles: userRule,
+                address: id,
+                resident_role: userRule,
                 ...value,
               };
               console.log(newValue);
-              ResidentService.addUserToAddress(newValue).then((res) =>
-                onCancel()
-              );
+              ResidentService.addUserToAddress(newValue).then(() => onCancel());
             });
           }}
         >
@@ -53,7 +51,7 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
             {users
               ? users.map((user, index) => (
                   <Select.Option key={index} value={user.id}>
-                    {user.first_name_en + " " + user.last_name_en}
+                    {user.firstname + " " + user.lastname}
                   </Select.Option>
                 ))
               : null}

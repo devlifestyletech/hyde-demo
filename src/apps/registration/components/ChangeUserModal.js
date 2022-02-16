@@ -61,7 +61,7 @@ export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
             {users
               ? users.map((user, index) => (
                   <Select.Option key={index} value={user.id}>
-                    {user.first_name_en + " " + user.last_name_en}
+                    {user.firstname + " " + user.lastname}
                   </Select.Option>
                 ))
               : null}
