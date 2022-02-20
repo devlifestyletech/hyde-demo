@@ -40,10 +40,27 @@ export default {
       throw error;
     }
   },
-  getResidences: async function () {
+  getResidences: async function (search) {
     try {
       return axios.get(
-        `${process.env.REACT_APP_API_URL}/addresses/?_limit=500`,
+        search
+          ? `${process.env.REACT_APP_API_URL}/addresses?address_number_contains=${search}&_limit=500`
+          : `${process.env.REACT_APP_API_URL}/addresses/?_limit=500`,
+        {
+          headers: {
+            Authorization: "Bearer " + session.jwt,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  getResidencesBySearch: async function (search) {
+    try {
+      return axios.get(
+        `${process.env.REACT_APP_API_URL}/addresses?address_number_contains=${search}`,
         {
           headers: {
             Authorization: "Bearer " + session.jwt,

@@ -39,7 +39,7 @@ function ProjectManagementPage() {
         <div className="subHeader">
           <Search
             style={{ maxWidth: 350 }}
-            placeholder="Search by floor"
+            placeholder="Search by address"
             allowClear
             size="large"
             onSearch={(val) => {
