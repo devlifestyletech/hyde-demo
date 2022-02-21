@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, InputNumber } from "antd";
+import { Modal, Button, Form, Input, TimePicker, Row, Col } from "antd";
+import moment from "moment";
 
 import { DeleteOutlined } from "@ant-design/icons";
 import imgIcon from "../assets/img.svg";
@@ -14,21 +15,27 @@ export default function EditOccupation({
   highAt,
   image,
   onEdit,
+  opened,
+  closed,
 }) {
   const [form] = Form.useForm();
   const [pickedImage, setPickedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [img, setImg] = useState(null);
-  const [mediumClone, setMediumClone] = useState(0);
-  const [highClone, setHighClone] = useState(0);
+  // const [mediumClone, setMediumClone] = useState(0);
+  // const [highClone, setHighClone] = useState(0);
 
   // functions
   const handleValue = () => {
-    setMediumClone(mediumAt);
-    setHighClone(highAt);
+    // setMediumClone(mediumAt);
+    // setHighClone(highAt);
     form.setFieldsValue({
       roomName: roomName,
       roomDetail: roomDetail,
+      highAt: highAt,
+      mediumAt: mediumAt,
+      opened: moment(opened, "HH:mm"),
+      closed: moment(closed, "HH:mm"),
     });
   };
 
@@ -96,10 +103,13 @@ export default function EditOccupation({
 
                   newValues = {
                     ...values,
-                    mediumAt: mediumClone,
-                    highAt: highClone,
+                    // mediumAt: mediumClone,
+                    // highAt: highClone,
+                    opened: values["opened"].format("HH:mm:ss"),
+                    closed: values["closed"].format("HH:mm:ss"),
                   };
                   form.resetFields();
+                  // console.log(newValues);
                   onConfirm(newValues, imageFile, id);
                 })
                 .catch((info) => {
@@ -129,10 +139,10 @@ export default function EditOccupation({
             <Form.Item label="Medium status will show at" name="mediumAt">
               <Input
                 type={"number"}
-                value={mediumClone}
-                onChange={(val) => {
-                  setMediumClone(val);
-                }}
+                // value={mediumClone}
+                // onChange={(val) => {
+                //   setMediumClone(val);
+                // }}
                 min={0}
                 style={{
                   borderRadius: 20,
@@ -144,10 +154,10 @@ export default function EditOccupation({
             <Form.Item label="High status will show at" name="highAt">
               <Input
                 type={"number"}
-                value={highClone}
-                onChange={(val) => {
-                  setHighClone(val);
-                }}
+                // value={highClone}
+                // onChange={(val) => {
+                //   setHighClone(val);
+                // }}
                 min={0}
                 style={{
                   borderRadius: 20,
@@ -156,6 +166,18 @@ export default function EditOccupation({
                 suffix="Persons"
               />
             </Form.Item>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item label="Open at" name="opened">
+                  <TimePicker format="HH:mm" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Close at" name="closed">
+                  <TimePicker format="HH:mm" />
+                </Form.Item>
+              </Col>
+            </Row>
             <Form.Item label="Image" name="image">
               <div>
                 {img ? (

@@ -28,6 +28,8 @@ export default function Occupations() {
   const [mediumAt, setMediumAt] = useState(null);
   const [highAt, setHighAt] = useState(null);
   const [image, setImage] = useState("");
+  const [opened, setOpened] = useState(null);
+  const [closed, setClosed] = useState(null);
 
   // functions
   const fetchData = () => {
@@ -59,17 +61,15 @@ export default function Occupations() {
         });
     }
     await axios
-      .put(
-        `${process.env.REACT_APP_API_URL}/occupations/${id}`,
-        {
-          room_name: value.roomName,
-          room_detail: value.roomDetail,
-          low_status_people: value.mediumAt,
-          medium_status_people: value.highAt,
-          image: imageId,
-        },
-        header
-      )
+      .put(`${process.env.REACT_APP_API_URL}/occupations/${id}`, header, {
+        room_name: value.roomName,
+        room_detail: value.roomDetail,
+        low_status_people: value.mediumAt,
+        medium_status_people: value.highAt,
+        opened: value.opened,
+        closed: value.closed,
+        image: imageId,
+      })
       .then((res) => {
         console.log(res.data);
         fetchData();
@@ -125,6 +125,8 @@ export default function Occupations() {
                         setRoomDetail(occupation.room_detail ?? "");
                         setMediumAt(occupation.low_status_people ?? 0);
                         setHighAt(occupation.medium_status_people ?? 0);
+                        setOpened(occupation.opened ?? null);
+                        setClosed(occupation.closed ?? null);
                         setImage(occupation?.image?.url ?? null);
                         setEditOccupationModalVisibility(true);
                       }}
@@ -189,6 +191,8 @@ export default function Occupations() {
         highAt={highAt}
         image={image}
         onEdit={editOccupation}
+        opened={opened}
+        closed={closed}
       />
     </>
   );
