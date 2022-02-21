@@ -86,7 +86,7 @@ export default function Facilities() {
 										</div>
 									</Col>
 								</Row>
-								<div className="facility-detail">{facility.room_detail}</div>
+								<div className="facility-detail">{facility.detail}</div>
 								<div className="facility-limit">
 									<Row>
 										<Col span={8}>

@@ -2,17 +2,30 @@
 	border-radius: 20px !important;
 	margin: 20px;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	width: 400px;
 }
 .facility-title {
 	font-size: 24px;
 	font-weight: 700;
 	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1; /* number of lines to show */
+	line-clamp: 1;
+	-webkit-box-orient: vertical;
 }
 .facilities-edit {
 	float: right;
 }
 .facility-detail {
 	font-size: 18px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1; /* number of lines to show */
+	line-clamp: 1;
+	-webkit-box-orient: vertical;
 }
 .facility-limit {
 	font-size: 18px;
@@ -29,4 +42,5 @@
 
 .facility-cover {
 	border-radius: 20px 20px 0px 0px !important;
+	height: 250px !important;
 }
