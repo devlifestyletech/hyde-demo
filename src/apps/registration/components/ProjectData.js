@@ -34,15 +34,8 @@ export default function ProjectData({ projectName, search = "" }) {
   const filterData = async (val) => {
     if (!isCancelled) {
       let floorsGroup = await groupBy(val, "floor");
-      // console.log(
-      //   Object.keys(floorsGroup).filter((item) =>
-      //     item.toLowerCase().includes(search.toLowerCase())
-      //   )
-      // );
-      // console.log(floorsGroup);
       setFloors(floorsGroup);
       setTotalLength(Object.keys(floorsGroup).length);
-      // setTotalPage(Object.keys(floorsGroup).length / pageSize);
       setMinIndex(0);
       setMaxIndex(pageSize);
       setLoading(false);
@@ -59,25 +52,21 @@ export default function ProjectData({ projectName, search = "" }) {
   }, []);
 
   useEffect(() => {
-    if (search && data) {
-      if (!isCancelled) {
-        let floorsGroup = groupBy(
-          data.filter((item) => item.address_number.includes(search)),
-          "floor"
-        );
-        // console.log(
-        //   Object.keys(floorsGroup).filter((item) =>
-        //     item.toLowerCase().includes(search.toLowerCase())
-        //   )
-        // );
-        // console.log(floorsGroup);
-        setFloors(floorsGroup);
-        setTotalLength(Object.keys(floorsGroup).length);
-        // setTotalPage(Object.keys(floorsGroup).length / pageSize);
-        setMinIndex(0);
-        setMaxIndex(pageSize);
-        setLoading(false);
-      }
+    setLoading(true);
+    if (search) {
+      ProjectService.getResidences(search).then((res) => {
+        if (!isCancelled) {
+          let floorsGroup = groupBy(
+            res.data.filter((item) => item.address_number.includes(search)),
+            "floor"
+          );
+          setFloors(floorsGroup);
+          setTotalLength(Object.keys(floorsGroup).length);
+          setMinIndex(0);
+          setMaxIndex(pageSize);
+          setLoading(false);
+        }
+      });
     } else {
       filterData(data);
     }
