@@ -19,7 +19,6 @@ import {
 import {
   PlusOutlined,
   PictureOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
@@ -181,9 +180,12 @@ function Announcement() {
   const onDelete = (key) => {
     Modal.confirm({
       title: "Are you sure you want to delete this announcement?",
-      okButtonProps: { shape: "round", size: "large", type: "primary" },
+      okText: "Confirm",
+      okType: "danger",
+      okButtonProps: { shape: "round", type: "danger", size: "large" },
       cancelButtonProps: { shape: "round", size: "large" },
-      icon: <DeleteOutlined style={{ color: "red" }} />,
+      // icon: <DeleteOutlined style={{ color: "red" }} />,
+      icon: null,
       autoFocusButton: null,
       centered: true,
       onOk() {
@@ -976,8 +978,6 @@ function Announcement() {
       <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
     </div>
   }
-
-  const [width, height] = useWindowSize();
 
   return (
     <>

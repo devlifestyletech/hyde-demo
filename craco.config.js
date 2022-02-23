@@ -16,7 +16,7 @@ module.exports = {
               "@table-border-radius-base": "10px",
               "@menu-item-color": "#1D1C1C",
               "@font-family": "SukhumvitSet",
-              "@menu-highlight-color": "#FFFFFF",
+              // "@menu-highlight-color": "#FFFFFF",
             },
             javascriptEnabled: true,
           },
