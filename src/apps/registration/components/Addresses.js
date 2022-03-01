@@ -32,7 +32,7 @@ export default function Addresses({ data }) {
           res.data.filter((user) => user.resident_role === "Inhabitant")
         );
         setTenant(res.data.filter((user) => user.resident_role === "Tenant"));
-        setQrCode(res.data[0]?.address.qr_parking.url ?? null);
+        setQrCode(res.data[0]?.address?.qr_parking?.url ?? undefined);
         setAddressId(res.data[0]?.address.id ?? null);
       });
       setRefresh(false);
@@ -75,7 +75,8 @@ export default function Addresses({ data }) {
                         <img
                           src={
                             process.env.REACT_APP_API_URL +
-                            resident.users_permissions_user.avatar.url
+                              resident?.users_permissions_user?.avatar?.url ??
+                            null
                           }
                           alt="avatar"
                           style={{

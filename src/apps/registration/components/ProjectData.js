@@ -42,6 +42,11 @@ export default function ProjectData({ projectName, search = "" }) {
     }
   };
 
+  const isLoading = (bool) => {
+    console.log("SET LOAD ACTIVATE : " + bool);
+    setLoading(bool);
+  };
+
   //actions
   useEffect(() => {
     setLoading(true);
@@ -97,7 +102,10 @@ export default function ProjectData({ projectName, search = "" }) {
                     }}
                   >
                     <p className="floor">FLOOR {floor.substring(1, 4)}</p>
-                    <BuildingZone floorsData={floors[floor]} />
+                    <BuildingZone
+                      isLoading={isLoading}
+                      floorsData={floors[floor]}
+                    />
                   </div>
                 )
             )

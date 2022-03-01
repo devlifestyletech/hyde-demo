@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Empty, Button, Modal, Tabs, Divider } from "antd";
+import { Empty, Button, Modal, Tabs } from "antd";
 import axios from "axios";
 import { encryptStorage } from "../../../utils/encryptStorage";
 // import ProjectService from "../services/project.service";
@@ -113,7 +113,7 @@ export const RoomInfoModal = ({
             <TabPane tab="Owner" key="owner">
               {owner.length ? (
                 owner.map((owner, index) => (
-                  <div key={index}>
+                  <div key={"owner" + index}>
                     <UsersInfo user={owner} onEvent={() => refresh()} />
                   </div>
                 ))
@@ -130,17 +130,6 @@ export const RoomInfoModal = ({
                   >
                     Add owner user
                   </Button>
-                  <Divider>or</Divider>
-                  <Button
-                    shape="round"
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                      setUserRule("Owner");
-                      setCreateUserModalVisibility(!createUserModalVisibility);
-                    }}
-                  >
-                    Create owner user
-                  </Button>
                 </div>
               )}
             </TabPane>
@@ -148,32 +137,20 @@ export const RoomInfoModal = ({
               {inhabitant.length ? (
                 inhabitant.map((inhabitant, index) => (
                   <>
-                    <div key={index}>
+                    <div key={"inhabitant" + index}>
                       <UsersInfo user={inhabitant} onEvent={() => refresh()} />
                     </div>
-                    {index < 3 ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Button
-                          style={{ alignSelf: "center" }}
-                          shape="round"
-                          icon={<PlusCircleOutlined />}
-                          onClick={() => {
-                            setUserRule("Inhabitant");
-                            setAppendUserModalVisibility(
-                              !appendUserModalVisibility
-                            );
-                          }}
-                        >
-                          Add inhabitant user
-                        </Button>
-                      </div>
-                    ) : null}
                   </>
                 ))
               ) : (
                 <div style={{ textAlign: "center" }}>
                   <Empty />
+                </div>
+              )}
+              {inhabitant.length < 4 ? (
+                <div style={{ textAlign: "center" }}>
                   <Button
+                    style={{ alignSelf: "center" }}
                     shape="round"
                     icon={<PlusCircleOutlined />}
                     onClick={() => {
@@ -183,50 +160,27 @@ export const RoomInfoModal = ({
                   >
                     Add inhabitant user
                   </Button>
-                  <Divider>or</Divider>
-                  <Button
-                    shape="round"
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                      setUserRule("Inhabitant");
-                      setCreateUserModalVisibility(!createUserModalVisibility);
-                    }}
-                  >
-                    Create inhabitant user
-                  </Button>
                 </div>
-              )}
+              ) : null}
             </TabPane>
             <TabPane tab="Tenant" key="tenant">
               {tenant.length ? (
                 tenant.map((tenant, index) => (
                   <>
-                    <div key={index}>
+                    <div key={"tenant" + index}>
                       <UsersInfo user={tenant} onEvent={() => refresh()} />
                     </div>
-                    {index < 3 ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Button
-                          style={{ alignSelf: "center" }}
-                          shape="round"
-                          icon={<PlusCircleOutlined />}
-                          onClick={() => {
-                            setUserRule("Tenant");
-                            setAppendUserModalVisibility(
-                              !appendUserModalVisibility
-                            );
-                          }}
-                        >
-                          Add tenant user
-                        </Button>
-                      </div>
-                    ) : null}
                   </>
                 ))
               ) : (
                 <div style={{ textAlign: "center" }}>
                   <Empty />
+                </div>
+              )}
+              {tenant.length < 4 ? (
+                <div style={{ textAlign: "center" }}>
                   <Button
+                    style={{ alignSelf: "center" }}
                     shape="round"
                     icon={<PlusCircleOutlined />}
                     onClick={() => {
@@ -236,19 +190,8 @@ export const RoomInfoModal = ({
                   >
                     Add tenant user
                   </Button>
-                  <Divider>or</Divider>
-                  <Button
-                    shape="round"
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                      setUserRule("Tenant");
-                      setCreateUserModalVisibility(!createUserModalVisibility);
-                    }}
-                  >
-                    Create tenant user
-                  </Button>
                 </div>
-              )}
+              ) : null}
             </TabPane>
             <TabPane tab="Auto Parking QR Code" key="qrCode">
               <div
