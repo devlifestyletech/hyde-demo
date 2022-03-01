@@ -17,7 +17,7 @@ import authService from "../services/auth.service";
 //import encrypt Storage configure
 import { encryptStorage } from "../utils/encryptStorage";
 
-function SignInPage({ fakeAuth }) {
+function SignInPage() {
 	const [LoginForm] = Form.useForm();
 
 	const onFinish = (value) => {
