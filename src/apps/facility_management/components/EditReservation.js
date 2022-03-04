@@ -38,7 +38,6 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 			topic: data.topic,
 			number_of_people: data.user_amount,
 			note: data.note,
-			booked: data.booked
 		})
 	}
 
@@ -57,14 +56,11 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 					endDateTime: val.range[1]._d,
 					user_amount: val.number_of_people,
 					note: val.note ? val.note : '',
-					booked: val.booked
 				}
 				console.log(newData)
 				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) }
 				let daily_startTime = new Date(val.range[0]).setHours(f?.daily_start, 0, 0, 0)
 				let daily_stopTime = f?.daily_stop === 0 ? addDays(new Date(val.range[0]).setHours(0, 0, 0, 0), 1) : new Date(val.range[0]).setHours(f?.daily_stop, 0, 0, 0)
-				// console.log(daily_startTime);
-				// console.log(daily_stopTime);
 
 				return new Promise((resolve, reject) => {
 					if (differenceInMinutes(new Date(val.range[1]), new Date(val.range[0])) > hoursToMinutes(f?.max_hours)) {
@@ -84,6 +80,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 								.then(() => {
 									resolve()
 									message.success('Save change successfully')
+									onCancel()
 								})
 								.catch((err) => reject(err))
 						} else {
@@ -106,7 +103,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 			},
 			onCancel() {
 				// console.log("Cancel");
-			}
+			},
 		})
 	}
 
@@ -127,7 +124,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 			okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
 			onOk() {
 				Modal.destroyAll()
-			}
+			},
 		})
 	}
 
@@ -142,8 +139,9 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 				footer={[
 					<Button size='large' shape='round' type='primary' onClick={() => editReservationForm.validateFields().then((val) => onConfirm(val))}>
 						Save
-					</Button>
-				]}>
+					</Button>,
+				]}
+			>
 				{loading ? (
 					<div style={{ justifyContent: 'center', alignContent: 'center' }}>
 						<Spin />
@@ -162,10 +160,11 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 											label='Topic'
 											rules={[
 												{
-													message: 'Please select booked!'
-												}
+													message: 'Please select booked!',
+												},
 											]}
-											name='topic'>
+											name='topic'
+										>
 											<Input />
 										</Form.Item>
 										<Form.Item
@@ -174,9 +173,10 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 											rules={[
 												{
 													required: true,
-													message: 'Please input user amount'
-												}
-											]}>
+													message: 'Please input user amount',
+												},
+											]}
+										>
 											<InputNumber min={1} max={f ? f.max_users : null} style={{ width: '100%', borderRadius: 20 }} defaultValue={data?.user_amount} />
 										</Form.Item>
 										<Form.Item label='Room Number'>
@@ -200,9 +200,10 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 											rules={[
 												{
 													required: true,
-													message: 'Please select time range!'
-												}
-											]}>
+													message: 'Please select time range!',
+												},
+											]}
+										>
 											<RangePicker showTime={{ format: 'HH:mm' }} format='YYYY-MM-DD HH:mm' minuteStep={10} disabledDate={disabledDate} />
 										</Form.Item>
 										<Form.Item label='Note'>
