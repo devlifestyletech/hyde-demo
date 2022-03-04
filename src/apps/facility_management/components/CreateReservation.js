@@ -50,7 +50,7 @@ export default function CreateReservation({ facility, time_slot, addresses, visi
 					endDateTime: val.range[1]._d,
 					user_amount: val.number_of_people,
 					note: val.note ? val.note : '',
-					booked: val.booked,
+					booked: 'Juristic',
 					status: 0
 				}
 				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) }
