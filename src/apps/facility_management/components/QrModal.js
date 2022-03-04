@@ -12,7 +12,7 @@ export default function QrModal({ data, visible, onCancel }) {
 		<>
 			<Modal centered title='Reservation' visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
 				<div style={{ textAlign: 'center', width: 350, height: 350, backgroundColor: 'white', padding: 25 }} ref={qrRef}>
-					<QRCode value={data?.id} size={300} imageSettings={{ src: qrlogo, height: 50, width: 50, excavate: false }} />
+					<QRCode value={data?.id} size={250} imageSettings={{ src: qrlogo, height: 50, width: 50, excavate: false }} />
 				</div>
 				<div style={{ paddingLeft: 30, marginTop: 20 }}>
 					<Row>
@@ -50,7 +50,13 @@ export default function QrModal({ data, visible, onCancel }) {
 					<Button shape='round' size='large' onClick={null} style={{ width: 200, marginTop: 50 }} icon={<ShareAltOutlined />}>
 						Share
 					</Button>
-					<Button shape='round' size='large' onClick={() => exportComponentAsJPEG(qrRef, { fileName: data?.name + '-' + data?.id })} style={{ width: 200, marginTop: 10 }} icon={<DownloadOutlined />}>
+					<Button
+						shape='round'
+						size='large'
+						onClick={() => exportComponentAsJPEG(qrRef, { fileName: data?.name + '-' + data?.id })}
+						style={{ width: 200, marginTop: 10 }}
+						icon={<DownloadOutlined />}
+					>
 						Save Image
 					</Button>
 				</div>

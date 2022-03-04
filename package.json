@@ -22,6 +22,8 @@
     "devextreme-react": "^21.2.4",
     "encrypt-storage": "^2.2.3",
     "firebase": "^9.6.3",
+    "firebase-tools": "^10.2.2",
+    "global": "^4.4.0",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-component-export-image": "^1.0.6",
