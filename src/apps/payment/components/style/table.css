@@ -1,0 +1,5 @@
+.ant-btn:focus {
+    color: #131414;
+    background: #fff;
+    border-color: #d9d9d9;
+}

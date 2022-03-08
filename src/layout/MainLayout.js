@@ -27,6 +27,9 @@ import BookingListsPage from "../apps/facility_management/views/lists.page";
 import OccupationPage from "../apps/facility_management/views/occupation.page";
 import FacilitiesPage from "../apps/facility_management/views/facilities.page";
 
+//payment
+import Payment_success from "../apps/payment/Payment_success";
+import Payment_dashbord from "../apps/payment/payment_dashbord";
 //Account confirm
 
 const { Sider, Content } = Layout;
@@ -65,6 +68,9 @@ function MainLayout() {
 					{/* Fixing */}
 					<Route path="/service-center-reports" element={<FixingReports />} />
 					<Route path="/service-center-dashBoard" element={<FixingReportDashBoard />} />
+					{/* Payment */}
+					<Route path="/payment/bill-payment" element={<Payment_success />} />
+					<Route path="/payment/Paymentdashbord" element={<Payment_dashbord />} />
 				</Routes>
 			</Content>
 		</Layout>

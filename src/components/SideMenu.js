@@ -22,7 +22,7 @@ import logoutIcon from "./assets/logout.svg";
 import pieIcon from "./assets/pie.svg";
 import facilitiesIcon from "./assets/facilities.svg";
 import groupIcon from "./assets/group.svg";
-
+import payment from "./assets/payment.svg";
 //service file
 import authService from "../services/auth.service";
 
@@ -114,6 +114,18 @@ function SideMenu() {
             >
               <Menu.Item key="7" className="menu-item">
                 <Link to="/nearby">Service Lists</Link>
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="payment"
+              icon={<img src={payment} alt="payment" />}
+              title="Payment"
+            >
+              <Menu.Item key="15">
+              <Link to="/payment/Paymentdashbord">Payment Dashboard</Link>
+                </Menu.Item>
+              <Menu.Item key="16">
+                <Link to="/payment/bill-payment">Bill Payment</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">User Management</div>

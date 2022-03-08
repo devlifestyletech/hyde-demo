@@ -17,6 +17,7 @@ module.exports = {
               "@menu-item-color": "#1D1C1C",
               "@font-family": "SukhumvitSet",
               // "@menu-highlight-color": "#FFFFFF",
+              "@modal-heading":"20px"
             },
             javascriptEnabled: true,
           },
