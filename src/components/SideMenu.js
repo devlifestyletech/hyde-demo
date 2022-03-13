@@ -111,7 +111,7 @@ function SideMenu() {
 								<Link to='/service-center-reports'>Service Center Lists</Link>
 							</Menu.Item>
 							<Menu.Item key='14' className='menu-item'>
-								<Link to='/service-center-message'>Message</Link>
+								<Link to='/join-room'>Message</Link>
 							</Menu.Item>
 						</SubMenu>
 						<div className='group-name'>Settings</div>
