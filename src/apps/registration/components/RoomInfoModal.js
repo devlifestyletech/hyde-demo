@@ -136,11 +136,9 @@ export const RoomInfoModal = ({
             <TabPane tab="Inhabitant" key="inhabitant">
               {inhabitant.length ? (
                 inhabitant.map((inhabitant, index) => (
-                  <>
-                    <div key={"inhabitant" + index}>
-                      <UsersInfo user={inhabitant} onEvent={() => refresh()} />
-                    </div>
-                  </>
+                  <div key={"inhabitant" + index}>
+                    <UsersInfo user={inhabitant} onEvent={() => refresh()} />
+                  </div>
                 ))
               ) : (
                 <div style={{ textAlign: "center" }}>
@@ -166,11 +164,9 @@ export const RoomInfoModal = ({
             <TabPane tab="Tenant" key="tenant">
               {tenant.length ? (
                 tenant.map((tenant, index) => (
-                  <>
-                    <div key={"tenant" + index}>
-                      <UsersInfo user={tenant} onEvent={() => refresh()} />
-                    </div>
-                  </>
+                  <div key={"tenant" + index}>
+                    <UsersInfo user={tenant} onEvent={() => refresh()} />
+                  </div>
                 ))
               ) : (
                 <div style={{ textAlign: "center" }}>
@@ -238,7 +234,7 @@ export const RoomInfoModal = ({
                       {pickedImage ? (
                         <div>
                           <img
-                            className="facility-image"
+                            style={{ width: 375, aspectRatio: 1 }}
                             src={pickedImage}
                             alt="picked"
                           />
