@@ -14,7 +14,7 @@ import EditOccupation from "./EditOccupation";
 const session = encryptStorage.getItem("user_session");
 
 export default function Occupations() {
-  const header = {
+  const headers = {
     headers: {
       Authorization: "Bearer " + session.jwt,
     },
@@ -52,32 +52,58 @@ export default function Occupations() {
     if (files) {
       dataImage.append("files", files[0]);
       await axios
-        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, header)
+        .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
         .then((res) => {
           imageId = res.data[0];
+          axios
+            .put(
+              `${process.env.REACT_APP_API_URL}/occupations/${id}`,
+              {
+                room_name: value.roomName,
+                room_detail: value.roomDetail,
+                low_status_people: value.mediumAt,
+                medium_status_people: value.highAt,
+                opened: value.opened,
+                closed: value.closed,
+                image: imageId,
+              },
+              headers
+            )
+            .then((res) => {
+              console.log(res.data);
+              fetchData();
+              alert("Edit occupation room success");
+            })
+            .catch((err) => {
+              console.error("Can't edit data: ", err);
+            });
         })
         .catch((err) => {
           console.log("Err", err);
         });
+    } else {
+      axios
+        .put(
+          `${process.env.REACT_APP_API_URL}/occupations/${id}`,
+          {
+            room_name: value.roomName,
+            room_detail: value.roomDetail,
+            low_status_people: value.mediumAt,
+            medium_status_people: value.highAt,
+            opened: value.opened,
+            closed: value.closed,
+          },
+          headers
+        )
+        .then((res) => {
+          console.log(res.data);
+          fetchData();
+          alert("Edit occupation room success");
+        })
+        .catch((err) => {
+          console.error("Can't edit data: ", err);
+        });
     }
-    await axios
-      .put(`${process.env.REACT_APP_API_URL}/occupations/${id}`, header, {
-        room_name: value.roomName,
-        room_detail: value.roomDetail,
-        low_status_people: value.mediumAt,
-        medium_status_people: value.highAt,
-        opened: value.opened,
-        closed: value.closed,
-        image: imageId,
-      })
-      .then((res) => {
-        console.log(res.data);
-        fetchData();
-        alert("Edit occupation room success");
-      })
-      .catch((err) => {
-        console.error("Can't edit data: ", err);
-      });
   };
 
   // actions
