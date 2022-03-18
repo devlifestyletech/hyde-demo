@@ -13,7 +13,7 @@ export default function BookingListsPage() {
 	const [facilities, setFacilities] = useState([])
 	const [reservations, setReservations] = useState([])
 	const [loading, setLoading] = useState(false)
-	const [selectedFacilities, setSelectedFacilities] = useState('VZbh7t4r9GlBIShhRFHe')
+	const [selectedFacilities, setSelectedFacilities] = useState('aPntKgd7dqVmG6qe2mk9')
 	const [search, setSearch] = useState('')
 
 	useEffect(() => {

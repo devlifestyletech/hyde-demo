@@ -2,13 +2,12 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyCcIAd_romoJndTub4Rzn91oeuoES8aAeU',
-	authDomain: 'artani-one-application.firebaseapp.com',
-	projectId: 'artani-one-application',
-	storageBucket: 'artani-one-application.appspot.com',
-	messagingSenderId: '926671911042',
-	appId: '1:926671911042:web:3600ab5485bf74ae5f1c9b',
-	measurementId: 'G-8EW9WW8H4R',
+	apiKey: 'AIzaSyAhhRKA1XyYtnyd8dQYJndqjSqGldlJJzU',
+	authDomain: 'hyde-heritage-9df6e.firebaseapp.com',
+	projectId: 'hyde-heritage-9df6e',
+	storageBucket: 'hyde-heritage-9df6e.appspot.com',
+	messagingSenderId: '716906153647',
+	appId: '1:716906153647:web:2190cbd7399d7644ed765a',
 }
 
 const app = initializeApp(firebaseConfig)

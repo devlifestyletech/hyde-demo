@@ -44,7 +44,7 @@ function SideMenu() {
 					<img src={MenuLogo} alt='menu-logo' />
 				</div>
 				<div className='menu-group'>
-					<Menu mode='inline' openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 300, backgroundColor: 'rgba(32, 38, 58, 1)' }}>
+					<Menu mode='inline' openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 275, backgroundColor: 'rgba(0, 51, 48, 1)' }}>
 						<div className='group-name'>Overview</div>
 						<SubMenu key='overview' icon={<img src={pieIcon} alt='member' />} title='Monitoring'>
 							<Menu.Item key='0'>

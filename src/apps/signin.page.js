@@ -83,7 +83,7 @@ function SignInPage() {
 		<div className='bg'>
 			<Row>
 				{width < 1180 ? null : (
-					<Col style={{ height: '100vh', width: 675, backgroundColor: 'rgba(32, 38, 58, 1)' }}>
+					<Col style={{ height: '100vh', width: 675, backgroundColor: 'rgba(0, 51, 48, 1)' }}>
 						{/* <img src={CoverImage} alt='hyde cover' className='cover-image' style={{ height: "100vh" }} /> */}
 					</Col>
 				)}

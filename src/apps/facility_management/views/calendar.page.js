@@ -18,7 +18,7 @@ export default function BookingCalendarPage() {
 	const [facilities, setFacilities] = useState([])
 	const [reservations, setReservations] = useState([])
 	const [loading, setLoading] = useState(false)
-	const [selectedFacilities, setSelectedFacilities] = useState('VZbh7t4r9GlBIShhRFHe')
+	const [selectedFacilities, setSelectedFacilities] = useState('aPntKgd7dqVmG6qe2mk9')
 	const [addresses, setAddresses] = useState()
 
 	let selectedFacility = facilities.find((facility) => facility.id === selectedFacilities)
