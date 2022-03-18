@@ -9,7 +9,7 @@ import { Menu } from 'antd'
 import './styles/side-menu.css'
 
 //icon svg
-import MenuLogo from './assets/menu-logo.svg'
+import MenuLogo from './assets/ArtaniLogo.svg'
 import nearbyImg from './assets/nearby.svg'
 import announcement from './assets/announcement.svg'
 import service from './assets/service.svg'

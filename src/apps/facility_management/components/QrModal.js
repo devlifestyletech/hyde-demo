@@ -4,7 +4,6 @@ import { Modal, Row, Col, Button } from 'antd'
 import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons'
 import { format } from 'date-fns'
 import { exportComponentAsJPEG } from 'react-component-export-image'
-import qrlogo from '../assets/hyde_2.svg'
 
 export default function QrModal({ data, visible, onCancel }) {
 	const qrRef = useRef()
@@ -12,7 +11,7 @@ export default function QrModal({ data, visible, onCancel }) {
 		<>
 			<Modal centered title='Reservation' visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
 				<div style={{ textAlign: 'center', width: 350, height: 350, backgroundColor: 'white', padding: 25 }} ref={qrRef}>
-					<QRCode value={data?.id} size={250} imageSettings={{ src: qrlogo, height: 50, width: 50, excavate: false }} />
+					<QRCode value={data?.id} size={250} />
 				</div>
 				<div style={{ paddingLeft: 30, marginTop: 20 }}>
 					<Row>
