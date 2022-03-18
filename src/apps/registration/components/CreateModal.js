@@ -53,7 +53,6 @@ function CreateModal({ visible, onCancel }) {
 				uploadService.uploadImage(imageData).then((res) => {
 					let new_value = { image: res.data[0], ...value }
 					authService.registration(new_value).then((response) => {
-						console.log(response.data)
 						let newValue = {
 							address: response.data.user.address,
 							users_permissions_user: response.data.user.id,
