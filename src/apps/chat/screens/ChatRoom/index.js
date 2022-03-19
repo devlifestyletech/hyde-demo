@@ -51,7 +51,7 @@ function ChatRoom(props) {
             socket.emit(
                 "sendMessage",
                 {
-                    userId: joinData.userData.id,
+                    userData:joinData.userData,
                     message,
                     time:
                         new Date(Date.now()).getHours() +

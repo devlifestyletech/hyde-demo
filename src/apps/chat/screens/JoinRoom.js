@@ -6,8 +6,11 @@ import { socket } from "../../../services/web-sockets";
 import ChatRoom from "./ChatRoom/index";
 // react router
 import { useNavigate } from "react-router-dom";
+import { encryptStorage } from "../../../utils/encryptStorage";
+const session = encryptStorage.getItem("user_session");
 function JoinRoom(props) {
     let navigate = useNavigate();
+    console.log("session==>>",session.user.id)
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
     const [error, setError] = useState("");
@@ -39,7 +42,8 @@ function JoinRoom(props) {
     };
     const onClick = () => {
         if (username && room) {
-            socket.emit("join", { username, room }, (error) => {
+            const userId=session.user.id;
+            socket.emit("join", {userId, username, room }, (error) => {
                 if (error) {
                     setError(error);
                     alert(error);
