@@ -9,7 +9,7 @@ import {
 import residentService from "../services/resident.service";
 import ChangeUserModal from "./ChangeUserModal";
 
-function UsersInfo({ user, onEvent }) {
+function UsersInfo({ user, onEvent, isOwner = false }) {
   // console.log(user);
   const [appendUserModalVisibility, setAppendUserModalVisibility] =
     useState(false);
@@ -54,9 +54,11 @@ function UsersInfo({ user, onEvent }) {
             <Menu.Item key="edit" icon={<EditOutlined />}>
               Change user
             </Menu.Item>
-            <Menu.Item key="delete" danger icon={<DeleteOutlined />}>
-              Delete user
-            </Menu.Item>
+            {isOwner ? null : (
+              <Menu.Item key="delete" danger icon={<DeleteOutlined />}>
+                Delete user
+              </Menu.Item>
+            )}
           </Menu>
         }
       >

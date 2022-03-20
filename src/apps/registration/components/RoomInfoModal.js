@@ -94,9 +94,6 @@ export const RoomInfoModal = ({
     }
   };
 
-  //actions
-  useEffect(() => {}, []);
-
   return (
     <>
       <Modal
@@ -114,7 +111,11 @@ export const RoomInfoModal = ({
               {owner.length ? (
                 owner.map((owner, index) => (
                   <div key={"owner" + index}>
-                    <UsersInfo user={owner} onEvent={() => refresh()} />
+                    <UsersInfo
+                      user={owner}
+                      onEvent={() => refresh()}
+                      isOwner={true}
+                    />
                   </div>
                 ))
               ) : (
@@ -319,6 +320,7 @@ export const RoomInfoModal = ({
         userRule={userRule}
         visible={appendUserModalVisibility}
         id={id}
+        refresh={() => refresh()}
         onCancel={() => {
           setAppendUserModalVisibility(!appendUserModalVisibility);
           refresh();
