@@ -17,6 +17,387 @@ function RoomDashboardPage() {
   const [nextMonth, setNextMonth] = useState("2022-02");
   const [data, setData] = useState([]);
   const [columnData, setColumnData] = useState([]);
+  const [staticData] = useState([
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-1"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 90,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-2"),
+      day: "Tuesday",
+      in_count: 24,
+      out_count: 23,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-3"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-4"),
+      day: "Thursday",
+      in_count: 75,
+      out_count: 70,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-5"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-6"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-7"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-1"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 52,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-2"),
+      day: "Tuesday",
+      in_count: 23,
+      out_count: 23,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-3"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-4"),
+      day: "Thursday",
+      in_count: 80,
+      out_count: 70,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-5"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-6"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-7"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-1"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 52,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-2"),
+      day: "Tuesday",
+      in_count: 1,
+      out_count: 1,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-3"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-4"),
+      day: "Thursday",
+      in_count: 3,
+      out_count: 3,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-5"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-6"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-7"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-8"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 90,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-9"),
+      day: "Tuesday",
+      in_count: 24,
+      out_count: 23,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-10"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-11"),
+      day: "Thursday",
+      in_count: 75,
+      out_count: 70,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-12"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-13"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 1",
+      },
+      date: new Date("2021-07-14"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-8"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 52,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-9"),
+      day: "Tuesday",
+      in_count: 23,
+      out_count: 23,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-10"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-11"),
+      day: "Thursday",
+      in_count: 80,
+      out_count: 70,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-12"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-13"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 2",
+      },
+      date: new Date("2021-07-14"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-8"),
+      day: "Monday",
+      in_count: 95,
+      out_count: 52,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-9"),
+      day: "Tuesday",
+      in_count: 1,
+      out_count: 1,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-10"),
+      day: "Wednesday",
+      in_count: 30,
+      out_count: 30,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-11"),
+      day: "Thursday",
+      in_count: 3,
+      out_count: 3,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-12"),
+      day: "Friday",
+      in_count: 15,
+      out_count: 15,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-13"),
+      day: "Saturday",
+      in_count: 29,
+      out_count: 29,
+    },
+    {
+      occupation: {
+        room_name: "Room 3",
+      },
+      date: new Date("2021-07-14"),
+      day: "Sunday",
+      in_count: 30,
+      out_count: 30,
+    },
+  ]);
   const [mockData, setMockData] = useState([
     {
       occupation: {
@@ -584,7 +965,7 @@ function RoomDashboardPage() {
     setData([]);
     setTotalRoom1(0);
     setColumnData([]);
-    setMockData(mockData);
+    setMockData(staticData);
   };
 
   function disabledDate(current) {
