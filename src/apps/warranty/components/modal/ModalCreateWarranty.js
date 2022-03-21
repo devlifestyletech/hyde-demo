@@ -66,6 +66,7 @@ const CreateWarrantyModal = (props) => {
                         style: { borderRadius: "25px" },
                     });
                     await  form.resetFields();
+                    await setFileList(null)
                     dispatch(getWarrantyProjectStore(paramsWarranty))
                     dispatch({type: "CREATE_MODAL_Warranty"});
                 } else {
