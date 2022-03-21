@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Form, Row, Col, Input, InputNumber, DatePicker, Button, message, Select } from 'antd'
+import { Modal, Form, Row, Col, Input, InputNumber, Button, message, Select } from 'antd'
 import './styles/facilities.css'
 import { DeleteOutlined } from '@ant-design/icons'
 import imgIcon from '../assets/img.svg'
@@ -62,7 +62,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 										detail: val.detail,
 										max_hours: val.max_hours,
 										max_users: val.max_users,
-										rules: val.rules === value.rules ? val.rules : val.rules.split(',')
+										rules: val.rules === value.rules ? val.rules : val.rules.split(','),
 									}
 									// console.log(newValues);
 									updateDoc(documentRef, newValues)
@@ -90,7 +90,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 								detail: val.detail,
 								max_hours: val.max_hours,
 								max_users: val.max_users,
-								rules: val.rules === value.rules ? val.rules : val.rules.split(',')
+								rules: val.rules === value.rules ? val.rules : val.rules.split(','),
 							}
 							console.log(newValues)
 							updateDoc(documentRef, newValues)
@@ -110,7 +110,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			onCancel() {
 				// console.log("Cancel");
 				editFacilities.resetFields()
-			}
+			},
 		})
 	}
 
@@ -119,7 +119,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 		hours.push(
 			<Option key={i.toString()} value={i}>
 				{i.toString().length < 1 ? '0' + i.toString() : i.toString()}:00
-			</Option>
+			</Option>,
 		)
 	}
 	if (value) {
@@ -130,7 +130,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			max_hours: value.max_hours,
 			accommodates: value.accommodates,
 			description: value.description,
-			rules: value.rules
+			rules: value.rules,
 		})
 	}
 
@@ -154,10 +154,12 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 						shape='round'
 						onClick={() => {
 							onConfirm()
-						}}>
+						}}
+					>
 						Save
-					</Button>
-				]}>
+					</Button>,
+				]}
+			>
 				<Form form={editFacilities} layout='vertical'>
 					<Row>
 						<Col span={12} style={{ padding: 10 }}>
@@ -230,7 +232,7 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 															}}
 															style={{
 																display: 'none',
-																float: 'left'
+																float: 'left',
 															}}
 														/>
 														<p style={{ color: 'red' }}>* Please upload image</p>
