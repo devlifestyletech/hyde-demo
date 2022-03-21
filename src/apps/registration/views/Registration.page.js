@@ -20,7 +20,7 @@ function RegistrationPage() {
 			res.data.forEach((res, index) => {
 				let user = {
 					number: index + 1,
-					...res
+					...res,
 				}
 				data.push(user)
 			})
@@ -53,16 +53,16 @@ function RegistrationPage() {
 				<div className='regis-table'>
 					<Tabs>
 						<TabPane tab='All' key='1'>
-							<TableRender data={residents} key='1' onEvent={() => setRefresh(!refresh)} />
+							<TableRender data={residents} onEvent={() => setRefresh(!refresh)} />
 						</TabPane>
 						<TabPane tab='Owner' key='2'>
-							<TableRender data={owner_users} key='2' />
+							<TableRender data={owner_users} onEvent={() => setRefresh(!refresh)} />
 						</TabPane>
 						<TabPane tab='Inhabitant' key='3'>
-							<TableRender data={inhabitant_users} key='3' />
+							<TableRender data={inhabitant_users} onEvent={() => setRefresh(!refresh)} />
 						</TabPane>
 						<TabPane tab='Tenant' key='4'>
-							<TableRender data={tenant_users} key='4' />
+							<TableRender data={tenant_users} onEvent={() => setRefresh(!refresh)} />
 						</TabPane>
 					</Tabs>
 				</div>
