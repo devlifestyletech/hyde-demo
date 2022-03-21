@@ -39,6 +39,7 @@ function JoinRoom(props) {
 	}
 	const onClick = () => {
 		if (username && room) {
+			const userId = session.user.id
 			socket.emit('join', { userId, username, room }, (error) => {
 				if (error) {
 					setError(error)
