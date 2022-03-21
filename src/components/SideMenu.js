@@ -18,9 +18,9 @@ import pieIcon from './assets/pie.svg'
 import facilitiesIcon from './assets/facilities.svg'
 import groupIcon from './assets/group.svg'
 import payment from './assets/payment.svg'
-import econtact from './assets/econtact.svg';
-import building from './assets/building.svg';
-import warranty from './assets/warranty.svg';
+import econtact from './assets/econtact.svg'
+import building from './assets/building.svg'
+import warranty from './assets/warranty.svg'
 //service file
 import authService from '../services/auth.service'
 
@@ -28,7 +28,7 @@ import authService from '../services/auth.service'
 const { SubMenu } = Menu
 
 function SideMenu() {
-	const rootSubmenuKeys = ['overview', 'member', 'nearby-service', 'announcement', 'facilities-management', 'maintenance', 'payment']
+	const rootSubmenuKeys = ['overview', 'member', 'nearby-service', 'announcement', 'facilities-management', 'maintenance', 'payment', 'econtact', 'building', 'warranty']
 	const [openKeys, setOpenKeys] = React.useState(['overview'])
 
 	const onOpenChange = (keys) => {
