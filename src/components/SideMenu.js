@@ -18,6 +18,9 @@ import pieIcon from './assets/pie.svg'
 import facilitiesIcon from './assets/facilities.svg'
 import groupIcon from './assets/group.svg'
 import payment from './assets/payment.svg'
+import econtact from './assets/econtact.svg';
+import building from './assets/building.svg';
+import warranty from './assets/warranty.svg';
 //service file
 import authService from '../services/auth.service'
 
@@ -85,6 +88,22 @@ function SideMenu() {
 							</Menu.Item>
 							<Menu.Item key='16'>
 								<Link to='/payment/bill-payment'>Bill Payment</Link>
+							</Menu.Item>
+						</SubMenu>
+						<SubMenu key='warranty' icon={<img src={warranty} alt='warranty' />} title='Warranty Tracking'>
+							<Menu.Item key='17'>
+								<Link to='/warranty/warranty-lists'>Warranty Lists</Link>
+							</Menu.Item>
+						</SubMenu>
+
+						<SubMenu key='econtact' icon={<img src={econtact} alt='econtact' />} title='Emergency Contact'>
+							<Menu.Item key='18'>
+								<Link to='/emergency/emergency-lists'>Emergency Lists</Link>
+							</Menu.Item>
+						</SubMenu>
+						<SubMenu key='building' icon={<img src={building} alt='building' />} title='Building Progresses'>
+							<Menu.Item key='19'>
+								<Link to='/building/projectProgresses'>Project Progresses</Link>
 							</Menu.Item>
 						</SubMenu>
 						<div className='group-name'>User Management</div>

@@ -34,7 +34,16 @@ import FacilitiesPage from '../apps/facility_management/views/facilities.page'
 //payment
 import Payment_success from '../apps/payment/Payment_success'
 import Payment_dashbord from '../apps/payment/payment_dashbord'
-//Account confirm
+
+//warranty
+import WarrantyMain from "../apps/warranty/WarrantyMain";
+
+//building
+import ProjectProgresses from "../apps/building/ProjectProgresses";
+
+//emergency
+import Emergencymain from "../apps/emergency/emergency_main";
+
 
 const { Sider, Content } = Layout
 function MainLayout() {
@@ -82,6 +91,12 @@ function MainLayout() {
 					{/* Payment */}
 					<Route path='/payment/bill-payment' element={<Payment_success />} />
 					<Route path='/payment/Paymentdashbord' element={<Payment_dashbord />} />
+					{/* emergency */}
+					<Route path='/emergency/emergency-lists' element={<Emergencymain/>} />
+					{/* warranty */}
+					<Route path='/warranty/warranty-lists' element={<WarrantyMain/>}/>
+					{/* building */}
+					<Route path='/building/projectProgresses' element={<ProjectProgresses/>} />
 				</Routes>
 			</Content>
 		</Layout>
