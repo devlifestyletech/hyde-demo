@@ -6,6 +6,9 @@ import { socket } from '../../../services/web-sockets'
 import ChatRoom from './ChatRoom/index'
 // react router
 import { useNavigate } from 'react-router-dom'
+import { encryptStorage } from '../../../utils/encryptStorage'
+const session = encryptStorage.getItem('user_session')
+
 function JoinRoom(props) {
 	let navigate = useNavigate()
 	const [username, setUsername] = useState('')
