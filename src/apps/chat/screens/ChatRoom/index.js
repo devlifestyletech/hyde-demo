@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useState } from "react";
 // import styled from "styled-components";
 import { socket } from "../../../../services/web-sockets";
@@ -18,7 +19,8 @@ import { Input } from "antd";
 function ChatRoom(props) {
     let navigate = useNavigate();
     const { username, userId, room, joinData } = props;
-    console.log("joinData", userId);
+    const chatData = { id: userId, username: username, room: room };
+    console.log("joinData", joinData);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState([]);
     const [users, setUsers] = useState([]);
@@ -51,7 +53,8 @@ function ChatRoom(props) {
             socket.emit(
                 "sendMessage",
                 {
-                    userData:joinData.userData,
+                    userData: chatData,
+                    type: "chat",
                     message,
                     time:
                         new Date(Date.now()).getHours() +
@@ -75,7 +78,7 @@ function ChatRoom(props) {
         <ChatContainer>
             <Header username={username} room={room} />
             <StyledContainer>
-                <List users={users.users} />
+                {/* <List users={users.users} /> */}
                 <ChatBox>
                     <Messages messages={messages} username={username} />
                     <Input
