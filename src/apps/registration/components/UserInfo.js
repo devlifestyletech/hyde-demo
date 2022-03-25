@@ -20,7 +20,9 @@ function UsersInfo({ user, onEvent, isOwner = false }) {
       icon: <ExclamationCircleOutlined />,
       content: "The resident will remove from this address",
       onOk() {
-        residentService.removeUserFromAddress(id).then(() => onEvent());
+        residentService
+          .removeUserFromAddress(id, user.users_permissions_user.id)
+          .then(() => onEvent());
       },
       onCancel() {
         onEvent();
@@ -33,7 +35,9 @@ function UsersInfo({ user, onEvent, isOwner = false }) {
       <ChangeUserModal
         visible={appendUserModalVisibility}
         id={user.id}
-        userRule={user.roles}
+        userRule={user.resident_role}
+        userId={user.users_permissions_user.id}
+        addressId={user.address.id}
         onCancel={() => {
           setAppendUserModalVisibility(false);
           onEvent();
