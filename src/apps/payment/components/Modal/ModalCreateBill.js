@@ -66,7 +66,7 @@ const ModalCreateBill = () => {
   // set default value in from.list on select
 
   const onFinish = async () => {
-   await setConfirmLoading(!confirmLoading)
+   await setConfirmLoading(true)
     console.log("dataCreateBilling:", dataCreateBilling);
     await form
       .validateFields()
@@ -132,7 +132,7 @@ const ModalCreateBill = () => {
       .catch((info) => {
         // console.log("Validate Failed:", info);
       });
-      await setConfirmLoading(!confirmLoading)
+      await setConfirmLoading(false)
   };
 
   const handleCancel = async () => {

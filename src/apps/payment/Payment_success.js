@@ -1,16 +1,13 @@
 import React from "react";
-// import {PaymentContext} from 'context/paymentContext'
-import {Input, Button, Space, DatePicker, Row, Col} from "antd";
-import {SearchOutlined, ArrowDownOutlined} from "@ant-design/icons";
+import {Input, DatePicker} from "antd";
+import {SearchOutlined} from "@ant-design/icons";
 import moment from "moment";
 import {useDispatch, useSelector} from "react-redux";
 import {Table_payment as TablePayment} from "./components/table_payment";
 import {getBillingPayment, getCustomerList} from "./services/thunk-action/payment_thunk";
 import {MenuBillPayment} from "./components/menuBillPayment";
 import CreateBillModal from "./components/Modal/ModalCreateBill";
-// import "../../App.css";
 import "./style/payment.css";
-// import {contains} from "dom-helpers";
 import Heading from "../../components/Header";
 // import io from "socket.io-client";
 // const URL = "https://crud-firestore-swagger-node.herokuapp.com/"
@@ -28,16 +25,11 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 const Payment_success = () => {
-    // const {paymentData,dataBillingP,paymentChange} = useContext(PaymentContext)
-    // useEffect(() => {
-    //   paymentChange("1")
-    // }, [])
     const dispatch = useDispatch();
     const {status_billing, dataBilling, paramsBilling} = useSelector(
         (state) => state.PaymentActionRedux
     );
     // export all payment
-    // console.log("paymentPage:",dataBillingP);
     const exportBillingModal = async () => {
         dispatch({type: "EXPORT_ALL_DATABILLING", payload: dataBilling});
         dispatch({type: "CHANGE_STATE_EXPORT_BILLING", payload: true});
@@ -61,15 +53,13 @@ const Payment_success = () => {
 
                     dispatch(getBillingPayment(paramsBilling));
                 }
-                // console.log("paramsBilling:",paramsBilling.filters);
+             
             } else {
                 paramsBilling.filters = {
                     BillsPayment_Invoice: [currentTarget.value],
                     Address_Customer: [currentTarget.value],
                 };
             }
-            //console.debug()
-            // dispatch({ type: "DISPLAY_DATATABLE", payload: resultFilter });
         } else {
             paramsBilling.filters = {
                 BillsPayment_Invoice: null,
@@ -98,9 +88,6 @@ const Payment_success = () => {
             <div className="row">
                 {status_billing !== "Bill not generated" ? (
                     <div className="col-4">
-                        {/*<div className="payment_custom">*/}
-                        {/*  <DatePicker onChange={onChange} picker="month" />*/}
-                        {/*</div>*/}
                     </div>
                 ) : null}
                 <div className="col-6">
@@ -114,30 +101,6 @@ const Payment_success = () => {
                         />
                     </div>
                 </div>
-                {/* <div className="col-4">
-                    <div className="flex-container">
-                        <div
-                            style={{flex: 1, display: "flex", justifyContent: "flex-end"}}
-                        >
-                            {status_billing === "Payment successfull" ? (
-                                <Button
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                    icon={<ArrowDownOutlined/>}
-                                    className="buttom_payment1"
-                                    type="Default"
-                                    shape="round"
-                                    onClick={exportBillingModal}
-                                >
-                                    Export
-                                </Button>
-                            ) : null}
-                        </div>
-                    </div>
-                </div> */}
             </div>
             <CreateBillModal dataCreateBilling={null}/>
             <MenuBillPayment/>

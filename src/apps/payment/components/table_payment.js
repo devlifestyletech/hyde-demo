@@ -53,7 +53,11 @@ export const Table_payment = () => {
   } = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
   const [state, setPayment] = useState(statePayment);
-  const [loadingCreate, setloadingCreate] = useState(false);
+  const [loadingCreate, setloadingCreate] = useState([]);
+  const [View, setView] = useState([]);
+  const [Del, setDel] = useState([]);
+  const [Verify, setVerify] = useState([]);
+  const [Export, setExport] = useState([]);
   useEffect(() => {
     dispatch({ type: "CHANGE_PARAMS_BILLING", payload: paramsBillingPayment });
     dispatch(getBillingPayment(paramsBillingPayment));
@@ -108,16 +112,24 @@ export const Table_payment = () => {
   // setting pagination Option
 
   const exportBillingModal = async ({ currentTarget }) => {
+    const exportLoading = [...Export];
+    exportLoading[currentTarget.value] = true;
+    await setExport(exportLoading);
     const result = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
 
     dispatch({ type: "EXPORT_ALL_DATABILLING", payload: result });
     dispatch({ type: "CHANGE_STATE_EXPORT_BILLING", payload: true });
+    exportLoading[currentTarget.value] = false;
+    await setExport(exportLoading);
   };
 
      // approve
      const approveBillingModal = async ({ currentTarget }) => {
+      const verifyLoading = [...Verify];
+      verifyLoading[currentTarget.value] = true;
+      await setVerify(verifyLoading);
       let resultSCB={}
       const [result] = dataBilling.filter((e) => {
         return e.BillsPayment_Invoice === currentTarget.value;
@@ -133,11 +145,17 @@ export const Table_payment = () => {
       resultSCB.BillsPayment_AllType=result.BillsPayment_AllType
       dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
       dispatch({ type: "MODAL_PENDING", payload: true });
+      verifyLoading[currentTarget.value] = false;
+      await setVerify(verifyLoading);
     };
     //approve
 
   // showDetail
-  const selectedRow = ({currentTarget}) => {
+  const selectedRow = async ({currentTarget})  => {
+    const viewLoadings = [...View];
+    viewLoadings[currentTarget.value] = true;
+    await setView(viewLoadings);
+ 
     const result = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
@@ -340,15 +358,23 @@ Tel. 0987645822
               : null}
             </div>
           ),
-          onOk() {},
+          async onOk () {
+            viewLoadings[currentTarget.value] = false;
+            await setView(viewLoadings);
+          },
         })
       
     }
+
   };
   // showDetail
 
   //delete billingPayment
-  const deleteBillingByID = ({ currentTarget }) => {
+  const deleteBillingByID  = async ({ currentTarget }) => {
+    const delLoading = [...Del];
+    delLoading[currentTarget.value] = true;
+    await setDel(delLoading);
+ 
     Modal.confirm({
       title: "Are you sure delete billing payment",
       icon: <ExclamationCircleOutlined />,
@@ -356,8 +382,14 @@ Tel. 0987645822
       okText: "Yes",
       async onOk() {
         await deleteID(currentTarget.value);
+        delLoading[currentTarget.value] = false;
+        await setDel(delLoading);
       },
       cancelText: "No",
+      async onCancel(){
+        delLoading[currentTarget.value] = false;
+        await setDel(delLoading);
+      }
     });
   };
   const deleteID = async (id) => {
@@ -388,7 +420,9 @@ Tel. 0987645822
   // create billingPayment by Id
   const createBilling = async ({ currentTarget }) => {
     let total = 0;
-    await setloadingCreate(true);
+    const newLoadings = [...loadingCreate];
+    newLoadings[currentTarget.value] = true;
+     await setloadingCreate(newLoadings);
     const [result] = dataBilling.filter((e) => {
       return e.address === currentTarget.value;
     });
@@ -406,7 +440,8 @@ Tel. 0987645822
     console.log("createBilling:", dataOutdate);
     await dispatch({ type: "CREATE_BILLING", payload: result });
     dispatch({ type: "CHANGE_STATE", payload: true });
-    await setloadingCreate(false);
+    newLoadings[currentTarget.value] = false;
+     await setloadingCreate(newLoadings);
   };
 
   // create billingPayment by Id
@@ -548,25 +583,6 @@ Tel. 0987645822
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     }, 
-    //   {
-    //   title: "View",
-    //   align: 'center',
-    //   dataIndex: "action",
-    //   key: "BillsPayment_Invoice",
-    //   width: "10%",
-    //   render: (text, record) => (
-    //     <>
-    //       <Button
-    //         value={record.BillsPayment_Invoice}
-    //         type="Default"
-    //         shape="round"
-    //         onClick={selectedRow}
-    //       >
-    //         View
-    //       </Button>
-    //     </>
-    //   ),
-    // },
     {
       title: "Export",
       align: 'center',
@@ -579,6 +595,7 @@ Tel. 0987645822
             value={record.BillsPayment_Invoice}
             type="Default"
             shape="round"
+            loading={Export[record.BillsPayment_Invoice]}
             onClick={exportBillingModal}
           >
             Export
@@ -683,27 +700,10 @@ Tel. 0987645822
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
-    // {
-    //   title: "View",
-    //   align: 'center',
-    //   dataIndex: "action",
-    //   key: "BillsPayment_Invoice",
-    //   width: "10%",
-    //   render: (text, record) => (
-    //     <>
-    //       <Button
-    //         value={record.BillsPayment_Invoice}
-    //         type="Default"
-    //         shape="round"
-    //         onClick={selectedRow}
-    //       >
-    //         View
-    //       </Button>
-    //     </>
-    //   ),
-    // },
+   
     {
       title: "Action",
+      align: 'center',
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -712,6 +712,7 @@ Tel. 0987645822
           <Button
             value={record.BillsPayment_Invoice}
             type="Default"
+            loading={Verify[record.BillsPayment_Invoice]}
             disabled={record.Receipt_Status}
             shape="round"
             onClick={approveBillingModal}
@@ -838,6 +839,7 @@ Tel. 0987645822
             value={record.BillsPayment_Invoice}
             type="Default"
             shape="round"
+            loading={View[record.BillsPayment_Invoice]}
             onClick={selectedRow}
           >
             View
@@ -858,6 +860,7 @@ Tel. 0987645822
             value={record.id}
             type="Default"
             disabled={record.Receipt_Status}
+            loading={Del[record.id]}
             shape="round"
             icon={<DeleteFilled style={{ verticalAlign: "baseline" }} />}
             onClick={deleteBillingByID}
@@ -938,7 +941,7 @@ Tel. 0987645822
             disabled={record.Receipt_Status}
             // icon={<PlusOutlined style={{ verticalAlign: "baseline" }} />}
             className="buttom_create"
-            loading={loadingCreate}
+            loading={loadingCreate[record.address]}
             shape="round"
             onClick={createBilling}
           >
