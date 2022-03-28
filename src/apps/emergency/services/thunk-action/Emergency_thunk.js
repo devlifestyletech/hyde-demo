@@ -10,7 +10,7 @@ const getEmergency = (params) =>{
             // eslint-disable-next-line no-unused-expressions
             count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE",payload:count}):0
             const data = await getDataEMS(resultParams.content)
-            console.log("getDataEMS:",data);
+            console.log("getDataEMS:",resultParams.content);
             if (data !== undefined) {
 
                 dispatch({

@@ -34,6 +34,8 @@ const CreateWarrantyModal = (props) => {
     const dispatch = useDispatch();
     const {statusCreateWarranty,paramsWarranty } =useSelector((state) => state.WarrantyActionRedux);
     const [fileList, setFileList] = useState(null);
+    const [loading, setloading] = useState(false);
+
     const OnCancel = async () => {
       if (fileList != null) {
         fileList.map(async (e) => {
@@ -44,6 +46,7 @@ const CreateWarrantyModal = (props) => {
     };
     const handleOk = async () => {
         // console.log("ok:", form.getFieldValue());
+        await setloading(true)
         await form
             .validateFields()
             .then(async (values) => {
@@ -53,7 +56,7 @@ const CreateWarrantyModal = (props) => {
                   SerialNumber:values["SerialNumber"],
                   PurchaseDate:values["PurchaseDate"].format("YYYY-MM-DD"),
                   ExpireDate:values["ExpireDate"].format("YYYY-MM-DD"),
-                  owner:props?.UserWarranty?.owner.id,
+                  // owner:props?.UserWarranty?.owner.id,
                   address:props?.UserWarranty?.address.id
                 }
                 console.log("formValue:", allValuesForm);
@@ -80,7 +83,7 @@ const CreateWarrantyModal = (props) => {
                 }
 
             })
-
+            await setloading(false)
     };
     const dummyRequest = ({ file, onSuccess, onError }) => {
        console.log("dummyRes",file);
@@ -146,6 +149,7 @@ const removeImage = async (file) => {
         className="add-btn"
         key="add"
         onClick={handleOk}
+        loading ={loading}
       >
         Add
       </Button>,

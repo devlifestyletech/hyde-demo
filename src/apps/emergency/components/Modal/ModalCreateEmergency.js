@@ -55,6 +55,7 @@ const CreateEMSModal = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const {statusCreateEMS } =useSelector((state) => state.EMSActionRedux);
+    const [loading, setloading] = useState(false)
 
 // map
 
@@ -162,6 +163,7 @@ const MapWithAMarker = withScriptjs(
     };
     const handleOk = async () => {
         // console.log("ok:", form.getFieldValue());
+        await setloading(true)
         await form
             .validateFields()
             .then(async (values) => {
@@ -197,7 +199,7 @@ const MapWithAMarker = withScriptjs(
                 }
 
             })
-
+            await setloading(false)
     };
   return  <Modal
     visible={statusCreateEMS}
@@ -211,6 +213,7 @@ const MapWithAMarker = withScriptjs(
         className="add-btn"
         key="add"
         onClick={handleOk}
+        loading={loading}
       >
         Add
       </Button>,

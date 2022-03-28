@@ -112,6 +112,7 @@ export default {
           `${process.env.REACT_APP_API_URL}/addresses/${value.address}`,
           {
             owner: value.users_permissions_user,
+            Status_billpayment:true
           },
           {
             headers: {

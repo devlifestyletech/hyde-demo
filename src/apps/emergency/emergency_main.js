@@ -33,6 +33,7 @@ function Emergencymain() {
         total: dataSize,
     };
     const paramsEmergency = {
+        status:undefined,
         defaultPage: 1,
         sorter:undefined,
         filters:{
@@ -44,6 +45,35 @@ function Emergencymain() {
     // setting pagination Option
 
 
+
+// sreach data
+
+const sreachData =({ currentTarget }) => {
+    if (currentTarget.value.length > 0) {
+        if (  paramsEMS.filters !== undefined && paramsEMS.filters !== null) {
+
+            paramsEMS.filters={
+                Name:[currentTarget.value],
+                // Address_Customer:[currentTarget.value]
+            }
+            dispatch(getEmergency(paramsEMS));
+            // console.log("paramsEMS:",paramsEMS.filters);
+        }else{
+            paramsEMS.filters={
+                Name:[currentTarget.value],
+                // Address_Customer:[currentTarget.value]
+            }
+        }
+        //console.debug()
+        // dispatch({ type: "DISPLAY_DATATABLE", payload: resultFilter });
+    } else {
+        paramsEMS.filters={
+            Name:null,
+            //   Address_Customer:null
+        }
+        dispatch(getEmergency(paramsEMS));
+    }
+}
 
 // create ems
     const CreateEMS = async ({currentTarget}) => {
@@ -94,10 +124,10 @@ function Emergencymain() {
         paramsEMS.defaultPage = pagination.current
         paramsEMS.pagesize =  pagination?.pageSize
         paramsEMS.filters = {
-            BillsPayment_Invoice: filters?.BillsPayment_Invoice,
-            Address_Customer: filters?.Address_Customer,
-            Name_Customer: filters?.Name_Customer,
-            Total_BillsPayment: filters?.Total_BillsPayment,
+            Name: filters?.Name,
+            // Address_Customer: filters?.Address_Customer,
+            // Name_Customer: filters?.Name_Customer,
+            // Total_BillsPayment: filters?.Total_BillsPayment,
         };
 
         if (sorter.order !== undefined) {
@@ -227,7 +257,7 @@ function Emergencymain() {
                         </div>
                     </div>
                     <div className='building_custom'>
-                        <Input placeholder={`Search by name`} onChange={null} prefix={<SearchOutlined/>}/>
+                        <Input placeholder={`Search by name`} onChange={sreachData} prefix={<SearchOutlined/>}/>
                     </div>
                 </div>
             </div>

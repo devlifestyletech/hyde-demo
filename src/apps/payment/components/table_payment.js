@@ -104,7 +104,6 @@ export const Table_payment = () => {
     sorter: undefined,
     filters: {
       Address_Customer: null,
-      BillsPayment_Invoice: null,
     },
     pagesize: PaginationConfig.defaultPageSize,
   };
@@ -437,7 +436,7 @@ Tel. 0987645822
       result.totalCost = null;
       result.Cost = null;
     }
-    console.log("createBilling:", dataOutdate);
+    // console.log("createBilling:", dataOutdate);
     await dispatch({ type: "CREATE_BILLING", payload: result });
     dispatch({ type: "CHANGE_STATE", payload: true });
     newLoadings[currentTarget.value] = false;
@@ -458,10 +457,10 @@ Tel. 0987645822
       (paramsBilling.defaultPage = pagination.current),
       (paramsBilling.pagesize = pagination.pageSize);
     paramsBilling.filters = {
-      BillsPayment_Invoice:
-        filters?.BillsPayment_Invoice !== undefined
-          ? filters?.BillsPayment_Invoice
-          : null,
+      // BillsPayment_Invoice:
+      //   filters?.BillsPayment_Invoice !== undefined
+      //     ? filters?.BillsPayment_Invoice
+      //     : null,
       Address_Customer:
         filters?.Address_Customer !== undefined
           ? filters?.Address_Customer
@@ -496,18 +495,6 @@ Tel. 0987645822
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
-      render: (text) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
-          searchWords={
-            paramsBilling.filters.BillsPayment_Invoice !== null
-              ? paramsBilling.filters.BillsPayment_Invoice
-              : [""]
-          }
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ),
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
@@ -611,18 +598,6 @@ Tel. 0987645822
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
-      render: (text) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
-          searchWords={
-            paramsBilling.filters.BillsPayment_Invoice !== null
-              ? paramsBilling.filters.BillsPayment_Invoice
-              : [""]
-          }
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ),
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
@@ -731,18 +706,6 @@ Tel. 0987645822
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
-      render: (text) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
-          searchWords={
-            paramsBilling.filters.BillsPayment_Invoice !== null
-              ? paramsBilling.filters.BillsPayment_Invoice
-              : [""]
-          }
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ),
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
@@ -958,18 +921,6 @@ Tel. 0987645822
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
-      render: (text) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
-          searchWords={
-            paramsBilling.filters.BillsPayment_Invoice !== null
-              ? paramsBilling.filters.BillsPayment_Invoice
-              : [""]
-          }
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ),
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },

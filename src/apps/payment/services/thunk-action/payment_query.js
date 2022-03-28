@@ -38,9 +38,9 @@ const paymentQuery = (params) => {
         Total_BillsPayment,
         createBill,
       } = params.filters;
-      if (BillsPayment_Invoice !== null&&BillsPayment_Invoice !== undefined) {
-        coditionData.content += `&BillsPayment_Invoice_contains=${BillsPayment_Invoice}`;
-      }
+      // if (BillsPayment_Invoice !== null&&BillsPayment_Invoice !== undefined) {
+      //   coditionData.content += `&BillsPayment_Invoice_contains=${BillsPayment_Invoice}`;
+      // }
       if (Address_Customer !== null &&Address_Customer !== undefined) {
         coditionData.content += `&Address_Customer_contains=${Address_Customer}`;
       }
@@ -100,7 +100,7 @@ const CustomerQuery = (params) => {
       } = params.filters;
     
       if (Address_Customer !== null &&Address_Customer !== undefined) {
-        coditionData.content += `&address_contains=${Address_Customer}`;
+        coditionData.content += `&address_number_contains=${Address_Customer}`;
       }
     
       if (Total_BillsPayment !== null &&Total_BillsPayment !== undefined) {

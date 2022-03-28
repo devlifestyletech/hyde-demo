@@ -1,18 +1,25 @@
 const EmergencyQuery = (params) => {
-  console.log("EmergencyQuery:",params)
+
   let coditionData = {
     status: false,
     content: null,
   };
   if (params !== undefined) {
-    if (params.Status_Billpayment !== undefined) {
-      coditionData.content = `users_permissions_user.Status_Billpayment=true`;
-    }
+    // if (params.Status_Billpayment !== undefined) {
+    //   coditionData.content = `users_permissions_user.Status_Billpayment=true`;
+    // }
     if (params.status !== undefined) {
-      coditionData.content = `BillsPayment_Status=${params.status}`;
+      coditionData.content = `Type=${params.status}`;
     }
-    if (params.defaultPage !== undefined) {
+    if (params.defaultPage !== undefined &&params.status === undefined) {
       coditionData.content = `_start=${
+          params.defaultPage === 1
+              ? params.defaultPage - 1
+              : params.defaultPage * params.pagesize
+      }`;
+    }
+    if (params.defaultPage !== undefined &&params.status !== undefined) {
+      coditionData.content += `&_start=${
           params.defaultPage === 1
               ? params.defaultPage - 1
               : params.defaultPage * params.pagesize
@@ -24,27 +31,12 @@ const EmergencyQuery = (params) => {
     // data table payment query
     if (params.filters !== undefined) {
       const {
-        BillsPayment_Invoice,
-        Address_Customer,
-        Name_Customer,
-        Total_BillsPayment,
-        createBill,
+        Name
       } = params.filters;
-      if (BillsPayment_Invoice !== null&&BillsPayment_Invoice !== undefined) {
-        coditionData.content += `&BillsPayment_Invoice_contains=${BillsPayment_Invoice}`;
+      if (Name !== null&&Name !== undefined) {
+        coditionData.content += `&Name_contains=${Name}`;
       }
-      if (Address_Customer !== null &&Address_Customer !== undefined) {
-        coditionData.content += `&Address_Customer_contains=${Address_Customer}`;
-      }
-      if (Name_Customer !== null &&Name_Customer !== undefined) {
-        coditionData.content += `&Name_Customer_contains=${Name_Customer}`;
-      }
-      if (Total_BillsPayment !== null &&Total_BillsPayment !== undefined) {
-        coditionData.content += `&Total_BillsPayment_gte=${Total_BillsPayment}`;
-      }
-      if (createBill !== undefined) {
-        coditionData.content += `&_createBill_eq=${createBill[0]}&_createBill_lte=${createBill[1]}`;
-      }
+
     }
     // data table payment query
 

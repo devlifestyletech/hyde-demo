@@ -18,10 +18,10 @@ const WarrantyQuery = (params) => {
     // data table payment query
     if (params.filters !== undefined) {
       const {
-        address_no,
+        address_number,
       } = params.filters;
-      if (address_no !== null&&address_no !== undefined) {
-        coditionData.content += `&address_no_contains=${address_no}`;
+      if (address_number !== null&&address_number !== undefined) {
+        coditionData.content += `&address_number_contains=${address_number}`;
       }
     }
     // data table payment query

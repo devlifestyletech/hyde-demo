@@ -11,8 +11,9 @@ const options = {
     }
 }
 const EMSurl =`${process.env.REACT_APP_API_ONEAPP}emergency-contact-lists`
-const getDataEMS = async () => {
-  const resultData = await Axios.get(EMSurl,options)
+const getDataEMS = async (params) => {
+
+  const resultData = await Axios.get(`${EMSurl}?${params}`,options)
     .then((result) => {
       if (result.status === 200) {
         result.data.map(async (e, i) => {
@@ -26,6 +27,7 @@ const getDataEMS = async () => {
     .catch((err) => {
       console.error(err);
     });
+ 
   return resultData;
 };
 
@@ -82,7 +84,7 @@ const deleteEMS = async (EMSD) => {
         const result = await axios
             .delete(`${EMSurl}/${EMSD}`,options)
             .then((result) => {
-                console.log("delete:", result);
+                // console.log("delete:", result);
                 return result.status === 200 ? true : false;
             })
             .catch((err) => {
@@ -104,7 +106,7 @@ const editEMS= async (EMSID,data) => {
     Longitude:data.longitude.toString(),
         location:data.location,
       };
-     console.log("postDataEdit:",EMSdata);
+    //  console.log("postDataEdit:",EMSdata);
      const result = await axios
        .put((`${EMSurl}/${EMSID}`), EMSdata,options)
        .then(async (res) => {

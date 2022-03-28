@@ -98,6 +98,7 @@ const locationList = [
 ];
 
 const ModalCreatebuilding = () => {
+    const [loading, setloading] = useState(false)
     const dispatch = useDispatch();
     const { status,dataEdit,paramsBuildingProgress } = useSelector((state) => state.BuildProgressActionRedux);
 
@@ -123,6 +124,7 @@ const ModalCreatebuilding = () => {
 
     const handleOk = async () => {
         // console.log("ok:", form.getFieldValue());
+        await setloading(true)
         await form
             .validateFields()
             .then(async (values) => {
@@ -163,7 +165,7 @@ const ModalCreatebuilding = () => {
                 }
 
             })
-
+            await setloading(false)
     };
     const handleCancel = async () => {
         if (fileList != null) {
@@ -173,36 +175,6 @@ const ModalCreatebuilding = () => {
         }
         dispatch({ type: "CHANGE_STATE_BUILDING", payload: false });
     };
-    const uploadImage = async (file) => {
-        console.log(file);
-        if (file.size > 209715200) {
-            notification["error"]({
-                duration: 2,
-                message: "Upload image",
-                description: "image size more than 200 MB.",
-                style: { borderRadius: "25px" },
-            });
-            return false;
-            //209715200 = 200mb
-        } else {
-            const result = await uploadImageBuildProgress(file);
-            result.data.map((e) => {
-                e.url =
-                    "http://52.221.254.46:1337" +
-                    e.url;
-            });
-            let dataImage = [];
-            if (fileList !== null) {
-                dataImage = fileList;
-                dataImage.push(result.data[0]);
-            } else {
-                dataImage = result.data;
-            }
-            await setFileList(dataImage);
-
-        }
-    };
-
     const removeImage = async (file) => {
         const totalImage = fileList.filter((e) => {
             return e.id !== file.id;
@@ -248,6 +220,7 @@ const ModalCreatebuilding = () => {
             title="Add New Project"
             visible={status}
             onOk={handleOk}
+            confirmLoading={loading}
             onCancel={handleCancel}
             width={"60%"}
         >

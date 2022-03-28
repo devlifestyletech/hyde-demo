@@ -30,10 +30,10 @@ const Payment_success = () => {
         (state) => state.PaymentActionRedux
     );
     // export all payment
-    const exportBillingModal = async () => {
-        dispatch({type: "EXPORT_ALL_DATABILLING", payload: dataBilling});
-        dispatch({type: "CHANGE_STATE_EXPORT_BILLING", payload: true});
-    };
+    // const exportBillingModal = async () => {
+    //     dispatch({type: "EXPORT_ALL_DATABILLING", payload: dataBilling});
+    //     dispatch({type: "CHANGE_STATE_EXPORT_BILLING", payload: true});
+    // };
     // export all payment
 
     // search data table
@@ -93,7 +93,7 @@ const Payment_success = () => {
                 <div className="col-6">
                     <div className="payment_custom">
                         <Input
-                            placeholder={`Search Invoice Bill , Room Number`}
+                            placeholder={`Search Room Number`}
                             onChange={(e) => {
                                 filterData(e);
                             }}

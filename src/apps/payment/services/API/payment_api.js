@@ -199,8 +199,8 @@ const addressCustomer = async (params) => {
       result.data.map((e) => {
         let resultAddress = {};
         resultAddress.address = e.address_number;
-        resultAddress.first_Name = e.owner.firstname;
-        resultAddress.last_Name = e.owner.lastname;
+        resultAddress.first_Name = e.owner.first_name_en;
+        resultAddress.last_Name = e.owner.last_name_en;
         // resultAddress.user_id = e.owner.id;
         resultAddress.address_id = e.id;
         resultAddress.fullname = e.owner.fullname;

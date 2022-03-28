@@ -1,51 +1,60 @@
 import React from "react";
 import {
-    getBillingPayment,
-    getCustomerList,
-} from "../../payment/services/thunk-action/payment_thunk";
-import {getDataEMS} from "../services/API/EmergencyAPI";
+    getEmergency
+} from "../services/thunk-action/Emergency_thunk";
+
 import {useDispatch, useSelector} from "react-redux";
 import {Menu} from "antd";
 
 export const MenuEmergency = () => {
-    const {count, paramsBilling} = useSelector(
+    const {count, paramsEMS} = useSelector(
         (state) => state.EMSActionRedux
     );
     const dispatch = useDispatch();
     const selectedMenuBillPayment = async ({item}) => {
 
-        MenuPayment.map(async (e, i) => {
+        MenuEMS.map(async (e, i) => {
             if (e.title === item.props.title) {
                 dispatch({type: "CHANGE_COUNT", payload: i});
-                const data = await getDataEMS()
-                const result = data.filter((e) => {
+               
                     switch (i) {
                         // เพิ้ทท xaseตามtype
                         case 0:
-                            return e
+                            paramsEMS.status =undefined
+                            paramsEMS.defaultPage = 1
                             break;
                         case 1:
-                            return e.Type === "Hospital"
+                            paramsEMS.status = "Hospital"
+                            paramsEMS.defaultPage = 1
                             break;
                         case 2:
-                            return e.Type === "Ambulance"
+                            paramsEMS.status = "Ambulance"
+                            paramsEMS.defaultPage = 1
                             break;
                         case 3:
-                            return e.Type === "Fire Truck"
+                            paramsEMS.status = "Fire Truck"
+                            paramsEMS.defaultPage = 1
+                          
                             break;
                         case 4:
-                            return e.Type === "Rescue"
+                            paramsEMS.status = "Rescue"
+                            paramsEMS.defaultPage = 1
+                           
                             break;
                         case 5:
-                            return e.Type === "Police"
+                            paramsEMS.status = "Police"
+                            paramsEMS.defaultPage = 1
+                         
                             break;
 
                         default:
-                            return e
+                            paramsEMS.status =undefined
+                            paramsEMS.defaultPage = 1
                             break;
                     }
-                })
-                dispatch({type: "DISPLAY_DATATABLE_EMS", payload: result});
+              
+              
+                dispatch(getEmergency(paramsEMS));
             }
         });
         // if (item.props.title === "Bill not generated") {
@@ -58,13 +67,13 @@ export const MenuEmergency = () => {
 
         // }
     };
-    const MenuPayment = [
-        {title: "All Contact", titleText: null},
-        {title: "Hospital", titleText: null},
-        {title: "Ambulance", titleText: null},
-        {title: "Fire Truck", titleText: null},
-        {title: "Rescue", titleText: null},
-        {title: "Police station", titleText: null},
+    const MenuEMS = [
+        {title: "All Contact", titleText: "All Contact"},
+        {title: "Hospital", titleText: "Hospital"},
+        {title: "Ambulance", titleText: "Ambulance"},
+        {title: "Fire Truck", titleText: "Fire Truck"},
+        {title: "Rescue", titleText: "Rescue"},
+        {title: "Police station", titleText: "Police station"},
     ];
 
     return (
@@ -74,7 +83,7 @@ export const MenuEmergency = () => {
                 onClick={selectedMenuBillPayment}
                 selectedKeys={[`${count}`]}
             >
-                {MenuPayment.map((e, i) => {
+                {MenuEMS.map((e, i) => {
                     return (
                         <Menu.Item key={i} title={e.title}>
                             <text style={{fontWeight: "bold", fontSize: "1rem"}}>
