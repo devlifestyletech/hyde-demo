@@ -9,7 +9,9 @@ import {
   Tag,
   Modal,
   notification,
-  DatePicker,Row, Col
+  DatePicker,
+  Row,
+  Col,
 } from "antd";
 import {
   DeleteFilled,
@@ -31,7 +33,7 @@ import {
 } from "../services/thunk-action/payment_thunk";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import logo from "../assets/images/hyde-logo.svg";
+import logo from "../assets/images/logoArtani-black.png";
 const { RangePicker } = DatePicker;
 const statePayment = {
   searchText: "",
@@ -124,171 +126,176 @@ export const Table_payment = () => {
     await setExport(exportLoading);
   };
 
-     // approve
-     const approveBillingModal = async ({ currentTarget }) => {
-      const verifyLoading = [...Verify];
-      verifyLoading[currentTarget.value] = true;
-      await setVerify(verifyLoading);
-      let resultSCB={}
-      const [result] = dataBilling.filter((e) => {
-        return e.BillsPayment_Invoice === currentTarget.value;
-      });
-      resultSCB = await getDataSCB(currentTarget.value);
-      
-      resultSCB === undefined ? resultSCB={}:null
-      resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
-      resultSCB.Address_Customer = result.Address_Customer;
-      resultSCB.Name_Customer = result.Name_Customer;
-      resultSCB.idBilling = result.id;
-      resultSCB.imageURL=result.imageURL
-      resultSCB.BillsPayment_AllType=result.BillsPayment_AllType
-      dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
-      dispatch({ type: "MODAL_PENDING", payload: true });
-      verifyLoading[currentTarget.value] = false;
-      await setVerify(verifyLoading);
-    };
-    //approve
+  // approve
+  const approveBillingModal = async ({ currentTarget }) => {
+    const verifyLoading = [...Verify];
+    verifyLoading[currentTarget.value] = true;
+    await setVerify(verifyLoading);
+    let resultSCB = {};
+    const [result] = dataBilling.filter((e) => {
+      return e.BillsPayment_Invoice === currentTarget.value;
+    });
+    resultSCB = await getDataSCB(currentTarget.value);
+
+    resultSCB === undefined ? (resultSCB = {}) : null;
+    resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
+    resultSCB.Address_Customer = result.Address_Customer;
+    resultSCB.Name_Customer = result.Name_Customer;
+    resultSCB.idBilling = result.id;
+    resultSCB.imageURL = result.imageURL;
+    resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
+    dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
+    dispatch({ type: "MODAL_PENDING", payload: true });
+    verifyLoading[currentTarget.value] = false;
+    await setVerify(verifyLoading);
+  };
+  //approve
 
   // showDetail
-  const selectedRow = async ({currentTarget})  => {
+  const selectedRow = async ({ currentTarget }) => {
     const viewLoadings = [...View];
     viewLoadings[currentTarget.value] = true;
     await setView(viewLoadings);
- 
+
     const result = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
     if (status_billing !== "Bill not generated") {
-    
-        Modal.info({
-          title: "Billing Payment Detail",
-          width:"45%",
-          // icon: <ExclamationCircleOutlined />,
-          content: (
-            <div>
+      Modal.info({
+        title: "Billing Payment Detail",
+        width: "45%",
+        // icon: <ExclamationCircleOutlined />,
+        content: (
+          <div>
             {result !== null
               ? result.map((e) => {
                   return (
                     <>
                       <div className="container-fluid">
-                            <Row>
-                              <Col span={12}>
-                                <div
-                                  className="col-4"
-                                  style={{ textAlign: "left" }}
-                                >
-                                   <img
-                                    src={logo}
-                                    style={{
-                                      width: "10vw",
-                                      marginTop: "6%",
-                                      marginLeft: "10%",
-                                    }}
-                                  />
-                                </div>
-                              </Col>
-                              <Col span={12}>
-                                <div
-                                  className="col-8"
-                                  style={{ textAlign: "left" }}
-                                >
-                                    <h3 style={{ margin: "4%" }}>
-                                    Hyde Heritage at Thonglor Condominium Juristic Person
-1199 Sukhumvit Rd., Klongton Nua, Wattana, Bangkok, 10110
-Tel. 0987645822 
-                                   
-                                  </h3>
-                                </div>
-                              </Col>
-                            </Row>
-
-                            <Row style={{ paddingBottom: "2vh" }}>
-                              <Col
-                                span={12}
+                        <Row>
+                          <Col span={12}>
+                            <div
+                              className="col-4"
+                              style={{ textAlign: "left" }}
+                            >
+                              <img
+                                src={logo}
                                 style={{
-                                  textAlign: "left",
-                                  paddingLeft: "5%",
+                                  width: "6vw",
+                                  marginTop: "6%",
+                                  marginLeft: "15%",
+                                  paddingBottom: "5%",
+                                }}
+                              />
+                            </div>
+                          </Col>
+                          <Col span={12}>
+                            <div
+                              className="col-8"
+                              style={{ textAlign: "left" }}
+                            >
+                              <h3 style={{ margin: "4%", fontStyle: "bold" }}>
+                                <b>
+                                  15 Soi Sirinthron 5 Sirinthron Rd. Khwang
+                                  Bangbamru, Khet Bangplad, Bangkok 10700
+                                  <br />
+                                  Tel. 0-2433-9955
+                                </b>
+                              </h3>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        <Row style={{ paddingBottom: "2vh" }}>
+                          <Col
+                            span={12}
+                            style={{
+                              textAlign: "left",
+                              paddingLeft: "5%",
+                            }}
+                          >
+                            <b>
+                              Invoice Bill: {e?.BillsPayment_Invoice}
+                              <br />
+                              Tax number: 0012254
+                              <br />
+                              Name Owner: {e?.Name_Customer}
+                              <br />
+                              Address: {e?.Address_Customer}
+                              <br />
+                            </b>
+                          </Col>
+                          <Col
+                            span={12}
+                            style={{
+                              textAlign: "left",
+                              paddingLeft: "2%",
+                            }}
+                          >
+                            <b>
+                              Due Date
+                              <br />
+                              From : {e?.BillsPayment_Date_Start}
+                              <br />
+                              To : {e?.BillsPayment_Date_End}
+                              <br />
+                              {/* Issued by: Admin2*/}
+                              Create on : {e?.BillsPayment_Date_Start}
+                              <br />
+                            </b>
+                          </Col>
+                        </Row>
+
+                        <div className="container-fluid">
+                          <table>
+                            <tr>
+                              <th
+                                style={{
+                                  backgroundColor: "#B8B8B8",
+                                  // borderTopLeftRadius: "10px",
+                                  width: "30%",
+                                  textAlign: "center",
                                 }}
                               >
-                                <text>
-                           
-                                  Invoice Bill: {e?.BillsPayment_Invoice}
-                                   
-                                  <br />
-                                  Tax number: 0012254
-                                  <br />
-                                  Name Owner: {e?.Name_Customer}
-                                  <br />
-                                  Address: {e?.Address_Customer}
-                                  <br />
-                                </text>
-                              </Col>
-                              <Col
-                                span={12}
+                                No.
+                              </th>
+                              <th
                                 style={{
-                                  textAlign: "left",
-                                  paddingLeft: "2%",
+                                  backgroundColor: "#B8B8B8",
+                                  width: "30%",
+                                  textAlign: "center",
                                 }}
                               >
-                                <text>
-                                  Due Date  
-                                  <br /> 
-                                  From : {e?.BillsPayment_Date_Start}
-                                  <br />
-                                  To : {e?.BillsPayment_Date_End}
-                                  <br />
-                                  {/* Issued by: Admin2*/}
-                               
-                                  Create on : {e?.BillsPayment_Date_Start}
-                                  <br /> 
-                              
-                                </text>
-                              </Col>
-                            </Row>
-
-                            <div className="container-fluid">
-                              <table >
-                                <tr>
-                                  <th
-                                    style={{
-                                      backgroundColor:"#B8B8B8",
-                                      // borderTopLeftRadius: "10px",
-                                      width: "30%",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    No.
-                                  </th>
-                                  <th
-                                    style={{
-                                      backgroundColor:"#B8B8B8",
-                                      width: "30%",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    Detail
-                                  </th>
-                                  <th
-                                    style={{
-                                      backgroundColor:"#B8B8B8",
-                                      // borderTopRightRadius: "10px",
-                                      width: "30%",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    Amount
-                                  </th>
-                                </tr>
-                                {e?.BillsPayment_AllType
-                                  ? e?.BillsPayment_AllType?.map((f, j) => {
-                                  return    <tr style={{ textAlign: "center" , backgroundColor:"#E2E1E1",}}>
-                                        <td>{j + 1}</td>
-                                        <td>{f.subBilling}</td>
-                                        <td>{f.amount}</td>
-                                      </tr>;
-                                    })
-                                  : null}
-                                {/* <tr style={{ textAlign: "center" }}>
+                                Detail
+                              </th>
+                              <th
+                                style={{
+                                  backgroundColor: "#B8B8B8",
+                                  // borderTopRightRadius: "10px",
+                                  width: "30%",
+                                  textAlign: "center",
+                                }}
+                              >
+                                Amount
+                              </th>
+                            </tr>
+                            {e?.BillsPayment_AllType
+                              ? e?.BillsPayment_AllType?.map((f, j) => {
+                                  return (
+                                    <tr
+                                      style={{
+                                        textAlign: "center",
+                                        backgroundColor: "#E2E1E1",
+                                      }}
+                                    >
+                                      <td>{j + 1}</td>
+                                      <td>{f.subBilling}</td>
+                                      <td>{f.amount}</td>
+                                    </tr>
+                                  );
+                                })
+                              : null}
+                            {/* <tr style={{ textAlign: "center" }}>
                                   <td>1</td>
                                   <td>
                                     {e?.BillsPayment_AllType[0].subBilling}
@@ -302,78 +309,83 @@ Tel. 0987645822
                                   </td>
                                   <td>{e?.BillsPayment_AllType[1].amount}</td>
                                 </tr> */}
-                              </table>
-                            </div>
+                          </table>
+                        </div>
 
-                            <div className="container-fluid">
-                              <div
-                                className="row"
-                                style={{ paddingTop: "2vh",backgroundColor:"#E2E1E1", }}
+                        <div className="container-fluid">
+                          <div
+                            className="row"
+                            style={{
+                              paddingTop: "2vh",
+                              backgroundColor: "#E2E1E1",
+                            }}
+                          >
+                            <Row>
+                              <Col span={8} style={{ textAlign: "left" }}>
+                                {" "}
+                              </Col>
+                              <Col
+                                span={8}
+                                style={{
+                                  textAlign: "left",
+                                  paddingLeft: "10%",
+                                }}
                               >
-                                <Row>
-                                  <Col span={8} style={{ textAlign: "left" }}>
-                                    {" "}
-                                  </Col>
-                                  <Col span={8} style={{ textAlign: "left",  paddingLeft: "10%", }}>
-                                    Sub Total:
-                                    <br />
-                                    outda
-                                    <br />
-                                    <h3>
-                                      Grand Total:
-                                      <br />
-                                    </h3>
-                                  </Col>
-                                  <Col span={4} style={{ textAlign: "left" }}>
-                                    {e?.Total_BillsPayment}
-                                    <br />
-                                    0 <br />
-                                    <h3>
-                                      {e?.Total_BillsPayment}
-                                      <br />
-                                    </h3>
-                                  </Col>
-                                  <Col span={2} style={{ textAlign: "left" }}>
-                                    {" "}
-                                    THB.
-                                    <br />
-                                    THB.
-                                    <br />
-                                    <h3>
-                                      {" "}
-                                      THB.
-                                      <br />
-                                    </h3>
-                                  </Col>
-                                </Row>
-                              </div>
-                            </div>
+                                Sub Total:
+                                <br />
+                                Vat:
+                                <br />
+                                <b>
+                                  Grand Total:
+                                  <br />
+                                </b>
+                              </Col>
+                              <Col span={4} style={{ textAlign: "left" }}>
+                                {e?.Total_BillsPayment}
+                                <br />
+                                0 <br />
+                                <b>
+                                  {e?.Total_BillsPayment}
+                                  <br />
+                                </b>
+                              </Col>
+                              <Col span={2} style={{ textAlign: "left" }}>
+                                {" "}
+                                THB.
+                                <br />
+                                THB.
+                                <br />
+                                <b>
+                                  {" "}
+                                  THB.
+                                  <br />
+                                </b>
+                              </Col>
+                            </Row>
                           </div>
-                  
-                  
+                        </div>
+                      </div>
                     </>
                   );
                 })
               : null}
-            </div>
-          ),
-          async onOk () {
-            viewLoadings[currentTarget.value] = false;
-            await setView(viewLoadings);
-          },
-        })
-      
+          </div>
+        ),
+        async onOk() {
+          viewLoadings[currentTarget.value] = false;
+          await setView(viewLoadings);
+        },
+      });
     }
-
   };
   // showDetail
 
   //delete billingPayment
-  const deleteBillingByID  = async ({ currentTarget }) => {
+  const deleteBillingByID = async ({ currentTarget }) => {
     const delLoading = [...Del];
     delLoading[currentTarget.value] = true;
     await setDel(delLoading);
- 
+
     Modal.confirm({
       title: "Are you sure delete billing payment",
       icon: <ExclamationCircleOutlined />,
@@ -385,10 +397,10 @@ Tel. 0987645822
         await setDel(delLoading);
       },
       cancelText: "No",
-      async onCancel(){
+      async onCancel() {
         delLoading[currentTarget.value] = false;
         await setDel(delLoading);
-      }
+      },
     });
   };
   const deleteID = async (id) => {
@@ -421,7 +433,7 @@ Tel. 0987645822
     let total = 0;
     const newLoadings = [...loadingCreate];
     newLoadings[currentTarget.value] = true;
-     await setloadingCreate(newLoadings);
+    await setloadingCreate(newLoadings);
     const [result] = dataBilling.filter((e) => {
       return e.address === currentTarget.value;
     });
@@ -440,7 +452,7 @@ Tel. 0987645822
     await dispatch({ type: "CREATE_BILLING", payload: result });
     dispatch({ type: "CHANGE_STATE", payload: true });
     newLoadings[currentTarget.value] = false;
-     await setloadingCreate(newLoadings);
+    await setloadingCreate(newLoadings);
   };
 
   // create billingPayment by Id
@@ -491,7 +503,7 @@ Tel. 0987645822
   let columns = [
     {
       title: "Invoice Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -500,7 +512,7 @@ Tel. 0987645822
     },
     {
       title: "Room Number",
-      align: 'center',
+      align: "center",
       dataIndex: "Address_Customer",
       key: "Address_Customer",
       width: "10%",
@@ -520,7 +532,7 @@ Tel. 0987645822
     },
     {
       title: "Name Owner",
-      align: 'center',
+      align: "center",
       dataIndex: "Name_Customer",
       key: "Name_Customer",
       width: "10%",
@@ -529,7 +541,7 @@ Tel. 0987645822
     },
     {
       title: "Due Date",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -544,7 +556,7 @@ Tel. 0987645822
     },
     {
       title: "Total",
-      align: 'center',
+      align: "center",
       dataIndex: "Total_BillsPayment",
       key: "Total_BillsPayment",
       width: "10%",
@@ -553,7 +565,7 @@ Tel. 0987645822
     },
     {
       title: "Status",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Status",
       key: "BillsPayment_Status",
       width: "10%",
@@ -563,16 +575,16 @@ Tel. 0987645822
     },
     {
       title: "Create Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "createdAt",
       key: "createBill",
       width: "10%",
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
-    }, 
+    },
     {
       title: "Export",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -594,7 +606,7 @@ Tel. 0987645822
   const PendingReview = [
     {
       title: "Invoice Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -603,7 +615,7 @@ Tel. 0987645822
     },
     {
       title: "Room Number",
-      align: 'center',
+      align: "center",
       dataIndex: "Address_Customer",
       key: "Address_Customer",
       width: "10%",
@@ -625,7 +637,7 @@ Tel. 0987645822
     },
     {
       title: "Name Owner",
-      align: 'center',
+      align: "center",
       dataIndex: "Name_Customer",
       key: "Name_Customer",
       width: "10%",
@@ -633,7 +645,7 @@ Tel. 0987645822
     },
     {
       title: "Due Date",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -649,7 +661,7 @@ Tel. 0987645822
 
     {
       title: "Total",
-      align: 'center',
+      align: "center",
       dataIndex: "Total_BillsPayment",
       key: "Total_BillsPayment",
       width: "10%",
@@ -658,7 +670,7 @@ Tel. 0987645822
     },
     {
       title: "Status",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Status",
       key: "BillsPayment_Status",
       width: "10%",
@@ -668,17 +680,17 @@ Tel. 0987645822
     },
     {
       title: "Create Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "createdAt",
       key: "createBill",
       width: "10%",
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
-   
+
     {
       title: "Action",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -702,7 +714,7 @@ Tel. 0987645822
   const waitForPayment = [
     {
       title: "Invoice Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -711,7 +723,7 @@ Tel. 0987645822
     },
     {
       title: "Room Number",
-      align: 'center',
+      align: "center",
       dataIndex: "Address_Customer",
       key: "Address_Customer",
       width: "10%",
@@ -731,7 +743,7 @@ Tel. 0987645822
     },
     {
       title: "Name Owner",
-      align: 'center',
+      align: "center",
       dataIndex: "Name_Customer",
       key: "Name_Customer",
       width: "10%",
@@ -740,7 +752,7 @@ Tel. 0987645822
     },
     {
       title: "Due Date",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -755,7 +767,7 @@ Tel. 0987645822
     },
     {
       title: "Total",
-      align: 'center',
+      align: "center",
       dataIndex: "Total_BillsPayment",
       key: "Total_BillsPayment",
       width: "10%",
@@ -763,7 +775,7 @@ Tel. 0987645822
     },
     {
       title: "Status",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Status",
       key: "BillsPayment_Status",
       width: "10%",
@@ -783,7 +795,7 @@ Tel. 0987645822
     },
     {
       title: "Create Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "createdAt",
       key: "createBill",
       width: "10%",
@@ -792,7 +804,7 @@ Tel. 0987645822
     },
     {
       title: "Detail",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -812,7 +824,7 @@ Tel. 0987645822
     },
     {
       title: "Action",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -838,7 +850,7 @@ Tel. 0987645822
   const BillingNotGen = [
     {
       title: "Room Number",
-      align: 'center',
+      align: "center",
       dataIndex: "address",
       key: "address",
       width: "10%",
@@ -854,11 +866,11 @@ Tel. 0987645822
           textToHighlight={text ? text.toString() : ""}
         />
       ),
-      sorter: (a,b) => a.address.localeCompare(b.address),
+      sorter: (a, b) => a.address.localeCompare(b.address),
     },
     {
       title: "Name Owner",
-      align: 'center',
+      align: "center",
       dataIndex: "fullname",
       key: "fullname",
       width: "10%",
@@ -869,11 +881,11 @@ Tel. 0987645822
       //   </p>
       //   </>
       // ),
-      sorter: (a,b) => a.fullname.localeCompare(b.fullname),
+      sorter: (a, b) => a.fullname.localeCompare(b.fullname),
     },
     // {
     //   title: "Name Owner",
-    // align: 'center',//   
+    // align: 'center',//
     // dataIndex: "Name_Customer",
     //   key: "Name_Customer",
     //   width: "10%",
@@ -881,7 +893,7 @@ Tel. 0987645822
     // },
     {
       title: "ฺBilling of the month",
-      align: 'center',
+      align: "center",
       dataIndex: "status_billing",
       key: "status_billing",
       width: "10%",
@@ -892,7 +904,7 @@ Tel. 0987645822
 
     {
       title: "Action",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -917,7 +929,7 @@ Tel. 0987645822
   const outDate = [
     {
       title: "Invoice Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Invoice",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -926,7 +938,7 @@ Tel. 0987645822
     },
     {
       title: "Room Number",
-      align: 'center',
+      align: "center",
       dataIndex: "Address_Customer",
       key: "Address_Customer",
       width: "10%",
@@ -946,7 +958,7 @@ Tel. 0987645822
     },
     {
       title: "Name Owner",
-      align: 'center',
+      align: "center",
       dataIndex: "Name_Customer",
       key: "Name_Customer",
       width: "10%",
@@ -955,7 +967,7 @@ Tel. 0987645822
     },
     {
       title: "Due Date",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -970,7 +982,7 @@ Tel. 0987645822
     },
     {
       title: "Total",
-      align: 'center',
+      align: "center",
       dataIndex: "Total_BillsPayment",
       key: "Total_BillsPayment",
       width: "10%",
@@ -978,7 +990,7 @@ Tel. 0987645822
     },
     {
       title: "Status",
-      align: 'center',
+      align: "center",
       dataIndex: "BillsPayment_Status",
       key: "BillsPayment_Status",
       width: "10%",
@@ -988,7 +1000,7 @@ Tel. 0987645822
     },
     {
       title: "Create Bill",
-      align: 'center',
+      align: "center",
       dataIndex: "createdAt",
       key: "createBill",
       width: "10%",
@@ -996,7 +1008,7 @@ Tel. 0987645822
     },
     {
       title: "Detail",
-      align: 'center',
+      align: "center",
       dataIndex: "action",
       key: "BillsPayment_Invoice",
       width: "10%",
@@ -1012,7 +1024,7 @@ Tel. 0987645822
           </Button>
         </>
       ),
-    }
+    },
   ];
   return (
     <div>
@@ -1035,7 +1047,6 @@ Tel. 0987645822
         }
       })()}
       <Table
-    
         // onRow={selectedRow}
         columns={columns}
         loading={loadingTable}
