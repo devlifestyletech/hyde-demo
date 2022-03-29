@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 // import styled from "styled-components";
 import { socket } from "../../../../services/web-sockets";
+import Heading from "../../../../components/Header";
 import Header from "../../Header";
 import Messages from "../../Messages";
 import List from "../../List";
@@ -12,7 +13,8 @@ import {
     StyledContainer,
     ChatBox,
     StyledButton,
-    SendIcon,
+    SendIcon, 
+    InputBar
 } from "./styles";
 import { Input } from "antd";
 
@@ -70,30 +72,39 @@ function ChatRoom(props) {
         }
     };
 
-    return (
+    return (<>
+    <Heading title="Nearby Service" />
         <ChatContainer>
             <Header username={username} room={room} />
             <StyledContainer>
-                {/* <List users={users.users} /> */}
+                <List />
                 <ChatBox>
                     <Messages messages={messages} username={username} />
-                    <Input
-                        type="text"
-                        placeholder="Type your message"
-                        value={message}
-                        onChange={handleChange}
-                        onKeyPress={(event) => {
-                            event.key === "Enter" && handleClick();
-                        }}
-                    />
-                    <StyledButton onClick={handleClick}>
-                        <SendIcon>
-                            <i className="fa fa-paper-plane" />
-                        </SendIcon>
-                    </StyledButton>
+                    <InputBar>
+                        <Input
+                            size="large"
+                            type="text"
+                            placeholder="Type your message"
+                            value={message}
+                            onChange={handleChange}
+                            onKeyPress={(event) => {
+                                event.key === "Enter" && handleClick();
+                            }}
+                        />
+                        <StyledButton onClick={handleClick}>
+                            <SendIcon>
+                                <i className="fa fa-paper-plane" />
+                            </SendIcon>
+                        </StyledButton>
+                        <StyledButton onClick={()=>{}}>
+                            <SendIcon>
+                            <i class="fa fa-image"/>
+                            </SendIcon>
+                        </StyledButton>
+                    </InputBar>
                 </ChatBox>
             </StyledContainer>
-        </ChatContainer>
+        </ChatContainer></>
     );
 }
 export default ChatRoom;

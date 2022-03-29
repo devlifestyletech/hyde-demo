@@ -6,11 +6,12 @@ export const ChatContainer = styled.div`
     flex-direction: column;
     justify-content:center;
     background: #f2f2f2;
-    padding: 40px;
+    padding: 10px;
     margin: 100px auto;
-    max-width: 60vw;
+    max-width: 80vw;
     box-shadow: 5px 10px 18px #888888;
     height: 80vh;
+    border-radius: 20px;
 `;
 
 export const StyledContainer = styled.div`
@@ -29,18 +30,23 @@ export const ChatBox = styled.div`
     background: #FFFFFF;
 `;
 
+export const InputBar = styled.div`
+    display: flex;
+    align-items: center;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+`;
 export const StyledButton = styled(Button)`
-    height: 45px;
-    background: #2979FF;
+height: 40px;
+    background: #D8AA81;
     transition: 0.5s;
 `
 export const SendIcon = styled.div`
     color: #fff;
-    font-size: 20px;
     :hover {
-        color:#2979FF;
-        background: #fff;
+        color:#D8AA81;
     }
+    font-size: 20px;
     :focus {
         outline: none;
     }

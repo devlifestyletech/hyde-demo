@@ -4,7 +4,6 @@ import {
     MessageBox,
     MessageText,
     SentBy,
-    Typing,
 } from "./styles";
 import { format, utcToZonedTime } from "date-fns-tz";
 
@@ -27,7 +26,7 @@ function Message(props) {
     if (user === trimmedName) {
         sentByCurrentUser = true;
     }
-    const background = sentByCurrentUser ? "blue" : "dark";
+    const background = sentByCurrentUser ? "colour" : "dark";
     const textPosition = sentByCurrentUser ? "end" : "start";
     const textColor = sentByCurrentUser ? "white" : "dark";
     const sentBy = sentByCurrentUser ? "right" : "left";

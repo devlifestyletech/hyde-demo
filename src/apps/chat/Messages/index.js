@@ -9,17 +9,17 @@ import { socket } from "../../../services/web-sockets";
 function Messages(props) {
     const { messages, username } = props;
     const [onTyping, setOnTyping] = useState("");
+
     useEffect(() => {
         socket.on("typing", (data) => {
-            console.log("typing", data);
-            // if (textMessage === "") setOnTyping("");
-            // else
+            // console.log("typing", data);
             setOnTyping(data.username + " is typing...");
             setTimeout(() => {
                 setOnTyping("");
             }, 5000);
         });
     });
+    
     return (
         <StyledMessages>
             <ScrollToBottom className="message-container">
@@ -28,7 +28,11 @@ function Messages(props) {
                         <Message message={message} username={username} />
                     </div>
                 ))}
-                {onTyping !== "" ? <Typing>{onTyping}</Typing> : null}
+                {onTyping !== "" ? (
+                    <MessagesContainer >
+                        <Typing>{onTyping}</Typing>
+                    </MessagesContainer>
+                ) : null}
             </ScrollToBottom>
         </StyledMessages>
     );
@@ -40,7 +44,17 @@ const StyledMessages = styled.div`
   flex: auto;
 `;
 
-export const Typing = styled.h6`
+export const MessagesContainer = styled.div`
+  display: flex;
+  padding: 0 5%;
+  margin-top: 12px;
+  justify-content: flex-start;
+`;
+
+export const Typing = styled.p`
   text-align: start;
-  margin-top: 3px;
+  font-size: 1.1em;
+  word-wrap: break-word;
+  color: #353535;
+  margin: 0;
 `;
