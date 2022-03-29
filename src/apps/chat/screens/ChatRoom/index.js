@@ -23,7 +23,6 @@ function ChatRoom(props) {
     console.log("joinData", joinData);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState([]);
-    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         if (Object.keys(joinData).length > 0) {
@@ -34,13 +33,13 @@ function ChatRoom(props) {
         } else {
             navigate("/join-room");
         }
-        socket.on("roomInfo", (users) => {
-            console.log("users", users);
-            setUsers(users);
-        });
     }, [joinData]);
 
     const handleChange = (e) => {
+        socket.emit("typing", {
+            room: room,
+            username: username,
+        });
         setMessage(e.target.value);
     };
 
@@ -56,10 +55,7 @@ function ChatRoom(props) {
                     userData: chatData,
                     type: "chat",
                     message,
-                    time:
-                        new Date(Date.now()).getHours() +
-                        ":" +
-                        new Date(Date.now()).getMinutes(),
+                    time: new Date().toISOString(),
                 },
                 (error) => {
                     if (error) {

@@ -5,7 +5,7 @@ export const MessagesContainer = styled.div`
   padding: 0 5%;
   margin-top: 3px;
   justify-content: ${(props) =>
-        props.textPosition === "end" ? "flex-end" : "flex-start"};
+    props.textPosition === "end" ? "flex-end" : "flex-start"};
 `;
 
 export const MessageBox = styled.div`
@@ -16,7 +16,7 @@ export const MessageBox = styled.div`
   display: inline-block;
   max-width: 80%;
   background: ${(props) =>
-        props.background === "blue" ? "#2979FF" : "#F3F3F3"};
+    props.background === "blue" ? "#2979FF" : "#F3F3F3"};
 `;
 
 export const MessageText = styled.p`
@@ -35,3 +35,4 @@ export const SentBy = styled.p`
   padding: ${(props) => (props.right ? "0 10px 0 0px" : "0 10px 0 10px")};
   margin: 0;
 `;
+
