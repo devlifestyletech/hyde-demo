@@ -16,7 +16,7 @@ export const MessageBox = styled.div`
   display: inline-block;
   max-width: 80%;
   background: ${(props) =>
-    props.background === "colour" ? "#D8AA81" : "#F3F3F3"};
+    props.background === "color" ? "#D8AA81" : "#F3F3F3"};
 `;
 
 export const MessageText = styled.p`

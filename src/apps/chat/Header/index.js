@@ -22,12 +22,14 @@ function Header({ username, room }) {
 
   return (
     <StyledHeader>
-      <OnlineStatusContainer>
-        <OnlineIcon>
-          <i className="fa fa-circle" aria-hidden="true"></i>
-        </OnlineIcon>
-        <div>Room name : {room}</div>
-      </OnlineStatusContainer>
+      {room ? (
+        <OnlineStatusContainer>
+          <OnlineIcon>
+            <i className="fa fa-circle" aria-hidden="true"></i>
+          </OnlineIcon>
+          <div>Room name : {room}</div>
+        </OnlineStatusContainer>
+      ) : null}
       <CloseIconContainer>
         {/* <a href="/"> */}
         <CloseIcon onClick={handleClick}>
@@ -45,8 +47,8 @@ const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #D8AA81;
-  border-radius: 4px 4px 0 0;
+  background: #d8aa81;
+  border-radius: 0px 20px 0 0;
   height: 60px;
   width: 100%;
 `;

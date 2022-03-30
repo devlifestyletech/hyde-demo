@@ -23,6 +23,7 @@ import FixingReportDashBoard from "../apps/fixing_report/view/Fixing_Report_Dash
 
 //Chat
 import JoinRoom from "../apps/chat/screens/JoinRoom";
+import ChatRoom from "../apps/chat/screens/ChatRoom";
 
 //Facilities
 import FacilitiesManagementDashboardPage from "../apps/facility_management/views/dashboard.page";
@@ -101,6 +102,7 @@ function MainLayout() {
 
           {/* Chat */}
           <Route path="/join-room" element={<JoinRoom />} />
+          <Route path="/chat-room" element={<ChatRoom />} />
 
           {/* Payment */}
           <Route path="/payment/bill-payment" element={<Payment_success />} />

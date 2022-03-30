@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Heading from "../../components/Header";
 import {
   Button,
@@ -14,18 +14,14 @@ import {
   TimePicker,
   message,
   Divider,
-  Spin
+  Spin,
 } from "antd";
-import {
-  PlusOutlined,
-  PictureOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, PictureOutlined } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
 import "./style/announcementsStyle.css";
 // import { format } from "date-fns";
-import { format, utcToZonedTime } from 'date-fns-tz'
-
+import { format, utcToZonedTime } from "date-fns-tz";
 
 import editIcon from "./assets/icons/edit.svg";
 import trashIcon from "./assets/icons/trash.svg";
@@ -42,7 +38,7 @@ function Announcement() {
   const { Search } = Input;
   const { Option } = Select;
   const { MonthPicker } = DatePicker;
-  const thTimeZone = 'Asia/Bangkok'
+  const thTimeZone = "Asia/Bangkok";
   const [data, setData] = useState([]);
   const [month, setMonth] = useState("");
   const [searchName, setSearchName] = useState("");
@@ -80,25 +76,29 @@ function Announcement() {
 
   let columns = [
     {
-      width: '2vw',
+      width: "2vw",
       title: "No.",
       dataIndex: "number",
       key: "number",
       sorter: (a, b) => a.number - b.number,
     },
     {
-      width: '8vw',
+      width: "8vw",
       title: "Image",
       dataIndex: "image",
       key: "image",
       render: (_, image) => (
         <>
-          <Image width={200} height={100}
+          <Image
+            width={200}
+            height={100}
             src={
               image?.image?.url
                 ? process.env.REACT_APP_API_URL + image.image.url
                 : noImg
-            } alt={image.image.url} />
+            }
+            alt={image.image.url}
+          />
         </>
       ),
     },
@@ -108,30 +108,32 @@ function Announcement() {
       key: "title_name",
     },
     {
-      width: '8vw',
+      width: "8vw",
       title: "Post Status",
       dataIndex: "post_status",
       key: "post_status",
-      render: (_, item) => (
-        item.post_status === 'Scheduled' ?
-          <span style={{ color: 'red' }}>{item.post_status}</span>
-          : <span>{item.post_status}</span>),
+      render: (_, item) =>
+        item.post_status === "Scheduled" ? (
+          <span style={{ color: "red" }}>{item.post_status}</span>
+        ) : (
+          <span>{item.post_status}</span>
+        ),
       sorter: (a, b) => (a.post_status > b.post_status ? 1 : -1),
     },
     {
-      width: '10vw',
+      width: "10vw",
       title: "Date Announced",
       dataIndex: "date_announced_show",
       key: "date_announced_show",
     },
     {
-      width: '10vw',
+      width: "10vw",
       title: "Date Expired",
       dataIndex: "date_expired_show",
       key: "date_expired_show",
     },
     {
-      width: '10vw',
+      width: "10vw",
       title: "Announcer",
       dataIndex: "announcer",
       key: "announcer",
@@ -143,14 +145,14 @@ function Announcement() {
       render: (_, record) => (
         <div class="flex-container">
           <Button
-            type='link'
-            icon={<img src={editIcon} alt='Edit' />}
+            type="link"
+            icon={<img src={editIcon} alt="Edit" />}
             onClick={() => handleEdit(record)}
           />
-          <Divider type='vertical' style={{ height: 30 }} />
+          <Divider type="vertical" style={{ height: 30 }} />
           <Button
-            type='link'
-            icon={<img src={trashIcon} alt='delete' />}
+            type="link"
+            icon={<img src={trashIcon} alt="delete" />}
             onClick={() => onDelete(record.id)}
           />
         </div>
@@ -176,10 +178,9 @@ function Announcement() {
       autoFocusButton: null,
       centered: true,
       onOk() {
-        handleDelete(key)
+        handleDelete(key);
       },
-      onCancel() {
-      }
+      onCancel() {},
     });
   };
 
@@ -199,67 +200,97 @@ function Announcement() {
   };
 
   useEffect(() => {
-    console.log('session', session)
+    console.log("session", session);
     fetchData();
   }, [month]);
 
   const fetchData = async () => {
-    setLoading(true)
+    setLoading(true);
     let gte, lt;
-    if (month.split('-')[1] === '12') {
-      gte = month + '-01'
-      lt = `${parseInt(month.split('-')[0]) + 1}-01-01`
-    }
-    else {
-      gte = month + '-01'
-      lt = `${month.split('-')[0]}-${(parseInt(month.split('-')[1]) + 1 < 10) ? `0${parseInt(month.split('-')[1]) + 1}` : `${parseInt(month.split('-')[1]) + 1}`}-01`
+    if (month.split("-")[1] === "12") {
+      gte = month + "-01";
+      lt = `${parseInt(month.split("-")[0]) + 1}-01-01`;
+    } else {
+      gte = month + "-01";
+      lt = `${month.split("-")[0]}-${
+        parseInt(month.split("-")[1]) + 1 < 10
+          ? `0${parseInt(month.split("-")[1]) + 1}`
+          : `${parseInt(month.split("-")[1]) + 1}`
+      }-01`;
     }
 
-    let url = `${URLreScript}${month === "" ? "?" : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`}_sort=createdAt:desc`
-    console.log(url)
-    await axios
-      .get(url, headers)
-      .then((response) => {
-        console.log("data", response.data);
-        let originData = [];
+    let url = `${URLreScript}${
+      month === "" ? "?" : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`
+    }_sort=createdAt:desc`;
+    console.log(url);
+    await axios.get(url, headers).then((response) => {
+      console.log("data", response.data);
+      let originData = [];
 
-        response.data.forEach((announce, index) => {
-          let date_an = format(utcToZonedTime(new Date(announce.date_announced), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
-          let date_ex = format(utcToZonedTime(new Date(announce.date_expired), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
-          // console.log('date', date_an, date_ex)
-          let announceData = { key: index, number: index + 1, date_announced_show: date_an, date_expired_show: date_ex, ...announce };
-          // console.log(index, announceData)
-          originData.push(announceData)
-        })
-        setData(originData);
-        setLoading(false)
+      response.data.forEach((announce, index) => {
+        let date_an = format(
+          utcToZonedTime(new Date(announce.date_announced), thTimeZone),
+          "dd MMM yyyy HH:mm",
+          { timeZone: "Asia/Bangkok" }
+        );
+        let date_ex = format(
+          utcToZonedTime(new Date(announce.date_expired), thTimeZone),
+          "dd MMM yyyy HH:mm",
+          { timeZone: "Asia/Bangkok" }
+        );
+        // console.log('date', date_an, date_ex)
+        let announceData = {
+          key: index,
+          number: index + 1,
+          date_announced_show: date_an,
+          date_expired_show: date_ex,
+          ...announce,
+        };
+        // console.log(index, announceData)
+        originData.push(announceData);
       });
+      setData(originData);
+      setLoading(false);
+    });
   };
 
   const EditAnnouncement = ({ visible, editValue, onCancel }) => {
     const [form] = Form.useForm();
     const [publishPicked, setPublishPicked] = useState(editValue.post_status);
     const [postDisable, setPostDisable] = useState(false);
-    const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
+    const [pickedImage, setPickedImage] = useState(
+      process.env.REACT_APP_API_URL + editValue.image.url
+    );
     const [imageFile, setImageFile] = useState(null);
-    const [imageBorder, setImageBorder] = useState('inputImage');
-    console.log('editValue.id', editValue.id)
+    const [imageBorder, setImageBorder] = useState("inputImage");
+    console.log("editValue.id", editValue.id);
 
-    let date_an = format(utcToZonedTime(new Date(editValue.date_announced), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
-    let date_ex = format(utcToZonedTime(new Date(editValue.date_expired), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
+    let date_an = format(
+      utcToZonedTime(new Date(editValue.date_announced), thTimeZone),
+      "yyyy-MM-dd HH:mm",
+      { timeZone: "Asia/Bangkok" }
+    );
+    let date_ex = format(
+      utcToZonedTime(new Date(editValue.date_expired), thTimeZone),
+      "yyyy-MM-dd HH:mm",
+      { timeZone: "Asia/Bangkok" }
+    );
 
     const handleValue = () => {
       form.setFieldsValue({
         title_name: editValue.title_name,
         detail: editValue.detail,
         publish_status: editValue.post_status,
-        schedule_date: editValue.post_status === "Scheduled" ? moment(date_an.split(' ')[0]) : "",
+        schedule_date:
+          editValue.post_status === "Scheduled"
+            ? moment(date_an.split(" ")[0])
+            : "",
         schedule_time:
           editValue.post_status === "Scheduled"
-            ? moment(date_an.split(' ')[1], "HH:mm")
+            ? moment(date_an.split(" ")[1], "HH:mm")
             : "",
-        expire_date: moment(date_ex.split(' ')[0]),
-        expire_time: moment(date_ex.split(' ')[1], "HH:mm"),
+        expire_date: moment(date_ex.split(" ")[0]),
+        expire_time: moment(date_ex.split(" ")[1], "HH:mm"),
       });
     };
 
@@ -269,14 +300,19 @@ function Announcement() {
         isFirstRun.current = false;
         return;
       } else {
-        if (pickedImage) { setImageBorder('inputImage') }
-        else { setImageBorder('inputNoImage') }
+        if (pickedImage) {
+          setImageBorder("inputImage");
+        } else {
+          setImageBorder("inputNoImage");
+        }
       }
     }, [pickedImage]);
 
     useEffect(() => {
       handleValue();
-      if (editValue.post_status === 'Published') { setPostDisable(true) }
+      if (editValue.post_status === "Published") {
+        setPostDisable(true);
+      }
       // setDatePicked(dateEdit);
       // setTimePicked(timeEdit);
     }, []);
@@ -317,17 +353,17 @@ function Announcement() {
         },
         onCancel() {
           // onCancel()
-        }
+        },
       });
     };
 
     const handleEditChange = async (value) => {
       console.log("value", value);
-      let dateNow = new Date().toISOString()
+      let dateNow = new Date().toISOString();
       // console.log("today", dateNow);
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
-      console.log('editValue.id', editValue.id)
+      console.log("editValue.id", editValue.id);
 
       if (imageFile == null) {
         axios
@@ -335,11 +371,25 @@ function Announcement() {
             `${URLreScript}/${editValue.id}`,
             {
               title_name: value.title_name,
-              post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
+              post_status:
+                value.publish_status === "Now"
+                  ? "Published"
+                  : value.publish_status,
               announcer: session.user.fullname,
               detail: value.detail,
-              date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
-              date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
+              date_announced:
+                value.publish_status === "Scheduled"
+                  ? `${
+                      value.schedule_date.format("yyyy-MM-DD") +
+                      "T" +
+                      value.schedule_time.format("HH:mm")
+                    }:00.000+07:00`
+                  : dateNow,
+              date_expired: `${
+                value.expire_date.format("yyyy-MM-DD") +
+                "T" +
+                value.expire_time.format("HH:mm")
+              }:00.000+07:00`,
             },
             headers
           )
@@ -362,13 +412,28 @@ function Announcement() {
                 `${URLreScript}/${editValue.id}`,
                 {
                   title_name: value.title_name,
-                  post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
+                  post_status:
+                    value.publish_status === "Now"
+                      ? "Published"
+                      : value.publish_status,
                   announcer: session.user.fullname,
                   detail: value.detail,
-                  date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
-                  date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
+                  date_announced:
+                    value.publish_status === "Scheduled"
+                      ? `${
+                          value.schedule_date.format("yyyy-MM-DD") +
+                          "T" +
+                          value.schedule_time.format("HH:mm")
+                        }:00.000+07:00`
+                      : dateNow,
+                  date_expired: `${
+                    value.expire_date.format("yyyy-MM-DD") +
+                    "T" +
+                    value.expire_time.format("HH:mm")
+                  }:00.000+07:00`,
                   image: imageId,
-                }, headers
+                },
+                headers
               )
               .then((res) => {
                 fetchData();
@@ -404,10 +469,12 @@ function Announcement() {
                   let newValues = {
                     ...values,
                   };
-                  onConfirm(newValues)
+                  onConfirm(newValues);
                 })
                 .catch((info) => {
-                  if (!pickedImage) { setImageBorder('inputNoImage') }
+                  if (!pickedImage) {
+                    setImageBorder("inputNoImage");
+                  }
                   console.log("Validate Failed:", info);
                 });
             }}
@@ -444,7 +511,21 @@ function Announcement() {
               />
             </Form.Item>
             <Form.Item
-              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Image</div>}
+              label={
+                <div>
+                  <span
+                    style={{
+                      color: "#ff4d4f",
+                      fontSize: 10,
+                      position: "relative",
+                      bottom: 5,
+                    }}
+                  >
+                    *{" "}
+                  </span>
+                  Image
+                </div>
+              }
             >
               <div>
                 {pickedImage ? null : (
@@ -491,7 +572,9 @@ function Announcement() {
                     />
                   </div>
                 ) : null}
-                {imageBorder === 'inputNoImage' ? <span style={{ color: '#ff4d4f' }}>Please input details</span> : null}
+                {imageBorder === "inputNoImage" ? (
+                  <span style={{ color: "#ff4d4f" }}>Please input details</span>
+                ) : null}
                 <div style={{ marginTop: 12 }}>
                   {pickedImage ? (
                     <div className="delete">
@@ -531,7 +614,11 @@ function Announcement() {
                 },
               ]}
             >
-              <Select style={{ width: "100%" }} onChange={publishPickedHandle} disabled={postDisable}>
+              <Select
+                style={{ width: "100%" }}
+                onChange={publishPickedHandle}
+                disabled={postDisable}
+              >
                 {publish.map((type, index) => (
                   <Option value={type} key={index}>
                     {type}
@@ -569,10 +656,7 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <TimePicker
-                      className="dateTime"
-                      format="HH:mm"
-                    />
+                    <TimePicker className="dateTime" format="HH:mm" />
                   </Form.Item>
                 </div>
               </div>
@@ -606,16 +690,13 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <TimePicker
-                    className="dateTime"
-                    format="HH:mm"
-                  />
+                  <TimePicker className="dateTime" format="HH:mm" />
                 </Form.Item>
               </div>
             </div>
           </div>
-        </Form >
-      </Modal >
+        </Form>
+      </Modal>
     );
   };
 
@@ -624,7 +705,7 @@ function Announcement() {
     const [publishPicked, setPublishPicked] = useState();
     const [pickedImage, setPickedImage] = useState(null);
     const [imageFile, setImageFile] = useState(null);
-    const [imageBorder, setImageBorder] = useState('inputImage');
+    const [imageBorder, setImageBorder] = useState("inputImage");
 
     const deleteHandle = () => {
       setPickedImage(null);
@@ -649,15 +730,17 @@ function Announcement() {
       reader.readAsDataURL(e.target.files[0]);
     };
 
-
     const isFirstRun = useRef(true);
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
         return;
       } else {
-        if (pickedImage) { setImageBorder('inputImage') }
-        else { setImageBorder('inputNoImage') }
+        if (pickedImage) {
+          setImageBorder("inputImage");
+        } else {
+          setImageBorder("inputNoImage");
+        }
       }
     }, [pickedImage]);
 
@@ -678,9 +761,16 @@ function Announcement() {
 
     const handleOnAdd = async (value) => {
       // console.log("value", value);
-      let dateNow = new Date().toISOString()
+      let dateNow = new Date().toISOString();
       // console.log("dateNow", dateNow);
-      console.log("dateNowEX", `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`);
+      console.log(
+        "dateNowEX",
+        `${
+          value.expire_date.format("yyyy-MM-DD") +
+          "T" +
+          value.expire_time.format("HH:mm")
+        }:00.000+07:00`
+      );
 
       let dataImage = new FormData();
       dataImage.append("files", imageFile);
@@ -694,13 +784,28 @@ function Announcement() {
               URLreScript,
               {
                 title_name: value.title_name,
-                post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
+                post_status:
+                  value.publish_status === "Now"
+                    ? "Published"
+                    : value.publish_status,
                 announcer: session.user.fullname,
                 detail: value.detail,
-                date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
-                date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
+                date_announced:
+                  value.publish_status === "Scheduled"
+                    ? `${
+                        value.schedule_date.format("yyyy-MM-DD") +
+                        "T" +
+                        value.schedule_time.format("HH:mm")
+                      }:00.000+07:00`
+                    : dateNow,
+                date_expired: `${
+                  value.expire_date.format("yyyy-MM-DD") +
+                  "T" +
+                  value.expire_time.format("HH:mm")
+                }:00.000+07:00`,
                 image: imageId,
-              }, headers
+              },
+              headers
             )
             .then((res) => {
               fetchData();
@@ -736,12 +841,15 @@ function Announcement() {
                     let newValues = {
                       ...values,
                     };
-                    onConfirm(newValues)
-                  } else { setImageBorder('inputNoImage') }
-
+                    onConfirm(newValues);
+                  } else {
+                    setImageBorder("inputNoImage");
+                  }
                 })
                 .catch((info) => {
-                  if (!pickedImage) { setImageBorder('inputNoImage') }
+                  if (!pickedImage) {
+                    setImageBorder("inputNoImage");
+                  }
                   console.log("Validate Failed:", info);
                 });
             }}
@@ -778,7 +886,21 @@ function Announcement() {
               />
             </Form.Item>
             <Form.Item
-              label={<div><span style={{ color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5 }}>* </span>Image</div>}
+              label={
+                <div>
+                  <span
+                    style={{
+                      color: "#ff4d4f",
+                      fontSize: 10,
+                      position: "relative",
+                      bottom: 5,
+                    }}
+                  >
+                    *{" "}
+                  </span>
+                  Image
+                </div>
+              }
             >
               <div>
                 {pickedImage ? null : (
@@ -825,7 +947,9 @@ function Announcement() {
                     />
                   </div>
                 ) : null}
-                {imageBorder === 'inputNoImage' ? <span style={{ color: '#ff4d4f' }}>Please input details</span> : null}
+                {imageBorder === "inputNoImage" ? (
+                  <span style={{ color: "#ff4d4f" }}>Please input details</span>
+                ) : null}
                 <div style={{ marginTop: 12 }}>
                   {pickedImage ? (
                     <div className="delete">
@@ -903,10 +1027,7 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <TimePicker
-                      className="dateTime"
-                      format="HH:mm"
-                    />
+                    <TimePicker className="dateTime" format="HH:mm" />
                   </Form.Item>
                 </div>
               </div>
@@ -940,51 +1061,70 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <TimePicker
-                    className="dateTime"
-                    format="HH:mm"
-                  />
+                  <TimePicker className="dateTime" format="HH:mm" />
                 </Form.Item>
               </div>
             </div>
           </div>
-        </Form >
-      </Modal >
+        </Form>
+      </Modal>
     );
   };
 
   function onMonthChange(date, dateString) {
     // console.log("date", date);
     // console.log("dateString", dateString);
-    setMonth(dateString)
+    setMonth(dateString);
   }
 
   const Loading = () => {
-    return <div style={{ width: "80vw", height: "100vh", textAlign: "center", paddingTop: 300 }}>
-      <Spin size='large' />
-      <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
-    </div>
-  }
+    return (
+      <div
+        style={{
+          width: "80vw",
+          height: "100vh",
+          textAlign: "center",
+          paddingTop: 300,
+        }}
+      >
+        <Spin size="large" />
+        <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
+      </div>
+    );
+  };
 
   return (
     <>
-      <Heading title='Announcements' />
-      <div className='flex-container'>
+      <Heading title="Announcements" />
+      <div className="flex-container">
         <div>
           <MonthPicker
-            style={{ marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20 }}
+            style={{
+              marginTop: 10,
+              width: 369,
+              marginBottom: 19,
+              marginRight: 10,
+              borderRadius: 20,
+            }}
             onChange={onMonthChange}
             placeholder="Select month"
-          // className="search-box"
+            // className="search-box"
           />
           <Search
             placeholder="Search by title"
             allowClear
             onSearch={handleSearch}
-            style={{ marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20 }}
+            style={{
+              marginTop: 10,
+              width: 369,
+              marginBottom: 19,
+              marginRight: 10,
+              borderRadius: 20,
+            }}
             onChange={handleSearchChange}
-          // className="search-box"
-          /></div>
+            // className="search-box"
+          />
+        </div>
 
         <div align="right">
           <Button
@@ -1003,17 +1143,21 @@ function Announcement() {
           </Button>
         </div>
       </div>
-      {loading ? <Loading /> : <Table
-        columns={columns}
-        scroll={{ x: 1200 }}
-        dataSource={
-          searchName === ""
-            ? data
-            : data.filter((item) =>
-              item.title_name.toLowerCase().includes(searchName)
-            )
-        }
-      />}
+      {loading ? (
+        <Loading />
+      ) : (
+        <Table
+          columns={columns}
+          scroll={{ x: 1200 }}
+          dataSource={
+            searchName === ""
+              ? data
+              : data.filter((item) =>
+                  item.title_name.toLowerCase().includes(searchName)
+                )
+          }
+        />
+      )}
       {value != null ? (
         <EditAnnouncement
           visible={editVisible}
