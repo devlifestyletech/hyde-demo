@@ -151,15 +151,18 @@ const sreachData =({ currentTarget }) => {
         {
             title: "No",
             dataIndex: "No",
+            align:"center",
             key: "No",
             width: "5%",
         },  {
             title: "Name",
+            align:"center",
             dataIndex: "Name",
             key: "Name",
             width: "10%",
         }, {
             title: "Type",
+            align:"center",
             dataIndex: "Type",
             key: "Type",
             width: "10%",
@@ -167,17 +170,20 @@ const sreachData =({ currentTarget }) => {
         },
         {
             title: "Tel",
+            align:"center",
             dataIndex: "Tel",
             key: "Tel",
             width: "10%",
         },{
             title: "Location",
+            align:"center",
             dataIndex: "location",
             key: "location",
             width: "15%",
         },
         {
             title: 'Action',
+            align:"center",
             key: 'operation',
             width: "5%",
             render: (text, record) => (

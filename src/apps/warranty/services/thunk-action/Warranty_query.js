@@ -1,15 +1,19 @@
 const WarrantyQuery = (params) => {
-  console.log("WarrantyQuery:",params)
+  // console.log("WarrantyQuery:",params)
   let coditionData = {
     status: false,
     content: null,
+    pageStart:0
   };
   if (params !== undefined) {
     if (params.defaultPage !== undefined) {
+      coditionData.pageStart= params.defaultPage === 1
+      ? params.defaultPage - 1
+      : (params.defaultPage * params.pagesize-params.defaultPage)+(params.defaultPage - params.pagesize)
       coditionData.content = `_start=${
           params.defaultPage === 1
               ? params.defaultPage - 1
-              : params.defaultPage * params.pagesize
+              : (params.defaultPage * params.pagesize-params.defaultPage)+(params.defaultPage - params.pagesize)
       }`;
     }
     if (params.pagesize !== undefined) {

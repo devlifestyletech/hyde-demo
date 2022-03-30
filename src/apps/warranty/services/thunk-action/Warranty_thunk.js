@@ -9,7 +9,7 @@ const getWarrantyProjectStore = (params) =>{
             const count = await getCountWarrantyList(resultParams.content)
             // eslint-disable-next-line no-unused-expressions
             count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE_WARRANTY",payload:count}):0
-            const data = await getWarranty(resultParams.content)
+            const data = await getWarranty(resultParams.content,resultParams.pageStart)
             if (data !== undefined) {
 
                 dispatch({

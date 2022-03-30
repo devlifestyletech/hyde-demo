@@ -19,7 +19,7 @@ const optionsImage = {
         Authorization:`Bearer ${auth}`
     }
 }
-const getWarranty = async (params) => {
+const getWarranty = async (params,pageStart) => {
     let resultData;
     let progressBuilding = [];
     let dataSubBuilding;
@@ -36,7 +36,7 @@ const getWarranty = async (params) => {
                             e.Tel =e.owner.tel
                             e.email=e.owner.email
                     }
-                    e.No = i + 1;
+                    e.No = i + 1+pageStart;
                     e.key = i;
                   
                    if( e.warranty_projects.length >0){
