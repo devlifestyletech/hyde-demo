@@ -24,9 +24,6 @@ import { encryptStorage } from "../../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 function ChatRoom(props) {
-  // let navigate = useNavigate();
-  // const { username, userId, room, joinData } = props;
-  // const chatData = { id: userId, username: username, room: room };
   console.log("session", session);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
@@ -34,14 +31,14 @@ function ChatRoom(props) {
   const [contactList, setContactList] = useState([]);
   const [room, setRoom] = useState("1199/3");
 
-  const username = session.user.fullname;
+  const sender_name = session.user.fullname;
   const connectChat = () => {
-    if (username && room) {
-      let userId = session.user._id;
-      let username = session.user.fullname;
-      setChatData({ id: userId, username: username, room: room });
+    if (sender_name && room) {
+      let sender_id = session.user._id;
+      let sender_name = session.user.fullname;
+      setChatData({ sender_id: sender_id, sender_name: sender_name, room: room });
 
-      socket.emit("join", { userId, username, room }, (data) => {
+      socket.emit("join", { sender_id, sender_name, room }, (data) => {
         console.log("JoinData", data);
       });
       if (messages.length === 0) {
@@ -72,7 +69,8 @@ function ChatRoom(props) {
                   text: data.text,
                   time: data.time,
                   type: data.type,
-                  user: data.user,
+                  sender_id: data.sender_id,
+                  sender_name: data.sender_name,
                 },
               ]);
             });
@@ -142,7 +140,7 @@ function ChatRoom(props) {
   const handleChange = (e) => {
     socket.emit("typing", {
       room: room,
-      username: username,
+      sender_name: sender_name,
     });
     setMessage(e.target.value);
   };
@@ -181,8 +179,8 @@ function ChatRoom(props) {
         <StyledContainer>
           <List />
           <ChatBox>
-            <Header username={username} room={room} />
-            <Messages messages={messages} username={username} />
+            <Header username={sender_name} room={room} />
+            <Messages messages={messages}  />
             <InputBar>
               <ActionIcon
                 onClick={() => {
