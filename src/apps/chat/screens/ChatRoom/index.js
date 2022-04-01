@@ -32,7 +32,9 @@ function ChatRoom(props) {
 
   const connectChat = () => {
     if (sender_name && room) {
-      console.log("messages", messages);
+      // console.log("messages", messages);
+
+      console.log('roomNum', room);
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
       setChatData({
@@ -103,7 +105,7 @@ function ChatRoom(props) {
   };
   useEffect(() => {
     socket.on("message", (newMessage, error) => {
-      // console.log("newMessage-->", newMessage);
+      console.log("newMessage-->", newMessage);
       setMessages((msgs) => [...msgs, newMessage]);
     });
   }, [socket]);
