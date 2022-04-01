@@ -1,24 +1,32 @@
+/* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { List as AntdList, Avatar, Select } from "antd";
 import Service from "../../../services/auth.service";
-import ChatRoom from "../../chat/screens/ChatRoom";
 
 const { Option } = Select;
 
 function List(props) {
-    const [room, setRoom] = useState();
+    const [contactList, setContactList] = useState([]);
 
     function handleChange(value) {
         console.log(value);
-        setRoom(value);
         props.handleCallback(value);
-        // return  <ChatRoom room={room} />
     }
 
     useEffect(() => {
         Service.getAllResident().then((user) => {
-            console.log("userss", user);
+            console.log("users", user);
+            user.data.map((data) => {
+                setContactList((lists) => [
+                    ...lists,
+                    {
+                        id: data._id,
+                        name: data.fullname,
+                        room: data.address.address_number,
+                    },
+                ]);
+            });
         });
     }, []);
 
@@ -41,12 +49,20 @@ function List(props) {
                                 .localeCompare(optionB.children.toLowerCase())
                         }
                     >
-                        <Option value="1199/1">Not Identified</Option>
-                        <Option value="1199/2">Closed</Option>
-                        <Option value="1199/3">Communicated</Option>
-                        <Option value="1199/4">Identified</Option>
-                        <Option value="1199/5">Resolved</Option>
-                        <Option value="1199/6">Cancelled</Option>
+                        {contactList.map((data, index) => (
+                            <Option
+                                value={`${data.name},${data.id}:${data.room}`}
+                                key={index}
+                            >
+                                {`${data.name} (${data.room})`}
+                            </Option>
+                        ))}
+                        {/* {contactList.map((data, index) => {
+                            console.log("dataList", index, data.id, data.name, data.room);
+                            <Option value={`${data.id},${data.room}`} key={index}>
+                                {index}
+                            </Option>;
+                        })} */}
                     </Select>
                 </ListHeading>
                 <AntdList
@@ -86,8 +102,7 @@ const StyledList = styled(AntdList)`
 `;
 
 const ListHeading = styled.div`
-  color: #757591;
   font-size: 20px;
-  font-style: oblique;
+  font-style: SukhumvitSet;
   border-bottom: 1px solid #757591;
 `;

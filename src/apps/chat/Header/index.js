@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function Header({ room, handleDisconnect }) {
+function Header({ username, room, handleDisconnect }) {
 
   return (
     <StyledHeader>
@@ -11,7 +11,7 @@ function Header({ room, handleDisconnect }) {
             <OnlineIcon>
               <i className="fa fa-circle" aria-hidden="true"></i>
             </OnlineIcon>
-            <div>Room name : {room}</div>
+            <div>{username} ({room.split(':')[1]})</div>
           </OnlineStatusContainer>
           <CloseIconContainer>
             <CloseIcon onClick={handleDisconnect}>
@@ -34,10 +34,12 @@ const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #d8aa81;
+  // background: #d8aa81;
+  background: white;
   border-radius: 0px 20px 0 0;
   height: 60px;
   width: 100%;
+  border-bottom: 1px solid #757591;
 `;
 const OnlineStatusContainer = styled.div`
   flex: 0.5;
@@ -59,5 +61,5 @@ const OnlineIcon = styled.div`
 
 const CloseIcon = styled.div`
   font-size: 20px;
-  color: #fff;
+  color: #757591;
 `;

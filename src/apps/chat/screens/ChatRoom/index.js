@@ -27,6 +27,7 @@ function ChatRoom(props) {
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
   const [room, setRoom] = useState();
+  const [receiver, setReceiver] = useState();
   const sender_name = session.user.fullname;
 
   const connectChat = () => {
@@ -90,9 +91,10 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log("room", childData);
+    console.log("room", childData.split(',')[1]);
     setMessages([]);
-    setRoom(childData);
+    setRoom(childData.split(',')[1]);
+    setReceiver(childData.split(',')[0])
   };
 
   const handleDisconnect = () => {
@@ -107,6 +109,7 @@ function ChatRoom(props) {
   }, [socket]);
 
   const handleChange = (e) => {
+    console.log(room)
     socket.emit("typing", {
       room: room,
       sender_name: sender_name,
@@ -147,7 +150,7 @@ function ChatRoom(props) {
         <StyledContainer>
           <List handleCallback={handleCallback} />
           <ChatBox>
-            <Header room={room} handleDisconnect={handleDisconnect}/>
+            <Header username={receiver} room={room} handleDisconnect={handleDisconnect}/>
             <Messages messages={messages} />
             <InputBar>
               <ActionIcon
