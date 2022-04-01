@@ -12,7 +12,6 @@ function Messages(props) {
 
     useEffect(() => {
         socket.on("typing", (data) => {
-            // console.log("typing", data);
             setOnTyping(data.sender_name + " is typing...");
             setTimeout(() => {
                 setOnTyping("");

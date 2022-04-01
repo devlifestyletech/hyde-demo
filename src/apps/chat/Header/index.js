@@ -1,42 +1,29 @@
 import React from "react";
-import { socket } from "../../../services/web-sockets";
 import styled from "styled-components";
 
-function Header({ username, room }) {
-  // console.log("userID", username);
-  // const userId =joinData.userData.id;
-  // const room =joinData.userData.room;
-
-  // const onClick = () => {
-  //     socket.emit("disconnect", { username, room }, (error) => { });
-  // };
-
-  const handleClick = () => {
-    console.log("The link was clicked.", username, room);
-    if (username && room) {
-      socket.emit("disconnected", { username, room }, (error) => {
-        console.log("error", error);
-      });
-    }
-  };
+function Header({ room, handleDisconnect }) {
 
   return (
     <StyledHeader>
       {room ? (
+        <>
+          <OnlineStatusContainer>
+            <OnlineIcon>
+              <i className="fa fa-circle" aria-hidden="true"></i>
+            </OnlineIcon>
+            <div>Room name : {room}</div>
+          </OnlineStatusContainer>
+          <CloseIconContainer>
+            <CloseIcon onClick={handleDisconnect}>
+              <i className="fa fa-times-circle" aria-hidden="true"></i>
+            </CloseIcon>
+          </CloseIconContainer>
+        </>
+      ) : (
         <OnlineStatusContainer>
-          <OnlineIcon>
-            <i className="fa fa-circle" aria-hidden="true"></i>
-          </OnlineIcon>
-          <div>Room name : {room}</div>
+          <div>No room selected</div>
         </OnlineStatusContainer>
-      ) : null}
-      <CloseIconContainer>
-        {/* <a href="/"> */}
-        <CloseIcon onClick={handleClick}>
-          <i className="fa fa-times-circle" aria-hidden="true"></i>
-        </CloseIcon>
-        {/* </a> */}
-      </CloseIconContainer>
+      )}
     </StyledHeader>
   );
 }
@@ -57,7 +44,9 @@ const OnlineStatusContainer = styled.div`
   display: flex;
   align-items: center;
   margin-left: 5%;
-  color: white;
+  color: black;
+  font-weight:bold;
+  font-size:1.2rem;
 `;
 const CloseIconContainer = styled.div`
   margin-right: 5%;
