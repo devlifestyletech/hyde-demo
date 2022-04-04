@@ -1,19 +1,75 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { List as AntdList, Avatar, Select } from "antd";
+import {
+    List as AntdList,
+    Avatar,
+    Select,
+    message,
+    Skeleton,
+    Divider,
+} from "antd";
+
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { encryptStorage } from "../../../utils/encryptStorage";
 import Service from "../../../services/auth.service";
+const session = encryptStorage.getItem("user_session");
 
 const { Option } = Select;
 
 function List(props) {
     const [contactList, setContactList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);
 
     function handleChange(value) {
         console.log(value);
         props.handleCallback(value);
     }
 
+    // const fetchData = async () => {
+    //     try {
+    //         const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+
+    //         await axios
+    //             .get(process.env.REACT_APP_API_URL + "/chats?_where[room]=" + room, headers)
+    //             .then((res) => {
+    //                 res.data.map((data) => {
+    //                     // console.log("data", data.room, data.text, data.time, data.user);
+    //                 });
+    //                 // setLoading(false);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
+
+    const loadMoreData = useCallback(() => {
+        if (loading) {
+            return;
+        }
+        setLoading(true);
+        fetch(
+            "https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo"
+        )
+            .then((res) => res.json())
+            .then((body) => {
+                setData([...data, ...body.results]);
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
+            });
+    });
+
+    useEffect(() => {
+        loadMoreData();
+    });
     useEffect(() => {
         Service.getAllResident().then((user) => {
             console.log("users", user);
@@ -57,28 +113,43 @@ function List(props) {
                                 {`${data.name} (${data.room})`}
                             </Option>
                         ))}
-                        {/* {contactList.map((data, index) => {
-                            console.log("dataList", index, data.id, data.name, data.room);
-                            <Option value={`${data.id},${data.room}`} key={index}>
-                                {index}
-                            </Option>;
-                        })} */}
                     </Select>
                 </ListHeading>
-                <AntdList
-                    itemLayout="horizontal"
-                    dataSource={props.users}
-                    renderItem={(user) => (
-                        <AntdList.Item>
-                            <AntdList.Item.Meta
-                                avatar={
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                }
-                                title={<a href="https://ant.design">{user.username}</a>}
-                            />
-                        </AntdList.Item>
-                    )}
-                />
+                {/* <div
+                    id="scrollableDiv"
+                    style={{
+                        // backgroundColor:'#fff',
+                        height: '72vh',
+                        overflow: 'auto',
+                        padding: '0 16px',
+                    }}
+                >
+                    <InfiniteScroll
+                        dataLength={data.length}
+                        next={loadMoreData}
+                        hasMore={data.length < 50}
+                        loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+                        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+                        scrollableTarget="scrollableDiv"
+                    >
+                        <AntdList
+                            dataSource={data}
+                            renderItem={(item) => (
+                                <AntdList.Item key={item.id}>
+                                    <AntdList.Item.Meta
+                                    style={{
+                                        // backgroundColor:'#fff',
+                                        // borderBottom: '1px solid rgba(140, 140, 140, 0.35)',
+                                    }}
+                                        avatar={<Avatar src={item.picture.large} />}
+                                        title={item.name.last}
+                                        description={item.email}
+                                    />
+                                </AntdList.Item>
+                            )}
+                        />
+                    </InfiniteScroll>
+                </div> */}
             </StyledList>
         </>
     );

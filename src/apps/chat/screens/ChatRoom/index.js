@@ -1,6 +1,5 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import React, { useEffect, useState } from "react";
 // import styled from "styled-components";
 import { socket } from "../../../../services/web-sockets";
@@ -16,7 +15,7 @@ import {
   SendIcon,
   InputBar,
 } from "./styles";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 
 import axios from "axios";
 import { encryptStorage } from "../../../../utils/encryptStorage";
@@ -26,14 +25,15 @@ function ChatRoom(props) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState("");
   const [receiver, setReceiver] = useState();
+  const [loading, setLoading] = useState(false);
   const sender_name = session.user.fullname;
 
   const connectChat = () => {
     if (sender_name && room) {
       // console.log("messages", messages);
-      console.log('roomNum', room);
+      // console.log("roomNum", room);
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
       setChatData({
@@ -46,7 +46,8 @@ function ChatRoom(props) {
         console.log("JoinData", data);
       });
       if (messages.length === 0) {
-        console.log("Do Fetch", messages);
+        // console.log("Do Fetch", messages);
+        setLoading(true);
         fetchData();
       }
     }
@@ -76,7 +77,7 @@ function ChatRoom(props) {
                 },
               ]);
             });
-            // setLoading(false);
+            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
@@ -92,25 +93,32 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log("room", childData.split(',')[1]);
+    console.log("room", childData.split(",")[1]);
     setMessages([]);
-    setRoom(childData.split(',')[1]);
-    setReceiver(childData.split(',')[0])
+    setRoom(childData.split(",")[1]);
+    setReceiver(childData.split(",")[0]);
   };
 
   const handleDisconnect = () => {
     setMessages([]);
-    setRoom('');
+    setRoom("");
   };
   useEffect(() => {
+    socket.off("message");
+  }, [room]);
+
+  useEffect(() => {
+    // console.log("Socket-->", room);
     socket.on("message", (newMessage, error) => {
-      console.log("newMessage-->", newMessage);
-      setMessages((msgs) => [...msgs, newMessage]);
+      // console.log("newMessage-->", newMessage.room, room);
+      if (newMessage.room === room) {
+        setMessages((msgs) => [...msgs, newMessage]);
+      }
     });
-  }, [socket]);
+  }, [socket,room]);
 
   const handleChange = (e) => {
-    console.log(room)
+    // console.log("room", room);
     socket.emit("typing", {
       room: room,
       sender_name: sender_name,
@@ -119,7 +127,12 @@ function ChatRoom(props) {
   };
 
   const handleClick = (e) => {
-    if (message) sendMessage(message);
+    if (room !== "") {
+      if (message) sendMessage(message);
+    } else {
+      // console.log('Please select room to connect')
+      alert("Please select room to connect");
+    }
   };
 
   const sendMessage = (message) => {
@@ -144,6 +157,22 @@ function ChatRoom(props) {
     }
   };
 
+  const Loading = () => {
+    return (
+      <div
+        style={{
+          // width: "80vw",
+          height: "100vh",
+          textAlign: "center",
+          paddingTop: 300,
+        }}
+      >
+        <Spin size="large" />
+        <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
+      </div>
+    );
+  };
+
   return (
     <>
       <Heading title="Chat" />
@@ -151,8 +180,16 @@ function ChatRoom(props) {
         <StyledContainer>
           <List handleCallback={handleCallback} />
           <ChatBox>
-            <Header username={receiver} room={room} handleDisconnect={handleDisconnect}/>
-            <Messages messages={messages} />
+            <Header
+              username={receiver}
+              room={room}
+              handleDisconnect={handleDisconnect}
+            />
+            {loading ? (
+              <Loading />
+            ) : (
+              <Messages room={room} messages={messages} />
+            )}
             <InputBar>
               <ActionIcon
                 onClick={() => {

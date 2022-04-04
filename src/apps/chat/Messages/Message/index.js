@@ -10,7 +10,7 @@ function Message(props) {
     const {
         message: { sender_id, sender_name, text, time },
     } = props;
-    console.log("Message", sender_id, sender_name, text, time);
+    // console.log("Message", sender_id, sender_name, text, time);
 
     const chatTime = format(utcToZonedTime(new Date(time), thTimeZone), "HH:mm", {
         timeZone: "Asia/Bangkok",

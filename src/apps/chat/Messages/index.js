@@ -7,28 +7,31 @@ import "./messageStyle.css";
 import { socket } from "../../../services/web-sockets";
 
 function Messages(props) {
-    const { messages } = props;
+    const { messages,room } = props;
     const [onTyping, setOnTyping] = useState("");
 
-    useEffect(() => {
+    // useEffect(() => {
         socket.on("typing", (data) => {
-            setOnTyping(data.sender_name + " is typing...");
-            setTimeout(() => {
-                setOnTyping("");
-            }, 5000);
+            // console.log("typing", data, room);
+            if (data.room === room) {
+                setOnTyping(data.sender_name + " is typing...");
+                setTimeout(() => {
+                    setOnTyping("");
+                }, 5000);
+            }
         });
-    });
-    
+    // }, [messages]);
+
     return (
         <StyledMessages>
             <ScrollToBottom className="message-container">
                 {messages.map((message, i) => (
                     <div key={i}>
-                        <Message message={message}/>
+                        <Message message={message} />
                     </div>
                 ))}
                 {onTyping !== "" ? (
-                    <MessagesContainer >
+                    <MessagesContainer>
                         <Typing>{onTyping}</Typing>
                     </MessagesContainer>
                 ) : null}
