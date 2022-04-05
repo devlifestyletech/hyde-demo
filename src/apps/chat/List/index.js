@@ -1,14 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { format, utcToZonedTime } from "date-fns-tz";
 import {
     List as AntdList,
     Avatar,
     Select,
     Skeleton,
     Divider,
-    Button,
+    Row,
+    Col,
 } from "antd";
 import noImg from "../../assets/images/noImg.jpg";
 import axios from "axios";
@@ -26,7 +29,11 @@ function List(props) {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const headers = { headers: { Authorization: "Bearer " + session.jwt } };
-    // console.log(headers);
+    const thTimeZone = "Asia/Bangkok";
+    const toDay = format(utcToZonedTime(new Date(), thTimeZone), "dd-MM-yyyy", {
+        timeZone: "Asia/Bangkok",
+    });
+    // console.log(toDay)
     function handleChange(value) {
         console.log(value);
         props.handleCallback(value);
@@ -40,7 +47,7 @@ function List(props) {
             await axios
                 .get(process.env.REACT_APP_API_URL + "/chats?_sort=time:desc", headers)
                 .then((res) => {
-                    console.log("res", res.data);
+                    // console.log("res", res.data);
                     var flags = [],
                         output = [],
                         l = res.data.length,
@@ -50,7 +57,7 @@ function List(props) {
                         flags[res.data[i].room] = true;
                         output.push(res.data[i]);
                     }
-                    console.log("output", output);
+                    // console.log("output", output);
                     setData(output);
                     setLoading(false);
                 })
@@ -98,9 +105,17 @@ function List(props) {
     // };
 
     useEffect(() => {
-        // loadMoreData();
-        fetchData();
+        console.log("fetch Socket");
+        socket.on("fetchHistory", () => {
+            console.log("fetchData");
+            fetchData();
+        });
     }, [socket]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     useEffect(() => {
         Service.getAllResident().then((user) => {
             // console.log("users", user);
@@ -149,10 +164,7 @@ function List(props) {
                 <div
                     id="scrollableDiv"
                     style={{
-                        // backgroundColor:'#fff',
                         height: "72vh",
-                        overflow: "auto",
-                        padding: "0 16px",
                     }}
                 >
                     <InfiniteScroll
@@ -164,40 +176,73 @@ function List(props) {
                         scrollableTarget="scrollableDiv"
                     >
                         <AntdList
+                            // itemLayout="vertical"
                             dataSource={data}
-                            renderItem={(item) => (
-                                // <button  onClick={handleChange(item.room)}>
+                            renderItem={(item, index) => (
                                 <AntdList.Item
                                     key={item.id}
                                     onClick={() => {
-                                        props.handleCallback(item.room_info.fullname+","+item.room);
+                                        props.handleCallback(
+                                            item.room_info.fullname + "," + item.room
+                                        );
                                     }}
                                 >
-                                    <AntdList.Item.Meta
-                                        style={{
-                                            // backgroundColor:'#fff',
-                                            borderBottom: "1px solid rgba(140, 140, 140, 0.35)",
-                                            // maxHeight:'10vh'
-                                        }}
-                                        avatar={
-                                            <Avatar
-                                                src={
-                                                    item.room_info.avatar
-                                                        ? process.env.REACT_APP_API_URL +
-                                                        item.room_info.avatar.url
-                                                        : noImg
-                                                }
-                                            />
-                                        }
-                                        title={item.room_info.fullname}
-                                        description={
-                                            item.text.length > 30
-                                                ? item.text.substring(0, 30) + "..."
-                                                : item.text
-                                        }
-                                    />
+                                    <Row>
+                                        <Avatar
+                                            size={40}
+                                            src={
+                                                item.room_info.avatar
+                                                    ? process.env.REACT_APP_API_URL +
+                                                    item.room_info.avatar.url
+                                                    : noImg
+                                            }
+                                        />
+                                        <Col>
+                                            <Row
+                                                style={{
+                                                    width: "20vw",
+                                                    justifyContent: "space-between",
+                                                }}
+                                            >
+                                                <TitleText>
+                                                    {`${item.room_info.fullname.length > 20
+                                                            ? item.room_info.fullname.substring(0, 20) + "..."
+                                                            : item.room_info.fullname
+                                                        } (${item.room.split(":")[1]})`}
+                                                </TitleText>
+                                                <TimeText>
+                                                    {toDay ===
+                                                        format(
+                                                            utcToZonedTime(new Date(item.time), thTimeZone),
+                                                            "dd-MM-yyyy",
+                                                            {
+                                                                timeZone: "Asia/Bangkok",
+                                                            }
+                                                        )
+                                                        ? format(
+                                                            utcToZonedTime(new Date(item.time), thTimeZone),
+                                                            "HH:mm",
+                                                            {
+                                                                timeZone: "Asia/Bangkok",
+                                                            }
+                                                        )
+                                                        : format(
+                                                            utcToZonedTime(new Date(item.time), thTimeZone),
+                                                            "dd/MM/yyyy HH:mm",
+                                                            {
+                                                                timeZone: "Asia/Bangkok",
+                                                            }
+                                                        )}
+                                                </TimeText>
+                                            </Row>
+                                            <ChatText>
+                                                {item.text.length > 30
+                                                    ? item.text.substring(0, 30) + "..."
+                                                    : item.text}
+                                            </ChatText>
+                                        </Col>
+                                    </Row>
                                 </AntdList.Item>
-                                // </button>
                             )}
                         />
                     </InfiniteScroll>
@@ -229,9 +274,20 @@ const ListHeading = styled.div`
   font-style: SukhumvitSet;
   border-bottom: 1px solid #757591;
 `;
-const textOverx = styled.div`
-  font-size: 20px;
+const TitleText = styled.div`
+  margin-left: 10px;
+  font-size: 16px;
   font-style: SukhumvitSet;
-  overflow: hidden;
-  text-overflow: ellipsis;
+`;
+const ChatText = styled.div`
+  margin-left: 10px;
+  font-size: 14px;
+  font-style: SukhumvitSet;
+  color: rgba(0, 0, 0, 0.45);
+`;
+const TimeText = styled.div`
+  text-align: right;
+  font-size: 14px;
+  font-style: SukhumvitSet;
+  color: rgba(0, 0, 0, 1);
 `;

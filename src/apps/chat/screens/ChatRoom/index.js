@@ -94,9 +94,12 @@ function ChatRoom(props) {
 
   const handleCallback = (childData) => {
     console.log("room", childData.split(",")[1]);
-    setMessages([]);
-    setRoom(childData.split(",")[1]);
-    setReceiver(childData.split(",")[0]);
+    if (room !== childData.split(",")[1]) {
+      setMessages([]);
+      setRoom(childData.split(",")[1]);
+      setReceiver(childData.split(",")[0]);
+    }
+
   };
 
   const handleDisconnect = () => {
@@ -115,7 +118,7 @@ function ChatRoom(props) {
         setMessages((msgs) => [...msgs, newMessage]);
       }
     });
-  }, [socket,room]);
+  }, [socket, room]);
 
   const handleChange = (e) => {
     // console.log("room", room);
