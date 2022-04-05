@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
     List as AntdList,
     Avatar,
     Select,
-    message,
     Skeleton,
     Divider,
+    Button,
 } from "antd";
-
+import noImg from "../../assets/images/noImg.jpg";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { encryptStorage } from "../../../utils/encryptStorage";
 import Service from "../../../services/auth.service";
+import { socket } from "../../../services/web-sockets";
+
 const session = encryptStorage.getItem("user_session");
 
 const { Option } = Select;
@@ -23,56 +25,85 @@ function List(props) {
     const [contactList, setContactList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-
+    const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+    // console.log(headers);
     function handleChange(value) {
         console.log(value);
         props.handleCallback(value);
     }
-
-    // const fetchData = async () => {
+    const fetchData = async () => {
+        try {
+            if (loading) {
+                return;
+            }
+            setLoading(true);
+            await axios
+                .get(process.env.REACT_APP_API_URL + "/chats?_sort=time:desc", headers)
+                .then((res) => {
+                    console.log("res", res.data);
+                    var flags = [],
+                        output = [],
+                        l = res.data.length,
+                        i;
+                    for (i = 0; i < l; i++) {
+                        if (flags[res.data[i].room]) continue;
+                        flags[res.data[i].room] = true;
+                        output.push(res.data[i]);
+                    }
+                    console.log("output", output);
+                    setData(output);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setLoading(false);
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    // const getUserData = async () => {
     //     try {
-    //         const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+    //         for (let i = 0; i < data.length; i++) {
+    //             await axios
+    //                 .get(
+    //                     process.env.REACT_APP_API_URL +
+    //                     "/users?_where[id]=" +
+    //                     data[i].room.split(":")[0],
+    //                     headers
+    //                 )
+    //                 .then((res) => {
+    //                     console.log("user", res.data[0]._id);
 
-    //         await axios
-    //             .get(process.env.REACT_APP_API_URL + "/chats?_where[room]=" + room, headers)
-    //             .then((res) => {
-    //                 res.data.map((data) => {
-    //                     // console.log("data", data.room, data.text, data.time, data.user);
+    //                     // setRoomInfo([...roomInfo, {key: res.data.id}]);
+    //                     // setData([...data, ...body.results]);
+    //                     // setRoomInfo(...roomInfo,{key: res.data[0]._id})
+    //                     // setRoomInfo((prevState) => {  });
+    //                     this.setRoomInfo(prevState => ({
+    //                         roomInfo: {                   // object that we want to update
+    //                             ...prevState.roomInfo,    // keep all other key-value pairs
+    //                             name: res.data[0].fullname       // update the value of specific key
+    //                         }
+    //                     }))
+    //                     console.log("roomInfo", roomInfo);
+    //                 })
+    //                 .catch((err) => {
+    //                     console.log(err);
+    //                     setLoading(false);
     //                 });
-    //                 // setLoading(false);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
+    //         }
     //     } catch (err) {
     //         console.error(err);
     //     }
     // };
 
-    const loadMoreData = useCallback(() => {
-        if (loading) {
-            return;
-        }
-        setLoading(true);
-        fetch(
-            "https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo"
-        )
-            .then((res) => res.json())
-            .then((body) => {
-                setData([...data, ...body.results]);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
-            });
-    });
-
     useEffect(() => {
-        loadMoreData();
-    });
+        // loadMoreData();
+        fetchData();
+    }, [socket]);
     useEffect(() => {
         Service.getAllResident().then((user) => {
-            console.log("users", user);
+            // console.log("users", user);
             user.data.map((data) => {
                 setContactList((lists) => [
                     ...lists,
@@ -115,41 +146,62 @@ function List(props) {
                         ))}
                     </Select>
                 </ListHeading>
-                {/* <div
+                <div
                     id="scrollableDiv"
                     style={{
                         // backgroundColor:'#fff',
-                        height: '72vh',
-                        overflow: 'auto',
-                        padding: '0 16px',
+                        height: "72vh",
+                        overflow: "auto",
+                        padding: "0 16px",
                     }}
                 >
                     <InfiniteScroll
                         dataLength={data.length}
-                        next={loadMoreData}
-                        hasMore={data.length < 50}
+                        next={fetchData}
+                        hasMore={data.length < 1}
                         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-                        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+                        endMessage={<Divider plain>It is all, nothing more</Divider>}
                         scrollableTarget="scrollableDiv"
                     >
                         <AntdList
                             dataSource={data}
                             renderItem={(item) => (
-                                <AntdList.Item key={item.id}>
-                                    <AntdList.Item.Meta
-                                    style={{
-                                        // backgroundColor:'#fff',
-                                        // borderBottom: '1px solid rgba(140, 140, 140, 0.35)',
+                                // <button  onClick={handleChange(item.room)}>
+                                <AntdList.Item
+                                    key={item.id}
+                                    onClick={() => {
+                                        props.handleCallback(item.room_info.fullname+","+item.room);
                                     }}
-                                        avatar={<Avatar src={item.picture.large} />}
-                                        title={item.name.last}
-                                        description={item.email}
+                                >
+                                    <AntdList.Item.Meta
+                                        style={{
+                                            // backgroundColor:'#fff',
+                                            borderBottom: "1px solid rgba(140, 140, 140, 0.35)",
+                                            // maxHeight:'10vh'
+                                        }}
+                                        avatar={
+                                            <Avatar
+                                                src={
+                                                    item.room_info.avatar
+                                                        ? process.env.REACT_APP_API_URL +
+                                                        item.room_info.avatar.url
+                                                        : noImg
+                                                }
+                                            />
+                                        }
+                                        title={item.room_info.fullname}
+                                        description={
+                                            item.text.length > 30
+                                                ? item.text.substring(0, 30) + "..."
+                                                : item.text
+                                        }
                                     />
                                 </AntdList.Item>
+                                // </button>
                             )}
                         />
                     </InfiniteScroll>
-                </div> */}
+                </div>
             </StyledList>
         </>
     );
@@ -176,4 +228,10 @@ const ListHeading = styled.div`
   font-size: 20px;
   font-style: SukhumvitSet;
   border-bottom: 1px solid #757591;
+`;
+const textOverx = styled.div`
+  font-size: 20px;
+  font-style: SukhumvitSet;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
