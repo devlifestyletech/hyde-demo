@@ -121,7 +121,6 @@ function ChatRoom(props) {
   }, [socket, room]);
 
   const handleChange = (e) => {
-    // console.log("room", room);
     socket.emit("typing", {
       room: room,
       sender_name: sender_name,
