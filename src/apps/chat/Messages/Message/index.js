@@ -33,6 +33,7 @@ function Message(props) {
     function ImageDemo() {
         return (
             <Image
+                style={{ borderRadius: 10 }}
                 width={200}
                 src={process.env.REACT_APP_API_URL + text}
                 preview={{
@@ -55,16 +56,6 @@ function Message(props) {
                     <MessageText color={textColor}>{text}</MessageText>
                 </MessageBox>
             ) : (
-                // <div style={{ overflow: "hidden", maxHeight: "10%", maxWidth: "40%" }}>
-                //     <Image
-                //         alt="example"
-                //         // style={{ height: "100%" }}
-                //         src={process.env.REACT_APP_API_URL + text}
-                //         preview={{
-                //             src: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-                //         }}
-                //     />
-                // </div>
                 <ImageDemo />
             )}
             {sentBy === "left" ? (
