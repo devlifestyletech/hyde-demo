@@ -28,6 +28,7 @@ function List(props) {
     const [contactList, setContactList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
+    const adminId = session.user._id;
     const headers = { headers: { Authorization: "Bearer " + session.jwt } };
     const thTimeZone = "Asia/Bangkok";
     const toDay = format(utcToZonedTime(new Date(), thTimeZone), "dd-MM-yyyy", {
@@ -131,6 +132,20 @@ function List(props) {
             });
         });
     }, []);
+
+    const History = (item) => {
+        return (
+            <ChatText>
+                {item.type === "chat"
+                    ? item.text.length > 30
+                        ? item.text.substring(0, 30) + "..."
+                        : item.text
+                    : item.sender_id === adminId
+                        ? "You send a photo"
+                        : item.room_info.fullname + "You send a photo"}
+            </ChatText>
+        );
+    };
 
     return (
         <>
@@ -236,9 +251,13 @@ function List(props) {
                                                 </TimeText>
                                             </Row>
                                             <ChatText>
-                                                {item.text.length > 30
-                                                    ? item.text.substring(0, 30) + "..."
-                                                    : item.text}
+                                                {item.type === "chat"
+                                                    ? item.text.length > 30
+                                                        ? item.text.substring(0, 30) + "..."
+                                                        : item.text
+                                                    : item.sender_id === adminId
+                                                        ? "You send a photo"
+                                                        : item.room_info.fullname + " send a photo"}
                                             </ChatText>
                                         </Col>
                                     </Row>

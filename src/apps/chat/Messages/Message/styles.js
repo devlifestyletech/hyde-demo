@@ -35,4 +35,3 @@ export const SentBy = styled.p`
   padding: ${(props) => (props.right ? "0 10px 0 0px" : "0 10px 0 10px")};
   margin: 0;
 `;
-

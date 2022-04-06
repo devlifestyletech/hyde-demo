@@ -28,7 +28,10 @@ function ChatRoom(props) {
   const [room, setRoom] = useState("");
   const [receiver, setReceiver] = useState();
   const [loading, setLoading] = useState(false);
+  const [onSend, setOnSend] = useState(false);
+  const [imageFile, setImageFile] = useState();
   const sender_name = session.user.fullname;
+  const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
   const connectChat = () => {
     if (sender_name && room) {
@@ -55,7 +58,6 @@ function ChatRoom(props) {
 
   const fetchData = async () => {
     try {
-      const headers = { headers: { Authorization: "Bearer " + session.jwt } };
       if (room) {
         await axios
           .get(
@@ -99,7 +101,6 @@ function ChatRoom(props) {
       setRoom(childData.split(",")[1]);
       setReceiver(childData.split(",")[0]);
     }
-
   };
 
   const handleDisconnect = () => {
@@ -135,6 +136,59 @@ function ChatRoom(props) {
       // console.log('Please select room to connect')
       alert("Please select room to connect");
     }
+  };
+
+  const deleteHandle = () => {
+    // setPickedImage(null);
+    setImageFile(null);
+  };
+
+  const selectHandle = (e) => {
+    setImageFile(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        // setPickedImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  useEffect(() => {
+    if (imageFile) uploadImg();
+  }, [imageFile]);
+
+  const uploadImg = async () => {
+    setOnSend(true);
+    let dataImage = new FormData();
+    dataImage.append("files", imageFile);
+    await axios
+      .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
+      .then((res) => {
+        console.log("res", res.data[0].url);
+        let imageUrl = res.data[0].url;
+        socket.emit(
+          "sendMessage",
+          {
+            userData: chatData,
+            type: "image",
+            message: imageUrl,
+            time: new Date().toISOString(),
+          },
+          (error) => {
+            if (error) {
+              alert(error);
+            }
+          }
+        );
+        deleteHandle();
+        setOnSend(false);
+      })
+      .catch((err) => {
+        setOnSend(false);
+        deleteHandle();
+        console.error("Can't add data: ", err);
+      });
   };
 
   const sendMessage = (message) => {
@@ -200,13 +254,35 @@ function ChatRoom(props) {
               >
                 <i className="fa fa-paperclip" />
               </ActionIcon>
-              <ActionIcon
-                onClick={() => {
-                  console.log("image");
+              {room !== "" && !onSend ? (
+                <label htmlFor="input">
+                  <ActionIcon>
+                    <i className="fa fa-image" />
+                  </ActionIcon>
+                </label>
+              ) : (
+                <ActionIcon
+                  onClick={() => {
+                    alert("Please select room to connect");
+                  }}
+                >
+                  <i className="fa fa-image" />
+                </ActionIcon>
+              )}
+              <input
+                type="file"
+                id="input"
+                accept="image/*"
+                onChange={(event) => {
+                  if (room !== "" && !onSend) {
+                    selectHandle(event);
+                  }
                 }}
-              >
-                <i className="fa fa-image" />
-              </ActionIcon>
+                onClick={(event) => {
+                  event.target.value = null;
+                }}
+                style={{ display: "none", float: "left" }}
+              />
               <Input
                 style={{
                   borderRadius: 20,
@@ -223,9 +299,13 @@ function ChatRoom(props) {
                   event.key === "Enter" && handleClick();
                 }}
               />
-              <SendIcon onClick={handleClick}>
-                <i className="fa fa-paper-plane" />
-              </SendIcon>
+              {!onSend ? (
+                <SendIcon onClick={handleClick}>
+                  <i className="fa fa-paper-plane" />
+                </SendIcon>
+              ) : (
+                <Spin size="small" />
+              )}
             </InputBar>
           </ChatBox>
         </StyledContainer>
