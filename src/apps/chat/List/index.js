@@ -70,41 +70,7 @@ function List(props) {
             console.error(err);
         }
     };
-    // const getUserData = async () => {
-    //     try {
-    //         for (let i = 0; i < data.length; i++) {
-    //             await axios
-    //                 .get(
-    //                     process.env.REACT_APP_API_URL +
-    //                     "/users?_where[id]=" +
-    //                     data[i].room.split(":")[0],
-    //                     headers
-    //                 )
-    //                 .then((res) => {
-    //                     console.log("user", res.data[0]._id);
-
-    //                     // setRoomInfo([...roomInfo, {key: res.data.id}]);
-    //                     // setData([...data, ...body.results]);
-    //                     // setRoomInfo(...roomInfo,{key: res.data[0]._id})
-    //                     // setRoomInfo((prevState) => {  });
-    //                     this.setRoomInfo(prevState => ({
-    //                         roomInfo: {                   // object that we want to update
-    //                             ...prevState.roomInfo,    // keep all other key-value pairs
-    //                             name: res.data[0].fullname       // update the value of specific key
-    //                         }
-    //                     }))
-    //                     console.log("roomInfo", roomInfo);
-    //                 })
-    //                 .catch((err) => {
-    //                     console.log(err);
-    //                     setLoading(false);
-    //                 });
-    //         }
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
-
+    
     useEffect(() => {
         console.log("fetch Socket");
         socket.on("fetchHistory", () => {
@@ -133,17 +99,74 @@ function List(props) {
         });
     }, []);
 
-    const History = (item) => {
+    const History = ({ item }) => {
         return (
-            <ChatText>
-                {item.type === "chat"
-                    ? item.text.length > 30
-                        ? item.text.substring(0, 30) + "..."
-                        : item.text
-                    : item.sender_id === adminId
-                        ? "You send a photo"
-                        : item.room_info.fullname + "You send a photo"}
-            </ChatText>
+            <AntdList.Item
+                key={item.id}
+                onClick={() => {
+                    props.handleCallback(item.room_info.fullname + "," + item.room);
+                    props.getAvatar(item.room_info.avatar);
+                }}
+            >
+                <Row>
+                    <Avatar
+                        size={40}
+                        src={
+                            item.room_info.avatar
+                                ? process.env.REACT_APP_API_URL + item.room_info.avatar.url
+                                : noImg
+                        }
+                    />
+                    <Col>
+                        <Row
+                            style={{
+                                width: "20vw",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <TitleText>
+                                {`${item.room_info.fullname.length > 20
+                                        ? item.room_info.fullname.substring(0, 20) + "..."
+                                        : item.room_info.fullname
+                                    } (${item.room.split(":")[1]})`}
+                            </TitleText>
+                            <TimeText>
+                                {toDay ===
+                                    format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "dd-MM-yyyy",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )
+                                    ? format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "HH:mm",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )
+                                    : format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "dd/MM/yyyy HH:mm",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )}
+                            </TimeText>
+                        </Row>
+                        <ChatText>
+                            {item.type === "chat"
+                                ? item.text.length > 30
+                                    ? item.text.substring(0, 30) + "..."
+                                    : item.text
+                                : item.sender_id === adminId
+                                    ? "You send a photo"
+                                    : item.room_info.fullname + " send a photo"}
+                        </ChatText>
+                    </Col>
+                </Row>
+            </AntdList.Item>
         );
     };
 
@@ -191,78 +214,8 @@ function List(props) {
                         scrollableTarget="scrollableDiv"
                     >
                         <AntdList
-                            // itemLayout="vertical"
                             dataSource={data}
-                            renderItem={(item, index) => (
-                                <AntdList.Item
-                                    key={item.id}
-                                    onClick={() => {
-                                        props.handleCallback(
-                                            item.room_info.fullname + "," + item.room
-                                        );
-                                    }}
-                                >
-                                    <Row>
-                                        <Avatar
-                                            size={40}
-                                            src={
-                                                item.room_info.avatar
-                                                    ? process.env.REACT_APP_API_URL +
-                                                    item.room_info.avatar.url
-                                                    : noImg
-                                            }
-                                        />
-                                        <Col>
-                                            <Row
-                                                style={{
-                                                    width: "20vw",
-                                                    justifyContent: "space-between",
-                                                }}
-                                            >
-                                                <TitleText>
-                                                    {`${item.room_info.fullname.length > 20
-                                                            ? item.room_info.fullname.substring(0, 20) + "..."
-                                                            : item.room_info.fullname
-                                                        } (${item.room.split(":")[1]})`}
-                                                </TitleText>
-                                                <TimeText>
-                                                    {toDay ===
-                                                        format(
-                                                            utcToZonedTime(new Date(item.time), thTimeZone),
-                                                            "dd-MM-yyyy",
-                                                            {
-                                                                timeZone: "Asia/Bangkok",
-                                                            }
-                                                        )
-                                                        ? format(
-                                                            utcToZonedTime(new Date(item.time), thTimeZone),
-                                                            "HH:mm",
-                                                            {
-                                                                timeZone: "Asia/Bangkok",
-                                                            }
-                                                        )
-                                                        : format(
-                                                            utcToZonedTime(new Date(item.time), thTimeZone),
-                                                            "dd/MM/yyyy HH:mm",
-                                                            {
-                                                                timeZone: "Asia/Bangkok",
-                                                            }
-                                                        )}
-                                                </TimeText>
-                                            </Row>
-                                            <ChatText>
-                                                {item.type === "chat"
-                                                    ? item.text.length > 30
-                                                        ? item.text.substring(0, 30) + "..."
-                                                        : item.text
-                                                    : item.sender_id === adminId
-                                                        ? "You send a photo"
-                                                        : item.room_info.fullname + " send a photo"}
-                                            </ChatText>
-                                        </Col>
-                                    </Row>
-                                </AntdList.Item>
-                            )}
+                            renderItem={(item) => <History item={item} />}
                         />
                     </InfiniteScroll>
                 </div>

@@ -30,6 +30,7 @@ function ChatRoom(props) {
   const [loading, setLoading] = useState(false);
   const [onSend, setOnSend] = useState(false);
   const [imageFile, setImageFile] = useState();
+  const [userAvatar, setUserAvatar] = useState("");
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
@@ -101,6 +102,10 @@ function ChatRoom(props) {
       setRoom(childData.split(",")[1]);
       setReceiver(childData.split(",")[0]);
     }
+  };
+  const getAvatar = (avatar) => {
+    console.log("room", avatar);
+    setUserAvatar(avatar);
   };
 
   const handleDisconnect = () => {
@@ -234,9 +239,10 @@ function ChatRoom(props) {
       <Heading title="Chat" />
       <ChatContainer>
         <StyledContainer>
-          <List handleCallback={handleCallback} />
+          <List handleCallback={handleCallback} getAvatar={getAvatar} />
           <ChatBox>
             <Header
+              avatar={userAvatar}
               username={receiver}
               room={room}
               handleDisconnect={handleDisconnect}
@@ -286,7 +292,7 @@ function ChatRoom(props) {
               <Input
                 style={{
                   borderRadius: 20,
-                  width: "70%",
+                  width: "80%",
                   marginLeft: 10,
                   marginRight: 20,
                 }}

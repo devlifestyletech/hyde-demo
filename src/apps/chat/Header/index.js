@@ -1,17 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import { Avatar } from "antd";
+import noImg from "../../assets/images/noImg.jpg";
 
-function Header({ username, room, handleDisconnect }) {
-
+function Header({ avatar, username, room, handleDisconnect }) {
+  console.log('avatar',avatar)
   return (
     <StyledHeader>
       {room ? (
         <>
           <OnlineStatusContainer>
-            <OnlineIcon>
-              <i className="fa fa-circle" aria-hidden="true"></i>
-            </OnlineIcon>
-            <div>{username} ({room.split(':')[1]})</div>
+            <Avatar
+              size={40}
+              style={{ margin: "10px 10px 10px 0px" }}
+              src={avatar ? process.env.REACT_APP_API_URL + avatar.url : noImg}
+            />
+            <div>
+              {username} ({room.split(":")[1]})
+            </div>
           </OnlineStatusContainer>
           <CloseIconContainer>
             <CloseIcon onClick={handleDisconnect}>
@@ -47,8 +53,8 @@ const OnlineStatusContainer = styled.div`
   align-items: center;
   margin-left: 5%;
   color: black;
-  font-weight:bold;
-  font-size:1.2rem;
+  font-weight: bold;
+  font-size: 1.2rem;
 `;
 const CloseIconContainer = styled.div`
   margin-right: 5%;

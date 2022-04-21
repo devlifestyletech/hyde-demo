@@ -47,7 +47,7 @@ export const StyledButton = styled(Button)`
   margin: 4px;
 `;
 export const SendIcon = styled.div`
-  color: #fff;
+  color: #494949;
   :hover {
     color: #d8aa81;
   }
@@ -57,7 +57,7 @@ export const SendIcon = styled.div`
   }
 `;
 export const ActionIcon = styled.div`
-  color: #fff;
+  color: #494949;
   :hover {
     color: #d8aa81;
   }
