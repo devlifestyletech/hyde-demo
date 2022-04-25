@@ -1,45 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 //import antd components
-import { Modal, Button, Form, Row, Col, Input, message, DatePicker, Select, Textarea } from 'antd'
-import { DeleteOutlined, SearchOutlined } from '@ant-design/icons'
+import { Modal, Button, Form, Row, Col, Input, message, DatePicker, Select } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
-import './styles/ModalStyle.css'
-import { locale } from '../../../utils/locale'
-import { format } from 'date-fns'
+import './styles/ModalStyle.css';
+import { locale } from '../../../utils/locale';
 
 //import services from "../services"
-import addressService from '../../../services/address.service'
-import authService from '../../../services/auth.service'
+import addressService from '../../../services/address.service';
+import authService from '../../../services/auth.service';
 
 //import svg icon
-import successsIcon from '../assets/icons/success.svg'
-import uploadService from '../../../services/upload.service'
-import ImageIcon from '../assets/icons/image.svg'
+import uploadService from '../../../services/upload.service';
+import ImageIcon from '../assets/icons/image.svg';
 
 //antd variable constraints
-const { Option } = Select
-const { confirm } = Modal
+const { Option } = Select;
+const { confirm } = Modal;
 
 function CreateModal({ visible, onCancel }) {
-	const [CreateResidentForm] = Form.useForm()
-	const [imageFile, setImageFile] = useState(null)
-	const [pickedImage, setPickedImage] = useState(null)
-	const [addresses, setAddresses] = useState()
+	const [CreateResidentForm] = Form.useForm();
+	const [imageFile, setImageFile] = useState(null);
+	const [pickedImage, setPickedImage] = useState(null);
+	const [addresses, setAddresses] = useState();
 
 	useEffect(() => {
-		addressService.getAllAddresses().then((res) => setAddresses(res.data))
-	}, [])
+		addressService.getAllAddresses().then((res) => setAddresses(res.data));
+	}, []);
 
 	const selectImage = (e) => {
-		setImageFile(e.target.files[0])
-		const reader = new FileReader()
+		setImageFile(e.target.files[0]);
+		const reader = new FileReader();
 		reader.onload = (e) => {
 			if (reader.readyState === 2) {
-				setPickedImage(reader.result)
+				setPickedImage(reader.result);
 			}
-		}
-		reader.readAsDataURL(e.target.files[0])
-	}
+		};
+		reader.readAsDataURL(e.target.files[0]);
+	};
 
 	function showConfirm(value, imageData) {
 		confirm({
@@ -49,40 +47,61 @@ function CreateModal({ visible, onCancel }) {
 			okButtonProps: { shape: 'round', size: 'large' },
 			cancelButtonProps: { shape: 'round', size: 'large' },
 			onOk() {
-				message.loading('Action in progress..')
-				uploadService.uploadImage(imageData).then((res) => {
-					let new_value = { image: res.data[0], ...value }
-					console.log(new_value)
-					authService.registration(new_value).then((response) => {
-						let newValue = {
-							address: response.data.address,
-							users_permissions_user: response.data.id,
-							resident_role: response.data.resident_type
-						}
-						authService.addUserToAddress(newValue).then(() => {
-							message.success('Registration finished')
-							onCancel()
+				return new Promise((resolve, reject) => {
+					message.loading('Action in progress please wait...');
+					uploadService
+						.uploadImage(imageData)
+						.then((res) => {
+							let new_value = { image: res.data[0], ...value };
+							console.log(new_value);
+							authService
+								.registration(new_value)
+								.then((response) => {
+									let newValue = {
+										address: response.data.address,
+										users_permissions_user: response.data.id,
+										resident_role: response.data.resident_type,
+									};
+									authService
+										.addUserToAddress(newValue)
+										.then(() => {
+											message.success('Registration finished');
+											resolve('Success');
+											onCancel();
+										})
+										.catch((err) => {
+											console.error(err);
+											reject(err);
+										});
+								})
+								.catch((err) => {
+									console.error(err);
+									reject(err);
+								});
 						})
-					})
-				})
+						.catch((err) => {
+							console.error(err);
+							reject(err);
+						});
+				});
 			},
 			onCancel() {
-				console.log('Cancel')
+				console.log('Cancel');
 			},
 			bodyStyle: { borderRadius: 20 },
 			maskStyle: { borderRadius: 20 },
-			autoFocusButton: null
-		})
+			autoFocusButton: null,
+		});
 	}
 
 	function makeUname(length) {
-		var result = ''
-		var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-		var charactersLength = characters.length
+		var result = '';
+		var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		var charactersLength = characters.length;
 		for (var i = 0; i < length; i++) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength))
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
 		}
-		return result
+		return result;
 	}
 
 	return (
@@ -91,8 +110,8 @@ function CreateModal({ visible, onCancel }) {
 				title='Add New'
 				visible={visible}
 				onCancel={() => {
-					onCancel()
-					setPickedImage(null)
+					onCancel();
+					setPickedImage(null);
 				}}
 				width={950}
 				footer={[
@@ -101,8 +120,8 @@ function CreateModal({ visible, onCancel }) {
 						size='large'
 						style={{ background: 'rgba(216, 170, 129, 1)', color: 'rgba(255, 255, 255,1)' }}
 						onClick={() => {
-							let imageData = new FormData()
-							imageData.append('files', imageFile)
+							let imageData = new FormData();
+							imageData.append('files', imageFile);
 							CreateResidentForm.validateFields().then((value) => {
 								let submit_value = {
 									username: 'hyde_' + makeUname(8),
@@ -123,15 +142,17 @@ function CreateModal({ visible, onCancel }) {
 									resident_type: value.resident_type,
 									resident_class: value.resident_class,
 									vehicle_type: value.vehicle_type,
-									project: '61b464ff4abbaa01b461bc5f'
-								}
-								console.log(submit_value)
-								showConfirm(submit_value, imageData)
-							})
-						}}>
+									project: '61b464ff4abbaa01b461bc5f',
+								};
+								console.log(submit_value);
+								showConfirm(submit_value, imageData);
+							});
+						}}
+					>
 						Add
-					</Button>
-				]}>
+					</Button>,
+				]}
+			>
 				<Form form={CreateResidentForm} layout='vertical'>
 					<Row gutter={40} style={{ padding: 20 }}>
 						<Col span={12}>
@@ -152,11 +173,11 @@ function CreateModal({ visible, onCancel }) {
 											accept='image/*'
 											onChange={selectImage}
 											onClick={(event) => {
-												event.target.value = null
+												event.target.value = null;
 											}}
 											style={{
 												display: 'none',
-												float: 'left'
+												float: 'left',
 											}}
 										/>
 										{pickedImage ? (
@@ -177,9 +198,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please input firstname!'
-										}
-									]}>
+											message: 'Please input firstname!',
+										},
+									]}
+								>
 									<Input placeholder='Please input first name' />
 								</Form.Item>
 								<Form.Item
@@ -188,9 +210,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please input lastname!'
-										}
-									]}>
+											message: 'Please input lastname!',
+										},
+									]}
+								>
 									<Input placeholder='Please input last name' />
 								</Form.Item>
 								<Form.Item
@@ -199,9 +222,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please select date of birth!'
-										}
-									]}>
+											message: 'Please select date of birth!',
+										},
+									]}
+								>
 									<DatePicker placeholder='Please select date' style={{ width: 410, borderRadius: 20 }} />
 								</Form.Item>
 								<Form.Item
@@ -210,9 +234,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please select gender!'
-										}
-									]}>
+											message: 'Please select gender!',
+										},
+									]}
+								>
 									<Select placeholder='Please select gender' style={{ borderRadius: 20 }}>
 										<Select.Option key={'male'} value='Male'>
 											Male
@@ -228,10 +253,15 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please select country!'
-										}
-									]}>
-									<Select placeholder='Type to search and select country' showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+											message: 'Please select country!',
+										},
+									]}
+								>
+									<Select
+										placeholder='Type to search and select country'
+										showSearch
+										filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+									>
 										{locale.map((country, index) => (
 											<Option key={index} value={country['ISO CODES']}>
 												{country['COUNTRY']}
@@ -249,9 +279,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please input ID Card number!'
-										}
-									]}>
+											message: 'Please input ID Card number!',
+										},
+									]}
+								>
 									<Input placeholder='Please input id card' />
 								</Form.Item>
 								<Form.Item label='Passport Number' name='passport_number'>
@@ -273,10 +304,11 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please select resident class!'
-										}
+											message: 'Please select resident class!',
+										},
 									]}
-									name='resident_class'>
+									name='resident_class'
+								>
 									<Select placeholder='Please select resident class'>
 										<Select.Option key={'privilege'} value='Privilege'>
 											Privilege
@@ -292,9 +324,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please select resident type!'
-										}
-									]}>
+											message: 'Please select resident type!',
+										},
+									]}
+								>
 									<Select placeholder='Please select resident type'>
 										<Select.Option key={'owner'} value='Owner'>
 											Owner
@@ -313,9 +346,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please input phone number!'
-										}
-									]}>
+											message: 'Please input phone number!',
+										},
+									]}
+								>
 									<Input placeholder='Please input phone number' />
 								</Form.Item>
 								<Form.Item
@@ -324,9 +358,10 @@ function CreateModal({ visible, onCancel }) {
 									rules={[
 										{
 											required: true,
-											message: 'Please input email!'
-										}
-									]}>
+											message: 'Please input email!',
+										},
+									]}
+								>
 									<Input placeholder='Please input email' />
 								</Form.Item>
 								<Form.Item label='Vehicle Type' name='vehicle_type'>
@@ -348,7 +383,7 @@ function CreateModal({ visible, onCancel }) {
 				</Form>
 			</Modal>
 		</div>
-	)
+	);
 }
 
-export default CreateModal
+export default CreateModal;
