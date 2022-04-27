@@ -3,6 +3,7 @@ import moment from "moment";
 import { encryptStorage } from "../../../../utils/encryptStorage";
 require('dotenv').config()
 const URLreScrpit = `${process.env.REACT_APP_API_URL}/payments`;
+const URLreScrpit2 = `${process.env.REACT_APP_API_URL}/payments/createBillingPayment`;
 const URLAddress = `${process.env.REACT_APP_API_URL}/addresses`;
 const URLUser = `${process.env.REACT_APP_API_URL}/users`;
 const session = encryptStorage.getItem("user_session");
@@ -162,10 +163,10 @@ const postdataRescrpt = async (data) => {
     Receipt_Status_Export: false,
   };
   const result = await Axios
-    .post(`${URLreScrpit}`, postData, options)
+    .post(`${URLreScrpit2}`, postData, options)
     .then(async (res) => {
-
-      return res.status === 200 ? await editAddress(data.address_id, false) : false;
+console.log("payment",res);
+      return res.status === 201 ? await editAddress(data.address_id, false) : false;
     })
     .catch((err) => {
       return false;
