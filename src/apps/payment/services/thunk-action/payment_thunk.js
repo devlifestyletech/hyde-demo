@@ -38,13 +38,11 @@ const getCustomerList=(params) =>{
         if (resultParams.status) {
             dispatch({type:"CHANGE_LOADING_TABLE"})
            
-            const count = await getCountaddressCustomer(resultParams.content)
+            // const count = await getCountaddressCustomer(resultParams.content)
             // eslint-disable-next-line no-unused-expressions
-            count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE",payload:count}):0
-           console.log("countPayment:",count);
             const data = await addressCustomer(resultParams.content)
             if (data !== undefined) {
-           
+                dispatch({type:"CHANGE_DATA_SIZE",payload:data.length})
                 dispatch({
                     payload:data ,
                     type:"DISPLAY_DATATABLE"

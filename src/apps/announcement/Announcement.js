@@ -708,6 +708,7 @@ function Announcement() {
               {
                 title_name: value.title_name,
                 post_status: value.publish_status === 'Now' ? "Published" : value.publish_status,
+                Status_announcements: value.publish_status === 'Now' ? true : false ,
                 announcer: session.user.fullname,
                 detail: value.detail,
                 date_announced: value.publish_status === "Scheduled" ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,

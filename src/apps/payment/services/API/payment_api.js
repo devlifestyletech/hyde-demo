@@ -199,14 +199,16 @@ const addressCustomer = async (params) => {
     .then((result) => {
       result.data.map((e) => {
         let resultAddress = {};
-        resultAddress.address = e.address_number;
-        resultAddress.first_Name = e.owner.first_name_en;
-        resultAddress.last_Name = e.owner.last_name_en;
-        // resultAddress.user_id = e.owner.id;
-        resultAddress.address_id = e.id;
-        resultAddress.fullname = e.owner.fullname;
-        resultAddress.status_billing = e.Status_billpayment;
-        if (e.Status_billpayment) {
+        if (e.owner!=undefined){
+          resultAddress.address = e.address_number;
+          resultAddress.first_Name = e.owner.first_name_en;
+          resultAddress.last_Name = e.owner.last_name_en;
+          // resultAddress.user_id = e.owner.id;
+          resultAddress.address_id = e.id;
+          resultAddress.fullname = e.owner.fullname;
+          resultAddress.status_billing = e.Status_billpayment;
+        }
+        if (e.Status_billpayment&&e.owner!=undefined) {
 
           resultData.push(resultAddress);
         }
