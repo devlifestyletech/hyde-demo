@@ -3,6 +3,7 @@ import moment from "moment";
 import { encryptStorage } from "../../../../utils/encryptStorage";
 require('dotenv').config()
 const URLreScrpit = `${process.env.REACT_APP_API_URL}/payments`;
+const URLreScrpit2 = `${process.env.REACT_APP_API_URL}/payments/createBillingPayment`;
 const URLAddress = `${process.env.REACT_APP_API_URL}/addresses`;
 const URLUser = `${process.env.REACT_APP_API_URL}/users`;
 const session = encryptStorage.getItem("user_session");
@@ -162,10 +163,10 @@ const postdataRescrpt = async (data) => {
     Receipt_Status_Export: false,
   };
   const result = await Axios
-    .post(`${URLreScrpit}`, postData, options)
+    .post(`${URLreScrpit2}`, postData, options)
     .then(async (res) => {
-
-      return res.status === 200 ? await editAddress(data.address_id, false) : false;
+console.log("payment",res);
+      return res.status === 201 ? await editAddress(data.address_id, false) : false;
     })
     .catch((err) => {
       return false;
@@ -198,14 +199,16 @@ const addressCustomer = async (params) => {
     .then((result) => {
       result.data.map((e) => {
         let resultAddress = {};
-        resultAddress.address = e.address_number;
-        resultAddress.first_Name = e.owner.firstname;
-        resultAddress.last_Name = e.owner.lastname;
-        // resultAddress.user_id = e.owner.id;
-        resultAddress.address_id = e.id;
-        resultAddress.fullname = e.owner.fullname;
-        resultAddress.status_billing = e.Status_billpayment;
-        if (e.Status_billpayment) {
+        if (e.owner!=undefined){
+          resultAddress.address = e.address_number;
+          resultAddress.first_Name = e.owner.first_name_en;
+          resultAddress.last_Name = e.owner.last_name_en;
+          // resultAddress.user_id = e.owner.id;
+          resultAddress.address_id = e.id;
+          resultAddress.fullname = e.owner.fullname;
+          resultAddress.status_billing = e.Status_billpayment;
+        }
+        if (e.Status_billpayment&&e.owner!=undefined) {
 
           resultData.push(resultAddress);
         }
