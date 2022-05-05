@@ -46,7 +46,7 @@ function List(props) {
             }
             setLoading(true);
             await axios
-                .get(process.env.REACT_APP_API_URL + "/chats?room_contains=:&_sort=time", headers)
+                .get(process.env.REACT_APP_API_URL + "/chats?room_contains=:&_sort=time:desc", headers)
                 .then((res) => {
                     console.log("res", res.data);
                     var flags = [],
@@ -58,7 +58,7 @@ function List(props) {
                         flags[res.data[i].room] = true;
                         output.push(res.data[i]);
                     }
-                    // console.log("output", output);
+                    console.log("output", output);
                     setData(output);
                     setLoading(false);
                 })
@@ -208,7 +208,7 @@ function List(props) {
                     <InfiniteScroll
                         dataLength={data.length}
                         next={fetchData}
-                        hasMore={data.length < 1}
+                        hasMore={data.length < 0}
                         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
                         endMessage={<Divider plain>It is all, nothing more</Divider>}
                         scrollableTarget="scrollableDiv"

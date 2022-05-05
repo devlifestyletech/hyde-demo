@@ -171,7 +171,7 @@ function SideMenu() {
               </Menu.Item>
               <Menu.Item key="15" className="menu-item">
                 {/* <Link to='/join-room'>Message</Link> */}
-                <Link to="/service-chat">Service Message</Link>
+                <Link to="/service-chat">Messages</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">Settings</div>

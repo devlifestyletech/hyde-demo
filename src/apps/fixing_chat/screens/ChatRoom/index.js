@@ -237,7 +237,7 @@ function ChatRoom(props) {
 
   return (
     <>
-      <Heading title="Service Chat" />
+      <Heading title="Messages" />
       <ChatContainer>
         <StyledContainer>
           <List handleCallback={handleCallback} getAvatar={getAvatar} />

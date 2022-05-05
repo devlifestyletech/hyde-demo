@@ -4,7 +4,7 @@ import { Avatar } from "antd";
 import noImg from "../../assets/images/noImg.jpg";
 
 function Header({ avatar, username, room, handleDisconnect }) {
-  console.log('avatar',avatar)
+  console.log("avatar", avatar);
   return (
     <StyledHeader>
       {room ? (
@@ -16,7 +16,8 @@ function Header({ avatar, username, room, handleDisconnect }) {
               src={avatar ? process.env.REACT_APP_API_URL + avatar.url : noImg}
             />
             <div>
-              {username} ({room.split(":")[1]})
+              {username} (
+              {room.includes(":") ? room.split(":")[1] : room.split("!")[1]})
             </div>
           </OnlineStatusContainer>
           <CloseIconContainer>

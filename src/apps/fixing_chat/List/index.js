@@ -46,7 +46,11 @@ function List(props) {
             }
             setLoading(true);
             await axios
-                .get(process.env.REACT_APP_API_URL + "/chats?room_contains=!&_sort=time", headers)
+                .get(
+                    process.env.REACT_APP_API_URL +
+                    "/chats?room_contains=!&_sort=time:desc",
+                    headers
+                )
                 .then((res) => {
                     console.log("res", res.data);
                     var flags = [],
@@ -58,7 +62,7 @@ function List(props) {
                         flags[res.data[i].room] = true;
                         output.push(res.data[i]);
                     }
-                    // console.log("output", output);
+                    console.log("output", output);
                     setData(output);
                     setLoading(false);
                 })
@@ -70,7 +74,7 @@ function List(props) {
             console.error(err);
         }
     };
-    
+
     useEffect(() => {
         console.log("fetch Socket");
         socket.on("fetchHistory", () => {
@@ -84,14 +88,16 @@ function List(props) {
     }, []);
 
     useEffect(() => {
-        Service.getAllResident().then((user) => {
-            // console.log("users", user);
-            user.data.map((data) => {
+        Service.getAllFixing().then((report) => {
+            console.log("report", report.data[0]._id);
+            console.log("report", report.data[0].problem);
+            console.log("report", report.data[0].address.address_number);
+            report.data.map((data) => {
                 setContactList((lists) => [
                     ...lists,
                     {
                         id: data._id,
-                        name: data.fullname,
+                        name: data.problem,
                         room: data.address.address_number,
                     },
                 ]);
@@ -100,20 +106,37 @@ function List(props) {
     }, []);
 
     const History = ({ item }) => {
+        console.log("ii", item);
         return (
             <AntdList.Item
                 key={item.id}
                 onClick={() => {
-                    props.handleCallback(item.room_info.fullname + "," + item.room);
-                    props.getAvatar(item.room_info.avatar);
+                    props.handleCallback(item.fixing_info.problem + "," + item.room);
+                    props.getAvatar(item.fixing_info.image_pending[0]);
                 }}
             >
-                <Row>
+                <Row
+                    style={
+                        {
+                            // backgroundColor: "coral",
+                        }
+                    }
+                >
+                    <div
+                        style={{
+                            width: "0.4vw",
+                            backgroundColor: "red",
+                        }}
+                    ></div>
                     <Avatar
+                        style={{
+                            marginLeft: "0.4vw",
+                        }}
                         size={40}
                         src={
-                            item.room_info.avatar
-                                ? process.env.REACT_APP_API_URL + item.room_info.avatar.url
+                            item.fixing_info.image_pending[0]
+                                ? process.env.REACT_APP_API_URL +
+                                item.fixing_info.image_pending[0].url
                                 : noImg
                         }
                     />
@@ -125,10 +148,10 @@ function List(props) {
                             }}
                         >
                             <TitleText>
-                                {`${item.room_info.fullname.length > 20
-                                        ? item.room_info.fullname.substring(0, 20) + "..."
-                                        : item.room_info.fullname
-                                    } (${item.room.split(":")[1]})`}
+                                {`${item.fixing_info.problem.length > 20
+                                    ? item.fixing_info.problem.substring(0, 20) + "..."
+                                    : item.fixing_info.problem
+                                    } (${item.room.split("!")[1]})`}
                             </TitleText>
                             <TimeText>
                                 {toDay ===
@@ -227,6 +250,7 @@ function List(props) {
 export default List;
 
 const StyledList = styled(AntdList)`
+  // background-color: green;
   margin-right: 10px;
   flex: 0 0 35%;
   padding: 20px;
@@ -240,7 +264,6 @@ const StyledList = styled(AntdList)`
     color: #097ef0;
   }
 `;
-
 const ListHeading = styled.div`
   font-size: 20px;
   font-style: SukhumvitSet;

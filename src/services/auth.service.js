@@ -32,6 +32,17 @@ export default {
 			throw error
 		}
 	},
+	getAllFixing: async function () {
+		try {
+			return await axios.get(`${process.env.REACT_APP_API_URL}/fixing-reports`, {
+				headers: { Authorization: 'Bearer ' + session.jwt }
+			})
+		} catch (error) {
+			console.error(error)
+			throw error
+		}
+	},
+
 	logout: async function () {
 		try {
 			encryptStorage.removeItem('user_session')
