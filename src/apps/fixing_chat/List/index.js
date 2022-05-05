@@ -46,7 +46,7 @@ function List(props) {
             }
             setLoading(true);
             await axios
-                .get(process.env.REACT_APP_API_URL + "/chats?room_notContains=:&_sort=time", headers)
+                .get(process.env.REACT_APP_API_URL + "/chats?room_contains=!&_sort=time", headers)
                 .then((res) => {
                     console.log("res", res.data);
                     var flags = [],
