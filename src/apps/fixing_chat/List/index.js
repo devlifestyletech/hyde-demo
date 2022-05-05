@@ -115,45 +115,62 @@ function List(props) {
                     props.getAvatar(item.fixing_info.image_pending[0]);
                 }}
             >
-                <Row
-                    style={
-                        {
-                            // backgroundColor: "coral",
-                        }
-                    }
-                >
-                    <div
-                        style={{
+                <ListComp style={{
+                    width: "100%",
+                    height: "10vh",
+                    // marginBottom: 5
+                }}>
+                    <Row>
+                        <Row style={{
                             width: "0.4vw",
+                            height: "10vh",
                             backgroundColor: "red",
                         }}
-                    ></div>
-                    <Avatar
-                        style={{
+                        />
+                        <Avatar style={{
+                            alignSelf: "center",
                             marginLeft: "0.4vw",
                         }}
-                        size={40}
-                        src={
-                            item.fixing_info.image_pending[0]
-                                ? process.env.REACT_APP_API_URL +
-                                item.fixing_info.image_pending[0].url
-                                : noImg
-                        }
-                    />
-                    <Col>
-                        <Row
-                            style={{
-                                width: "20vw",
-                                justifyContent: "space-between",
-                            }}
-                        >
-                            <TitleText>
-                                {`${item.fixing_info.problem.length > 20
-                                    ? item.fixing_info.problem.substring(0, 20) + "..."
-                                    : item.fixing_info.problem
-                                    } (${item.room.split("!")[1]})`}
-                            </TitleText>
-                            <TimeText>
+                            size={60}
+                            src={
+                                item.fixing_info.image_pending[0]
+                                    ? process.env.REACT_APP_API_URL +
+                                    item.fixing_info.image_pending[0].url
+                                    : noImg
+                            }
+                        />
+                        <Row style={{
+                            // backgroundColor: "green",
+                            justifyContent: 'space-between',
+                            width: "78.2%",
+                        }}>
+                            <Col
+                                style={{
+
+                                    alignSelf: "center",
+                                    // width: "60%",
+                                }}
+                            >
+                                <TitleText >
+                                    {`${item.fixing_info.problem.length > 20
+                                        ? item.fixing_info.problem.substring(0, 20) + "..."
+                                        : item.fixing_info.problem
+                                        } (${item.room.split("!")[1]})`}
+                                </TitleText>
+                                <ChatText>
+                                    {item.type === "chat"
+                                        ? item.text.length > 30
+                                            ? item.text.substring(0, 30) + "..."
+                                            : item.text
+                                        : item.sender_id === adminId
+                                            ? "You send a photo"
+                                            : item.room_info.fullname + " send a photo"}
+                                </ChatText>
+                            </Col>
+                            <TimeText style={{
+                                // width: "10%",
+                                // backgroundColor: "coral",
+                            }}>
                                 {toDay ===
                                     format(
                                         utcToZonedTime(new Date(item.time), thTimeZone),
@@ -176,19 +193,8 @@ function List(props) {
                                             timeZone: "Asia/Bangkok",
                                         }
                                     )}
-                            </TimeText>
-                        </Row>
-                        <ChatText>
-                            {item.type === "chat"
-                                ? item.text.length > 30
-                                    ? item.text.substring(0, 30) + "..."
-                                    : item.text
-                                : item.sender_id === adminId
-                                    ? "You send a photo"
-                                    : item.room_info.fullname + " send a photo"}
-                        </ChatText>
-                    </Col>
-                </Row>
+                            </TimeText></Row>
+                    </Row></ListComp>
             </AntdList.Item>
         );
     };
@@ -250,10 +256,16 @@ function List(props) {
 export default List;
 
 const StyledList = styled(AntdList)`
-  // background-color: green;
-  margin-right: 10px;
+  //   background-color: green;
+  //   padding-top: 10px;
   flex: 0 0 35%;
   padding: 20px;
+  .ant-list-item {
+    padding: 0 !important;
+  }
+  .ant-list-split .ant-list-item {
+    border-bottom: 0px;
+  }
   .ant-list-item-meta-content {
     flex-grow: 0;
   }
@@ -262,6 +274,12 @@ const StyledList = styled(AntdList)`
   }
   a {
     color: #097ef0;
+  }
+`;
+const ListComp = styled.div`
+background-color: white;
+:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 const ListHeading = styled.div`
@@ -282,7 +300,7 @@ const ChatText = styled.div`
 `;
 const TimeText = styled.div`
   text-align: right;
-  font-size: 14px;
+  font-size: 12px;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 1);
 `;
