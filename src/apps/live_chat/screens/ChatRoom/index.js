@@ -33,6 +33,7 @@ function ChatRoom(props) {
   const [userAvatar, setUserAvatar] = useState("");
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+  console.log(session.jwt)
 
   const connectChat = () => {
     if (sender_name && room) {
@@ -236,7 +237,7 @@ function ChatRoom(props) {
 
   return (
     <>
-      <Heading title="Chat" />
+      <Heading title="Live Chat" />
       <ChatContainer>
         <StyledContainer>
           <List handleCallback={handleCallback} getAvatar={getAvatar} />

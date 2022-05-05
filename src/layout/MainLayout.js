@@ -20,10 +20,10 @@ import Announcement from "../apps/announcement/Announcement";
 //Fixing
 import FixingReports from "../apps/fixing_report/view/Fixing_Reports";
 import FixingReportDashBoard from "../apps/fixing_report/view/Fixing_Report_DashBoard";
+import FixingChat from "../apps/fixing_chat/screens/ChatRoom";
 
 //Chat
-import JoinRoom from "../apps/chat/screens/JoinRoom";
-import ChatRoom from "../apps/chat/screens/ChatRoom";
+import LiveChat from "../apps/live_chat/screens/ChatRoom";
 
 //Facilities
 import FacilitiesManagementDashboardPage from "../apps/facility_management/views/dashboard.page";
@@ -101,8 +101,8 @@ function MainLayout() {
           />
 
           {/* Chat */}
-          <Route path="/join-room" element={<JoinRoom />} />
-          <Route path="/chat-room" element={<ChatRoom />} />
+          <Route path="/service-chat" element={<FixingChat />} />
+          <Route path="/live-chat" element={<LiveChat />} />
 
           {/* Payment */}
           <Route path="/payment/bill-payment" element={<Payment_success />} />
