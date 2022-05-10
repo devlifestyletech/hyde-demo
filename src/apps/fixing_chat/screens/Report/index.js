@@ -1,30 +1,37 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { ReportContainer, StyledContainer, StyledHeader } from "./styles";
-import { Spin } from "antd";
-
+import {
+  ReportContainer,
+  StyledContainer,
+  StyledHeader,
+  HeaderContainer,
+  NoContainer,
+} from "./styles";
+import { Spin, Image } from "antd";
+import noImg from "../../../assets/images/noImg.jpg";
 import axios from "axios";
 import { encryptStorage } from "../../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
-function ReportDetail(props) {
-  const [room, setRoom] = useState("");
-  const [receiver, setReceiver] = useState();
+function ReportDetail({ reportId }) {
+  const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
-  const [userAvatar, setUserAvatar] = useState("");
-  const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
   const fetchData = async () => {
     try {
-      if (room) {
+      if (reportId) {
         await axios
           .get(
-            process.env.REACT_APP_API_URL + "/chats?_where[room]=" + room,
+            process.env.REACT_APP_API_URL +
+              "/fixing-reports?_where[id]=" +
+              reportId,
             headers
           )
           .then((res) => {
+            console.log("reportData", res.data);
+            setReportData(res.data[0]);
             setLoading(false);
           })
           .catch((err) => {
@@ -36,14 +43,33 @@ function ReportDetail(props) {
     }
   };
 
+  const ShowReport = () => {
+    return reportData ? (
+      <Image
+        style={{
+          width: "100%",
+          height: "20vwh",
+          alignSelf: "center",
+        }}
+        src={
+          reportData.image_pending[0]
+            ? process.env.REACT_APP_API_URL + reportData.image_pending[0].url
+            : noImg
+        }
+      />
+    ) : (
+      <NoContainer>No Room Selected</NoContainer>
+    );
+  };
+
   const Loading = () => {
     return (
       <div
         style={{
-          // width: "80vw",
-          height: "100vh",
+          width: "100%",
+          height: "100%",
           textAlign: "center",
-          paddingTop: 300,
+          paddingTop: "30vh",
         }}
       >
         <Spin size="large" />
@@ -52,11 +78,23 @@ function ReportDetail(props) {
     );
   };
 
+  useEffect(() => {
+    fetchData();
+    setLoading(true);
+    setTimeout(() => {
+      if (!reportId) setLoading(false);
+    }, 2000);
+  }, [reportId]);
+
   return (
     <>
       <ReportContainer>
-      <StyledHeader></StyledHeader>
-        <StyledContainer></StyledContainer>
+        <StyledHeader>
+          <HeaderContainer>Details</HeaderContainer>
+        </StyledHeader>
+        <StyledContainer>
+          {loading ? <Loading /> : <ShowReport />}
+        </StyledContainer>
       </ReportContainer>
     </>
   );

@@ -19,6 +19,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { encryptStorage } from "../../../utils/encryptStorage";
 import Service from "../../../services/auth.service";
 import { socket } from "../../../services/web-sockets";
+import { getRenderPropValue } from "antd/lib/_util/getRenderPropValue";
 
 const session = encryptStorage.getItem("user_session");
 
@@ -53,7 +54,6 @@ function List(props) {
                     headers
                 )
                 .then((res) => {
-                    console.log("res", res.data);
                     var flags = [],
                         output = [],
                         l = res.data.length,
@@ -63,7 +63,6 @@ function List(props) {
                         flags[res.data[i].room] = true;
                         output.push(res.data[i]);
                     }
-                    console.log("output", output);
                     setData(output);
                     setLoading(false);
                 })
@@ -77,7 +76,6 @@ function List(props) {
     };
 
     useEffect(() => {
-        console.log("fetch Socket");
         socket.on("fetchHistory", () => {
             console.log("fetchData");
             fetchData();
@@ -90,9 +88,6 @@ function List(props) {
 
     useEffect(() => {
         Service.getAllFixing().then((report) => {
-            console.log("report", report.data[0]._id);
-            console.log("report", report.data[0].problem);
-            console.log("report", report.data[0].address.address_number);
             report.data.map((data) => {
                 setContactList((lists) => [
                     ...lists,
@@ -107,7 +102,6 @@ function List(props) {
     }, []);
 
     const History = ({ item }) => {
-        console.log("ii", item);
         return (
             <AntdList.Item
                 key={item.id}
@@ -115,6 +109,7 @@ function List(props) {
                     props.handleCallback(item.fixing_info.problem + "," + item.room);
                     props.getAvatar(item.fixing_info.image_pending[0]);
                     props.getStatus(status[item.fixing_info.status])
+                    props.getReportId(item.fixing_info._id)
                 }}
             >
                 <ListComp style={{
@@ -142,31 +137,9 @@ function List(props) {
                                     : noImg
                             }
                         />
-                        <Row style={{
-                            justifyContent: 'space-between',
-                            width: "78.2%",
+                        <div style={{
+                            flex:1
                         }}>
-                            <Col
-                                style={{
-                                    alignSelf: "center",
-                                }}
-                            >
-                                <TitleText >
-                                    {`${item.fixing_info.problem.length > 20
-                                        ? item.fixing_info.problem.substring(0, 20) + "..."
-                                        : item.fixing_info.problem
-                                        } (${item.room.split("!")[1]})`}
-                                </TitleText>
-                                <ChatText>
-                                    {item.type === "chat"
-                                        ? item.text.length > 30
-                                            ? item.text.substring(0, 30) + "..."
-                                            : item.text
-                                        : item.sender_id === adminId
-                                            ? "You send a photo"
-                                            : item.room_info.fullname + " send a photo"}
-                                </ChatText>
-                            </Col>
                             <TimeText >
                                 {toDay ===
                                     format(
@@ -190,8 +163,32 @@ function List(props) {
                                             timeZone: "Asia/Bangkok",
                                         }
                                     )}
-                            </TimeText></Row>
-                    </Row></ListComp>
+                            </TimeText>
+                            <Col
+                                style={{
+                                    alignSelf: "center",
+                                }}
+                            >
+                                <TitleText >
+                                    {`${item.fixing_info.problem.length > 20
+                                        ? item.fixing_info.problem.substring(0, 20) + "..."
+                                        : item.fixing_info.problem
+                                        } (${item.room.split("!")[1]})`}
+                                </TitleText>
+                                <ChatText>
+                                    {item.type === "chat"
+                                        ? item.text.length > 30
+                                            ? item.text.substring(0, 30) + "..."
+                                            : item.text
+                                        : item.sender_id === adminId
+                                            ? "You send a photo"
+                                            : item.room_info.fullname + " send a photo"}
+                                </ChatText>
+                            </Col>
+                            
+                            </div>
+                    </Row>
+                </ListComp>
             </AntdList.Item>
         );
     };
@@ -285,21 +282,23 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  margin-left: 10px;
-  font-size: 16px;
+// background-color: cyan;
+  margin-left: 1vh;
+  font-size: 0.88vw;
   font-style: SukhumvitSet;
 `;
 const ChatText = styled.div`
-  margin-left: 10px;
-  font-size: 14px;
+// background-color: coral;
+  margin-left: 1vh;
+  font-size: 0.76vw;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`
 // background-color: green;
- margin:  1vh 1vh 0 0;
+ margin:  1vh 1vh 0 1vh;
   text-align: right;
-  font-size: 12px;
+  font-size: 0.64vw;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 1);
 `;

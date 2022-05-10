@@ -4,13 +4,14 @@ import { Button } from "antd";
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex:1;
   justify-content: center;
   background: #f2f2f2;
   // padding: 10px 0px 0px 10px;
   margin-right: 2vh;
-  width: 74%;
+  // width: 74%;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  height: 76vh;
+  height: 70vh;
   border-radius: 20px;
 `;
 
@@ -36,6 +37,7 @@ export const InputBar = styled.div`
   display: flex;
   align-items: center;
   border-radius: 0px 0px 20px 0px;
+  padding: 0 1vw 0 1vw;
   width: 100%;
   background: #d3d3d3;
   justify-content: center;

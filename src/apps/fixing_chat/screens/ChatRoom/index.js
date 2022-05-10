@@ -33,10 +33,10 @@ function ChatRoom(props) {
   const [imageFile, setImageFile] = useState();
   const [userAvatar, setUserAvatar] = useState("");
   const [fixingStatus, setFixingStatus] = useState("");
+  const [fixingReportId, setFixingReportId] = useState("");
   const [searchTag, setSearchTag] = useState("");
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
-  // console.log(session.jwt)
 
   const types = ["All", "Pending", "Repairing", "Success"];
   const { TabPane } = Tabs;
@@ -113,7 +113,11 @@ function ChatRoom(props) {
   };
   const getStatus = (status) => {
     console.log("status", status);
-    setFixingStatus(status)
+    setFixingStatus(status);
+  };
+  const getReportId = (reportId) => {
+    console.log("report", reportId);
+    setFixingReportId(reportId);
   };
 
   const handleDisconnect = () => {
@@ -144,7 +148,6 @@ function ChatRoom(props) {
     if (room !== "") {
       if (message) sendMessage(message);
     } else {
-      // console.log('Please select room to connect')
       alert("Please select room to connect");
     }
   };
@@ -255,10 +258,15 @@ function ChatRoom(props) {
           ))}
         </Tabs>
       </div>
-      <Row >
+      <Row>
         <ChatContainer>
           <StyledContainer>
-            <List handleCallback={handleCallback} getAvatar={getAvatar} getStatus={getStatus} />
+            <List
+              handleCallback={handleCallback}
+              getAvatar={getAvatar}
+              getStatus={getStatus}
+              getReportId={getReportId}
+            />
             <ChatBox>
               <Header
                 avatar={userAvatar}
@@ -336,7 +344,7 @@ function ChatRoom(props) {
             </ChatBox>
           </StyledContainer>
         </ChatContainer>
-        <ReportDetail />
+        <ReportDetail reportId={fixingReportId} status={fixingStatus} />
       </Row>
     </>
   );
