@@ -1,35 +1,49 @@
 import React from "react";
 import styled from "styled-components";
-import { Avatar } from "antd";
+import { Avatar, Row } from "antd";
 import noImg from "../../assets/images/noImg.jpg";
 
-function Header({ avatar, username, room, handleDisconnect }) {
-  console.log("avatar", avatar);
+function Header({ avatar, username, room, status, handleDisconnect }) {
+  console.log("avatar status", status);
   return (
     <StyledHeader>
       {room ? (
         <>
-          <OnlineStatusContainer>
+          <HeaderContainer>
+            {status ? (
+              <Row
+                style={{
+                  width: "0.4vw",
+                  height: "60px",
+                  marginRight: "0.4vw",
+                  backgroundColor: status,
+                }}
+              />
+            ) : null}
             <Avatar
-              size={40}
-              style={{ margin: "10px 10px 10px 0px" }}
+              style={{
+                width: "2.4vw",
+                height: "2.4vw",
+                margin: "10px 10px 10px 0px",
+              }}
               src={avatar ? process.env.REACT_APP_API_URL + avatar.url : noImg}
             />
             <div>
               {username} (
               {room.includes(":") ? room.split(":")[1] : room.split("!")[1]})
             </div>
-          </OnlineStatusContainer>
-          <CloseIconContainer>
-            <CloseIcon onClick={handleDisconnect}>
-              <i className="fa fa-times-circle" aria-hidden="true"></i>
-            </CloseIcon>
-          </CloseIconContainer>
+          </HeaderContainer>
         </>
       ) : (
-        <OnlineStatusContainer>
-          <div>No room selected</div>
-        </OnlineStatusContainer>
+        <HeaderContainer>
+          <div
+            style={{
+              marginLeft: "0.4vw",
+            }}
+          >
+            No room selected
+          </div>
+        </HeaderContainer>
       )}
     </StyledHeader>
   );
@@ -38,35 +52,21 @@ function Header({ avatar, username, room, handleDisconnect }) {
 export default Header;
 
 const StyledHeader = styled.div`
+  background-color: white;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  // background: #d8aa81;
-  background: white;
+  // align-items: center;
+  // justify-content: space-between;
   border-radius: 0px 20px 0 0;
   height: 60px;
   width: 100%;
   border-bottom: 1px solid #757591;
 `;
-const OnlineStatusContainer = styled.div`
-  flex: 0.5;
+const HeaderContainer = styled.div`
+  // background-color: red;
+  flex: 1;
   display: flex;
   align-items: center;
-  margin-left: 5%;
   color: black;
   font-weight: bold;
   font-size: 1.2rem;
-`;
-const CloseIconContainer = styled.div`
-  margin-right: 5%;
-`;
-
-const OnlineIcon = styled.div`
-  color: #11ec11;
-  margin-right: 10px;
-`;
-
-const CloseIcon = styled.div`
-  font-size: 20px;
-  color: #757591;
 `;

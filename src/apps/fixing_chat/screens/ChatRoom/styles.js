@@ -7,10 +7,10 @@ export const ChatContainer = styled.div`
   justify-content: center;
   background: #f2f2f2;
   // padding: 10px 0px 0px 10px;
-  margin: 1vh auto;
-  max-width: 80vw;
+  margin-right: 2vh;
+  width: 74%;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  height: 80vh;
+  height: 76vh;
   border-radius: 20px;
 `;
 

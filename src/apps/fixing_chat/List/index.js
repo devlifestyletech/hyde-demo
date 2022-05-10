@@ -34,7 +34,8 @@ function List(props) {
     const toDay = format(utcToZonedTime(new Date(), thTimeZone), "dd-MM-yyyy", {
         timeZone: "Asia/Bangkok",
     });
-    // console.log(toDay)
+    const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
+
     function handleChange(value) {
         console.log(value);
         props.handleCallback(value);
@@ -113,6 +114,7 @@ function List(props) {
                 onClick={() => {
                     props.handleCallback(item.fixing_info.problem + "," + item.room);
                     props.getAvatar(item.fixing_info.image_pending[0]);
+                    props.getStatus(status[item.fixing_info.status])
                 }}
             >
                 <ListComp style={{
@@ -124,14 +126,15 @@ function List(props) {
                         <Row style={{
                             width: "0.4vw",
                             height: "10vh",
-                            backgroundColor: "red",
+                            backgroundColor: status[item.fixing_info.status],
                         }}
                         />
                         <Avatar style={{
+                            width: "3.2vw",
+                            height: "3.2vw",
                             alignSelf: "center",
                             marginLeft: "0.4vw",
                         }}
-                            size={60}
                             src={
                                 item.fixing_info.image_pending[0]
                                     ? process.env.REACT_APP_API_URL +
@@ -140,15 +143,12 @@ function List(props) {
                             }
                         />
                         <Row style={{
-                            // backgroundColor: "green",
                             justifyContent: 'space-between',
                             width: "78.2%",
                         }}>
                             <Col
                                 style={{
-
                                     alignSelf: "center",
-                                    // width: "60%",
                                 }}
                             >
                                 <TitleText >
@@ -167,10 +167,7 @@ function List(props) {
                                             : item.room_info.fullname + " send a photo"}
                                 </ChatText>
                             </Col>
-                            <TimeText style={{
-                                // width: "10%",
-                                // backgroundColor: "coral",
-                            }}>
+                            <TimeText >
                                 {toDay ===
                                     format(
                                         utcToZonedTime(new Date(item.time), thTimeZone),
@@ -220,7 +217,7 @@ function List(props) {
                     >
                         {contactList.map((data, index) => (
                             <Option
-                                value={`${data.name},${data.id}:${data.room}`}
+                                value={`${data.name},${data.id}!${data.room}`}
                                 key={index}
                             >
                                 {`${data.name} (${data.room})`}
@@ -299,6 +296,8 @@ const ChatText = styled.div`
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`
+// background-color: green;
+ margin:  1vh 1vh 0 0;
   text-align: right;
   font-size: 12px;
   font-style: SukhumvitSet;

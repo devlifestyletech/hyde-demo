@@ -7,6 +7,7 @@ import Heading from "../../../../components/Header";
 import Header from "../../Header";
 import Messages from "../../Messages";
 import List from "../../List";
+import ReportDetail from "../Report";
 import {
   ChatContainer,
   StyledContainer,
@@ -15,7 +16,7 @@ import {
   SendIcon,
   InputBar,
 } from "./styles";
-import { Input, Spin } from "antd";
+import { Input, Spin, Tabs, Row } from "antd";
 
 import axios from "axios";
 import { encryptStorage } from "../../../../utils/encryptStorage";
@@ -31,14 +32,17 @@ function ChatRoom(props) {
   const [onSend, setOnSend] = useState(false);
   const [imageFile, setImageFile] = useState();
   const [userAvatar, setUserAvatar] = useState("");
+  const [fixingStatus, setFixingStatus] = useState("");
+  const [searchTag, setSearchTag] = useState("");
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
-  console.log(session.jwt)
+  // console.log(session.jwt)
+
+  const types = ["All", "Pending", "Repairing", "Success"];
+  const { TabPane } = Tabs;
 
   const connectChat = () => {
     if (sender_name && room) {
-      // console.log("messages", messages);
-      // console.log("roomNum", room);
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
       setChatData({
@@ -51,7 +55,6 @@ function ChatRoom(props) {
         console.log("JoinData", data);
       });
       if (messages.length === 0) {
-        // console.log("Do Fetch", messages);
         setLoading(true);
         fetchData();
       }
@@ -68,7 +71,6 @@ function ChatRoom(props) {
           )
           .then((res) => {
             res.data.map((data) => {
-              // console.log("data", data.room, data.text, data.time, data.user);
               setMessages((msgs) => [
                 ...msgs,
                 {
@@ -104,9 +106,14 @@ function ChatRoom(props) {
       setReceiver(childData.split(",")[0]);
     }
   };
+
   const getAvatar = (avatar) => {
     console.log("room", avatar);
     setUserAvatar(avatar);
+  };
+  const getStatus = (status) => {
+    console.log("status", status);
+    setFixingStatus(status)
   };
 
   const handleDisconnect = () => {
@@ -118,9 +125,7 @@ function ChatRoom(props) {
   }, [room]);
 
   useEffect(() => {
-    // console.log("Socket-->", room);
     socket.on("message", (newMessage, error) => {
-      // console.log("newMessage-->", newMessage.room, room);
       if (newMessage.room === room) {
         setMessages((msgs) => [...msgs, newMessage]);
       }
@@ -219,6 +224,11 @@ function ChatRoom(props) {
     }
   };
 
+  const callback = (key) => {
+    console.log(types[parseInt(key)]);
+    setSearchTag(types[parseInt(key)]);
+  };
+
   const Loading = () => {
     return (
       <div
@@ -238,85 +248,96 @@ function ChatRoom(props) {
   return (
     <>
       <Heading title="Messages" />
-      <ChatContainer>
-        <StyledContainer>
-          <List handleCallback={handleCallback} getAvatar={getAvatar} />
-          <ChatBox>
-            <Header
-              avatar={userAvatar}
-              username={receiver}
-              room={room}
-              handleDisconnect={handleDisconnect}
-            />
-            {loading ? (
-              <Loading />
-            ) : (
-              <Messages room={room} messages={messages} />
-            )}
-            <InputBar>
-              <ActionIcon
-                onClick={() => {
-                  // console.log("ContactList", contactList);
-                }}
-              >
-                <i className="fa fa-paperclip" />
-              </ActionIcon>
-              {room !== "" && !onSend ? (
-                <label htmlFor="input">
-                  <ActionIcon>
-                    <i className="fa fa-image" />
-                  </ActionIcon>
-                </label>
+      <div className="regis-table">
+        <Tabs defaultActiveKey="All Service" onChange={callback}>
+          {types.map((type, index) => (
+            <TabPane tab={type} key={index} />
+          ))}
+        </Tabs>
+      </div>
+      <Row >
+        <ChatContainer>
+          <StyledContainer>
+            <List handleCallback={handleCallback} getAvatar={getAvatar} getStatus={getStatus} />
+            <ChatBox>
+              <Header
+                avatar={userAvatar}
+                status={fixingStatus}
+                username={receiver}
+                room={room}
+                handleDisconnect={handleDisconnect}
+              />
+              {loading ? (
+                <Loading />
               ) : (
+                <Messages room={room} messages={messages} />
+              )}
+              <InputBar>
                 <ActionIcon
                   onClick={() => {
-                    alert("Please select room to connect");
+                    // console.log("ContactList", contactList);
                   }}
                 >
-                  <i className="fa fa-image" />
+                  <i className="fa fa-paperclip" />
                 </ActionIcon>
-              )}
-              <input
-                type="file"
-                id="input"
-                accept="image/*"
-                onChange={(event) => {
-                  if (room !== "" && !onSend) {
-                    selectHandle(event);
-                  }
-                }}
-                onClick={(event) => {
-                  event.target.value = null;
-                }}
-                style={{ display: "none", float: "left" }}
-              />
-              <Input
-                style={{
-                  borderRadius: 20,
-                  width: "80%",
-                  marginLeft: 10,
-                  marginRight: 20,
-                }}
-                size="large"
-                type="text"
-                placeholder="Type your message"
-                value={message}
-                onChange={handleChange}
-                onKeyPress={(event) => {
-                  event.key === "Enter" && handleClick();
-                }}
-              />
-              {!onSend ? (
-                <SendIcon onClick={handleClick}>
-                  <i className="fa fa-paper-plane" />
-                </SendIcon>
-              ) : (
-                <Spin size="small" />
-              )}
-            </InputBar>
-          </ChatBox>
-        </StyledContainer>
-      </ChatContainer>
+                {room !== "" && !onSend ? (
+                  <label htmlFor="input">
+                    <ActionIcon>
+                      <i className="fa fa-image" />
+                    </ActionIcon>
+                  </label>
+                ) : (
+                  <ActionIcon
+                    onClick={() => {
+                      alert("Please select room to connect");
+                    }}
+                  >
+                    <i className="fa fa-image" />
+                  </ActionIcon>
+                )}
+                <input
+                  type="file"
+                  id="input"
+                  accept="image/*"
+                  onChange={(event) => {
+                    if (room !== "" && !onSend) {
+                      selectHandle(event);
+                    }
+                  }}
+                  onClick={(event) => {
+                    event.target.value = null;
+                  }}
+                  style={{ display: "none", float: "left" }}
+                />
+                <Input
+                  style={{
+                    borderRadius: 20,
+                    width: "80%",
+                    marginLeft: 10,
+                    marginRight: 20,
+                  }}
+                  size="large"
+                  type="text"
+                  placeholder="Type your message"
+                  value={message}
+                  onChange={handleChange}
+                  onKeyPress={(event) => {
+                    event.key === "Enter" && handleClick();
+                  }}
+                />
+                {!onSend ? (
+                  <SendIcon onClick={handleClick}>
+                    <i className="fa fa-paper-plane" />
+                  </SendIcon>
+                ) : (
+                  <Spin size="small" />
+                )}
+              </InputBar>
+            </ChatBox>
+          </StyledContainer>
+        </ChatContainer>
+        <ReportDetail />
+      </Row>
     </>
   );
 }
