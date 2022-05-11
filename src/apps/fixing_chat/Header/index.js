@@ -26,7 +26,7 @@ function Header({ avatar, username, room, status, handleDisconnect }) {
                 height: "2.4vw",
                 margin: "10px 10px 10px 0px",
               }}
-              src={avatar ? process.env.REACT_APP_API_URL + avatar.url : noImg}
+              src={avatar!=="" ? process.env.REACT_APP_API_URL + avatar : noImg}
             />
             <div>
               {username} (

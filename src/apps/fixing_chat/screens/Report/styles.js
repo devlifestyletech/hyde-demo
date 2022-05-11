@@ -27,7 +27,6 @@ export const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // background: #d8aa81;
   background: white;
   border-radius: 20px 20px 0 0;
   height: 60px;

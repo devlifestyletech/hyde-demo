@@ -105,7 +105,7 @@ function ChatRoom(props) {
     }
   };
   const getAvatar = (avatar) => {
-    console.log("room", avatar);
+    console.log("avatarDx", avatar);
     setUserAvatar(avatar);
   };
 

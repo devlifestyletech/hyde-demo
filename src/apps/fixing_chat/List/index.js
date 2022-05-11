@@ -19,7 +19,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { encryptStorage } from "../../../utils/encryptStorage";
 import Service from "../../../services/auth.service";
 import { socket } from "../../../services/web-sockets";
-import { getRenderPropValue } from "antd/lib/_util/getRenderPropValue";
 
 const session = encryptStorage.getItem("user_session");
 
@@ -42,9 +41,18 @@ function List(props) {
     };
 
     function handleChange(value) {
-        console.log(value);
-        props.handleCallback(value);
+        let element = [];
+        props.searchTag === "All"
+            ? (element = contactList[value])
+            : (element = contactList.filter((item) =>
+                item.status.toLowerCase().includes(props.searchTag.toLowerCase())
+            )[value]);
+        console.log(element);
+        props.handleCallback(element.name + "," + element.id + "!" + element.room);
+        props.getAvatar(element.avatar);
+        props.getStatus(element.status);
     }
+
     const fetchData = async () => {
         try {
             if (loading) {
@@ -93,17 +101,43 @@ function List(props) {
     useEffect(() => {
         Service.getAllFixing().then((report) => {
             report.data.map((data) => {
+                console.log("data", data);
                 setContactList((lists) => [
                     ...lists,
                     {
                         id: data._id,
                         name: data.problem,
                         room: data.address.address_number,
+                        status: data.status,
+                        avatar: data.image_pending[0] ? data.image_pending[0].url : "",
                     },
                 ]);
             });
         });
     }, []);
+
+    const ChatComponent = ({ item }) => {
+        if (item.sender_id === adminId) {
+            if (item.type === "chat") {
+                return item.text.length > 30
+                    ? "You: " + item.text.substring(0, 30) + "..."
+                    : "You: " + item.text;
+            } else {
+                return "You: send a photo";
+            }
+        } else {
+            if (item.type === "chat") {
+                return item.text.length > 30
+                    ? item.sender_name.split(" ")[0] +
+                    ": " +
+                    item.text.substring(0, 30) +
+                    "..."
+                    : item.sender_name.split(" ")[0] + ": " + item.text;
+            } else {
+                return item.sender_name.split(" ")[0] + ": send a photo";
+            }
+        }
+    };
 
     const History = ({ item }) => {
         return (
@@ -111,9 +145,12 @@ function List(props) {
                 key={item.id}
                 onClick={() => {
                     props.handleCallback(item.fixing_info.problem + "," + item.room);
-                    props.getAvatar(item.fixing_info.image_pending[0]);
+                    props.getAvatar(
+                        item.fixing_info.image_pending
+                            ? item.fixing_info.image_pending[0].url
+                            : ""
+                    );
                     props.getStatus(status[item.fixing_info.status]);
-                    props.getReportId(item.fixing_info._id);
                 }}
             >
                 <ListComp
@@ -185,13 +222,7 @@ function List(props) {
                                         } (${item.room.split("!")[1]})`}
                                 </TitleText>
                                 <ChatText>
-                                    {item.type === "chat"
-                                        ? item.text.length > 30
-                                            ? item.text.substring(0, 30) + "..."
-                                            : item.text
-                                        : item.sender_id === adminId
-                                            ? "You send a photo"
-                                            : item.room_info.fullname + " send a photo"}
+                                    <ChatComponent item={item} />
                                 </ChatText>
                             </Col>
                         </div>
@@ -220,14 +251,26 @@ function List(props) {
                                 .localeCompare(optionB.children.toLowerCase())
                         }
                     >
-                        {contactList.map((data, index) => (
-                            <Option
-                                value={`${data.name},${data.id}!${data.room}`}
-                                key={index}
-                            >
-                                {`${data.name} (${data.room})`}
-                            </Option>
-                        ))}
+                        {props.searchTag === "All"
+                            ? contactList.map((data, index) => {
+                                console.log("com", data);
+                                return (
+                                    <Option value={index} key={index}>
+                                        {`${data.name} (${data.room})`}
+                                    </Option>
+                                );
+                            })
+                            : contactList
+                                .filter((item) =>
+                                    item.status
+                                        .toLowerCase()
+                                        .includes(props.searchTag.toLowerCase())
+                                )
+                                .map((data, index) => (
+                                    <Option value={index} key={index}>
+                                        {`${data.name} (${data.room})`}
+                                    </Option>
+                                ))}
                     </Select>
                 </ListHeading>
                 <div
@@ -266,8 +309,6 @@ function List(props) {
 export default List;
 
 const StyledList = styled(AntdList)`
-  //   background-color: green;
-  //   padding-top: 10px;
   flex: 0 0 35%;
   padding: 20px;
   .ant-list-item {

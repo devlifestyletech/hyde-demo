@@ -36,9 +36,17 @@ function List(props) {
     });
     // console.log(toDay)
     function handleChange(value) {
-        console.log(value);
-        props.handleCallback(value);
+        console.log(contactList[value]);
+        props.handleCallback(
+            contactList[value].name +
+            "," +
+            contactList[value].id +
+            ":" +
+            contactList[value].room
+        );
+        props.getAvatar(contactList[value].avatar);
     }
+
     const fetchData = async () => {
         try {
             if (loading) {
@@ -46,7 +54,11 @@ function List(props) {
             }
             setLoading(true);
             await axios
-                .get(process.env.REACT_APP_API_URL + "/chats?room_contains=:&_sort=time:desc", headers)
+                .get(
+                    process.env.REACT_APP_API_URL +
+                    "/chats?room_contains=:&_sort=time:desc",
+                    headers
+                )
                 .then((res) => {
                     console.log("res", res.data);
                     var flags = [],
@@ -70,7 +82,7 @@ function List(props) {
             console.error(err);
         }
     };
-    
+
     useEffect(() => {
         console.log("fetch Socket");
         socket.on("fetchHistory", () => {
@@ -87,25 +99,51 @@ function List(props) {
         Service.getAllResident().then((user) => {
             // console.log("users", user);
             user.data.map((data) => {
+                console.log("users DAa", data.fullname);
                 setContactList((lists) => [
                     ...lists,
                     {
                         id: data._id,
                         name: data.fullname,
                         room: data.address.address_number,
+                        avatar: data.avatar ? data.avatar.url : "",
                     },
                 ]);
             });
         });
     }, []);
 
-    const History = ({ item }) => {
+    const ChatComponent = ({ item }) => {
+        if (item.sender_id === adminId) {
+            if (item.type === "chat") {
+                return item.text.length > 30
+                    ? "You: " + item.text.substring(0, 30) + "..."
+                    : "You: " + item.text;
+            } else {
+                return "You: send a photo";
+            }
+        } else {
+            if (item.type === "chat") {
+                return item.text.length > 30
+                    ? item.sender_name.split(" ")[0] +
+                    ": " +
+                    item.text.substring(0, 30) +
+                    "..."
+                    : item.sender_name.split(" ")[0] + ": " + item.text;
+            } else {
+                return item.sender_name.split(" ")[0] + ": send a photo";
+            }
+        }
+    };
+
+    const History1 = ({ item }) => {
         return (
             <AntdList.Item
                 key={item.id}
                 onClick={() => {
-                    props.handleCallback(item.room_info.fullname + "," + item.room);
-                    props.getAvatar(item.room_info.avatar);
+                    console.log("avatarXXX", item.room_info);
+                      props.handleCallback(item.room_info.fullname + "," + item.room);
+                      props.getAvatar(item.room_info.avatar ? item.avatar.url : "");
                 }}
             >
                 <Row>
@@ -156,16 +194,92 @@ function List(props) {
                             </TimeText>
                         </Row>
                         <ChatText>
-                            {item.type === "chat"
-                                ? item.text.length > 30
-                                    ? item.text.substring(0, 30) + "..."
-                                    : item.text
-                                : item.sender_id === adminId
-                                    ? "You send a photo"
-                                    : item.room_info.fullname + " send a photo"}
-                        </ChatText>
+                                    <ChatComponent item={item} />
+                                </ChatText>
                     </Col>
                 </Row>
+            </AntdList.Item>
+        );
+    };
+
+    const History = ({ item }) => {
+        return (
+            <AntdList.Item
+                key={item.id}
+                onClick={() => {
+                    console.log("avatarXXX", item.room_info);
+                      props.handleCallback(item.room_info.fullname + "," + item.room);
+                      props.getAvatar(item.room_info.avatar ? item.room_info.avatar.url : "");
+                }}
+            >
+                <ListComp
+                    style={{
+                        width: "100%",
+                        height: "10vh",
+                    }}
+                >
+                    <Row>
+                        <Avatar
+                            style={{
+                                width: "3.2vw",
+                                height: "3.2vw",
+                                alignSelf: "center",
+                                marginLeft: "0.4vw",
+                            }}
+                            src={
+                                item.room_info.avatar
+                                    ? process.env.REACT_APP_API_URL +
+                                    item.room_info.avatar.url
+                                    : noImg
+                            }
+                        />
+                        <div
+                            style={{
+                                flex: 1,
+                            }}
+                        >
+                            <TimeText>
+                                {toDay ===
+                                    format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "dd-MM-yyyy",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )
+                                    ? format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "HH:mm",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )
+                                    : format(
+                                        utcToZonedTime(new Date(item.time), thTimeZone),
+                                        "dd/MM/yyyy HH:mm",
+                                        {
+                                            timeZone: "Asia/Bangkok",
+                                        }
+                                    )}
+                            </TimeText>
+                            <Col
+                                style={{
+                                    alignSelf: "center",
+                                }}
+                            >
+                                <TitleText>
+                                    {`${item.room_info.fullname.length > 20
+                                            ? item.room_info.fullname.substring(0, 20) + "..."
+                                            : item.room_info.fullname
+                                        } (${item.room.split(":")[1]})`}
+                                </TitleText>
+                                <ChatText>
+                                    <ChatComponent item={item} />
+                                </ChatText>
+                            </Col>
+                        </div>
+                    </Row>
+                </ListComp>
             </AntdList.Item>
         );
     };
@@ -190,10 +304,7 @@ function List(props) {
                         }
                     >
                         {contactList.map((data, index) => (
-                            <Option
-                                value={`${data.name},${data.id}:${data.room}`}
-                                key={index}
-                            >
+                            <Option value={index} key={index}>
                                 {`${data.name} (${data.room})`}
                             </Option>
                         ))}
@@ -227,9 +338,14 @@ function List(props) {
 export default List;
 
 const StyledList = styled(AntdList)`
-  margin-right: 10px;
   flex: 0 0 35%;
   padding: 20px;
+  .ant-list-item {
+    padding: 0 !important;
+  }
+  .ant-list-split .ant-list-item {
+    border-bottom: 0px;
+  }
   .ant-list-item-meta-content {
     flex-grow: 0;
   }
@@ -240,26 +356,35 @@ const StyledList = styled(AntdList)`
     color: #097ef0;
   }
 `;
-
+const ListComp = styled.div`
+  background-color: white;
+  :hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
 const ListHeading = styled.div`
   font-size: 20px;
   font-style: SukhumvitSet;
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  margin-left: 10px;
-  font-size: 16px;
+  // background-color: cyan;
+  margin-left: 1vh;
+  font-size: 0.88vw;
   font-style: SukhumvitSet;
 `;
 const ChatText = styled.div`
-  margin-left: 10px;
-  font-size: 14px;
+  // background-color: coral;
+  margin-left: 1vh;
+  font-size: 0.76vw;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`
+  // background-color: green;
+  margin: 1vh 1vh 0 1vh;
   text-align: right;
-  font-size: 14px;
+  font-size: 0.64vw;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 1);
 `;

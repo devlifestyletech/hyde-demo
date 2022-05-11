@@ -25,8 +25,8 @@ function ReportDetail({ reportId }) {
         await axios
           .get(
             process.env.REACT_APP_API_URL +
-              "/fixing-reports?_where[id]=" +
-              reportId,
+            "/fixing-reports?_where[id]=" +
+            reportId,
             headers
           )
           .then((res) => {
@@ -47,8 +47,8 @@ function ReportDetail({ reportId }) {
     return reportData ? (
       <Image
         style={{
-          width: "100%",
-          height: "20vwh",
+          // width: "100%",
+          // height: "20vh",
           alignSelf: "center",
         }}
         src={

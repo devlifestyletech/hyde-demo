@@ -99,11 +99,12 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log("room", childData.split(",")[1]);
+    console.log("ReportId", childData.split(",")[1].split("!")[0]);
     if (room !== childData.split(",")[1]) {
       setMessages([]);
       setRoom(childData.split(",")[1]);
       setReceiver(childData.split(",")[0]);
+      setFixingReportId(childData.split(",")[1].split("!")[0]);
     }
   };
 
@@ -114,10 +115,6 @@ function ChatRoom(props) {
   const getStatus = (status) => {
     console.log("status", status);
     setFixingStatus(status);
-  };
-  const getReportId = (reportId) => {
-    console.log("report", reportId);
-    setFixingReportId(reportId);
   };
 
   const handleDisconnect = () => {
@@ -265,7 +262,6 @@ function ChatRoom(props) {
               handleCallback={handleCallback}
               getAvatar={getAvatar}
               getStatus={getStatus}
-              getReportId={getReportId}
               searchTag={searchTag}
             />
             <ChatBox>
