@@ -35,7 +35,11 @@ function List(props) {
     const toDay = format(utcToZonedTime(new Date(), thTimeZone), "dd-MM-yyyy", {
         timeZone: "Asia/Bangkok",
     });
-    const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
+    const status = {
+        Pending: "#E86A6B",
+        Repairing: "#EEC84D",
+        Success: "#79CA6C",
+    };
 
     function handleChange(value) {
         console.log(value);
@@ -108,28 +112,31 @@ function List(props) {
                 onClick={() => {
                     props.handleCallback(item.fixing_info.problem + "," + item.room);
                     props.getAvatar(item.fixing_info.image_pending[0]);
-                    props.getStatus(status[item.fixing_info.status])
-                    props.getReportId(item.fixing_info._id)
+                    props.getStatus(status[item.fixing_info.status]);
+                    props.getReportId(item.fixing_info._id);
                 }}
             >
-                <ListComp style={{
-                    width: "100%",
-                    height: "10vh",
-                    // marginBottom: 5
-                }}>
+                <ListComp
+                    style={{
+                        width: "100%",
+                        height: "10vh",
+                    }}
+                >
                     <Row>
-                        <Row style={{
-                            width: "0.4vw",
-                            height: "10vh",
-                            backgroundColor: status[item.fixing_info.status],
-                        }}
+                        <Row
+                            style={{
+                                width: "0.4vw",
+                                height: "10vh",
+                                backgroundColor: status[item.fixing_info.status],
+                            }}
                         />
-                        <Avatar style={{
-                            width: "3.2vw",
-                            height: "3.2vw",
-                            alignSelf: "center",
-                            marginLeft: "0.4vw",
-                        }}
+                        <Avatar
+                            style={{
+                                width: "3.2vw",
+                                height: "3.2vw",
+                                alignSelf: "center",
+                                marginLeft: "0.4vw",
+                            }}
                             src={
                                 item.fixing_info.image_pending[0]
                                     ? process.env.REACT_APP_API_URL +
@@ -137,10 +144,12 @@ function List(props) {
                                     : noImg
                             }
                         />
-                        <div style={{
-                            flex:1
-                        }}>
-                            <TimeText >
+                        <div
+                            style={{
+                                flex: 1,
+                            }}
+                        >
+                            <TimeText>
                                 {toDay ===
                                     format(
                                         utcToZonedTime(new Date(item.time), thTimeZone),
@@ -169,10 +178,10 @@ function List(props) {
                                     alignSelf: "center",
                                 }}
                             >
-                                <TitleText >
+                                <TitleText>
                                     {`${item.fixing_info.problem.length > 20
-                                        ? item.fixing_info.problem.substring(0, 20) + "..."
-                                        : item.fixing_info.problem
+                                            ? item.fixing_info.problem.substring(0, 20) + "..."
+                                            : item.fixing_info.problem
                                         } (${item.room.split("!")[1]})`}
                                 </TitleText>
                                 <ChatText>
@@ -185,8 +194,7 @@ function List(props) {
                                             : item.room_info.fullname + " send a photo"}
                                 </ChatText>
                             </Col>
-                            
-                            </div>
+                        </div>
                     </Row>
                 </ListComp>
             </AntdList.Item>
@@ -237,7 +245,15 @@ function List(props) {
                         scrollableTarget="scrollableDiv"
                     >
                         <AntdList
-                            dataSource={data}
+                            dataSource={
+                                props.searchTag === "All"
+                                    ? data
+                                    : data.filter((item) =>
+                                        item.fixing_info.status
+                                            .toLowerCase()
+                                            .includes(props.searchTag.toLowerCase())
+                                    )
+                            }
                             renderItem={(item) => <History item={item} />}
                         />
                     </InfiniteScroll>
@@ -271,8 +287,8 @@ const StyledList = styled(AntdList)`
   }
 `;
 const ListComp = styled.div`
-background-color: white;
-:hover {
+  background-color: white;
+  :hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 `;
@@ -282,21 +298,21 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-// background-color: cyan;
+  // background-color: cyan;
   margin-left: 1vh;
   font-size: 0.88vw;
   font-style: SukhumvitSet;
 `;
 const ChatText = styled.div`
-// background-color: coral;
+  // background-color: coral;
   margin-left: 1vh;
   font-size: 0.76vw;
   font-style: SukhumvitSet;
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`
-// background-color: green;
- margin:  1vh 1vh 0 1vh;
+  // background-color: green;
+  margin: 1vh 1vh 0 1vh;
   text-align: right;
   font-size: 0.64vw;
   font-style: SukhumvitSet;

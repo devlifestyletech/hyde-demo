@@ -34,7 +34,7 @@ function ChatRoom(props) {
   const [userAvatar, setUserAvatar] = useState("");
   const [fixingStatus, setFixingStatus] = useState("");
   const [fixingReportId, setFixingReportId] = useState("");
-  const [searchTag, setSearchTag] = useState("");
+  const [searchTag, setSearchTag] = useState("All");
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
@@ -266,6 +266,7 @@ function ChatRoom(props) {
               getAvatar={getAvatar}
               getStatus={getStatus}
               getReportId={getReportId}
+              searchTag={searchTag}
             />
             <ChatBox>
               <Header
