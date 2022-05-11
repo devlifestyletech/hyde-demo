@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import {
   ReportContainer,
   StyledContainer,
+  ReportImg,
   StyledHeader,
   HeaderContainer,
+  ProblemContainer,
+  DetailContainer,
   NoContainer,
 } from "./styles";
-import { Spin, Image } from "antd";
+import { Spin, Image, Row, Col } from "antd";
 import noImg from "../../../assets/images/noImg.jpg";
 import axios from "axios";
 import { encryptStorage } from "../../../../utils/encryptStorage";
@@ -25,8 +28,8 @@ function ReportDetail({ reportId }) {
         await axios
           .get(
             process.env.REACT_APP_API_URL +
-            "/fixing-reports?_where[id]=" +
-            reportId,
+              "/fixing-reports?_where[id]=" +
+              reportId,
             headers
           )
           .then((res) => {
@@ -45,18 +48,31 @@ function ReportDetail({ reportId }) {
 
   const ShowReport = () => {
     return reportData ? (
-      <Image
-        style={{
-          // width: "100%",
-          // height: "20vh",
-          alignSelf: "center",
-        }}
-        src={
-          reportData.image_pending[0]
-            ? process.env.REACT_APP_API_URL + reportData.image_pending[0].url
-            : noImg
-        }
-      />
+      <Col>
+        <ProblemContainer>Problem: {reportData.problem}</ProblemContainer>
+        <Row>
+        <DetailContainer style={{flex: 0.1}}>
+          Detail:
+        </DetailContainer>
+        <DetailContainer  style={{flex: 0.9}}>
+          {reportData.description.length > 120
+            ? reportData.description.substring(0, 120) + "..."
+            : reportData.description}
+        </DetailContainer></Row>
+        
+        {/* <ReportImg> */}
+          <Image
+            height={"16vh"}
+            width={"24vw"}
+            src={
+              reportData.image_pending[0]
+                ? process.env.REACT_APP_API_URL +
+                  reportData.image_pending[0].url
+                : noImg
+            }
+          />
+        {/* </ReportImg> */}
+      </Col>
     ) : (
       <NoContainer>No Room Selected</NoContainer>
     );

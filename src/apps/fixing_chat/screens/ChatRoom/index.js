@@ -121,6 +121,7 @@ function ChatRoom(props) {
     setMessages([]);
     setRoom("");
   };
+
   useEffect(() => {
     socket.off("message");
   }, [room]);
@@ -233,10 +234,10 @@ function ChatRoom(props) {
     return (
       <div
         style={{
-          // width: "80vw",
+          width: "100%",
           height: "100vh",
           textAlign: "center",
-          paddingTop: 300,
+          paddingTop: "24vh",
         }}
       >
         <Spin size="large" />

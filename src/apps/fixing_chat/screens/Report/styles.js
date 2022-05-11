@@ -33,6 +33,12 @@ export const StyledHeader = styled.div`
   width: 100%;
   border-bottom: 1px solid #757591;
 `;
+export const ReportImg = styled.div`
+  // display: flex;
+  align-items: center;
+  background: white;
+  width: 100%;
+`;
 
 export const HeaderContainer = styled.div`
   margin-left: 0.4vw;
@@ -51,4 +57,23 @@ export const NoContainer = styled.div`
   color: black;
   font-weight: bold;
   font-size: 1.2rem;
+`;
+export const ProblemContainer = styled.div`
+margin-left: 0.4vw;
+  flex: 1;
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+`;
+export const DetailContainer = styled.div`
+margin-left: 0.4vw;
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  color: rgba(0, 0, 0, 1);
+  font-family: SukhumvitSet-Thin;
+  font-size: 1rem;
 `;

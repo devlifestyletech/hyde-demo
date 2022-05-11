@@ -253,7 +253,6 @@ function List(props) {
                     >
                         {props.searchTag === "All"
                             ? contactList.map((data, index) => {
-                                console.log("com", data);
                                 return (
                                     <Option value={index} key={index}>
                                         {`${data.name} (${data.room})`}
@@ -276,7 +275,8 @@ function List(props) {
                 <div
                     id="scrollableDiv"
                     style={{
-                        height: "72vh",
+                        height: "60vh",
+                        overflow: 'auto',
                     }}
                 >
                     <InfiniteScroll

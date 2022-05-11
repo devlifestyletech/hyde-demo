@@ -34,7 +34,6 @@ function List(props) {
     const toDay = format(utcToZonedTime(new Date(), thTimeZone), "dd-MM-yyyy", {
         timeZone: "Asia/Bangkok",
     });
-    // console.log(toDay)
     function handleChange(value) {
         console.log(contactList[value]);
         props.handleCallback(
@@ -136,80 +135,13 @@ function List(props) {
         }
     };
 
-    const History1 = ({ item }) => {
-        return (
-            <AntdList.Item
-                key={item.id}
-                onClick={() => {
-                    console.log("avatarXXX", item.room_info);
-                      props.handleCallback(item.room_info.fullname + "," + item.room);
-                      props.getAvatar(item.room_info.avatar ? item.avatar.url : "");
-                }}
-            >
-                <Row>
-                    <Avatar
-                        size={40}
-                        src={
-                            item.room_info.avatar
-                                ? process.env.REACT_APP_API_URL + item.room_info.avatar.url
-                                : noImg
-                        }
-                    />
-                    <Col>
-                        <Row
-                            style={{
-                                width: "20vw",
-                                justifyContent: "space-between",
-                            }}
-                        >
-                            <TitleText>
-                                {`${item.room_info.fullname.length > 20
-                                        ? item.room_info.fullname.substring(0, 20) + "..."
-                                        : item.room_info.fullname
-                                    } (${item.room.split(":")[1]})`}
-                            </TitleText>
-                            <TimeText>
-                                {toDay ===
-                                    format(
-                                        utcToZonedTime(new Date(item.time), thTimeZone),
-                                        "dd-MM-yyyy",
-                                        {
-                                            timeZone: "Asia/Bangkok",
-                                        }
-                                    )
-                                    ? format(
-                                        utcToZonedTime(new Date(item.time), thTimeZone),
-                                        "HH:mm",
-                                        {
-                                            timeZone: "Asia/Bangkok",
-                                        }
-                                    )
-                                    : format(
-                                        utcToZonedTime(new Date(item.time), thTimeZone),
-                                        "dd/MM/yyyy HH:mm",
-                                        {
-                                            timeZone: "Asia/Bangkok",
-                                        }
-                                    )}
-                            </TimeText>
-                        </Row>
-                        <ChatText>
-                                    <ChatComponent item={item} />
-                                </ChatText>
-                    </Col>
-                </Row>
-            </AntdList.Item>
-        );
-    };
-
     const History = ({ item }) => {
         return (
             <AntdList.Item
                 key={item.id}
                 onClick={() => {
-                    console.log("avatarXXX", item.room_info);
-                      props.handleCallback(item.room_info.fullname + "," + item.room);
-                      props.getAvatar(item.room_info.avatar ? item.room_info.avatar.url : "");
+                    props.handleCallback(item.room_info.fullname + "," + item.room);
+                    props.getAvatar(item.room_info.avatar ? item.room_info.avatar.url : "");
                 }}
             >
                 <ListComp
@@ -269,8 +201,8 @@ function List(props) {
                             >
                                 <TitleText>
                                     {`${item.room_info.fullname.length > 20
-                                            ? item.room_info.fullname.substring(0, 20) + "..."
-                                            : item.room_info.fullname
+                                        ? item.room_info.fullname.substring(0, 20) + "..."
+                                        : item.room_info.fullname
                                         } (${item.room.split(":")[1]})`}
                                 </TitleText>
                                 <ChatText>
@@ -313,7 +245,8 @@ function List(props) {
                 <div
                     id="scrollableDiv"
                     style={{
-                        height: "72vh",
+                        height: "60vh",
+                        overflow: 'auto',
                     }}
                 >
                     <InfiniteScroll
