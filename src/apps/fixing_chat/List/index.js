@@ -109,7 +109,7 @@ function List(props) {
                         name: data.problem,
                         room: data.address.address_number,
                         status: data.status,
-                        avatar: data.image_pending[0] ? data.image_pending[0].url : "",
+                        avatar: data.image_pending[0] ? data.image_pending[0]?.url : "",
                     },
                 ]);
             });
@@ -147,7 +147,7 @@ function List(props) {
                     props.handleCallback(item.fixing_info.problem + "," + item.room);
                     props.getAvatar(
                         item.fixing_info.image_pending
-                            ? item.fixing_info.image_pending[0].url
+                            ? item.fixing_info.image_pending[0]?.url
                             : ""
                     );
                     props.getStatus(status[item.fixing_info.status]);
@@ -177,7 +177,7 @@ function List(props) {
                             src={
                                 item.fixing_info.image_pending[0]
                                     ? process.env.REACT_APP_API_URL +
-                                    item.fixing_info.image_pending[0].url
+                                    item.fixing_info.image_pending[0]?.url
                                     : noImg
                             }
                         />

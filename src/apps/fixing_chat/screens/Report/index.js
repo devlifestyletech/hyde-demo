@@ -51,17 +51,16 @@ function ReportDetail({ reportId }) {
       <Col>
         <ProblemContainer>Problem: {reportData.problem}</ProblemContainer>
         <Row>
-        <DetailContainer style={{flex: 0.1}}>
-          Detail:
-        </DetailContainer>
-        <DetailContainer  style={{flex: 0.9}}>
-          {reportData.description.length > 120
-            ? reportData.description.substring(0, 120) + "..."
-            : reportData.description}
-        </DetailContainer></Row>
-        
+          <DetailContainer style={{ flex: 0.1 }}>Detail:</DetailContainer>
+          <DetailContainer style={{ flex: 0.9 }}>
+            {reportData.description.length > 120
+              ? reportData.description.substring(0, 120) + "..."
+              : reportData.description}
+          </DetailContainer>
+        </Row>
+
         {/* <ReportImg> */}
-          <Image
+        {/* <Image
             height={"16vh"}
             width={"24vw"}
             src={
@@ -70,7 +69,16 @@ function ReportDetail({ reportId }) {
                   reportData.image_pending[0].url
                 : noImg
             }
-          />
+          /> */}
+        <img
+          alt="Report Images"
+          style={{maxWidth:"100%",maxHeight:"24vh"}}
+          src={
+            reportData.image_pending[0]
+              ? process.env.REACT_APP_API_URL + reportData.image_pending[0]?.url
+              : noImg
+          }
+        />
         {/* </ReportImg> */}
       </Col>
     ) : (
