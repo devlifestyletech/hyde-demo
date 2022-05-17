@@ -47,7 +47,7 @@ function List(props) {
             : (element = contactList.filter((item) =>
                 item.status.toLowerCase().includes(props.searchTag.toLowerCase())
             )[value]);
-        console.log(element);
+        // console.log(element);
         props.handleCallback(element.name + "," + element.id + "!" + element.room);
         props.getAvatar(element.avatar);
         props.getStatus(element.status);
@@ -89,7 +89,7 @@ function List(props) {
 
     useEffect(() => {
         socket.on("fetchHistory", () => {
-            console.log("fetchData");
+            // console.log("fetchData");
             fetchData();
         });
     }, [socket]);
@@ -101,7 +101,7 @@ function List(props) {
     useEffect(() => {
         Service.getAllFixing().then((report) => {
             report.data.map((data) => {
-                console.log("data", data);
+                // console.log("data", data);
                 setContactList((lists) => [
                     ...lists,
                     {

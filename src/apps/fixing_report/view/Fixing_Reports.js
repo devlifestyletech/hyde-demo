@@ -176,7 +176,7 @@ const FixingReports = () => {
   ].filter((item) => !item.hidden);
 
   // function
-  const handleEdit = async (record) => {
+  const handleEdit =  (record) => {
     setIsEdit(true);
     setReportValue(record);
     setVisible(true);
@@ -209,9 +209,8 @@ const FixingReports = () => {
     const [repairingImgFile, setRepairingImgFile] = useState([]);
     const [successImgFile, setSuccessImgFile] = useState([]);
     // const dateReport = format(parseInt(reportValue.submission_date, 10), 'dd MMM yyyy');
-
+    console.log(reportValue, reportValue)
     const handleValue = () => {
-
       form.setFieldsValue({
         pick_up_date: (reportValue.pick_up_date) ? moment(format(utcToZonedTime(new Date(reportValue.pick_up_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
         opening_date: (reportValue.opening_date) ? moment(format(utcToZonedTime(new Date(reportValue.opening_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
@@ -239,8 +238,8 @@ const FixingReports = () => {
         setRepairReq(true);
         setSuccessReq(true);
       }
-      console.log(repairReq, (reportValue.pick_up_date && !repairReq))
-      console.log(successReq, (reportValue.pick_up_date && !successReq))
+      // console.log(repairReq, (reportValue.pick_up_date && !repairReq))
+      // console.log(successReq, (reportValue.pick_up_date && !successReq))
     }, [reportStatus]);
 
     const imagePreviewSty = {

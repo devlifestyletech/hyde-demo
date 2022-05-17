@@ -1,14 +1,9 @@
 import styled from "styled-components";
-import { Button } from "antd";
 
 export const ReportContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // background: #f2f2f2;
-  // padding: 10px 0px 0px 10px;
-  // margin: 1vh auto;
-  // width: 24%;
   flex:0.4;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
   height: 70vh;
@@ -17,8 +12,8 @@ export const ReportContainer = styled.div`
 
 export const StyledContainer = styled.div`
   display: flex;
-  width: 100%;
   flex: 1;
+  width: 100%;
   height: 60%;
   // background-color: #d8aa81;
 `;
@@ -33,12 +28,13 @@ export const StyledHeader = styled.div`
   width: 100%;
   border-bottom: 1px solid #757591;
 `;
-export const ReportImg = styled.div`
-  // display: flex;
-  align-items: center;
-  background: white;
-  width: 100%;
-`;
+export const ReportImg = styled.img`
+display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  max-height: 40%;
+`
 
 export const HeaderContainer = styled.div`
   margin-left: 0.4vw;
@@ -76,4 +72,11 @@ margin-left: 0.4vw;
   color: rgba(0, 0, 0, 1);
   font-family: SukhumvitSet-Thin;
   font-size: 1rem;
+`;
+
+export const ReportCenter = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top:2vh;
 `;
