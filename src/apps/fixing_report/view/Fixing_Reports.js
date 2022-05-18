@@ -828,13 +828,11 @@ const FixingReports = () => {
           .forEach((residence, index) => {
             let residenceData = { key: index, number: index + 1, ...residence };
             residence.fixing_reports.forEach((report, index) => {
-
               let date_show = format(utcToZonedTime(new Date(report.submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
-
               let newReport = { key: residence.fixing_reports[index].id, number: index + 1, submission_date_show: date_show, address_number: residence.address_number, owner: residence.owner.fullname, ...report };
               residence.fixing_reports[index] = newReport;
             });
-            // console.log('residenceData');
+            console.log('residenceData',residenceData);
             // console.log(residenceData.fixing_reports);
             combinesData.push(residenceData);
           });

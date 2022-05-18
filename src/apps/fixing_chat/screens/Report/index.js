@@ -15,12 +15,15 @@ import {
 import { Spin, Button, Row, Col } from "antd";
 import noImg from "../../../assets/images/noImg.jpg";
 import axios from "axios";
+import { format, utcToZonedTime } from 'date-fns-tz'
 import { encryptStorage } from "../../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
 function ReportDetail({ reportId }) {
   const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
+  const [reportValue, setReportValue] = useState(null);
+  const thTimeZone = 'Asia/Bangkok'
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
   const fetchData = async () => {
@@ -34,7 +37,11 @@ function ReportDetail({ reportId }) {
             headers
           )
           .then((res) => {
-            // console.log("reportData", res.data);
+            console.log("reportData", res.data);
+            let date_show = format(utcToZonedTime(new Date( res.data[0].submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
+            let newReport = { key:  res.data.id, submission_date_show: date_show, address_number: res.data[0].address.address_number, owner:  res.data[0].address.owner.fullname, ...res.data };
+            console.log('newReport',newReport)
+            setReportValue(newReport)
             setReportData(res.data[0]);
             setLoading(false);
           })
@@ -77,7 +84,7 @@ function ReportDetail({ reportId }) {
           }}
           key="manage_report"
           onClick={() => {
-            console.log('record');
+            console.log('newReport',reportValue)
             // setVisible(true);
             // handleEdit(record);
           }
