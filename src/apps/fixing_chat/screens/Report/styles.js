@@ -15,7 +15,6 @@ export const StyledContainer = styled.div`
   flex: 1;
   width: 100%;
   height: 60%;
-  // background-color: #d8aa81;
 `;
 
 export const StyledHeader = styled.div`
@@ -29,7 +28,7 @@ export const StyledHeader = styled.div`
   border-bottom: 1px solid #757591;
 `;
 export const ReportImg = styled.img`
-display: block;
+  display: block;
   margin-left: auto;
   margin-right: auto;
   max-width: 90%;
@@ -72,6 +71,7 @@ margin-left: 0.4vw;
   color: rgba(0, 0, 0, 1);
   font-family: SukhumvitSet-Thin;
   font-size: 1rem;
+  // background-color: #d8aa81;
 `;
 
 export const ReportCenter = styled.div`

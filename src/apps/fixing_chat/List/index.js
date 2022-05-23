@@ -50,7 +50,7 @@ function List(props) {
         // console.log(element);
         props.handleCallback(element.name + "," + element.id + "!" + element.room);
         props.getAvatar(element.avatar);
-        props.getStatus(element.status);
+        props.getStatus(status[element.status]);
     }
 
     const fetchData = async () => {

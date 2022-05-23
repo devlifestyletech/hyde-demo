@@ -13,6 +13,7 @@ import {
   ReportCenter
 } from "./styles";
 import { Spin, Button, Row, Col } from "antd";
+import ReportModal from "../../../fixing_report/service/reportModal" 
 import noImg from "../../../assets/images/noImg.jpg";
 import axios from "axios";
 import { format, utcToZonedTime } from 'date-fns-tz'
@@ -22,11 +23,13 @@ const session = encryptStorage.getItem("user_session");
 function ReportDetail({ reportId }) {
   const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [reportValue, setReportValue] = useState(null);
   const thTimeZone = 'Asia/Bangkok'
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
 
   const fetchData = async () => {
+    console.log('reportId',reportId);
     try {
       if (reportId) {
         await axios
@@ -37,9 +40,9 @@ function ReportDetail({ reportId }) {
             headers
           )
           .then((res) => {
-            console.log("reportData", res.data);
+            console.log("reporT", res.data);
             let date_show = format(utcToZonedTime(new Date( res.data[0].submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
-            let newReport = { key:  res.data.id, submission_date_show: date_show, address_number: res.data[0].address.address_number, owner:  res.data[0].address.owner.fullname, ...res.data };
+            let newReport = { key:  res.data[0]._id, submission_date_show: date_show, address_number: res.data[0].address.address_number, owner:  res.data[0].address.owner, ...res.data[0] };
             console.log('newReport',newReport)
             setReportValue(newReport)
             setReportData(res.data[0]);
@@ -60,13 +63,12 @@ function ReportDetail({ reportId }) {
         <ProblemContainer>Problem: {reportData.problem}</ProblemContainer>
         <Row>
           <DetailContainer style={{ flex: 0.1 }}>Detail:</DetailContainer>
-          <DetailContainer style={{ flex: 0.9 }}>
+          <DetailContainer style={{ flex: 0.88 }}>
             {reportData.description.length > 120
               ? reportData.description.substring(0, 120) + "..."
               : reportData.description}
           </DetailContainer>
         </Row>
-
         <ReportImg src={
           reportData.image_pending[0]
             ? process.env.REACT_APP_API_URL + reportData.image_pending[0]?.url
@@ -85,7 +87,7 @@ function ReportDetail({ reportId }) {
           key="manage_report"
           onClick={() => {
             console.log('newReport',reportValue)
-            // setVisible(true);
+            setVisible(true);
             // handleEdit(record);
           }
           }
@@ -133,6 +135,16 @@ function ReportDetail({ reportId }) {
           {loading ? <Loading /> : <ShowReport />}
         </StyledContainer>
       </ReportContainer>
+      {visible ? (
+        <ReportModal  
+          visible={visible}
+          reportValue={reportValue}
+          fetchData={fetchData}
+          onCancel={() => {
+            setVisible(false);
+          }}
+        />
+      ) : null}
     </>
   );
 }
