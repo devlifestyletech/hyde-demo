@@ -7,9 +7,9 @@ export default function PieChart() {
 	const config = {
 		appendPadding: 10,
 		data: pie_data,
-		angleField: 'reservations',
+		angleField: 'Bills',
 		colorField: 'status',
-		// color:["#20263a","#d1ba7d","#d8aa81",],
+		color:["#20263a","#d1ba7d","#d8aa81","#FAEDCA"],
 		radius: 0.8,
 		label: {
 		  type: 'outer',

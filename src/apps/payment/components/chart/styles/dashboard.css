@@ -1,25 +1,45 @@
+.pie-graph {
+	width: 40%;
+	min-width: 400px;
+	border-radius: 10px;
+	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+	margin-right: 20px;
+	margin-bottom: 40px;
+}
 .bar-graph {
 	width: 55%;
-	min-width: 500px;
+	min-width: 400px;
 	border-radius: 10px;
 	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-	margin-right: 20px;
+	margin-bottom: 40px;
+}
+
+.table-graph {
+	width: 96%;
+	min-width: 400px;
+	border-radius: 10px;
+	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
 	margin-bottom: 20px;
 }
-.pie-graph {
-	width: 43.45%;
-	min-width: 350px;
-	border-radius: 10px;
+.month-graph {
+	width: 400px;
 	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-	margin-bottom: 20px;
-}
-.area-graph {
-	width: 100%;
-	min-width: 850px;
-	border-radius: 10px;
-	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+	min-width: 400px;
+	border-radius: 20px;
 	margin-right: 20px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
+}
+.text-title {
+	min-width: 400px;
+	margin-bottom: 40px;
+	width: 25%;
+	height: 30px;
+}
+.export-button {
+	min-width: 400px;
+	margin-bottom: 40px;
+	width: 42%;
+	height: 30px;
 }
 .chart-title {
 	width: 100%;

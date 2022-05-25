@@ -6,7 +6,7 @@ export default function GraphReserves() {
 	const config = {
 		data: bar_data,
 		xField: "month",
-		yField: "reservations"
+		yField: "Bills",
 	};
 
 	return <Column {...config} />;

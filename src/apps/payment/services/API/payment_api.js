@@ -31,7 +31,7 @@ const GetBillinglist = async (params) => {
       }
     })
     .catch((err) => {
-      console.log("error:", err);
+      // console.log("error:", err);
     });
   // console.log(`${URLreScrpit}?${params}`);
   return resultData;
@@ -122,7 +122,7 @@ const updateRescrpt = async (data) => {
 
 //update status rescript
 const rejectRescrpt = async (data,annotaion) => {
-  console.log("update:", annotaion)
+  // console.log("update:", annotaion)
   const result = await Axios
     .put(`${URLreScrpit}/${data.idBilling}`, { "BillsPayment_Status": "Wait for payment","annotation_payment":annotaion }, options)
     .then((res) => {
@@ -142,7 +142,7 @@ const editAddress = async (address_id, value) => {
   }).catch((err) => {
     return false
   });
-  console.log("editAddress:", statusResult);
+  // console.log("editAddress:", statusResult);
   return statusResult
 }
 
@@ -163,10 +163,10 @@ const postdataRescrpt = async (data) => {
     Receipt_Status_Export: false,
   };
   const result = await Axios
-    .post(`${URLreScrpit2}`, postData, options)
+    .post(`${URLreScrpit}`, postData, options)
     .then(async (res) => {
-console.log("payment",res);
-      return res.status === 201 ? await editAddress(data.address_id, false) : false;
+
+      return res.status === 200 ? await editAddress(data.address_id, false) : false;
     })
     .catch((err) => {
       return false;
@@ -187,7 +187,7 @@ const getCountaddressCustomer = async (params) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(`${URLAddress}/count?${params}`, options);
+  // console.log(`${URLAddress}/count?${params}`, options);
   return resultData;
 
 };
@@ -218,7 +218,7 @@ const addressCustomer = async (params) => {
     .catch((err) => {
       console.error(err);
     });
-  console.log(`${URLAddress}?${params}`);
+  // console.log(`${URLAddress}?${params}`);
   return resultData;
 };
 
