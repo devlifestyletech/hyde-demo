@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   Button, Image, Input, Row, Col, DatePicker, Form, Modal, Select,
@@ -9,7 +10,7 @@ import { format, utcToZonedTime } from 'date-fns-tz'
 import { encryptStorage } from "../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
-export default function ReportModal({ visible, reportValue, onCancel, fetchData }) {
+export default function ReportModal({ visible, reportValue, fetchData,closeModal }) {
   const URLreScript = process.env.REACT_APP_API_URL + "/fixing-reports";
   const headers = { headers: { Authorization: "Bearer " + session.jwt } }
   const thTimeZone = 'Asia/Bangkok'
@@ -25,7 +26,7 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
   const [pendingImgFile, setPendingImgFile] = useState([]);
   const [repairingImgFile, setRepairingImgFile] = useState([]);
   const [successImgFile, setSuccessImgFile] = useState([]);
-  console.log('Modal', reportValue)
+  console.log('Modal Value', reportValue)
   const handleValue = () => {
     form.setFieldsValue({
       pick_up_date: (reportValue.pick_up_date) ? moment(format(utcToZonedTime(new Date(reportValue.pick_up_date), thTimeZone), 'yyyy-MM-dd', { timeZone: 'Asia/Bangkok' })) : "",
@@ -54,8 +55,6 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
       setRepairReq(true);
       setSuccessReq(true);
     }
-    // console.log(repairReq, (reportValue.pick_up_date && !repairReq))
-    // console.log(successReq, (reportValue.pick_up_date && !successReq))
   }, [reportStatus]);
 
   const imagePreviewSty = {
@@ -70,8 +69,6 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
     console.log("statusHandle", status);
     setReportStatus(status);
   }
-
-  console.log("reportValue", reportValue);
 
   const selectPendingImg = (e) => {
     setPendingImgFile([...pendingImgFile, e.target.files[0]]);
@@ -119,7 +116,6 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
       .put(
         `${URLreScript}/${reportValue.key}`,
         {
-
           pick_up_date: value.pick_up_date ? `${value.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
           opening_date: value.opening_date ? `${value.opening_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
           closing_date: value.closing_date ? `${value.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00` : "",
@@ -134,9 +130,8 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
         if (pendingImgFile.length > 0 && repairingImgFile.length > 0 && successImgFile.length > 0) { uploadImg(); } else {
           uploadImg();
           fetchData();
+          closeModal();
         }
-
-
       })
       .catch((err) => {
         console.error("Can't add data: ", err);
@@ -170,7 +165,7 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
                 )
                 .then((res) => {
                   fetchData();
-                  onCancel();
+                  closeModal();
                 })
                 .catch((err) => {
                   console.error("Can't add data: ", err);
@@ -203,17 +198,15 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
                   `${URLreScript}/${reportValue.key}`,
                   {
                     image_repairing: arr,
-
                   }, headers
                 )
                 .then((res) => {
                   fetchData();
-                  onCancel();
+                  closeModal();
                 })
                 .catch((err) => {
                   console.error("Can't add data: ", err);
                 });
-
             })
             .catch((err) => {
               console.log("ERROR", err);
@@ -246,7 +239,7 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
                 )
                 .then((res) => {
                   fetchData();
-                  onCancel();
+                  closeModal();
                 })
                 .catch((err) => {
                   console.error("Can't add data: ", err);
@@ -410,7 +403,7 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
           }}
           className="add-btn"
           key="add"
-          onClick={() => onCancel()}
+          onClick={closeModal}
         >
           Cancel
         </Button>,
@@ -439,9 +432,7 @@ export default function ReportModal({ visible, reportValue, onCancel, fetchData 
           OK
         </Button>,
       ]}
-      onCancel={() => {
-        onCancel();
-      }}
+      onCancel={closeModal}
       width={'70%'}
     >
       <Form

@@ -267,9 +267,6 @@ const FixingReports = () => {
           reportValue={reportValue}
           fetchData={fetchData}
           closeModal={closeModal}
-          onCancel={() => {
-            setVisible(false);
-          }}
         />
       ) : null}
     </>

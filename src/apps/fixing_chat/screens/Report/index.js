@@ -20,16 +20,17 @@ import { format, utcToZonedTime } from 'date-fns-tz'
 import { encryptStorage } from "../../../../utils/encryptStorage";
 const session = encryptStorage.getItem("user_session");
 
-function ReportDetail({ reportId }) {
+export default function ReportDetail({ reportId }) {
   const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [reportValue, setReportValue] = useState(null);
   const thTimeZone = 'Asia/Bangkok'
   const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+  const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
 
   const fetchData = async () => {
-    console.log('reportId',reportId);
+    // console.log('reportId',reportId);
     try {
       if (reportId) {
         await axios
@@ -43,7 +44,7 @@ function ReportDetail({ reportId }) {
             console.log("reporT", res.data);
             let date_show = format(utcToZonedTime(new Date( res.data[0].submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
             let newReport = { key:  res.data[0]._id, submission_date_show: date_show, address_number: res.data[0].address.address_number, owner:  res.data[0].address.owner, ...res.data[0] };
-            console.log('newReport',newReport)
+            // console.log('newReport',newReport)
             setReportValue(newReport)
             setReportData(res.data[0]);
             setLoading(false);
@@ -69,6 +70,12 @@ function ReportDetail({ reportId }) {
               : reportData.description}
           </DetailContainer>
         </Row>
+        <Row>
+          <DetailContainer style={{ flex: 0.1 }}>Status:</DetailContainer>
+          <DetailContainer style={{ flex: 0.88 ,color:status[reportData.status]}}>
+            {reportData.status}
+          </DetailContainer>
+        </Row>
         <ReportImg src={
           reportData.image_pending[0]
             ? process.env.REACT_APP_API_URL + reportData.image_pending[0]?.url
@@ -79,6 +86,8 @@ function ReportDetail({ reportId }) {
           <Button
           style={{
             backgroundColor: "#D8AA81",
+            position:"absolute",
+            bottom:'2vh',
             color: "#F5F4EC",
             borderRadius: 20,
             borderColor:"transparent",
@@ -86,9 +95,7 @@ function ReportDetail({ reportId }) {
           }}
           key="manage_report"
           onClick={() => {
-            console.log('newReport',reportValue)
             setVisible(true);
-            // handleEdit(record);
           }
           }
         >
@@ -99,6 +106,11 @@ function ReportDetail({ reportId }) {
     ) : (
       <NoContainer>No Room Selected</NoContainer>
     );
+  };
+
+  const closeModal = () => {
+    console.log('closeModal')
+    setVisible(false);
   };
 
   const Loading = () => {
@@ -140,12 +152,9 @@ function ReportDetail({ reportId }) {
           visible={visible}
           reportValue={reportValue}
           fetchData={fetchData}
-          onCancel={() => {
-            setVisible(false);
-          }}
+          closeModal={closeModal}
         />
       ) : null}
     </>
   );
 }
-export default ReportDetail;

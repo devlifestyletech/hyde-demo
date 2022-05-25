@@ -118,10 +118,10 @@ function SideMenu() {
               icon={<img src={payment} alt="payment" />}
               title="Payment"
             >
-              <Menu.Item key="15">
+              <Menu.Item key="8">
                 <Link to="/payment/Paymentdashbord">Payment Dashboard</Link>
               </Menu.Item>
-              <Menu.Item key="16">
+              <Menu.Item key="9">
                 <Link to="/payment/bill-payment">Bill Payment</Link>
               </Menu.Item>
             </SubMenu>
@@ -131,16 +131,16 @@ function SideMenu() {
               icon={<img src={groupIcon} alt="member" />}
               title="Members"
             >
-              <Menu.Item key="8">
+              <Menu.Item key="10">
                 <Link to="/members">User Management Dashboard</Link>
               </Menu.Item>
-              <Menu.Item key="9">
+              <Menu.Item key="11">
                 <Link to="/members/registration">Registration</Link>
               </Menu.Item>
-              <Menu.Item key="10">
+              <Menu.Item key="12">
                 <Link to="/members/roomDashboard">Room Dashboard</Link>
               </Menu.Item>
-              <Menu.Item key="11">
+              <Menu.Item key="13">
                 <Link to="/members/roomManagement">Room Management</Link>
               </Menu.Item>
             </SubMenu>
@@ -149,7 +149,7 @@ function SideMenu() {
               icon={<img src={chatIcon} width="20" height="20" alt="chat" />}
               title="Live Chat"
             >
-              <Menu.Item key="12" >
+              <Menu.Item key="14" >
                 <Link to="/live-chat">Chat</Link>
               </Menu.Item>
             </SubMenu>
@@ -161,15 +161,15 @@ function SideMenu() {
               icon={<img src={service} alt="service" />}
               title="Service Center"
             >
-              <Menu.Item key="13" className="menu-item">
+              <Menu.Item key="15" className="menu-item">
                 <Link to="/service-center-dashBoard">
                   Service Center Dashboard
                 </Link>
               </Menu.Item>
-              <Menu.Item key="14" className="menu-item">
+              <Menu.Item key="16" className="menu-item">
                 <Link to="/service-center-reports">Service Center Lists</Link>
               </Menu.Item>
-              <Menu.Item key="15" className="menu-item">
+              <Menu.Item key="17" className="menu-item">
                 {/* <Link to='/join-room'>Message</Link> */}
                 <Link to="/service-chat">Messages</Link>
               </Menu.Item>

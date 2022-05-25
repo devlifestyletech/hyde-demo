@@ -4,7 +4,6 @@ import { Avatar, Row } from "antd";
 import noImg from "../../assets/images/noImg.jpg";
 
 function Header({ avatar, username, room, status, handleDisconnect }) {
-  console.log("avatar status", status);
   return (
     <StyledHeader>
       {room ? (
@@ -54,15 +53,12 @@ export default Header;
 const StyledHeader = styled.div`
   background-color: white;
   display: flex;
-  // align-items: center;
-  // justify-content: space-between;
   border-radius: 0px 20px 0 0;
   height: 60px;
   width: 100%;
   border-bottom: 1px solid #757591;
 `;
 const HeaderContainer = styled.div`
-  // background-color: red;
   flex: 1;
   display: flex;
   align-items: center;
