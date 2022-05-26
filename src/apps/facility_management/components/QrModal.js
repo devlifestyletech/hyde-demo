@@ -1,13 +1,13 @@
-import React, { useRef } from 'react'
-import QRCode from 'qrcode.react'
-import { Modal, Row, Col, Button } from 'antd'
-import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons'
-import { format } from 'date-fns'
-import { exportComponentAsJPEG } from 'react-component-export-image'
-import qrlogo from '../assets/hyde_2.svg'
+import React, { useRef } from 'react';
+import QRCode from 'qrcode.react';
+import { Modal, Row, Col, Button } from 'antd';
+import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
+import { format } from 'date-fns';
+import { exportComponentAsJPEG } from 'react-component-export-image';
+import qrlogo from '../assets/hyde_2.svg';
 
 export default function QrModal({ data, visible, onCancel }) {
-	const qrRef = useRef()
+	const qrRef = useRef();
 	return (
 		<>
 			<Modal centered title='Reservation' visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
@@ -62,5 +62,5 @@ export default function QrModal({ data, visible, onCancel }) {
 				</div>
 			</Modal>
 		</>
-	)
+	);
 }

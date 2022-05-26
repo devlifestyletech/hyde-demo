@@ -1,44 +1,43 @@
-import React, { useState, useEffect } from 'react'
-import { Modal, message, Spin, Button, Row, Col, Form, Select, Input, InputNumber, DatePicker } from 'antd'
-import moment from 'moment'
-import { areIntervalsOverlapping, addDays, differenceInMinutes, hoursToMinutes } from 'date-fns'
-import { db } from '../../../utils/firebaseConfig'
-import { doc, updateDoc, collection, query, onSnapshot } from 'firebase/firestore'
+import React, { useState, useEffect } from 'react';
+import { Modal, message, Spin, Button, Row, Col, Form, Select, Input, InputNumber, DatePicker } from 'antd';
+import moment from 'moment';
+import { areIntervalsOverlapping, addDays, differenceInMinutes, hoursToMinutes } from 'date-fns';
+import { db } from '../../../utils/firebaseConfig';
+import { doc, updateDoc, collection, query, onSnapshot } from 'firebase/firestore';
 
-const { Option } = Select
-const { RangePicker } = DatePicker
-const { TextArea } = Input
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
 export default function EditReservation({ data, facility, visible, onCancel }) {
-	const [reservations, setReservations] = useState([])
-	const [loading, setLoading] = useState(true)
+	const [reservations, setReservations] = useState([]);
+	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		const queryReservations = query(collection(db, 'reservations'))
-		onSnapshot(queryReservations, (QuerySnapshot) => {
-			let reservation = []
-			QuerySnapshot.forEach((doc) => {
-				let reserve = { id: doc.id, ...doc.data() }
-				if (reserve.id !== data?.id) {
-					reservation.push(data)
-				}
-			})
-			setReservations(reservation)
-			setLoading(false)
-		})
-	}, [data])
+		const queryReservations = query(collection(db, 'reservations'));
+		(async () => {
+			onSnapshot(queryReservations, (QuerySnapshot) => {
+				let reservation = [];
+				QuerySnapshot.forEach((doc) => {
+					let reserve = { id: doc.id, ...doc.data() };
+					if (reserve.id !== data?.id) {
+						reservation.push(data);
+					}
+				});
+				setReservations(reservation);
+				setLoading(false);
+			});
+		})();
+	}, [data]);
 
-	var time_slot = reservations?.map((item) => ({ start: item?.startDateTime.toDate(), end: item?.endDateTime.toDate() }))
-	let f = facility.find((i) => i.id === data?.facility_id)
-	const [editReservationForm] = Form.useForm()
-	// if (data) console.log(data);
-	// if (facility) console.log(facility);
+	var time_slot = reservations?.map((item) => ({ start: item?.startDateTime.toDate(), end: item?.endDateTime.toDate() }));
+	let f = facility.find((i) => i.id === data?.facility_id);
+	const [editReservationForm] = Form.useForm();
 
 	if (data) {
 		editReservationForm.setFieldsValue({
 			topic: data.topic,
 			number_of_people: data.user_amount,
 			note: data.note,
-		})
+		});
 	}
 
 	const onConfirm = (val) => {
@@ -56,64 +55,64 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 					endDateTime: val.range[1]._d,
 					user_amount: val.number_of_people,
 					note: val.note ? val.note : '',
-				}
-				console.log(newData)
-				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) }
-				let daily_startTime = new Date(val.range[0]).setHours(f?.daily_start, 0, 0, 0)
-				let daily_stopTime = f?.daily_stop === 0 ? addDays(new Date(val.range[0]).setHours(0, 0, 0, 0), 1) : new Date(val.range[0]).setHours(f?.daily_stop, 0, 0, 0)
+				};
+				console.log(newData);
+				var timeSlot = { start: new Date(val.range[0]), end: new Date(val.range[1]) };
+				let daily_startTime = new Date(val.range[0]).setHours(f?.daily_start, 0, 0, 0);
+				let daily_stopTime = f?.daily_stop === 0 ? addDays(new Date(val.range[0]).setHours(0, 0, 0, 0), 1) : new Date(val.range[0]).setHours(f?.daily_stop, 0, 0, 0);
 
 				return new Promise((resolve, reject) => {
 					if (differenceInMinutes(new Date(val.range[1]), new Date(val.range[0])) > hoursToMinutes(f?.max_hours)) {
-						createError('Error Time schedule', 'Time schedule you picked is over max hours limit')
+						createError('Error Time schedule', 'Time schedule you picked is over max hours limit');
 					} else if (time_slot.length > 0) {
-						let available = false
+						let available = false;
 						for (const interval of time_slot) {
 							if (!areIntervalsOverlapping(interval, timeSlot)) {
-								available = true
+								available = true;
 							} else {
-								available = false
-								break
+								available = false;
+								break;
 							}
 						}
 						if (available) {
 							editReservation(newData)
 								.then(() => {
-									resolve()
-									message.success('Save change successfully')
-									onCancel()
+									resolve();
+									message.success('Save change successfully');
+									onCancel();
 								})
-								.catch((err) => reject(err))
+								.catch((err) => reject(err));
 						} else {
-							createError('Error unavailable', 'Time schedule you picked is not available')
+							createError('Error unavailable', 'Time schedule you picked is not available');
 						}
 					} else if (differenceInMinutes(new Date(val.range[0]), new Date(daily_startTime)) < 0) {
-						createError('Error daily start time', 'Start time you picked is not available')
+						createError('Error daily start time', 'Start time you picked is not available');
 					} else if (differenceInMinutes(new Date(daily_stopTime), new Date(val.range[1])) < 0) {
-						createError('Error daily stop time', 'End time you picked is not available')
+						createError('Error daily stop time', 'End time you picked is not available');
 					} else {
 						editReservation(newData)
 							.then(() => {
-								resolve()
-								message.success('Save change successfully')
-								onCancel()
+								resolve();
+								message.success('Save change successfully');
+								onCancel();
 							})
-							.catch((err) => reject(err))
+							.catch((err) => reject(err));
 					}
-				})
+				});
 			},
 			onCancel() {
 				// console.log("Cancel");
 			},
-		})
-	}
+		});
+	};
 
 	const editReservation = async (val) => {
-		const docRef = doc(db, 'reservations', data.id)
-		return await updateDoc(docRef, val)
-	}
+		const docRef = doc(db, 'reservations', data.id);
+		return await updateDoc(docRef, val);
+	};
 
 	function disabledDate(current) {
-		return current && current <= moment().startOf('day')
+		return current && current <= moment().startOf('day');
 	}
 
 	function createError(title, content) {
@@ -123,9 +122,9 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 			centered: true,
 			okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
 			onOk() {
-				Modal.destroyAll()
+				Modal.destroyAll();
 			},
-		})
+		});
 	}
 
 	return (
@@ -217,5 +216,5 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
 				)}
 			</Modal>
 		</>
-	)
+	);
 }

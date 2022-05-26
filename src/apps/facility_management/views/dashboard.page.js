@@ -1,18 +1,18 @@
-import React from "react";
-import Header from "../../../components/Header";
-import GraphReserves from "../components/GraphReserves";
-import "./styles/dashboard.css";
-import { Button, Row } from "antd";
-import { VerticalAlignBottomOutlined } from "@ant-design/icons";
-import PieChart from "../components/PieChart";
-import AreaChart from "../components/AreaChart";
+import React from 'react';
+import Header from '../../../components/Header';
+import GraphReserves from '../components/GraphReserves';
+import './styles/dashboard.css';
+import { Button, Row } from 'antd';
+import { VerticalAlignBottomOutlined } from '@ant-design/icons';
+import PieChart from '../components/PieChart';
+import AreaChart from '../components/AreaChart';
 
 export default function FacilitiesManagementDashboardPage() {
 	return (
 		<>
 			<Header title='Reservation Dashboard' />
 			<div className='top-container'>
-				<Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round' style={{ float: "right" }}>
+				<Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round' style={{ float: 'right' }}>
 					Export
 				</Button>
 			</div>

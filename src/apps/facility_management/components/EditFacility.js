@@ -1,37 +1,37 @@
-import React, { useState } from 'react'
-import { Modal, Form, Row, Col, Input, InputNumber, DatePicker, Button, message, Select } from 'antd'
-import './styles/facilities.css'
-import { DeleteOutlined } from '@ant-design/icons'
-import imgIcon from '../assets/img.svg'
+import React, { useState } from 'react';
+import { Modal, Form, Row, Col, Input, InputNumber, Button, message, Select } from 'antd';
+import './styles/facilities.css';
+import { DeleteOutlined } from '@ant-design/icons';
+import imgIcon from '../assets/img.svg';
 
 //firebase components
-import { db } from '../../../utils/firebaseConfig'
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage'
-import { doc, updateDoc } from 'firebase/firestore'
+import { db } from '../../../utils/firebaseConfig';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { doc, updateDoc } from 'firebase/firestore';
 
-const { TextArea } = Input
-const { Option } = Select
+const { TextArea } = Input;
+const { Option } = Select;
 
 export default function EditFacility({ id, value, visible, onCancel }) {
-	const [editFacilities] = Form.useForm()
-	const [pickedImage, setPickedImage] = useState(null)
-	const [imageFile, setImageFile] = useState(null)
-	const [img, setImg] = useState(true)
-	const [dailyStart, setDailyStart] = useState()
-	const [dailyStop, setDailyStop] = useState()
+	const [editFacilities] = Form.useForm();
+	const [pickedImage, setPickedImage] = useState(null);
+	const [imageFile, setImageFile] = useState(null);
+	const [img, setImg] = useState(true);
+	const [dailyStart, setDailyStart] = useState();
+	const [dailyStop, setDailyStop] = useState();
 
-	console.log(dailyStart, dailyStop)
+	console.log(dailyStart, dailyStop);
 
 	const selectImage = (e) => {
-		setImageFile(e.target.files[0])
-		const reader = new FileReader()
+		setImageFile(e.target.files[0]);
+		const reader = new FileReader();
 		reader.onload = () => {
 			if (reader.readyState === 2) {
-				setPickedImage(reader.result)
+				setPickedImage(reader.result);
 			}
-		}
-		reader.readAsDataURL(e.target.files[0])
-	}
+		};
+		reader.readAsDataURL(e.target.files[0]);
+	};
 
 	const onConfirm = () => {
 		Modal.confirm({
@@ -43,11 +43,11 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			centered: true,
 			onOk() {
 				return new Promise((resolve) => {
-					const documentRef = doc(db, 'facilities', id)
+					const documentRef = doc(db, 'facilities', id);
 					if (pickedImage) {
-						let file = imageFile
-						const storage = getStorage()
-						const storageRef = ref(storage, 'facilities_image/' + file.name)
+						let file = imageFile;
+						const storage = getStorage();
+						const storageRef = ref(storage, 'facilities_image/' + file.name);
 						uploadBytes(storageRef, file).then((snapshot) => {
 							getDownloadURL(snapshot.ref).then((downloadURL) => {
 								editFacilities.validateFields().then((val) => {
@@ -62,22 +62,22 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 										detail: val.detail,
 										max_hours: val.max_hours,
 										max_users: val.max_users,
-										rules: val.rules === value.rules ? val.rules : val.rules.split(',')
-									}
+										rules: val.rules === value.rules ? val.rules : val.rules.split(','),
+									};
 									// console.log(newValues);
 									updateDoc(documentRef, newValues)
 										.catch((err) => console.error(err))
 										.then(() => {
-											editFacilities.resetFields()
-											setDailyStart()
-											setDailyStop()
-											resolve('SUCCESS')
-											message.success('Save Change Successfully')
-											onCancel()
-										})
-								})
-							})
-						})
+											editFacilities.resetFields();
+											setDailyStart();
+											setDailyStop();
+											resolve('SUCCESS');
+											message.success('Save Change Successfully');
+											onCancel();
+										});
+								});
+							});
+						});
 					} else {
 						editFacilities.validateFields().then((val) => {
 							// console.log(val);
@@ -90,37 +90,37 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 								detail: val.detail,
 								max_hours: val.max_hours,
 								max_users: val.max_users,
-								rules: val.rules === value.rules ? val.rules : val.rules.split(',')
-							}
-							console.log(newValues)
+								rules: val.rules === value.rules ? val.rules : val.rules.split(','),
+							};
+							console.log(newValues);
 							updateDoc(documentRef, newValues)
 								.catch((err) => console.error(err))
 								.then(() => {
-									editFacilities.resetFields()
-									setDailyStart()
-									setDailyStop()
-									resolve('SUCCESS')
-									message.success('Save Change Successfully')
-									onCancel()
-								})
-						})
+									editFacilities.resetFields();
+									setDailyStart();
+									setDailyStop();
+									resolve('SUCCESS');
+									message.success('Save Change Successfully');
+									onCancel();
+								});
+						});
 					}
-				})
+				});
 			},
 			onCancel() {
 				// console.log("Cancel");
-				editFacilities.resetFields()
-			}
-		})
-	}
+				editFacilities.resetFields();
+			},
+		});
+	};
 
-	const hours = []
+	const hours = [];
 	for (let i = 0; i < 24; i++) {
 		hours.push(
 			<Option key={i.toString()} value={i}>
 				{i.toString().length < 1 ? '0' + i.toString() : i.toString()}:00
-			</Option>
-		)
+			</Option>,
+		);
 	}
 	if (value) {
 		editFacilities.setFieldsValue({
@@ -130,8 +130,8 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 			max_hours: value.max_hours,
 			accommodates: value.accommodates,
 			description: value.description,
-			rules: value.rules
-		})
+			rules: value.rules,
+		});
 	}
 
 	return (
@@ -141,9 +141,9 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 				centered
 				visible={visible}
 				onCancel={() => {
-					editFacilities.resetFields()
-					onCancel()
-					setImg(true)
+					editFacilities.resetFields();
+					onCancel();
+					setImg(true);
 				}}
 				title='Edit Facilities'
 				width={1000}
@@ -153,11 +153,13 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 						size='large'
 						shape='round'
 						onClick={() => {
-							onConfirm()
-						}}>
+							onConfirm();
+						}}
+					>
 						Save
-					</Button>
-				]}>
+					</Button>,
+				]}
+			>
 				<Form form={editFacilities} layout='vertical'>
 					<Row>
 						<Col span={12} style={{ padding: 10 }}>
@@ -226,11 +228,11 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 															accept='image/*'
 															onChange={selectImage}
 															onClick={(event) => {
-																event.target.value = null
+																event.target.value = null;
 															}}
 															style={{
 																display: 'none',
-																float: 'left'
+																float: 'left',
 															}}
 														/>
 														<p style={{ color: 'red' }}>* Please upload image</p>
@@ -253,5 +255,5 @@ export default function EditFacility({ id, value, visible, onCancel }) {
 				</Form>
 			</Modal>
 		</>
-	)
+	);
 }

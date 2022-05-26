@@ -1,14 +1,13 @@
-import React from "react";
-import QRCode from "qrcode.react";
-import { Modal, Row, Col, Button } from "antd";
-import { format } from "date-fns";
-import qrlogo from "../assets/hyde_2.svg";
+import React from 'react';
+import QRCode from 'qrcode.react';
+import { Modal, Row, Col, Button } from 'antd';
+import { format } from 'date-fns';
 
 export default function QrReservationModal({ data, visible, onCancel }) {
 	return (
 		<>
-			<Modal centered title="Reservation" visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
-				<div style={{ textAlign: "center" }}>
+			<Modal centered title='Reservation' visible={visible} onCancel={() => onCancel()} footer={null} width={400}>
+				<div style={{ textAlign: 'center' }}>
 					<QRCode value={data?.id} size={200} />
 				</div>
 				<div style={{ paddingLeft: 30, marginTop: 20 }}>
@@ -23,7 +22,7 @@ export default function QrReservationModal({ data, visible, onCancel }) {
 					<Row>
 						<Col span={12}>Time :</Col>
 						<Col span={12}>
-							{data ? format(new Date(data?.startDateTime), "HH:mm") : null} - {data ? format(new Date(data?.endDateTime), "HH:mm") : null}
+							{data ? format(new Date(data?.startDateTime), 'HH:mm') : null} - {data ? format(new Date(data?.endDateTime), 'HH:mm') : null}
 						</Col>
 					</Row>
 					<Row>
@@ -43,8 +42,8 @@ export default function QrReservationModal({ data, visible, onCancel }) {
 						<Col span={12}>{data?.note}</Col>
 					</Row>
 				</div>
-				<div style={{ textAlign: "center" }}>
-					<Button shape="round" size="large" onClick={null} style={{ width: 200, marginTop: 50 }}>
+				<div style={{ textAlign: 'center' }}>
+					<Button shape='round' size='large' onClick={null} style={{ width: 200, marginTop: 50 }}>
 						Share
 					</Button>
 				</div>
