@@ -1,8 +1,8 @@
-import React from "react";
-import "./styles/header.css";
-import { Button } from "antd";
+import React from 'react';
+import './styles/header.css';
+import { Button } from 'antd';
 
-import notiIcon from "./assets/bell.svg";
+import notiIcon from './assets/bell.svg';
 
 function Header({ title }) {
 	return (

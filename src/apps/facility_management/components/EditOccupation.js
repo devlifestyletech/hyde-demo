@@ -64,7 +64,7 @@ export default function EditOccupation({ visible, onCancel, id, roomName, roomDe
 			setImg(image);
 		}
 		handleValue();
-	}, [visible]);
+	}, []);
 
 	return (
 		<>

@@ -1,17 +1,17 @@
 /* eslint-disable import/no-anonymous-default-export */
-import axios from 'axios'
-import { encryptStorage } from '../../../utils/encryptStorage'
-const session = encryptStorage.getItem('user_session')
+import axios from 'axios';
+import { encryptStorage } from '../../../utils/encryptStorage';
+const session = encryptStorage.getItem('user_session');
 
 export default {
 	getAllUsers: async function () {
-		let data = []
+		let data = [];
 		try {
 			await axios
 				.get(`${process.env.REACT_APP_API_URL}/users`, {
 					headers: {
-						Authorization: 'Bearer ' + session.jwt
-					}
+						Authorization: 'Bearer ' + session.jwt,
+					},
 				})
 				.then((response) => {
 					response.data
@@ -20,15 +20,15 @@ export default {
 							let newData = {
 								key: index,
 								number: index + 1,
-								...user
-							}
-							data.push(newData)
-						})
-				})
-			return data
+								...user,
+							};
+							data.push(newData);
+						});
+				});
+			return data;
 		} catch (e) {
-			console.error(e)
-			throw e
+			console.error(e);
+			throw e;
 		}
 	},
 
@@ -37,13 +37,13 @@ export default {
 			await axios
 				.delete(`${process.env.REACT_APP_API_URL}/users/${id}`, {
 					headers: {
-						Authorization: 'Bearer ' + session.jwt
-					}
+						Authorization: 'Bearer ' + session.jwt,
+					},
 				})
-				.then((res) => res.data)
+				.then((res) => res.data);
 		} catch (e) {
-			console.error(e)
-			throw e
+			console.error(e);
+			throw e;
 		}
 	},
 
@@ -51,31 +51,26 @@ export default {
 		try {
 			const data = await axios.get(`${process.env.REACT_APP_API_URL}/projects`, {
 				headers: {
-					Authorization: 'Bearer ' + session.jwt
-				}
-			})
-			return data
+					Authorization: 'Bearer ' + session.jwt,
+				},
+			});
+			return data;
 		} catch (e) {
-			console.error(e)
-			throw e
+			console.error(e);
+			throw e;
 		}
-	},
-
-	updateResidentData: async function (data, id) {
-		try {
-		} catch (error) {}
 	},
 
 	getUserData: async function (id) {
 		try {
 			const data = await axios.get(`${process.env.REACT_APP_API_URL}/users/${id}`, {
 				headers: {
-					Authorization: 'Bearer ' + session.jwt
-				}
-			})
-			return data
+					Authorization: 'Bearer ' + session.jwt,
+				},
+			});
+			return data;
 		} catch (error) {
-			console.error(error)
+			console.error(error);
 		}
 	},
 
@@ -83,12 +78,12 @@ export default {
 		try {
 			return await axios.post(`${process.env.REACT_APP_API_URL}/resident-lists`, value, {
 				headers: {
-					Authorization: 'Bearer ' + session.jwt
-				}
-			})
+					Authorization: 'Bearer ' + session.jwt,
+				},
+			});
 		} catch (error) {
-			console.error(error)
-			throw error
+			console.error(error);
+			throw error;
 		}
 	},
 
@@ -96,24 +91,24 @@ export default {
 		try {
 			return await axios.delete(`${process.env.REACT_APP_API_URL}/resident-lists/${id}`, {
 				headers: {
-					Authorization: 'Bearer ' + session.jwt
-				}
-			})
+					Authorization: 'Bearer ' + session.jwt,
+				},
+			});
 		} catch (error) {
-			console.error(error)
-			throw error
+			console.error(error);
+			throw error;
 		}
 	},
 	changeRoleUser: async function (value, id) {
 		try {
 			return await axios.put(`${process.env.REACT_APP_API_URL}/resident-lists/${id}`, value, {
 				headers: {
-					Authorization: 'Bearer ' + session.jwt
-				}
-			})
+					Authorization: 'Bearer ' + session.jwt,
+				},
+			});
 		} catch (error) {
-			console.error(error)
-			throw error
+			console.error(error);
+			throw error;
 		}
-	}
-}
+	},
+};

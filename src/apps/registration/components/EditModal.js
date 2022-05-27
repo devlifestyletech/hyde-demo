@@ -19,16 +19,15 @@ export default function EditModal({ user, visible, onCancel }) {
 	const [addresses, setAddresses] = useState();
 
 	useEffect(() => {
-		if (user?.image) {
-			setImg(true);
-		}
-		addressService.getAllAddresses().then((res) => setAddresses(res.data));
+		(async () => {
+			if (user?.image) {
+				setImg(true);
+			}
+			addressService.getAllAddresses().then((res) => setAddresses(res.data));
+		})();
 	}, [user]);
 
 	if (user) {
-		// if (user.image !== undefined) {
-		// 	setPickedImage(`${process.env.REACT_APP_API_URL}${user.image.url}`);
-		// }
 		EditResidentForm.setFieldsValue({
 			firstname: user.firstname,
 			lastname: user.lastname,

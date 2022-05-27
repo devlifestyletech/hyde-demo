@@ -25,7 +25,9 @@ function CreateModal({ visible, onCancel }) {
 	const [addresses, setAddresses] = useState();
 
 	useEffect(() => {
-		addressService.getAllAddresses().then((res) => setAddresses(res.data));
+		(async () => {
+			addressService.getAllAddresses().then((res) => setAddresses(res.data));
+		})();
 	}, []);
 
 	const selectImage = (e) => {

@@ -1,38 +1,40 @@
-import React, { useState, useEffect } from 'react'
-import { Tabs, Input, Button, Spin } from 'antd'
-import TableRender from '../components/TableRender'
-import Header from '../../../components/Header'
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons'
-import './styles/registration.css'
-import authService from '../../../services/auth.service'
-import CreateModal from '../components/CreateModal'
+import React, { useState, useEffect } from 'react';
+import { Tabs, Input, Button, Spin } from 'antd';
+import TableRender from '../components/TableRender';
+import Header from '../../../components/Header';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import './styles/registration.css';
+import authService from '../../../services/auth.service';
+import CreateModal from '../components/CreateModal';
 
-const { TabPane } = Tabs
+const { TabPane } = Tabs;
 function RegistrationPage() {
-	const [residents, setResidents] = useState([])
-	const [addNewModalVisibility, setAddNewModalVisibility] = useState(false)
-	const [refresh, setRefresh] = useState(false)
-	const [loading, setLoading] = useState(true)
+	const [residents, setResidents] = useState([]);
+	const [addNewModalVisibility, setAddNewModalVisibility] = useState(false);
+	const [refresh, setRefresh] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		authService.getAllResident().then((res) => {
-			let data = []
-			res.data.forEach((res, index) => {
-				let user = {
-					number: index + 1,
-					...res
-				}
-				data.push(user)
-			})
-			setResidents(data)
-			setLoading(false)
-		})
-	}, [refresh])
-	console.log(residents)
+		(async () => {
+			authService.getAllResident().then((res) => {
+				let data = [];
+				res.data.forEach((res, index) => {
+					let user = {
+						number: index + 1,
+						...res,
+					};
+					data.push(user);
+				});
+				setResidents(data);
+				setLoading(false);
+			});
+		})();
+	}, [refresh]);
+	console.log(residents);
 
-	let owner_users = residents.filter((user) => user.resident_type === 'Owner')
-	let inhabitant_users = residents.filter((user) => user.resident_type === 'Inhabitant')
-	let tenant_users = residents.filter((user) => user.resident_type === 'Tenant')
+	let owner_users = residents.filter((user) => user.resident_type === 'Owner');
+	let inhabitant_users = residents.filter((user) => user.resident_type === 'Inhabitant');
+	let tenant_users = residents.filter((user) => user.resident_type === 'Tenant');
 
 	return (
 		<>
@@ -71,12 +73,12 @@ function RegistrationPage() {
 			<CreateModal
 				visible={addNewModalVisibility}
 				onCancel={() => {
-					setAddNewModalVisibility(false)
-					setRefresh(!refresh)
+					setAddNewModalVisibility(false);
+					setRefresh(!refresh);
 				}}
 			/>
 		</>
-	)
+	);
 }
 
-export default RegistrationPage
+export default RegistrationPage;

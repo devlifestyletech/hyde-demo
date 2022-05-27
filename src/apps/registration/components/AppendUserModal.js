@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Form, Button, Select, Modal } from 'antd'
-import ResidentService from '../services/resident.service'
+import React, { useEffect, useState } from 'react';
+import { Form, Button, Select, Modal } from 'antd';
+import ResidentService from '../services/resident.service';
 
 export default function AppendUserModal({ userRule, visible, onCancel, id }) {
-	const [users, setUsers] = useState()
-	const [form] = Form.useForm()
+	const [users, setUsers] = useState();
+	const [form] = Form.useForm();
 	useEffect(() => {
-		ResidentService.getAllUsers().then((users) => setUsers(users))
-	}, [])
+		(async () => {
+			ResidentService.getAllUsers().then((users) => setUsers(users));
+		})();
+	}, []);
 	return (
 		<Modal
 			centered
@@ -17,20 +19,22 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
 			footer={[
 				<Button
 					onClick={(e) => {
-						e.preventDefault()
+						e.preventDefault();
 						form.validateFields().then((value) => {
 							let newValue = {
 								address: id,
 								resident_role: userRule,
-								...value
-							}
-							console.log(newValue)
-							ResidentService.addUserToAddress(newValue).then(() => onCancel())
-						})
-					}}>
+								...value,
+							};
+							console.log(newValue);
+							ResidentService.addUserToAddress(newValue).then(() => onCancel());
+						});
+					}}
+				>
 					Add
-				</Button>
-			]}>
+				</Button>,
+			]}
+		>
 			<Form form={form} layout='vertical'>
 				<Form.Item name='users_permissions_user' label='Select user from list'>
 					<Select
@@ -38,7 +42,8 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
 						placeholder='Search to Select'
 						optionFilterProp='children'
 						filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-						filterSort={(optionA, optionB) => optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())}>
+						filterSort={(optionA, optionB) => optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())}
+					>
 						{users
 							? users.map((user, index) => (
 									<Select.Option key={index} value={user.id}>
@@ -50,5 +55,5 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
 				</Form.Item>
 			</Form>
 		</Modal>
-	)
+	);
 }
