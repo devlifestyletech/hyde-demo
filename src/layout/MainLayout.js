@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import React from 'react';
 import { Layout } from 'antd';
 import SideMenu from '../components/SideMenu';
@@ -39,55 +40,81 @@ import Payment_dashbord from '../apps/payment/payment_dashbord';
 
 const { Sider, Content } = Layout;
 function MainLayout() {
-	return (
-		<Layout>
-			<Sider
-				width={300}
-				style={{
-					backgroundColor: 'white',
-					height: '100vh',
-					position: 'fixed',
-					left: 0,
-					overflow: 'auto',
-					paddingBottom: 55,
-				}}
-			>
-				<SideMenu />
-			</Sider>
-			<Content style={{ backgroundColor: 'white', padding: 35, marginLeft: 300 }}>
-				<Routes>
-					<Route index element={<MainPage />} />
-					{/* Facilities */}
-					<Route path='/facility-reservation' element={<FacilitiesManagementDashboardPage />} />
-					<Route path='/facility-reservation/calendar' element={<BookingCalendarPage />} />
-					<Route path='/facility-reservation/list' element={<BookingListsPage />} />
-					<Route path='/facility-reservation/facilities' element={<FacilitiesPage />} />
-					<Route path='/facility-reservation/occupation' element={<OccupationPage />} />
-					{/* Members */}
-					<Route path='/members' element={<MemberDashboardPage />} />
-					<Route path='/members/registration' element={<RegistrationPage />} />
-					<Route path='/members/roomManagement' element={<RoomManagement />} />
-					<Route path='/members/roomDashboard' element={<RoomDashboardPage />} />
+  return (
+    <Layout>
+      <Sider
+        width={300}
+        style={{
+          backgroundColor: 'white',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+          overflow: 'auto',
+          paddingBottom: 55,
+        }}
+      >
+        <SideMenu />
+      </Sider>
+      <Content
+        style={{ backgroundColor: 'white', padding: 35, marginLeft: 300 }}
+      >
+        <Routes>
+          <Route index element={<MainPage />} />
+          {/* Facilities */}
+          <Route
+            path="/facility-reservation"
+            element={<FacilitiesManagementDashboardPage />}
+          />
+          <Route
+            path="/facility-reservation/calendar"
+            element={<BookingCalendarPage />}
+          />
+          <Route
+            path="/facility-reservation/list"
+            element={<BookingListsPage />}
+          />
+          <Route
+            path="/facility-reservation/facilities"
+            element={<FacilitiesPage />}
+          />
+          <Route
+            path="/facility-reservation/occupation"
+            element={<OccupationPage />}
+          />
+          {/* Members */}
+          <Route path="/members" element={<MemberDashboardPage />} />
+          <Route path="/members/registration" element={<RegistrationPage />} />
+          <Route path="/members/roomManagement" element={<RoomManagement />} />
+          <Route
+            path="/members/roomDashboard"
+            element={<RoomDashboardPage />}
+          />
 
-					{/* Nearby */}
-					<Route path='/nearby' element={<Nearby />} />
-					<Route path='/announcement' element={<Announcement />} />
+          {/* Nearby */}
+          <Route path="/nearby" element={<Nearby />} />
+          <Route path="/announcement" element={<Announcement />} />
 
-					{/* Fixing */}
-					<Route path='/service-center-reports' element={<FixingReports />} />
-					<Route path='/service-center-dashBoard' element={<FixingReportDashBoard />} />
+          {/* Fixing */}
+          <Route path="/service-center-reports" element={<FixingReports />} />
+          <Route
+            path="/service-center-dashBoard"
+            element={<FixingReportDashBoard />}
+          />
 
-					{/* Chat */}
-					<Route path='/service-chat' element={<FixingChat />} />
-					<Route path='/live-chat' element={<LiveChat />} />
+          {/* Chat */}
+          <Route path="/service-chat" element={<FixingChat />} />
+          <Route path="/live-chat" element={<LiveChat />} />
 
-					{/* Payment */}
-					<Route path='/payment/bill-payment' element={<Payment_success />} />
-					<Route path='/payment/Paymentdashbord' element={<Payment_dashbord />} />
-				</Routes>
-			</Content>
-		</Layout>
-	);
+          {/* Payment */}
+          <Route path="/payment/bill-payment" element={<Payment_success />} />
+          <Route
+            path="/payment/Paymentdashbord"
+            element={<Payment_dashbord />}
+          />
+        </Routes>
+      </Content>
+    </Layout>
+  );
 }
 
 export default MainLayout;
