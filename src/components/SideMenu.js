@@ -68,7 +68,7 @@ function SideMenu() {
               title="Monitoring"
             >
               <Menu.Item key="0">
-                <Link to="/">Summary Dashboard</Link>
+                <Link to="/dashboard/summary">Summary Dashboard</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">Facility Management</div>
@@ -78,21 +78,25 @@ function SideMenu() {
               title="Facilities Reservation"
             >
               <Menu.Item key="1">
-                <Link to="/facility-reservation">Facilities Dashboard</Link>
+                <Link to="/dashboard/facilities-reservation-dashboard">
+                  Facilities Dashboard
+                </Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/facility-reservation/calendar">
+                <Link to="/dashboard/facilities-reservation-calendar">
                   Booking Calendar
                 </Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/facility-reservation/list">Booking List</Link>
+                <Link to="/dashboard/facilities-reservation-list">
+                  Booking List
+                </Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to="/facility-reservation/facilities">Facilities</Link>
+                <Link to="/dashboard/facilities-management">Facilities</Link>
               </Menu.Item>
               <Menu.Item key="5">
-                <Link to="/facility-reservation/occupation">Occupation</Link>
+                <Link to="/dashboard/occupation">Occupation</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
@@ -102,7 +106,7 @@ function SideMenu() {
               title="Announcement"
             >
               <Menu.Item key="6" className="menu-item">
-                <Link to="/announcement">Announcement Lists</Link>
+                <Link to="/dashboard/announcement">Announcement Lists</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
@@ -112,7 +116,7 @@ function SideMenu() {
               title="Nearby Service"
             >
               <Menu.Item key="7" className="menu-item">
-                <Link to="/nearby">Service Lists</Link>
+                <Link to="/dashboard/nearby">Service Lists</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
@@ -121,10 +125,10 @@ function SideMenu() {
               title="Payment"
             >
               <Menu.Item key="8">
-                <Link to="/payment/Paymentdashbord">Payment Dashboard</Link>
+                <Link to="/dashboard/payment-dashboard">Payment Dashboard</Link>
               </Menu.Item>
               <Menu.Item key="9">
-                <Link to="/payment/bill-payment">Bill Payment</Link>
+                <Link to="/dashboard/payment-billing">Bill Payment</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">User Management</div>
@@ -134,16 +138,20 @@ function SideMenu() {
               title="Members"
             >
               <Menu.Item key="10">
-                <Link to="/members">User Management Dashboard</Link>
+                <Link to="/dashboard/members-dashboard">
+                  User Management Dashboard
+                </Link>
               </Menu.Item>
               <Menu.Item key="11">
-                <Link to="/members/registration">Registration</Link>
+                <Link to="/dashboard/members-registration">Registration</Link>
               </Menu.Item>
               <Menu.Item key="12">
-                <Link to="/members/roomDashboard">Room Dashboard</Link>
+                <Link to="/dashboard/rooms-management-dashboard">
+                  Room Dashboard
+                </Link>
               </Menu.Item>
               <Menu.Item key="13">
-                <Link to="/members/roomManagement">Room Management</Link>
+                <Link to="/dashboard/rooms-management">Room Management</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu
@@ -152,7 +160,7 @@ function SideMenu() {
               title="Live Chat"
             >
               <Menu.Item key="14">
-                <Link to="/live-chat">Chat</Link>
+                <Link to="/dashboard/live-chat">Chat</Link>
               </Menu.Item>
             </SubMenu>
 
@@ -164,16 +172,18 @@ function SideMenu() {
               title="Service Center"
             >
               <Menu.Item key="15" className="menu-item">
-                <Link to="/service-center-dashBoard">
+                <Link to="/dashboard/service-center-dashBoard">
                   Service Center Dashboard
                 </Link>
               </Menu.Item>
               <Menu.Item key="16" className="menu-item">
-                <Link to="/service-center-reports">Service Center Lists</Link>
+                <Link to="/dashboard/service-center-reports">
+                  Service Center Lists
+                </Link>
               </Menu.Item>
               <Menu.Item key="17" className="menu-item">
                 {/* <Link to='/join-room'>Message</Link> */}
-                <Link to="/service-chat">Messages</Link>
+                <Link to="/dashboard/service-chat">Messages</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">Settings</div>

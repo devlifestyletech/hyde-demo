@@ -92,7 +92,7 @@ const data = [
   },
 ];
 
-const payment_dashbord = () => {
+const PaymentDashbord = () => {
   return (
     <>
       <Header title="Payment Dashboard" />
@@ -158,4 +158,4 @@ const payment_dashbord = () => {
     </>
   );
 };
-export default payment_dashbord;
+export default PaymentDashbord;

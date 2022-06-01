@@ -12,7 +12,7 @@ import CreateBillModal from './components/Modal/ModalCreateBill';
 import './style/payment.css';
 import Heading from '../../components/Header';
 
-const Payment_success = () => {
+const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const { status_billing, paramsBilling } = useSelector(
     (state) => state.PaymentActionRedux
@@ -82,4 +82,4 @@ const Payment_success = () => {
   );
 };
 
-export default Payment_success;
+export default PaymentSuccess;
