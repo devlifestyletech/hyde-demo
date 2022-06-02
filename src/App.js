@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.less';
 import 'devextreme/dist/css/dx.light.css';
 import { AuthProvider } from './hooks/useAuth';
@@ -78,6 +78,7 @@ function App() {
           <Route path="payment-billing" element={<PaymentSuccess />} />
           <Route path="payment-dashboard" element={<PaymentDashbord />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </AuthProvider>
   );

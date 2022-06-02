@@ -2,7 +2,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import SideMenu from '../components/SideMenu';
-import { Navigate, useOutlet } from 'react-router-dom';
+import { Navigate, useOutlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 // import MainPage from '../apps/main.page';
@@ -41,9 +41,10 @@ import { useAuth } from '../hooks/useAuth';
 
 const { Sider, Content } = Layout;
 function MainLayout() {
+  const location = useLocation(); // <-- get current location being accessed
   const { isSignIn } = useAuth();
   const outlet = useOutlet();
-  if (!isSignIn) return <Navigate to="/signin" />;
+  if (!isSignIn) return <Navigate to="/signin" state={{ from: location }} />;
 
   return (
     <Layout>
@@ -63,56 +64,6 @@ function MainLayout() {
       <Content
         style={{ backgroundColor: 'white', padding: 35, marginLeft: 300 }}
       >
-        {/* <Routes>
-          <Route index element={<MainPage />} />
-          {/* Facilities 
-          <Route
-            path="/facility-reservation"
-            element={<FacilitiesManagementDashboardPage />}
-          />
-          <Route
-            path="/facility-reservation/calendar"
-            element={<BookingCalendarPage />}
-          />
-          <Route
-            path="/facility-reservation/list"
-            element={<BookingListsPage />}
-          />
-          <Route
-            path="/facility-reservation/facilities"
-            element={<FacilitiesPage />}
-          />
-          <Route
-            path="/facility-reservation/occupation"
-            element={<OccupationPage />}
-          />
-
-          <Route path="/members" element={<MemberDashboardPage />} />
-          <Route path="/members/registration" element={<RegistrationPage />} />
-          <Route path="/members/roomManagement" element={<RoomManagement />} />
-          <Route
-            path="/members/roomDashboard"
-            element={<RoomDashboardPage />}
-          />
-
-          <Route path="/nearby" element={<Nearby />} />
-          <Route path="/announcement" element={<Announcement />} />
-   
-          <Route path="/service-center-reports" element={<FixingReports />} />
-          <Route
-            path="/service-center-dashBoard"
-            element={<FixingReportDashBoard />}
-          />
-
-          <Route path="/service-chat" element={<FixingChat />} />
-          <Route path="/live-chat" element={<LiveChat />} />
-
-          <Route path="/payment/bill-payment" element={<Payment_success />} />
-          <Route
-            path="/payment/Paymentdashbord"
-            element={<Payment_dashbord />}
-          />
-        </Routes> */}
         {outlet}
       </Content>
     </Layout>

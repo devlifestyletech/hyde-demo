@@ -16,16 +16,25 @@ import authService from '../services/auth.service';
 
 //import encrypt Storage configure
 import { encryptStorage } from '../utils/encryptStorage';
+import { useAuth } from '../hooks/useAuth';
 
 function SignInPage() {
   const [LoginForm] = Form.useForm();
+  const { signin } = useAuth();
 
   const onFinish = (value) => {
     authService
       .signIn(value)
       .then((res) => {
-        console.log(res.data);
-        if (res.data.user.role.type === 'resident') {
+        console.log(res);
+        if (res?.data?.user?.role?.type === 'juristic') {
+          try {
+            encryptStorage.setItem('user_session', JSON.stringify(res.data));
+            signin();
+          } catch (e) {
+            console.error(e.message);
+          }
+        } else {
           Modal.error({
             title: 'Error !',
             content:
@@ -34,13 +43,6 @@ function SignInPage() {
               LoginForm.resetFields();
             },
           });
-        } else {
-          try {
-            encryptStorage.setItem('user_session', JSON.stringify(res.data));
-            window.location.href = '/';
-          } catch (e) {
-            console.error(e.message);
-          }
         }
       })
       .catch(() =>
