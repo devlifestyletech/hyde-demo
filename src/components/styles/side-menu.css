@@ -17,6 +17,12 @@
   font-size: 18px;
   padding-left: 24px;
 }
+.menu-group .ant-menu-item a {
+  color: #1d1c1c;
+}
+.menu-group .ant-menu-item a:hover {
+  color: rgba(216, 170, 129, 1);
+}
 .menu-group .ant-menu-inline {
   border: 0;
   color: rgba(255, 255, 255, 1);
