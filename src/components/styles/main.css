@@ -1,0 +1,17 @@
+.main_box {
+  width: 500px;
+  padding: 20px;
+  margin: auto;
+}
+.main_box h1 {
+  color: '#fff';
+}
+
+.main_box h4 {
+  color: '#fff';
+}
+
+.main_box .ant-form-item-label > label {
+  color: #fff;
+  font-size: 18px;
+}

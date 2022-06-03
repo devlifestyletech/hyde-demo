@@ -194,7 +194,7 @@ function SideMenu() {
                 style={{ float: 'left', paddingTop: 5 }}
               />
               <div className="menu-txt">
-                <a href="/" onClick={() => authService.logout()}>
+                <a href="/" onClick={() => authService.signOut()}>
                   Logout
                 </a>
               </div>

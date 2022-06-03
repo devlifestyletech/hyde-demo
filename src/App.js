@@ -9,11 +9,13 @@ import NoAuth from './layout/NoAuthLayout';
 import MainLayout from './layout/MainLayout';
 
 // import UnauthorizeRoute from './routes/unauthorize_route';
-import SignInPage from './apps/signin.page';
-import ResetPasswordPage from './apps/reset_password.page';
+import SignInPage from './components/signin.page';
+import ResetPasswordPage from './components/reset_password.page';
+import ForgotPasswordPage from './components/forgot_password.page';
+import ConfirmRegistrationPage from './components/confirm_registration.page';
 
 // import AuthorizeRoute from './routes/authorize_route';
-import MainPage from './apps/main.page';
+import MainPage from './components/main.page';
 import FacilitiesManagementDashboardPage from './apps/facility_management/views/dashboard.page';
 import BookingCalendarPage from './apps/facility_management/views/calendar.page';
 import BookingListsPage from './apps/facility_management/views/lists.page';
@@ -40,7 +42,12 @@ function App() {
         <Route element={<NoAuth />}>
           <Route path="/" element={<SignInPage />} />
           <Route path="/signin" element={<SignInPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route
+            path="/confirm-registration"
+            element={<ConfirmRegistrationPage />}
+          />
         </Route>
         {/* authorize_route */}
         <Route path="/dashboard" element={<MainLayout />}>
