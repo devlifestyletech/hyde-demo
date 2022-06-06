@@ -31,7 +31,8 @@ export const ReportImg = styled.img`
   display: block;
   margin-left: auto;
   margin-right: auto;
-  max-width: 90%;
+  // margin-top: 0.1%;
+  max-width: 100%;
   max-height: 40%;
 `
 
@@ -66,12 +67,9 @@ margin-left: 0.4vw;
 export const DetailContainer = styled.div`
 margin-left: 0.4vw;
   display: flex;
-  // align-items: center;
-  // justify-content: center;
   color: rgba(0, 0, 0, 1);
   font-family: SukhumvitSet-Thin;
   font-size: 1rem;
-  // background-color: #d8aa81;
 `;
 
 export const ReportCenter = styled.div`
@@ -79,4 +77,11 @@ display: flex;
 justify-content: center;
 align-items: center;
 margin-top:2vh;
+`;
+export const BoxReport = styled.div`
+// display: flex;
+// justify-content: center;
+// align-items: center;
+// margin-top:2vh;
+background-color: #ECEBEB;
 `;

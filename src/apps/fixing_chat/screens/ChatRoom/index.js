@@ -172,6 +172,7 @@ function ChatRoom(props) {
 
   const uploadImg = async () => {
     setOnSend(true);
+    console.log('imageFile',imageFile)
     let dataImage = new FormData();
     dataImage.append("files", imageFile);
     await axios

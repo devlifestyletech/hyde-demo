@@ -10,7 +10,8 @@ import {
   ProblemContainer,
   DetailContainer,
   NoContainer,
-  ReportCenter
+  ReportCenter,
+  BoxReport
 } from "./styles";
 import { Spin, Button, Row, Col } from "antd";
 import ReportModal from "../../../fixing_report/service/reportModal" 
@@ -61,6 +62,14 @@ export default function ReportDetail({ reportId }) {
   const ShowReport = () => {
     return reportData ? (
       <Col style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+         <ReportImg src={
+          reportData.image_pending[0]
+            ? process.env.REACT_APP_API_URL + reportData.image_pending[0]?.url
+            : noImg
+        }>
+        </ReportImg>
+
+        <BoxReport>
         <ProblemContainer>Problem: {reportData.problem}</ProblemContainer>
         <Row>
           <DetailContainer style={{ flex: 0.1 }}>Detail:</DetailContainer>
@@ -76,12 +85,7 @@ export default function ReportDetail({ reportId }) {
             {reportData.status}
           </DetailContainer>
         </Row>
-        <ReportImg src={
-          reportData.image_pending[0]
-            ? process.env.REACT_APP_API_URL + reportData.image_pending[0]?.url
-            : noImg
-        }>
-        </ReportImg>
+        </BoxReport>
         <ReportCenter> 
           <Button
           style={{
