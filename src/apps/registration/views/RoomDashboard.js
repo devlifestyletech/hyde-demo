@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../../../components/Header';
+import React, { useEffect, useState } from 'react';
+import Header from '../../../components/header';
 import PieGraph from '../components/PieGraph';
 import { Column } from '@ant-design/plots';
 import './styles/dashboard.css';
-import { Row, Button, DatePicker, Col } from 'antd';
+import { Button, Col, DatePicker, Row } from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import moment from 'moment';
 

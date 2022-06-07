@@ -5,15 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/announcement/Announcement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/announcement/Announcement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/dashboard.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/dashboard.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/facilities.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/facilities.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/lists.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/lists.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/occupation.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/occupation.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_chat/screens/ChatRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_chat/screens/ChatRoom/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Report_DashBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Report_DashBoard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/nearby/NearbyService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/nearby/NearbyService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/payment/Payment_success.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/Payment_success.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/payment/payment_dashbord.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/payment_dashbord.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/RoomDashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/RoomDashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SideMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sideMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/confirm_registration.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/confirm_registration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forgot_password.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forgot_password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/main.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/main_dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/reset_password.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/reset_password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/signin.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/signin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/MainLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/MainLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/NoAuthLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/NoAuthLayout.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -21,18 +49,36 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2A0Y27aRHsuxb2hlUeh13LudSYV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/phongsakornsuttama/Documents/GitHub/hyde-demo",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "prettierjs.PrettierConfiguration.Package": "/opt/homebrew/lib/node_modules/prettier",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RunManager" selected="npm.start">
     <configuration name="start (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -48,7 +94,7 @@
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="start" />
       <node-interpreter value="project" />
-      <package-manager value="C:\Users\User\.yarn\bin\yarn" />
+      <package-manager value="$USER_HOME$/.yarn/bin/yarn" />
       <envs />
       <method v="2" />
     </configuration>
@@ -68,6 +114,8 @@
       <updated>1654147762086</updated>
       <workItem from="1654147766126" duration="2530000" />
       <workItem from="1654496761365" duration="1009000" />
+      <workItem from="1654593838073" duration="1698000" />
+      <workItem from="1654595615768" duration="575000" />
     </task>
     <servers />
   </component>
@@ -84,6 +132,9 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
