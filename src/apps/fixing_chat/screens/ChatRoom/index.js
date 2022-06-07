@@ -3,17 +3,23 @@
 import React, { useEffect, useState } from 'react';
 // import styled from "styled-components";
 import { socket } from '../../../../services/web-sockets';
-import Heading from '../../../../components/header';
+import Heading from '../../../../components/Header';
 import Header from '../../Header';
 import Messages from '../../Messages';
 import List from '../../List';
 import ReportDetail from '../Report';
-import { ActionIcon, ChatBox, ChatContainer, InputBar, SendIcon, StyledContainer } from './styles';
-import { Input, Row, Spin, Tabs } from 'antd';
+import {
+  ChatContainer,
+  StyledContainer,
+  ChatBox,
+  ActionIcon,
+  SendIcon,
+  InputBar,
+} from './styles';
+import { Input, Spin, Tabs, Row } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-
 const session = encryptStorage.getItem('user_session');
 
 function ChatRoom(props) {
@@ -150,14 +156,15 @@ function ChatRoom(props) {
   };
 
   const selectHandle = (e) => {
+    // console.log('file Event', e.target.files[0].type.split('/'));
     setImageFile(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        // setPickedImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //     // setPickedImage(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
   };
 
   useEffect(() => {
@@ -172,8 +179,11 @@ function ChatRoom(props) {
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        console.log('res', res.data[0].url);
+        console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
+        console.log('type',imageFile.type.split('/')[0])
+
+        imageFile.type.split('/')[0]==='image'?
         socket.emit(
           'sendMessage',
           {
@@ -187,7 +197,20 @@ function ChatRoom(props) {
               alert(error);
             }
           }
-        );
+        ):socket.emit(
+          'sendMessage',
+          {
+            userData: chatData,
+            type: 'file',
+            message: imageUrl,
+            time: new Date().toISOString(),
+          },
+          (error) => {
+            if (error) {
+              alert(error);
+            }
+          }
+        )
         deleteHandle();
         setOnSend(false);
       })
@@ -274,31 +297,40 @@ function ChatRoom(props) {
                 <Messages room={room} messages={messages} />
               )}
               <InputBar>
-                <ActionIcon
-                  onClick={() => {
-                    // console.log("ContactList", contactList);
-                  }}
-                >
-                  <i className="fa fa-paperclip" />
-                </ActionIcon>
                 {room !== '' && !onSend ? (
-                  <label htmlFor="input">
-                    <ActionIcon>
+                  <Row>
+                    <label htmlFor="inputFile">
+                      <ActionIcon>
+                        <i className="fa fa-paperclip" />
+                      </ActionIcon>
+                    </label>
+                    <label htmlFor="inputImg">
+                      <ActionIcon>
+                        <i className="fa fa-image" />
+                      </ActionIcon>
+                    </label>
+                  </Row>
+                ) : (
+                  <Row>
+                    <ActionIcon
+                      onClick={() => {
+                        alert('Please select room to connect');
+                      }}
+                    >
+                      <i className="fa fa-paperclip" />
+                    </ActionIcon>
+                    <ActionIcon
+                      onClick={() => {
+                        alert('Please select room to connect');
+                      }}
+                    >
                       <i className="fa fa-image" />
                     </ActionIcon>
-                  </label>
-                ) : (
-                  <ActionIcon
-                    onClick={() => {
-                      alert('Please select room to connect');
-                    }}
-                  >
-                    <i className="fa fa-image" />
-                  </ActionIcon>
+                  </Row>
                 )}
                 <input
                   type="file"
-                  id="input"
+                  id="inputImg"
                   accept="image/*"
                   onChange={(event) => {
                     if (room !== '' && !onSend) {
@@ -308,7 +340,21 @@ function ChatRoom(props) {
                   onClick={(event) => {
                     event.target.value = null;
                   }}
-                  style={{ display: 'none', float: 'left' }}
+                  style={{ display: 'none' }}
+                />
+                <input
+                  type="file"
+                  id="inputFile"
+                  accept="*"
+                  onChange={(event) => {
+                    if (room !== '' && !onSend) {
+                      selectHandle(event);
+                    }
+                  }}
+                  onClick={(event) => {
+                    event.target.value = null;
+                  }}
+                  style={{ display: 'none' }}
                 />
                 <Input
                   style={{
