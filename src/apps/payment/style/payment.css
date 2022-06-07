@@ -1,0 +1,120 @@
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+/* Responsive layout - makes a one column layout instead of a two-column layout */
+@media (max-width: 800px) {
+    .flex-container {
+        flex-direction: column;
+    }
+}
+
+.myDiv {
+    border: 5px outset red;
+    background: #FFFFFF;
+    margin-left: 15vw;
+    text-align: center;
+    width: 30vw;
+    height: 55vh;
+    border: 3px solid #D1BA7D;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+
+}
+
+th {
+    background-color: #CBB989;
+    color: white;
+}
+
+table td, table th {
+    text-align: center;
+}
+
+.logoblack {
+    margin: 16px;
+    height: 20%;
+    width: 100%;
+    background-image: url("../assets/images/logoArtani-black.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.receipt {
+    width: 80px;
+    height: 35px;
+    borderRadius: 15px;
+    background: #B2A37A;
+    color: #F5F4EC;
+}
+
+.receipt:hover {
+    background-color: gainsboro;
+    color: silver;
+    border:gainsboro ;
+}
+
+.buttom_payment1 {
+    width: 130px;
+    height: 40px;
+    border-Radius: 20px;
+    background: #B2A37A;
+    color: #F5F4EC;
+}
+.buttom_create {
+    width: 130px;
+    height: 40px;
+    border-Radius: 20px;
+    background: #B2A37A;
+    color: #F5F4EC;
+}
+
+.buttom_payment1:hover {
+    background-color: gainsboro;
+    color: silver;
+    border:gainsboro ;
+}
+
+.payment_custom > .ant-input-affix-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    padding: 4px 11px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 1.5715;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 15px;
+    transition: all 0.3s;
+    display: inline-flex;
+}
+
+.payment_custom > .ant-picker {
+    padding: 4px 11px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 1.5715;
+    background-color: #fff;
+    background-image: none;
+    position: relative;
+    border: 1px solid #d9d9d9;
+    border-radius: 15px;
+    align-items: center;
+    width: 25%;
+}
+

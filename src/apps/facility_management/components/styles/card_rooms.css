@@ -1,0 +1,28 @@
+.cover-image {
+	border-radius: 20px 20px 0px 0px;
+}
+.ant-card-cover img {
+	border-radius: 2px 2px 0 0;
+}
+.room_name {
+	flex: 1;
+	font-size: 24px;
+	color: rgba(203, 185, 137, 1);
+	font-weight: bold;
+}
+.room_type {
+	flex: 1;
+	margin-top: 10px;
+	color: rgba(29, 28, 28, 1);
+}
+.room_rule {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.rule {
+	float: left;
+	color: rgba(61, 61, 59, 1);
+}
+.users {
+	margin-right: 50px;
+}

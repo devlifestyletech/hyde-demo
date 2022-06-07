@@ -1,18 +1,6 @@
-# 1st Stage
-FROM node:10.15.1 AS builder
+FROM nginx
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install --ignore-platform
-COPY . .
-RUN yarn build
-
-# 2nd Stage
-FROM nginx:1.14.2-alpine
-
-COPY --from=0 /usr/src/app/build /usr/share/nginx/html
+COPY build /usr/share/nginx/html
 WORKDIR /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
