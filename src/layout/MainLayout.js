@@ -44,7 +44,7 @@ function MainLayout() {
   const location = useLocation(); // <-- get current location being accessed
   const { isSignIn } = useAuth();
   const outlet = useOutlet();
-  if (!isSignIn) return <Navigate to="/signin" state={{ from: location }} />;
+  if (!isSignIn) return <Navigate to='/signin' replace state={{ from: location }} />;
 
   return (
     <Layout>

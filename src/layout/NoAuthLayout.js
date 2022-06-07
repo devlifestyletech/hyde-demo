@@ -6,6 +6,7 @@ import { Row, Col } from 'antd';
 import CoverImage from '../apps/assets/images/hyde_building2.png';
 import HydeLogo from '../apps/assets/images/hyde-logo.svg';
 
+const from = window.location.pathname;
 function NoAuthLayout() {
   const { isSignIn } = useAuth();
   const location = useLocation();
@@ -38,7 +39,7 @@ function NoAuthLayout() {
   }
   if (isSignIn)
     return (
-      <Navigate to="/dashboard/summary" state={{ from: location }} replace />
+      <Navigate to={from !== '/' ? from : '/dashboard/summary'} state={{from:location}} replace/>
     );
 
   return (
