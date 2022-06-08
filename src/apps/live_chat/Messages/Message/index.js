@@ -1,5 +1,11 @@
 import React from 'react';
-import { MessagesContainer, MessageBox, MessageText, SentBy } from './styles';
+import {
+  MessagesContainer,
+  MessageBox,
+  MessageText,
+  LinkText,
+  SentBy,
+} from './styles';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { Image } from 'antd';
 
@@ -11,7 +17,6 @@ function Message(props) {
   const {
     message: { sender_id, type, sender_name, text, time },
   } = props;
-  console.log('Message', type, sender_id, sender_name, text, time);
 
   const chatTime = format(utcToZonedTime(new Date(time), thTimeZone), 'HH:mm', {
     timeZone: 'Asia/Bangkok',
@@ -19,8 +24,6 @@ function Message(props) {
   let sentByCurrentUser = false;
 
   const adminId = session.user._id;
-  // .trim().toLowerCase();
-  // console.log(user,'user VS Trim',trimmedName)
 
   if (sender_id === adminId) {
     sentByCurrentUser = true;
@@ -51,13 +54,26 @@ function Message(props) {
           {chatTime}
         </SentBy>
       ) : null}
-      {type === 'chat' ? (
+      {type === 'image' ? (
+        <ImageDemo />
+      ) : type === 'chat' ? (
         <MessageBox background={background}>
           <MessageText color={textColor}>{text}</MessageText>
         </MessageBox>
       ) : (
-        <ImageDemo />
+        <MessageBox background={background}>
+          <a
+            href={process.env.REACT_APP_API_URL + text}
+            color={textColor}
+            target="_blank"
+            download 
+						rel="noreferrer"
+          >
+            <LinkText color={textColor}>{text.split('/')[2]}</LinkText>
+          </a>
+        </MessageBox>
       )}
+
       {sentBy === 'left' ? (
         <SentBy sentBy={sentBy}>
           {sender_name}

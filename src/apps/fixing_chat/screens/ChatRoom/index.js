@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 // import styled from "styled-components";
 import { socket } from '../../../../services/web-sockets';
-import Heading from '../../../../components/Header';
+import Heading from '../../../../components/header';
 import Header from '../../Header';
 import Messages from '../../Messages';
 import List from '../../List';
@@ -156,15 +156,7 @@ function ChatRoom(props) {
   };
 
   const selectHandle = (e) => {
-    // console.log('file Event', e.target.files[0].type.split('/'));
     setImageFile(e.target.files[0]);
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     // setPickedImage(reader.result);
-    //   }
-    // };
-    // reader.readAsDataURL(e.target.files[0]);
   };
 
   useEffect(() => {
