@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Input, Spin, Tabs } from 'antd';
 import TableRender from '../components/TableRender';
 import Header from '../../../components/header';
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import './styles/registration.css';
 import authService from '../../../services/auth.service';
 import CreateModal from '../components/CreateModal';
@@ -14,6 +14,8 @@ function RegistrationPage() {
   const [addNewModalVisibility, setAddNewModalVisibility] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [searchResident, setSearchResident] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +33,18 @@ function RegistrationPage() {
       });
     })();
   }, [refresh]);
-  console.log(residents);
+  console.log(searchResident);
+
+  const handleSearch = (value) => {
+    setSearch(value);
+    let data = [];
+    residents.forEach((res) => {
+      if (res.fullname.includes(value)) {
+        data.push(res);
+      }
+    });
+    setSearchResident(data);
+  };
 
   let owner_users = residents.filter((user) => user.resident_type === 'Owner');
   let inhabitant_users = residents.filter(
@@ -41,15 +54,30 @@ function RegistrationPage() {
     (user) => user.resident_type === 'Tenant'
   );
 
+  if (search !== '') {
+    owner_users = searchResident.filter(
+      (user) => user.resident_type === 'Owner'
+    );
+    inhabitant_users = searchResident.filter(
+      (user) => user.resident_type === 'Inhabitant'
+    );
+    tenant_users = searchResident.filter(
+      (user) => user.resident_type === 'Tenant'
+    );
+  }
+
   return (
     <>
       <Header title="Registration" />
       <div className="regis-helper">
-        <Input
-          prefix={<SearchOutlined />}
+        <Input.Search
+          style={{ width: 400 }}
           size="large"
           shape="round"
-          placeholder="Search by name"
+          placeholder="Search by address"
+          allowClear
+          enterButton
+          onSearch={handleSearch}
         />
         <Button
           shape="round"
@@ -72,7 +100,7 @@ function RegistrationPage() {
           <Tabs>
             <TabPane tab="All" key="1">
               <TableRender
-                data={residents}
+                data={search !== '' ? searchResident : residents}
                 key="1"
                 onEvent={() => setRefresh(!refresh)}
               />

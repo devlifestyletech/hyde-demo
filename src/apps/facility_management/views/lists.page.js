@@ -17,6 +17,7 @@ export default function BookingListsPage() {
     'aPntKgd7dqVmG6qe2mk9'
   );
   const [search, setSearch] = useState('');
+  const [reservationSearch, setReservationSearch] = useState([]);
 
   useEffect(() => {
     const queryFacilities = query(collection(db, 'facilities'));
@@ -47,6 +48,17 @@ export default function BookingListsPage() {
     })();
   }, [selectedFacilities]);
 
+  const handleSearch = (value) => {
+    setSearch(value);
+    setReservationSearch(
+      reservations.filter((reservation) => {
+        return reservation.room_number
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      })
+    );
+  };
+
   return (
     <>
       <Header title="Booking Lists" />
@@ -65,11 +77,12 @@ export default function BookingListsPage() {
                 </Option>
               ))}
         </Select>
-        <Input
-          placeholder="Search by name or room number"
+        <Input.Search
+          placeholder="Search by room number"
           style={{ width: 400, borderRadius: 20, height: 40, marginLeft: 10 }}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          enterButton
+          allowClear
+          onSearch={handleSearch}
         />
       </div>
       <div className="content-container">
@@ -84,7 +97,10 @@ export default function BookingListsPage() {
             <Spin />
           </div>
         ) : (
-          <ReservationTable data={reservations} facility={facilities} />
+          <ReservationTable
+            data={search !== '' ? reservationSearch : reservations}
+            facility={facilities}
+          />
         )}
       </div>
     </>
