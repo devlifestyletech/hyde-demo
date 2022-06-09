@@ -221,13 +221,12 @@ function Announcement() {
     }
 
     let url = `${URLreScript}${
-      month === '' ? '?' : `?createdAt_gte=${gte}&createdAt_lt=${lt}&`
+      month === '' ? '?' : `?date_announced_gte=${gte}&date_announced_lt=${lt}&`
     }_sort=createdAt:desc`;
     console.log(url);
     await axios.get(url, headers).then((response) => {
       console.log('data', response.data);
       let originData = [];
-
       response.data.forEach((announce, index) => {
         let date_an = format(
           utcToZonedTime(new Date(announce.date_announced), thTimeZone),
@@ -1076,7 +1075,7 @@ function Announcement() {
 
   function onMonthChange(date, dateString) {
     // console.log("date", date);
-    // console.log("dateString", dateString);
+    console.log("dateString", dateString);
     setMonth(dateString);
   }
 
