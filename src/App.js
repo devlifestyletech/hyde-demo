@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.less';
 import 'devextreme/dist/css/dx.light.css';
@@ -32,7 +32,22 @@ import LiveChat from './apps/live_chat/screens/ChatRoom';
 import PaymentSuccess from './apps/payment/Payment_success';
 import PaymentDashboard from './apps/payment/payment_dashbord';
 
+import { getAuth, signInAnonymously } from 'firebase/auth';
+
 const App = () => {
+  useEffect(() => {
+    const auth = getAuth();
+    signInAnonymously(auth)
+      .then(() => {
+        // Signed in..
+        console.log('Firebase signed in succcessfully');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('error: ', errorCode, errorMessage);
+      });
+  }, []);
   return (
     <AuthProvider>
       <Routes>
