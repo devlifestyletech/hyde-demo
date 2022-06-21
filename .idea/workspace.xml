@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/CreateReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/CreateReservation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/QrReservationModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/QrReservationModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +72,7 @@
       <workItem from="1654593838073" duration="1698000" />
       <workItem from="1654595615768" duration="575000" />
       <workItem from="1655391412041" duration="62000" />
+      <workItem from="1655804448236" duration="3438000" />
     </task>
     <servers />
   </component>
