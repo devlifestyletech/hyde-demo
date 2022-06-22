@@ -2,25 +2,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Heading from '../../components/header';
 import {
-	Button,
-	Col,
-	DatePicker,
-	Divider,
-	Form,
-	Image,
-	Input,
-	message,
-	Modal,
-	Select,
-	Spin,
-	Table,
-	TimePicker,
+  Button,
+  Col,
+  DatePicker,
+  Divider,
+  Form,
+  Image,
+  Input,
+  message,
+  Modal,
+  Select,
+  Spin,
+  Table,
+  TimePicker,
 } from 'antd';
 import { PictureOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
 import './style/announcementsStyle.css';
-// import { format } from "date-fns";
 import { format, utcToZonedTime } from 'date-fns-tz';
 
 import editIcon from './assets/icons/edit.svg';
@@ -238,7 +237,6 @@ function Announcement() {
           'dd MMM yyyy HH:mm',
           { timeZone: 'Asia/Bangkok' }
         );
-        // console.log('date', date_an, date_ex)
         let announceData = {
           key: index,
           number: index + 1,
@@ -246,7 +244,6 @@ function Announcement() {
           date_expired_show: date_ex,
           ...announce,
         };
-        // console.log(index, announceData)
         originData.push(announceData);
       });
       setData(originData);
@@ -280,6 +277,7 @@ function Announcement() {
       form.setFieldsValue({
         title_name: editValue.title_name,
         detail: editValue.detail,
+        link: editValue.link ? editValue.link : '',
         publish_status: editValue.post_status,
         schedule_date:
           editValue.post_status === 'Scheduled'
@@ -363,7 +361,7 @@ function Announcement() {
       // console.log("today", dateNow);
       let dataImage = new FormData();
       dataImage.append('files', imageFile);
-      console.log('editValue.id', editValue.id);
+      // console.log('editValue.id', editValue.id);
 
       if (imageFile == null) {
         axios
@@ -377,6 +375,7 @@ function Announcement() {
                   : value.publish_status,
               announcer: session.user.fullname,
               detail: value.detail,
+              link: value.link,
               date_announced:
                 value.publish_status === 'Scheduled'
                   ? `${
@@ -418,6 +417,7 @@ function Announcement() {
                       : value.publish_status,
                   announcer: session.user.fullname,
                   detail: value.detail,
+                  link: value.link,
                   date_announced:
                     value.publish_status === 'Scheduled'
                       ? `${
@@ -602,6 +602,12 @@ function Announcement() {
               <Input.TextArea
                 placeholder="Please input details"
                 style={{ minHeight: '20vh' }}
+              />
+            </Form.Item>
+            <Form.Item name="link" label="Link">
+              <Input
+                placeholder="https://example.com"
+                style={{ borderRadius: 20 }}
               />
             </Form.Item>
             <Form.Item
@@ -792,6 +798,7 @@ function Announcement() {
                   value.publish_status === 'Now' ? true : false,
                 announcer: session.user.fullname,
                 detail: value.detail,
+                link: value.link,
                 date_announced:
                   value.publish_status === 'Scheduled'
                     ? `${
@@ -981,6 +988,12 @@ function Announcement() {
                 style={{ minHeight: '20vh' }}
               />
             </Form.Item>
+            <Form.Item name="link" label="Link">
+              <Input
+                placeholder="https://example.com"
+                style={{ borderRadius: 20 }}
+              />
+            </Form.Item>
             <Form.Item
               name="publish_status"
               label="Publish"
@@ -1075,7 +1088,7 @@ function Announcement() {
 
   function onMonthChange(date, dateString) {
     // console.log("date", date);
-    console.log("dateString", dateString);
+    console.log('dateString', dateString);
     setMonth(dateString);
   }
 
