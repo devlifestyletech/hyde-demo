@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-pascal-case */
 import React from 'react';
 import { Layout } from 'antd';
-import SideMenu from '../components/SideMenu';
-import { Navigate, useOutlet, useLocation } from 'react-router-dom';
+import SideMenu from '../components/sideMenu';
+import { Navigate, useLocation, useOutlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-// import MainPage from '../apps/main.page';
+// import Main_dashboard from '../apps/main.page';
 
 // //Members
 // import MemberDashboardPage from '../apps/registration/views/MemberDashboard.page';
@@ -40,11 +40,13 @@ import { useAuth } from '../hooks/useAuth';
 // //Account confirm
 
 const { Sider, Content } = Layout;
+
 function MainLayout() {
   const location = useLocation(); // <-- get current location being accessed
   const { isSignIn } = useAuth();
   const outlet = useOutlet();
-  if (!isSignIn) return <Navigate to='/signin' replace state={{ from: location }} />;
+  if (!isSignIn)
+    return <Navigate to="/signin" replace state={{ from: location }} />;
 
   return (
     <Layout>

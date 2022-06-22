@@ -1,20 +1,19 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.less';
 import 'devextreme/dist/css/dx.light.css';
 import { AuthProvider } from './hooks/useAuth';
 
 //Layout Component
-// import NoAuth from './layout/NoAuthLayout';
 import MainLayout from './layout/MainLayout';
 import NoAuthLayout from './layout/NoAuthLayout';
-// import UnauthorizeRoute from './routes/unauthorize_route';
-import SignInPage from './components/signin.page';
-import ResetPasswordPage from './components/reset_password.page';
-import ForgotPasswordPage from './components/forgot_password.page';
-import ConfirmRegistrationPage from './components/confirm_registration.page';
-// import AuthorizeRoute from './routes/authorize_route';
-import MainPage from './components/main.page';
+//Unauthorized routes
+import Signin from './components/signin';
+import ResetPasswordPage from './components/reset_password';
+import ForgotPasswordPage from './components/forgot_password';
+import ConfirmRegistrationPage from './components/confirm_registration';
+//Authorized routes
+import MainDashboard from './components/main_dashboard';
 import FacilitiesManagementDashboardPage from './apps/facility_management/views/dashboard.page';
 import BookingCalendarPage from './apps/facility_management/views/calendar.page';
 import BookingListsPage from './apps/facility_management/views/lists.page';
@@ -31,60 +30,75 @@ import FixingReportsDashboard from './apps/fixing_report/view/Fixing_Report_Dash
 import FixingChat from './apps/fixing_chat/screens/ChatRoom';
 import LiveChat from './apps/live_chat/screens/ChatRoom';
 import PaymentSuccess from './apps/payment/Payment_success';
-import PaymentDashbord from './apps/payment/payment_dashbord';
+import PaymentDashboard from './apps/payment/payment_dashbord';
+
+import { getAuth, signInAnonymously } from 'firebase/auth';
 
 const App = () => {
+  useEffect(() => {
+    const auth = getAuth();
+    signInAnonymously(auth)
+      .then(() => {
+        // Signed in..
+        console.log('Firebase signed in succcessfully');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('error: ', errorCode, errorMessage);
+      });
+  }, []);
   return (
     <AuthProvider>
       <Routes>
-        {/* unauthorize_route */}
+        {/* unauthorized_route */}
         <Route element={<NoAuthLayout />}>
-          <Route index element={<SignInPage />} />
-          <Route path="/signin" element={<SignInPage />} />
+          <Route index element={<Signin />} />
+          <Route path="/signin" element={<Signin />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route
             path="/confirm-registration"
-            element={<ConfirmRegistrationPage />}          
-	    />        	  
-	</Route>
-        {/* authorize_route */}
-        <Route path='dashboard' element={<MainLayout />}>
-          <Route path='summary' element={<MainPage />} />
+            element={<ConfirmRegistrationPage />}
+          />
+        </Route>
+        {/* authorized_route */}
+        <Route path="dashboard" element={<MainLayout />}>
+          <Route path="summary" element={<MainDashboard />} />
           <Route
-            path='facilities-reservation-dashboard'
+            path="facilities-reservation-dashboard"
             element={<FacilitiesManagementDashboardPage />}
           />
           <Route
-            path='facilities-reservation-calendar'
+            path="facilities-reservation-calendar"
             element={<BookingCalendarPage />}
           />
           <Route
-            path='facilities-reservation-list'
+            path="facilities-reservation-list"
             element={<BookingListsPage />}
           />
-          <Route path='facilities-management' element={<FacilitiesPage />} />
-          <Route path='occupation' element={<OccupationPage />} />
-          <Route path='members-dashboard' element={<MemberDashboardPage />} />
-          <Route path='members-registration' element={<RegistrationPage />} />
+          <Route path="facilities-management" element={<FacilitiesPage />} />
+          <Route path="occupation" element={<OccupationPage />} />
+          <Route path="members-dashboard" element={<MemberDashboardPage />} />
+          <Route path="members-registration" element={<RegistrationPage />} />
           <Route
-            path='rooms-management-dashboard'
+            path="rooms-management-dashboard"
             element={<RoomDashboardPage />}
           />
-          <Route path='rooms-management' element={<RoomManagement />} />
-          <Route path='nearby' element={<Nearby />} />
-          <Route path='announcement' element={<Announcement />} />
-          <Route path='service-center-reports' element={<FixingReports />} />
+          <Route path="rooms-management" element={<RoomManagement />} />
+          <Route path="nearby" element={<Nearby />} />
+          <Route path="announcement" element={<Announcement />} />
+          <Route path="service-center-reports" element={<FixingReports />} />
           <Route
-            path='service-center-dashboard'
+            path="service-center-dashboard"
             element={<FixingReportsDashboard />}
           />
-          <Route path='service-chat' element={<FixingChat />} />
-          <Route path='live-chat' element={<LiveChat />} />
-          <Route path='payment-billing' element={<PaymentSuccess />} />
-          <Route path='payment-dashboard' element={<PaymentDashbord />} />
+          <Route path="service-chat" element={<FixingChat />} />
+          <Route path="live-chat" element={<LiveChat />} />
+          <Route path="payment-billing" element={<PaymentSuccess />} />
+          <Route path="payment-dashboard" element={<PaymentDashboard />} />
         </Route>
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </AuthProvider>
   );
@@ -95,8 +109,8 @@ const App = () => {
   //     <button onClick={() => authService.logout()}>Logout</button>
   //     <Routes>
   //       <Route element={<PublicRoute isSignIn={isSignIn} location={location} />}>
-  //         <Route index element={<SignInPage />} />
-  //         <Route path='/landing' element={<SignInPage />} />
+  //         <Route index element={<Signin />} />
+  //         <Route path='/landing' element={<Signin />} />
   //       </Route>
   //       <Route element={<ProtectedRoute isSignIn={isSignIn} />}>
   //         <Route path='/home' element={<Home />} />
@@ -171,4 +185,3 @@ export default App;
 //     </h2>
 //   );
 // };
-

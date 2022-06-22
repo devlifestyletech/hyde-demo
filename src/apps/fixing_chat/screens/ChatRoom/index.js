@@ -1,13 +1,13 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 // import styled from "styled-components";
-import { socket } from "../../../../services/web-sockets";
-import Heading from "../../../../components/Header";
-import Header from "../../Header";
-import Messages from "../../Messages";
-import List from "../../List";
-import ReportDetail from "../Report";
+import { socket } from '../../../../services/web-sockets';
+import Heading from '../../../../components/header';
+import Header from '../../Header';
+import Messages from '../../Messages';
+import List from '../../List';
+import ReportDetail from '../Report';
 import {
   ChatContainer,
   StyledContainer,
@@ -15,30 +15,30 @@ import {
   ActionIcon,
   SendIcon,
   InputBar,
-} from "./styles";
-import { Input, Spin, Tabs, Row } from "antd";
+} from './styles';
+import { Input, Spin, Tabs, Row } from 'antd';
 
-import axios from "axios";
-import { encryptStorage } from "../../../../utils/encryptStorage";
-const session = encryptStorage.getItem("user_session");
+import axios from 'axios';
+import { encryptStorage } from '../../../../utils/encryptStorage';
+const session = encryptStorage.getItem('user_session');
 
 function ChatRoom(props) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState('');
   const [receiver, setReceiver] = useState();
   const [loading, setLoading] = useState(false);
   const [onSend, setOnSend] = useState(false);
   const [imageFile, setImageFile] = useState();
-  const [userAvatar, setUserAvatar] = useState("");
-  const [fixingStatus, setFixingStatus] = useState("");
-  const [fixingReportId, setFixingReportId] = useState("");
-  const [searchTag, setSearchTag] = useState("All");
+  const [userAvatar, setUserAvatar] = useState('');
+  const [fixingStatus, setFixingStatus] = useState('');
+  const [fixingReportId, setFixingReportId] = useState('');
+  const [searchTag, setSearchTag] = useState('All');
   const sender_name = session.user.fullname;
-  const headers = { headers: { Authorization: "Bearer " + session.jwt } };
+  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
 
-  const types = ["All", "Pending", "Repairing", "Success"];
+  const types = ['All', 'Pending', 'Repairing', 'Success'];
   const { TabPane } = Tabs;
 
   const connectChat = () => {
@@ -51,8 +51,8 @@ function ChatRoom(props) {
         room: room,
       });
 
-      socket.emit("join", { sender_id, sender_name, room }, (data) => {
-        console.log("JoinData", data);
+      socket.emit('join', { sender_id, sender_name, room }, (data) => {
+        console.log('JoinData', data);
       });
       if (messages.length === 0) {
         setLoading(true);
@@ -66,7 +66,7 @@ function ChatRoom(props) {
       if (room) {
         await axios
           .get(
-            process.env.REACT_APP_API_URL + "/chats?_where[room]=" + room,
+            process.env.REACT_APP_API_URL + '/chats?_where[room]=' + room,
             headers
           )
           .then((res) => {
@@ -99,35 +99,35 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log("ReportId", childData.split(",")[1].split("!")[0]);
-    if (room !== childData.split(",")[1]) {
+    console.log('ReportId', childData.split(',')[1].split('!')[0]);
+    if (room !== childData.split(',')[1]) {
       setMessages([]);
-      setRoom(childData.split(",")[1]);
-      setReceiver(childData.split(",")[0]);
-      setFixingReportId(childData.split(",")[1].split("!")[0]);
+      setRoom(childData.split(',')[1]);
+      setReceiver(childData.split(',')[0]);
+      setFixingReportId(childData.split(',')[1].split('!')[0]);
     }
   };
 
   const getAvatar = (avatar) => {
-    console.log("room", avatar);
+    console.log('room', avatar);
     setUserAvatar(avatar);
   };
   const getStatus = (status) => {
-    console.log("status", status);
+    console.log('status', status);
     setFixingStatus(status);
   };
 
   const handleDisconnect = () => {
     setMessages([]);
-    setRoom("");
+    setRoom('');
   };
 
   useEffect(() => {
-    socket.off("message");
+    socket.off('message');
   }, [room]);
 
   useEffect(() => {
-    socket.on("message", (newMessage, error) => {
+    socket.on('message', (newMessage, error) => {
       if (newMessage.room === room) {
         setMessages((msgs) => [...msgs, newMessage]);
       }
@@ -135,7 +135,7 @@ function ChatRoom(props) {
   }, [socket, room]);
 
   const handleChange = (e) => {
-    socket.emit("typing", {
+    socket.emit('typing', {
       room: room,
       sender_name: sender_name,
     });
@@ -143,10 +143,10 @@ function ChatRoom(props) {
   };
 
   const handleClick = (e) => {
-    if (room !== "") {
+    if (room !== '') {
       if (message) sendMessage(message);
     } else {
-      alert("Please select room to connect");
+      alert('Please select room to connect');
     }
   };
 
@@ -157,13 +157,6 @@ function ChatRoom(props) {
 
   const selectHandle = (e) => {
     setImageFile(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        // setPickedImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
   };
 
   useEffect(() => {
@@ -172,19 +165,22 @@ function ChatRoom(props) {
 
   const uploadImg = async () => {
     setOnSend(true);
-    console.log('imageFile',imageFile)
+    console.log('imageFile', imageFile);
     let dataImage = new FormData();
-    dataImage.append("files", imageFile);
+    dataImage.append('files', imageFile);
     await axios
-      .post(process.env.REACT_APP_API_URL + "/upload/", dataImage, headers)
+      .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        console.log("res", res.data[0].url);
+        console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
+        console.log('type',imageFile.type.split('/')[0])
+
+        imageFile.type.split('/')[0]==='image'?
         socket.emit(
-          "sendMessage",
+          'sendMessage',
           {
             userData: chatData,
-            type: "image",
+            type: 'image',
             message: imageUrl,
             time: new Date().toISOString(),
           },
@@ -193,7 +189,20 @@ function ChatRoom(props) {
               alert(error);
             }
           }
-        );
+        ):socket.emit(
+          'sendMessage',
+          {
+            userData: chatData,
+            type: 'file',
+            message: imageUrl,
+            time: new Date().toISOString(),
+          },
+          (error) => {
+            if (error) {
+              alert(error);
+            }
+          }
+        )
         deleteHandle();
         setOnSend(false);
       })
@@ -207,10 +216,10 @@ function ChatRoom(props) {
   const sendMessage = (message) => {
     if (message) {
       socket.emit(
-        "sendMessage",
+        'sendMessage',
         {
           userData: chatData,
-          type: "chat",
+          type: 'chat',
           message,
           time: new Date().toISOString(),
         },
@@ -220,7 +229,7 @@ function ChatRoom(props) {
           }
         }
       );
-      setMessage("");
+      setMessage('');
     } else {
       alert("Message can't be empty");
     }
@@ -235,14 +244,14 @@ function ChatRoom(props) {
     return (
       <div
         style={{
-          width: "100%",
-          height: "100vh",
-          textAlign: "center",
-          paddingTop: "24vh",
+          width: '100%',
+          height: '100vh',
+          textAlign: 'center',
+          paddingTop: '24vh',
         }}
       >
         <Spin size="large" />
-        <p style={{ color: "#20263A", fontSize: 30 }}>Loading...</p>
+        <p style={{ color: '#20263A', fontSize: 30 }}>Loading...</p>
       </div>
     );
   };
@@ -280,46 +289,69 @@ function ChatRoom(props) {
                 <Messages room={room} messages={messages} />
               )}
               <InputBar>
-                <ActionIcon
-                  onClick={() => {
-                    // console.log("ContactList", contactList);
-                  }}
-                >
-                  <i className="fa fa-paperclip" />
-                </ActionIcon>
-                {room !== "" && !onSend ? (
-                  <label htmlFor="input">
-                    <ActionIcon>
+                {room !== '' && !onSend ? (
+                  <Row>
+                    <label htmlFor="inputFile">
+                      <ActionIcon>
+                        <i className="fa fa-paperclip" />
+                      </ActionIcon>
+                    </label>
+                    <label htmlFor="inputImg">
+                      <ActionIcon>
+                        <i className="fa fa-image" />
+                      </ActionIcon>
+                    </label>
+                  </Row>
+                ) : (
+                  <Row>
+                    <ActionIcon
+                      onClick={() => {
+                        alert('Please select room to connect');
+                      }}
+                    >
+                      <i className="fa fa-paperclip" />
+                    </ActionIcon>
+                    <ActionIcon
+                      onClick={() => {
+                        alert('Please select room to connect');
+                      }}
+                    >
                       <i className="fa fa-image" />
                     </ActionIcon>
-                  </label>
-                ) : (
-                  <ActionIcon
-                    onClick={() => {
-                      alert("Please select room to connect");
-                    }}
-                  >
-                    <i className="fa fa-image" />
-                  </ActionIcon>
+                  </Row>
                 )}
                 <input
                   type="file"
-                  id="input"
+                  id="inputImg"
                   accept="image/*"
                   onChange={(event) => {
-                    if (room !== "" && !onSend) {
+                    if (room !== '' && !onSend) {
                       selectHandle(event);
                     }
                   }}
                   onClick={(event) => {
                     event.target.value = null;
                   }}
-                  style={{ display: "none", float: "left" }}
+                  style={{ display: 'none' }}
+                />
+                <input
+                  type="file"
+                  id="inputFile"
+                  accept="*"
+                  onChange={(event) => {
+                    if (room !== '' && !onSend) {
+                      selectHandle(event);
+                    }
+                  }}
+                  onClick={(event) => {
+                    event.target.value = null;
+                  }}
+                  style={{ display: 'none' }}
                 />
                 <Input
                   style={{
                     borderRadius: 20,
-                    width: "80%",
+                    width: '80%',
                     marginLeft: 10,
                     marginRight: 20,
                   }}
@@ -329,7 +361,7 @@ function ChatRoom(props) {
                   value={message}
                   onChange={handleChange}
                   onKeyPress={(event) => {
-                    event.key === "Enter" && handleClick();
+                    event.key === 'Enter' && handleClick();
                   }}
                 />
                 {!onSend ? (
@@ -348,4 +380,5 @@ function ChatRoom(props) {
     </>
   );
 }
+
 export default ChatRoom;

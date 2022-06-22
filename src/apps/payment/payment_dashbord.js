@@ -1,11 +1,10 @@
 import React from 'react';
-import Header from '../../components/Header';
+import Header from '../../components/header';
 import './components/chart/styles/dashboard.css';
-import { Button, Row } from 'antd';
+import { Button, DatePicker, Row, Table } from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import PieChart from './components/chart/PieChart';
 import GraphReserves from './components/chart/GraphReserves';
-import { Table, DatePicker } from 'antd';
 
 const columns = [
   {
@@ -92,7 +91,7 @@ const data = [
   },
 ];
 
-const PaymentDashbord = () => {
+const PaymentDashboard = () => {
   return (
     <>
       <Header title="Payment Dashboard" />
@@ -158,4 +157,4 @@ const PaymentDashbord = () => {
     </>
   );
 };
-export default PaymentDashbord;
+export default PaymentDashboard;

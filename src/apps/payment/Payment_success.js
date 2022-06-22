@@ -10,7 +10,7 @@ import {
 import { MenuBillPayment } from './components/menuBillPayment';
 import CreateBillModal from './components/Modal/ModalCreateBill';
 import './style/payment.css';
-import Heading from '../../components/Header';
+import Heading from '../../components/header';
 
 const PaymentSuccess = () => {
   const dispatch = useDispatch();

@@ -58,4 +58,5 @@ const HeaderContainer = styled.div`
 	color: black;
 	font-weight: bold;
 	font-size: 1.2rem;
+	height: 60px;
 `;

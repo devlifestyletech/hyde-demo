@@ -1,4 +1,4 @@
-import { Form, Input, Button, Row, Modal } from 'antd';
+import { Button, Form, Input, Modal, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import EmailIcon from './assets/email.svg';
@@ -6,6 +6,7 @@ import authService from '../services/auth.service';
 
 function ForgotPasswordPage() {
   const [ForgotPasswordForm] = Form.useForm();
+
   async function onFinish(value) {
     await authService
       .forgotPassword(value)
@@ -19,7 +20,7 @@ function ForgotPasswordPage() {
           },
         });
       })
-      .catch((error) => {
+      .catch(() => {
         Modal.error({
           title: 'Error !',
           content:
@@ -30,9 +31,11 @@ function ForgotPasswordPage() {
         });
       });
   }
+
   function onFinishFailed(error) {
     console.log(error);
   }
+
   return (
     <div className="login-form">
       <div style={{ textAlign: 'left', color: 'white', marginBottom: 50 }}>
@@ -61,7 +64,7 @@ function ForgotPasswordPage() {
             },
           ]}
         >
-          <Input prefix={<img src={EmailIcon} n alt="email" />} />
+          <Input prefix={<img src={EmailIcon} alt="email" />} />
         </Form.Item>
         <Form.Item>
           <Row style={{ justifyContent: 'space-around' }}>

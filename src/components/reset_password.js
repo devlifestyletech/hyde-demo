@@ -8,6 +8,7 @@ export default function ResetPasswordPage() {
   const [resetPasswordForm] = Form.useForm();
   const [searchParams] = useSearchParams();
   let code = searchParams.get('code');
+
   async function onFinish(value) {
     console.log({ code: code, ...value });
     authService
@@ -18,7 +19,7 @@ export default function ResetPasswordPage() {
       .then(() =>
         Modal.success({
           title: 'Success !',
-          content: 'Please sigin in with your new password',
+          content: 'Please signin in with your new password',
           onOk: () => {
             window.open('about:blank', '_self');
             window.close();
@@ -36,6 +37,7 @@ export default function ResetPasswordPage() {
         })
       );
   }
+
   return (
     <div className="main_box">
       <div style={{ textAlign: 'left', marginBottom: 50 }}>
