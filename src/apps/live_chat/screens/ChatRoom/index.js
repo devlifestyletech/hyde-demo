@@ -7,8 +7,15 @@ import Heading from '../../../../components/header';
 import Header from '../../Header';
 import Messages from '../../Messages';
 import List from '../../List';
-import { ActionIcon, ChatBox, ChatContainer, InputBar, SendIcon, StyledContainer } from './styles';
-import { Input, Spin ,Row} from 'antd';
+import {
+  ActionIcon,
+  ChatBox,
+  ChatContainer,
+  InputBar,
+  SendIcon,
+  StyledContainer,
+} from './styles';
+import { Input, Spin } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
@@ -151,7 +158,6 @@ function ChatRoom(props) {
     if (imageFile) uploadImg();
   }, [imageFile]);
 
-
   const uploadImg = async () => {
     setOnSend(true);
     console.log('imageFile', imageFile);
@@ -162,36 +168,37 @@ function ChatRoom(props) {
       .then((res) => {
         console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        console.log('type',imageFile.type.split('/')[0])
+        console.log('type', imageFile.type.split('/')[0]);
 
-        imageFile.type.split('/')[0]==='image'?
-        socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'image',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        ):socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'file',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        )
+        imageFile.type.split('/')[0] === 'image'
+          ? socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'image',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            )
+          : socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'file',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            );
         deleteHandle();
         setOnSend(false);
       })
@@ -228,7 +235,6 @@ function ChatRoom(props) {
     return (
       <div
         style={{
-          // width: "80vw",
           height: '100vh',
           textAlign: 'center',
           paddingTop: 300,
@@ -259,65 +265,65 @@ function ChatRoom(props) {
               <Messages room={room} messages={messages} />
             )}
             <InputBar>
-            {room !== '' && !onSend ? (
-                  <Row>
-                    <label htmlFor="inputFile">
-                      <ActionIcon>
-                        <i className="fa fa-paperclip" />
-                      </ActionIcon>
-                    </label>
-                    <label htmlFor="inputImg">
-                      <ActionIcon>
-                        <i className="fa fa-image" />
-                      </ActionIcon>
-                    </label>
-                  </Row>
-                ) : (
-                  <Row>
-                    <ActionIcon
-                      onClick={() => {
-                        alert('Please select room to connect');
-                      }}
-                    >
+              {room !== '' && !onSend ? (
+                <>
+                  <label htmlFor="inputFile">
+                    <ActionIcon>
                       <i className="fa fa-paperclip" />
                     </ActionIcon>
-                    <ActionIcon
-                      onClick={() => {
-                        alert('Please select room to connect');
-                      }}
-                    >
+                  </label>
+                  <label htmlFor="inputImg">
+                    <ActionIcon>
                       <i className="fa fa-image" />
                     </ActionIcon>
-                  </Row>
-                )}
-                <input
-                  type="file"
-                  id="inputImg"
-                  accept="image/*"
-                  onChange={(event) => {
-                    if (room !== '' && !onSend) {
-                      selectHandle(event);
-                    }
-                  }}
-                  onClick={(event) => {
-                    event.target.value = null;
-                  }}
-                  style={{ display: 'none' }}
-                />
-                <input
-                  type="file"
-                  id="inputFile"
-                  accept="*"
-                  onChange={(event) => {
-                    if (room !== '' && !onSend) {
-                      selectHandle(event);
-                    }
-                  }}
-                  onClick={(event) => {
-                    event.target.value = null;
-                  }}
-                  style={{ display: 'none' }}
-                />
+                  </label>
+                </>
+              ) : (
+                <>
+                  <ActionIcon
+                    onClick={() => {
+                      alert('Please select room to connect');
+                    }}
+                  >
+                    <i className="fa fa-paperclip" />
+                  </ActionIcon>
+                  <ActionIcon
+                    onClick={() => {
+                      alert('Please select room to connect');
+                    }}
+                  >
+                    <i className="fa fa-image" />
+                  </ActionIcon>
+                </>
+              )}
+              <input
+                type="file"
+                id="inputImg"
+                accept="image/*"
+                onChange={(event) => {
+                  if (room !== '' && !onSend) {
+                    selectHandle(event);
+                  }
+                }}
+                onClick={(event) => {
+                  event.target.value = null;
+                }}
+                style={{ display: 'none' }}
+              />
+              <input
+                type="file"
+                id="inputFile"
+                accept="*"
+                onChange={(event) => {
+                  if (room !== '' && !onSend) {
+                    selectHandle(event);
+                  }
+                }}
+                onClick={(event) => {
+                  event.target.value = null;
+                }}
+                style={{ display: 'none' }}
+              />
               <Input
                 style={{
                   borderRadius: 20,

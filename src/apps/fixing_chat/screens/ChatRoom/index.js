@@ -290,7 +290,7 @@ function ChatRoom(props) {
               )}
               <InputBar>
                 {room !== '' && !onSend ? (
-                  <Row>
+                  <>
                     <label htmlFor="inputFile">
                       <ActionIcon>
                         <i className="fa fa-paperclip" />
@@ -301,9 +301,9 @@ function ChatRoom(props) {
                         <i className="fa fa-image" />
                       </ActionIcon>
                     </label>
-                  </Row>
+                  </>
                 ) : (
-                  <Row>
+                  <>
                     <ActionIcon
                       onClick={() => {
                         alert('Please select room to connect');
@@ -318,7 +318,7 @@ function ChatRoom(props) {
                     >
                       <i className="fa fa-image" />
                     </ActionIcon>
-                  </Row>
+                  </>
                 )}
                 <input
                   type="file"
