@@ -205,7 +205,7 @@ const FixingReports = () => {
             };
             residence.fixing_reports[index] = newReport;
           });
-          console.log('residenceData', residenceData);
+          // console.log('residenceData', residenceData);
           // console.log(residenceData.fixing_reports);
           combinesData.push(residenceData);
         });

@@ -99,7 +99,7 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log('ReportId', childData.split(',')[1].split('!')[0]);
+    // console.log('ReportId', childData.split(',')[1].split('!')[0]);
     if (room !== childData.split(',')[1]) {
       setMessages([]);
       setRoom(childData.split(',')[1]);
@@ -109,11 +109,11 @@ function ChatRoom(props) {
   };
 
   const getAvatar = (avatar) => {
-    console.log('room', avatar);
+    // console.log('room', avatar);
     setUserAvatar(avatar);
   };
   const getStatus = (status) => {
-    console.log('status', status);
+    // console.log('status', status);
     setFixingStatus(status);
   };
 
@@ -165,15 +165,15 @@ function ChatRoom(props) {
 
   const uploadImg = async () => {
     setOnSend(true);
-    console.log('imageFile', imageFile);
+    // console.log('File', imageFile);
     let dataImage = new FormData();
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        console.log('res Upload', res.data[0].url);
+        // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        console.log('type',imageFile.type.split('/')[0])
+        // console.log('type',imageFile.type.split('/')[0])
 
         imageFile.type.split('/')[0]==='image'?
         socket.emit(
@@ -236,7 +236,7 @@ function ChatRoom(props) {
   };
 
   const callback = (key) => {
-    console.log(types[parseInt(key)]);
+    // console.log(types[parseInt(key)]);
     setSearchTag(types[parseInt(key)]);
   };
 

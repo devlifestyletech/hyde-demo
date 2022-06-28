@@ -4,7 +4,12 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
+.date-container {
+  width: 100%;
+  text-align: center;
+	font-size: 0.64vw;
+	font-weight: bold;
+}
 .message-container::-webkit-scrollbar {
   display: none;
 }
- 

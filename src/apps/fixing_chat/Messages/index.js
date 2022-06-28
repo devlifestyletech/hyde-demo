@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Message from './Message';
 import styled from 'styled-components';
 import './messageStyle.css';
+import { format, utcToZonedTime } from 'date-fns-tz';
+import moment from 'moment';
 
 import { socket } from '../../../services/web-sockets';
 
 function Messages(props) {
+  const thTimeZone = 'Asia/Bangkok';
   const { messages, room } = props;
   const [onTyping, setOnTyping] = useState('');
+  const [reduceMess, setReduceMess] = useState();
 
-  // useEffect(() => {
   socket.on('typing', (data) => {
-    // console.log("typing", data, room);
     if (data.room === room) {
       setOnTyping(data.sender_name + ' is typing...');
       setTimeout(() => {
@@ -20,16 +22,57 @@ function Messages(props) {
       }, 5000);
     }
   });
-  // }, [messages]);
+
+  function timeFormat(date) {
+    let today = moment().diff(date, 'DD/MM/YYYY') / 86400000;
+    console.log('today', today);
+    return today > 1
+      ? format(utcToZonedTime(new Date(date), thTimeZone), 'dd/MMM/yyyy', {
+          timeZone: 'Asia/Bangkok',
+        })
+      : 'Today';
+  }
+
+  useEffect(() => {
+    console.log('messages', messages);
+
+    let mess = messages.reduce(
+      (prev, cur) => ({
+        ...prev,
+        [timeFormat(cur.time)]: (prev[timeFormat(cur.time)] || []).concat(cur),
+      }),
+      {}
+    );
+    setReduceMess(mess);
+  }, [messages]);
+
+  useEffect(() => {
+    console.log('Mess: ', reduceMess);
+    if (reduceMess) {
+      Object.keys(reduceMess).map((item, index) =>
+        console.log('reduceMess: ', item, [reduceMess[item]])
+      );
+    }
+  }, [reduceMess]);
 
   return (
     <StyledMessages>
       <ScrollToBottom className="message-container">
-        {messages.map((message, i) => (
-          <div key={i}>
-            <Message message={message} />
-          </div>
-        ))}
+        {reduceMess
+          ? Object.keys(reduceMess).map((item, index) => (
+              <>
+                <div className="date-container" key={index}>
+                  {item}
+                </div>
+                {reduceMess[item].map((message, i) => (
+                  <div key={i}>
+                    <Message message={message} />
+                  </div>
+                ))}
+              </>
+            ))
+          : null}
+
         {onTyping !== '' ? (
           <MessagesContainer>
             <Typing>{onTyping}</Typing>
