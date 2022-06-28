@@ -1,97 +1,137 @@
-import React from 'react';
+import React ,{useEffect,useState} from 'react';
 import Header from '../../components/header';
 import './components/chart/styles/dashboard.css';
-import { Button, DatePicker, Row, Table } from 'antd';
+import { Button, Row,Space,Text ,Table, DatePicker} from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import PieChart from './components/chart/PieChart';
 import GraphReserves from './components/chart/GraphReserves';
+import {getDashboard} from "./services/thunk-action/payment_thunk";
+import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import { exportExcel } from './services/API/payment_api'
+import { CSVLink } from "react-csv";
 
 const columns = [
   {
     title: 'Date',
     align: 'center',
-    dataIndex: 'date',
-    key: 'date',
-    render: (text) => <Button type="link">{text}</Button>,
+    dataIndex: 'Date_table',
+    key: 'Date_table',
+    render: (text, record) => (
+      <Space size="middle">
+        <a>
+          {moment(record.Date_table).format("DD/MM/YYYY")}
+        </a>
+      </Space>
+    ),
   },
   {
     title: 'Total Invoice Bill',
     align: 'center',
-    dataIndex: 'total',
-    key: 'total',
+    dataIndex: 'Count_Bills_Date',
+    key: 'Count_Bills_Date',
+    render: (text, record) => (
+      <p>{record.Count_Bills_Date.toLocaleString('en-US')}</p>
+     ),
   },
   {
     title: 'Total Amount Water',
     align: 'center',
-    dataIndex: 'total_water',
-    key: 'total_water',
+    dataIndex: 'Amount_water',
+    key: 'Amount_water',
+    render: (text, record) => (
+      <p>{record.Amount_water.toLocaleString('en-US')}</p>
+     ),
   },
   {
     title: 'Total Amount Common Fee',
     align: 'center',
-    dataIndex: 'total_common',
-    key: 'total_common',
+    dataIndex: 'Amount_common_fee',
+    key: 'Amount_common_fee',
+    render: (text, record) => (
+      <p>{record.Amount_common_fee.toLocaleString('en-US')}</p>
+     ),
+  },
+  {
+    title: 'Total Overdue',
+    align: 'center',
+    dataIndex: 'Overdue',
+    key: 'Overdue',
+    render: (text, record) => (
+     <p>{record.Overdue.toLocaleString('en-US')}</p>
+    ),
   },
   {
     title: 'Received Amount',
     align: 'center',
-    dataIndex: 'total_received',
-    key: 'total_received',
+    dataIndex: 'Total_BillsPayment_Dashboard',
+    key: 'Total_BillsPayment_Dashboard',
+    render: (text, record) => (
+      <p>{record.Total_BillsPayment_Dashboard.toLocaleString('en-US')}</p>
+     ),
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    date: '01/05/2022',
-    total: 200,
-    total_water: 15000,
-    total_common: 22500,
-    total_received: 37500,
-  },
-  {
-    key: '2',
-    date: '02/05/2022',
-    total: 200,
-    total_water: 10000,
-    total_common: 16500,
-    total_received: 26500,
-  },
-  {
-    key: '3',
-    date: '03/05/2022',
-    total: 200,
-    total_water: 8000,
-    total_common: 6800,
-    total_received: 14800,
-  },
-  {
-    key: '4',
-    date: '04/05/2022',
-    total: 200,
-    total_water: 2500,
-    total_common: 3000,
-    total_received: 5500,
-  },
-  {
-    key: '5',
-    date: '05/05/2022',
-    total: 200,
-    total_water: 5000,
-    total_common: 6000,
-    total_received: 11000,
-  },
-  {
-    key: '6',
-    date: '06/05/2022',
-    total: 200,
-    total_water: 10000,
-    total_common: 2100,
-    total_received: 12100,
-  },
-];
+const Payment_dashbord = () => {
+  const {dataPaymentDashboard } = useSelector((state) => state.PaymentActionRedux);
+  const { MonthPicker } = DatePicker;
+  const [month, setMonth] = useState("");
+  const dispatch = useDispatch();
+  const [FileNameExcel, setFileNameExcel] = useState("Report Payment All");
 
-const PaymentDashboard = () => {
+  const headers = [
+    { label:"Date_table",key:"Date_table"},
+    { label:"Count_Bills_Dater",key:"Count_Bills_Date"}, 
+    { label:"Amount_water",key:"Amount_water"},
+    { label:"Amount_common_fee",key:"Amount_common_fee"},
+    { label:"Overdue",key:"Overdue"},
+    { label:"Total_BillsPayment_Dashboard",key:"Total_BillsPayment_Dashboard"},
+  ];
+  const data =dataPaymentDashboard
+
+  const pageSizeOptions = ["10", "30", "50", "100"];
+  const PaginationConfig = {
+    defaultPageSize: pageSizeOptions[0],
+    pageSizeOptions: pageSizeOptions,
+    current: 1,
+    showSizeChanger: true,
+    total: 10,
+  };
+
+  useEffect(() => {
+    dispatch(getDashboard());
+  }, []);
+
+  async function onMonthChange(date, dateString) {
+    // console.log("date", date);
+
+     console.log("dateString", dateString);
+     if (dateString!=='') {
+       const params={filters:null}
+       const firstDayOfTheMonth = moment(dateString).startOf('month').format('YYYY-MM-DD'); //2021-04-01
+       const lastDayOfTheMonth = moment(dateString).endOf('month').format('YYYY-MM-DD'); //2021-04-30
+       await setFileNameExcel(`Report Payment Of ${moment(dateString).startOf('month').format('MMM YYYY')}`)
+
+  //  console.log("firstDayOfTheMonth:",firstDayOfTheMonth);
+  //  console.log("firstDayOfTheMonth:",lastDayOfTheMonth);
+  //  console.log("dateString:",dateString);
+
+   params.filters={
+     firstDayOfTheMonth:firstDayOfTheMonth,
+     lastDayOfTheMonth:lastDayOfTheMonth
+   }
+   
+      await setMonth(dateString)
+      await dispatch(getDashboard(params))
+    }else{
+      await setFileNameExcel(`Report Payment All`)
+      await dispatch(getDashboard())
+    }
+  }
+  const exportExcelPayment =async () => {
+    await exportExcel(month)
+  }
+  
   return (
     <>
       <Header title="Payment Dashboard" />
@@ -101,7 +141,7 @@ const PaymentDashboard = () => {
           <div className="pie-graph">
             <div className="chart-title">
               <p style={{ fontSize: 18, paddingLeft: 10 }}>
-                Status Payment Today
+                Status Payment Current
               </p>
             </div>
             <div className="chart-content">
@@ -111,7 +151,7 @@ const PaymentDashboard = () => {
           <div className="bar-graph">
             <div className="chart-title">
               <p style={{ fontSize: 18, paddingLeft: 10 }}>
-                Status Payment Today
+                Status Payment Success Of Month
               </p>
             </div>
             <div className="chart-content">
@@ -125,36 +165,42 @@ const PaymentDashboard = () => {
             </p>
           </div>
           <div className="month-graph">
-            <DatePicker
-              format="MMM YYYY"
-              picker="month"
-              placeholder="Please select Month"
-              style={{
-                color: '#fff',
-                width: 410,
-                borderRadius: 20,
-                backgroundColor: '#fff',
-              }}
-            />
+
+          <MonthPicker
+            style={{  color: '#fff',
+            width: 410,
+            borderRadius: 20,
+            backgroundColor: '#fff',}}
+            onChange={onMonthChange}
+            format="MMM YYYY"
+            picker="month"
+            placeholder="Please select Month"
+          // className="search-box"
+          />
           </div>
+
           <div className="export-button">
+          <CSVLink filename={FileNameExcel} data={data} headers={headers}>
             <Button
               icon={<VerticalAlignBottomOutlined />}
-              disabled={true}
+              disabled={false}
               type="primary"
               size="large"
               shape="round"
               style={{ float: 'right' }}
+              // onClick={exportExcelPayment}
             >
-              Export
+              Export All
             </Button>
+            </CSVLink>
           </div>
+
           <div className="table-graph">
-            <Table columns={columns} dataSource={data} />;
+            <Table columns={columns} dataSource={dataPaymentDashboard}  pagination={PaginationConfig} />;
           </div>
         </Row>
       </div>
     </>
   );
 };
-export default PaymentDashboard;
+export default Payment_dashbord;

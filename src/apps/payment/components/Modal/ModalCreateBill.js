@@ -308,7 +308,7 @@ const ModalCreateBill = () => {
                                   message: 'Missing amount',
                                 },
                                 () => ({
-                                  validator(value) {
+                                  validator(rules,value) {
                                     const rexp = /^[0-9]*[.0-9]+$/;
                                     if (
                                       isNaN(value) ||
