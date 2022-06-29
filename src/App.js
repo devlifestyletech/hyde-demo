@@ -33,6 +33,7 @@ import PaymentSuccess from './apps/payment/Payment_success';
 import PaymentDashboard from './apps/payment/payment_dashbord';
 
 import { getAuth, signInAnonymously } from 'firebase/auth';
+import NoContent from './components/no_content';
 
 const App = () => {
   useEffect(() => {
@@ -66,37 +67,34 @@ const App = () => {
         <Route path="dashboard" element={<MainLayout />}>
           <Route path="summary" element={<MainDashboard />} />
           <Route
-            path="facilities-reservation-dashboard"
+            path="facilities/reservation-dashboard"
             element={<FacilitiesManagementDashboardPage />}
           />
           <Route
-            path="facilities-reservation-calendar"
+            path="facilities/reservation-calendar"
             element={<BookingCalendarPage />}
           />
           <Route
-            path="facilities-reservation-list"
+            path="facilities/reservation-list"
             element={<BookingListsPage />}
           />
-          <Route path="facilities-management" element={<FacilitiesPage />} />
-          <Route path="occupation" element={<OccupationPage />} />
-          <Route path="members-dashboard" element={<MemberDashboardPage />} />
-          <Route path="members-registration" element={<RegistrationPage />} />
-          <Route
-            path="rooms-management-dashboard"
-            element={<RoomDashboardPage />}
-          />
-          <Route path="rooms-management" element={<RoomManagement />} />
+          <Route path="facilities/management" element={<FacilitiesPage />} />
+          <Route path="facilities/occupation" element={<OccupationPage />} />
+          <Route path="members/dashboard" element={<MemberDashboardPage />} />
+          <Route path="members/registration" element={<RegistrationPage />} />
+          <Route path="members/rooms-management" element={<RoomManagement />} />
           <Route path="nearby" element={<Nearby />} />
           <Route path="announcement" element={<Announcement />} />
-          <Route path="service-center-reports" element={<FixingReports />} />
+          <Route path="services/reports" element={<FixingReports />} />
           <Route
-            path="service-center-dashboard"
+            path="services/dashboard"
             element={<FixingReportsDashboard />}
           />
-          <Route path="service-chat" element={<FixingChat />} />
+          <Route path="services/chat" element={<FixingChat />} />
           <Route path="live-chat" element={<LiveChat />} />
-          <Route path="payment-billing" element={<PaymentSuccess />} />
-          <Route path="payment-dashboard" element={<PaymentDashboard />} />
+          <Route path="payment/billing" element={<PaymentSuccess />} />
+          <Route path="payment/dashboard" element={<PaymentDashboard />} />
+          <Route path="*" element={<NoContent />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
