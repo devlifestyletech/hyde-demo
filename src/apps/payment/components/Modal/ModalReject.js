@@ -188,16 +188,14 @@ const ModalReject = () => {
                             : null}
                           <div style={{ paddingTop: 20 }}>
                             <h3>Annotation</h3>
-                            <Input
-                              style={{ borderRadius: '25px' }}
-                              placeholder="No data form SCB"
-                              disabled={true}
-                              value={e?.annotation_payment}
-                            />
+                           
                             <TextArea
-        placeholder="Autosize height with minimum and maximum number of lines"
-        autoSize={{ minRows: 2, maxRows: 6 }}
-      />
+                             style={{ borderRadius: '25px' }}
+                              rows={3}
+                             disabled={true}
+        placeholder={e?.annotation_payment}
+       
+      ></TextArea>
                           </div>
 
                           <div style={{ paddingTop: 20 }}>
