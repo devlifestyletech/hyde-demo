@@ -1169,7 +1169,7 @@ export const Table_payment = () => {
           case "Out Date":
             columns = outDate;
             break;
-          case "Reject":
+          case "Payment annotation":
             columns = reject;
             break;
           default:
