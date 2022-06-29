@@ -287,7 +287,7 @@ function List(props) {
           <InfiniteScroll
             dataLength={data.length}
             next={fetchData}
-            hasMore={data.length < 1}
+            hasMore={data.length < 0}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
             endMessage={<Divider plain>It is all, nothing more</Divider>}
             scrollableTarget="scrollableDiv"

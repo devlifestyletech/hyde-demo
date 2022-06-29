@@ -41,7 +41,7 @@ function List(props) {
 			await axios
 				.get(process.env.REACT_APP_API_URL + '/chats?room_contains=:&_sort=time:desc', headers)
 				.then((res) => {
-					console.log('res', res.data);
+					// console.log('res', res.data);
 					var flags = [],
 						output = [],
 						l = res.data.length,
@@ -51,7 +51,7 @@ function List(props) {
 						flags[res.data[i].room] = true;
 						output.push(res.data[i]);
 					}
-					console.log('output', output);
+					// console.log('output', output);
 					setData(output);
 					setLoading(false);
 				})
@@ -80,7 +80,7 @@ function List(props) {
 		Service.getAllResident().then((user) => {
 			// console.log("users", user);
 			user.data.map((data) => {
-				console.log('users DAa', data.fullname);
+				// console.log('users DAa', data.fullname);
 				setContactList((lists) => [
 					...lists,
 					{

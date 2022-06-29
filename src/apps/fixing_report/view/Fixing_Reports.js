@@ -74,19 +74,21 @@ const FixingReports = () => {
 
   let extendsColumns = [
     {
+      width: '4vw',
       title: 'No.',
       dataIndex: 'number',
       key: 'number',
     },
     {
+      width: '8vw',
       title: 'Image',
       dataIndex: 'image_pending',
       key: 'image_pending',
       render: (index, record) => (
         <>
           <Image
-            width={150}
-            height={100}
+            width={300}
+            height={200}
             src={record?.image_pending[0] ? process.env.REACT_APP_API_URL + record.image_pending[0].url : '/main/images/artani-logo.png'}
             alt={record?.image_pending[0] ? process.env.REACT_APP_API_URL + record.image_pending[0].url : '/main/images/artani-logo.png'}
           />
@@ -94,7 +96,7 @@ const FixingReports = () => {
       ),
     },
     {
-      width: 120,
+      width: '8vw',
       title: 'Submission Date',
       dataIndex: 'submission_date_show',
       key: 'submission_date_show',
@@ -104,12 +106,6 @@ const FixingReports = () => {
       dataIndex: 'problem',
       key: 'problem',
     },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-    },
-
     {
       title: 'Description',
       dataIndex: 'description',
@@ -128,6 +124,7 @@ const FixingReports = () => {
       key: 'owner',
     },
     {
+      width: '4vw',
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
@@ -139,6 +136,7 @@ const FixingReports = () => {
       ),
     },
     {
+      width: '4vw',
       align: 'center',
       title: 'Action',
       key: 'extendsAction',
@@ -207,7 +205,7 @@ const FixingReports = () => {
             };
             residence.fixing_reports[index] = newReport;
           });
-          console.log('residenceData', residenceData);
+          // console.log('residenceData', residenceData);
           // console.log(residenceData.fixing_reports);
           combinesData.push(residenceData);
         });
