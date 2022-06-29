@@ -58,6 +58,7 @@ function NewSideMenu() {
           >
             <div className={'group-name'}>Overview</div>
             <Menu.Item
+              onClick={() => setOpenKeys([])}
               key={`${main_link}/summary`}
               icon={<img src={pieIcon} alt="main" />}
             >
@@ -96,12 +97,14 @@ function NewSideMenu() {
               </Menu.Item>
             </SubMenu>
             <Menu.Item
+              onClick={() => setOpenKeys([])}
               key={`${main_link}/announcement`}
               icon={<img src={annouceIcon} alt="chat" />}
             >
               <Link to={`${main_link}/announcement`}>Announcement</Link>
             </Menu.Item>
             <Menu.Item
+              onClick={() => setOpenKeys([])}
               key={`${main_link}/nearby`}
               icon={<img src={nearbyIcon} alt="chat" />}
             >
@@ -130,6 +133,7 @@ function NewSideMenu() {
               </Menu.Item>
             </SubMenu>
             <Menu.Item
+              onClick={() => setOpenKeys([])}
               key={`${main_link}/live-chat`}
               icon={<img src={chatIcon} width="20" height="20" alt="chat" />}
             >
