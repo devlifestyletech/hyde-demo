@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/CreateReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/CreateReservation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/QrReservationModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/QrReservationModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditFacility.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditFacility.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +18,11 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -73,6 +75,8 @@
       <workItem from="1654595615768" duration="575000" />
       <workItem from="1655391412041" duration="62000" />
       <workItem from="1655804448236" duration="3438000" />
+      <workItem from="1656419014870" duration="515000" />
+      <workItem from="1656481907149" duration="4033000" />
     </task>
     <servers />
   </component>
