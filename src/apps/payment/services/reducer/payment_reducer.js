@@ -14,6 +14,7 @@ const billingPaymentData = {
     alert_notification: null,
     status_billing: null,
     statusModalPending: false,
+    statusModalReject: false,
     dataPaymentDashboard:[]
 };
 
@@ -41,6 +42,8 @@ const PaymentActionRedux = (state = billingPaymentData, action) => {
             return {...state, alert_notification: action.payload};
         case "MODAL_PENDING":
             return {...state, statusModalPending: action.payload};
+            case "MODAL_REJECT":
+                return {...state, statusModalReject: action.payload};
         case "CHANGE_STATE_EXPORT_APPROVE":
             return {...state, dataBillingAllApprove: action.payload};
         case "CHANGE_STATE_MENU_PAYMENT":

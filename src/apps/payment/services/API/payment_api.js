@@ -140,7 +140,7 @@ const rejectRescrpt = async (data, annotaion) => {
   console.log("update:", annotaion);
   const result = await Axios.put(
     `${URLreScrpit}/${data.idBilling}`,
-    { BillsPayment_Status: "Wait for payment", annotation_payment: annotaion },
+    { BillsPayment_Status: "Reject", annotation_payment: annotaion },
     options
   )
     .then((res) => {

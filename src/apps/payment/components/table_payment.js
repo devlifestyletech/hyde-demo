@@ -22,6 +22,7 @@ import {
 import Highlighter from "react-highlight-words";
 import ModalExportBilling from "./Modal/ModalExportBilling";
 import ModalPendingBill from "./Modal/ModalPending";
+import ModalReject from "./Modal/ModalReject";
 import {
   getDataSCB,
   deleteBillingPayment,
@@ -59,6 +60,8 @@ export const Table_payment = () => {
   const [View, setView] = useState([]);
   const [Del, setDel] = useState([]);
   const [Verify, setVerify] = useState([]);
+  const [VerifyReject, setVerifyReject] = useState([]);
+
   const [Export, setExport] = useState([]);
   useEffect(() => {
     dispatch({ type: "CHANGE_PARAMS_BILLING", payload: paramsBillingPayment });
@@ -136,7 +139,6 @@ export const Table_payment = () => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
     resultSCB = await getDataSCB(currentTarget.value);
-
     resultSCB === undefined ? (resultSCB = {}) : null;
     resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
     resultSCB.Address_Customer = result.Address_Customer;
@@ -150,7 +152,28 @@ export const Table_payment = () => {
     await setVerify(verifyLoading);
   };
   //approve
-
+  const approveBillingModalReject = async ({ currentTarget }) => {
+    const verifyLoadingReject = [...VerifyReject];
+    verifyLoadingReject[currentTarget.value] = true;
+    await setVerifyReject(verifyLoadingReject);
+    let resultSCB = {};
+    const [result] = dataBilling.filter((e) => {
+      return e.BillsPayment_Invoice === currentTarget.value;
+    });
+    resultSCB = await getDataSCB(currentTarget.value);
+    resultSCB === undefined ? (resultSCB = {}) : null;
+    resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
+    resultSCB.Address_Customer = result.Address_Customer;
+    resultSCB.Name_Customer = result.Name_Customer;
+    resultSCB.idBilling = result.id;
+    resultSCB.imageURL = result.imageURL;
+    resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
+    resultSCB.annotation_payment = result.annotation_payment;
+    dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
+    dispatch({ type: "MODAL_REJECT", payload: true });
+    verifyLoadingReject[currentTarget.value] = false;
+    await setVerifyReject(verifyLoadingReject);
+  };
   // showDetail
   const selectedRow = async ({ currentTarget }) => {
     const viewLoadings = [...View];
@@ -1026,6 +1049,110 @@ export const Table_payment = () => {
       ),
     },
   ];
+
+  const reject = [
+    {
+      title: "Invoice Bill",
+      align: "center",
+      dataIndex: "BillsPayment_Invoice",
+      key: "BillsPayment_Invoice",
+      width: "10%",
+      sorter: (a, b) =>
+        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+    },
+    {
+      title: "Room Number",
+      align: "center",
+      dataIndex: "Address_Customer",
+      key: "Address_Customer",
+      width: "10%",
+      render: (text) => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          searchWords={
+            paramsBilling.filters.Address_Customer !== null
+              ? paramsBilling.filters.Address_Customer
+              : [""]
+          }
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ),
+      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+    },
+    {
+      title: "Name Owner",
+      align: "center",
+      dataIndex: "Name_Customer",
+      key: "Name_Customer",
+      width: "10%",
+
+      sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
+    },
+    {
+      title: "Due Date",
+      align: "center",
+      dataIndex: "action",
+      key: "BillsPayment_Invoice",
+      width: "10%",
+      render: (text, record) => (
+        <Space size="middle">
+          <a>
+            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
+            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+          </a>
+        </Space>
+      ),
+    },
+    {
+      title: "Total",
+      align: "center",
+      dataIndex: "Total_BillsPayment",
+      key: "Total_BillsPayment",
+      width: "10%",
+      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+    },
+    {
+      title: "Status",
+      align: "center",
+      dataIndex: "BillsPayment_Status",
+      key: "BillsPayment_Status",
+      width: "10%",
+      render: (BillsPayment_Status) => {
+        return <Tag color="warning">{BillsPayment_Status}</Tag>;
+      },
+    },
+    {
+      title: "Create Bill",
+      align: "center",
+      dataIndex: "createdAt",
+      key: "createBill",
+      width: "10%",
+      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+    },
+    {
+      title: "Action",
+      align: "center",
+      dataIndex: "action",
+      key: "BillsPayment_Invoice",
+      width: "10%",
+      render: (text, record) => (
+        <>
+          <Button
+            value={record.BillsPayment_Invoice}
+            type="Default"
+            loading={VerifyReject[record.BillsPayment_Invoice]}
+            disabled={record.Receipt_Status}
+            shape="round"
+            onClick={approveBillingModalReject}
+          >
+            View
+          </Button>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div>
       {(() => {
@@ -1042,6 +1169,9 @@ export const Table_payment = () => {
           case "Out Date":
             columns = outDate;
             break;
+          case "Reject":
+            columns = reject;
+            break;
           default:
             break;
         }
@@ -1056,6 +1186,7 @@ export const Table_payment = () => {
       />
       <ModalExportBilling paymentDetail={state.paymentDetail} />
       <ModalPendingBill />
+      <ModalReject/>
     </div>
   );
 };
