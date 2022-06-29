@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import SideMenu from '../components/sideMenu';
 import { Navigate, useLocation, useOutlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import NewSideMenu from '../components/new_side_menu';
 
 // import Main_dashboard from '../apps/main.page';
 
@@ -61,7 +62,8 @@ function MainLayout() {
           paddingBottom: 55,
         }}
       >
-        <SideMenu />
+        {/*<SideMenu />*/}
+        <NewSideMenu />
       </Sider>
       <Content
         style={{ backgroundColor: 'white', padding: 35, marginLeft: 300 }}
