@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, Row, Col } from "antd";
 import Pdf from "react-to-pdf";
-import logo from "../../assets/images/logoArtani-black.png";
+import logo from '../../assets/images/hyde-logo.svg';
 const ref = React.createRef();
 const ModalExportBilling = () => {
   const { statusExportBilling, dataBillingAllExport } = useSelector(
@@ -75,10 +75,9 @@ const ModalExportBilling = () => {
                               >
                                 <h3 style={{ margin: "4%", fontStyle: "bold" }}>
                                   <b>
-                                    15 Soi Sirinthron 5 Sirinthron Rd. Khwang
-                                    Bangbamru, Khet Bangplad, Bangkok 10700
+                                  Hyde Heritage at Thonglor Condominium Juristic Person 1199 Sukhumvit Rd., Klongton Nua, Wattana, Bangkok, 10110
                                     <br />
-                                    Tel. 0-2433-9955
+                                    Tel. 0987645822
                                   </b>
                                 </h3>
                               </div>

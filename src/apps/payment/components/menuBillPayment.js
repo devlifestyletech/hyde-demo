@@ -36,8 +36,9 @@ export const MenuBillPayment = () => {
     { title: "Wait for payment", titleText: "Wait for payment" },
     { title: "Pending review", titleText: " Pending review" },
     { title: "Payment successfull", titleText: " Payment success" },
-    { title: "Out Date", titleText: "Out Date" },
     { title: "Payment annotation", titleText: "Payment annotation" },
+    { title: "Out Date", titleText: "Out Date" },
+    
   ];
 
   return (
