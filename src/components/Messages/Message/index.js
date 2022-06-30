@@ -9,7 +9,7 @@ import {
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { Image } from 'antd';
 
-import { encryptStorage } from '../../../../utils/encryptStorage';
+import { encryptStorage } from '../../../utils/encryptStorage';
 const session = encryptStorage.getItem('user_session');
 
 function Message(props) {

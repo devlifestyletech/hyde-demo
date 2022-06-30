@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { socket } from '../../../../services/web-sockets';
 import Heading from '../../../../components/header';
 import Header from '../../Header';
-import Messages from '../../Messages';
+import Messages from '../../../../components/Messages';
 import List from '../../List';
 import {
   ActionIcon,

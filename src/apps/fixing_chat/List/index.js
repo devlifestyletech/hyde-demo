@@ -45,8 +45,8 @@ function List(props) {
     props.searchTag === 'All'
       ? (element = contactList[value])
       : (element = contactList.filter((item) =>
-          item.status.toLowerCase().includes(props.searchTag.toLowerCase())
-        )[value]);
+        item.status.toLowerCase().includes(props.searchTag.toLowerCase())
+      )[value]);
     // console.log(element);
     props.handleCallback(element.name + ',' + element.id + '!' + element.room);
     props.getAvatar(element.avatar);
@@ -62,7 +62,7 @@ function List(props) {
       await axios
         .get(
           process.env.REACT_APP_API_URL +
-            '/chats?room_contains=!&_sort=time:desc',
+          '/chats?room_contains=!&_sort=time:desc',
           headers
         )
         .then((res) => {
@@ -131,9 +131,9 @@ function List(props) {
       if (item.type === 'chat') {
         return item.text.length > 30
           ? item.sender_name.split(' ')[0] +
-              ': ' +
-              item.text.substring(0, 30) +
-              '...'
+          ': ' +
+          item.text.substring(0, 30) +
+          '...'
           : item.sender_name.split(' ')[0] + ': ' + item.text;
       } else if (item.type === 'file') {
         return item.sender_name.split(' ')[0] + ': send a file';
@@ -181,7 +181,7 @@ function List(props) {
               src={
                 item.fixing_info.image_pending[0]
                   ? process.env.REACT_APP_API_URL +
-                    item.fixing_info.image_pending[0]?.url
+                  item.fixing_info.image_pending[0]?.url
                   : noImg
               }
             />
@@ -192,27 +192,27 @@ function List(props) {
             >
               <TimeText>
                 {toDay ===
-                format(
-                  utcToZonedTime(new Date(item.time), thTimeZone),
-                  'dd-MM-yyyy',
-                  {
-                    timeZone: 'Asia/Bangkok',
-                  }
-                )
+                  format(
+                    utcToZonedTime(new Date(item.time), thTimeZone),
+                    'dd-MM-yyyy',
+                    {
+                      timeZone: 'Asia/Bangkok',
+                    }
+                  )
                   ? format(
-                      utcToZonedTime(new Date(item.time), thTimeZone),
-                      'HH:mm',
-                      {
-                        timeZone: 'Asia/Bangkok',
-                      }
-                    )
+                    utcToZonedTime(new Date(item.time), thTimeZone),
+                    'HH:mm',
+                    {
+                      timeZone: 'Asia/Bangkok',
+                    }
+                  )
                   : format(
-                      utcToZonedTime(new Date(item.time), thTimeZone),
-                      'dd/MM/yyyy HH:mm',
-                      {
-                        timeZone: 'Asia/Bangkok',
-                      }
-                    )}
+                    utcToZonedTime(new Date(item.time), thTimeZone),
+                    'dd/MM/yyyy HH:mm',
+                    {
+                      timeZone: 'Asia/Bangkok',
+                    }
+                  )}
               </TimeText>
               <Col
                 style={{
@@ -220,11 +220,10 @@ function List(props) {
                 }}
               >
                 <TitleText>
-                  {`${
-                    item.fixing_info.problem.length > 20
+                  {`${item.fixing_info.problem.length > 20
                       ? item.fixing_info.problem.substring(0, 20) + '...'
                       : item.fixing_info.problem
-                  } (${item.room.split('!')[1]})`}
+                    } (${item.room.split('!')[1]})`}
                 </TitleText>
                 <ChatText>
                   <ChatComponent item={item} />
@@ -258,29 +257,29 @@ function List(props) {
           >
             {props.searchTag === 'All'
               ? contactList.map((data, index) => {
-                  return (
-                    <Option value={index} key={index}>
-                      {`${data.name} (${data.room})`}
-                    </Option>
-                  );
-                })
+                return (
+                  <Option value={index} key={index}>
+                    {`${data.name} (${data.room})`}
+                  </Option>
+                );
+              })
               : contactList
-                  .filter((item) =>
-                    item.status
-                      .toLowerCase()
-                      .includes(props.searchTag.toLowerCase())
-                  )
-                  .map((data, index) => (
-                    <Option value={index} key={index}>
-                      {`${data.name} (${data.room})`}
-                    </Option>
-                  ))}
+                .filter((item) =>
+                  item.status
+                    .toLowerCase()
+                    .includes(props.searchTag.toLowerCase())
+                )
+                .map((data, index) => (
+                  <Option value={index} key={index}>
+                    {`${data.name} (${data.room})`}
+                  </Option>
+                ))}
           </Select>
         </ListHeading>
         <div
           id="scrollableDiv"
           style={{
-            height: '60vh',
+            height: '62.4vh',
             overflow: 'auto',
           }}
         >
@@ -297,10 +296,10 @@ function List(props) {
                 props.searchTag === 'All'
                   ? data
                   : data.filter((item) =>
-                      item.fixing_info.status
-                        .toLowerCase()
-                        .includes(props.searchTag.toLowerCase())
-                    )
+                    item.fixing_info.status
+                      .toLowerCase()
+                      .includes(props.searchTag.toLowerCase())
+                  )
               }
               renderItem={(item) => <History item={item} />}
             />

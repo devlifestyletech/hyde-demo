@@ -95,31 +95,31 @@ function List(props) {
 	}, []);
 
 	const ChatComponent = ({ item }) => {
-    if (item.sender_id === adminId) {
-      if (item.type === 'chat') {
-        return item.text.length > 30
-          ? 'You: ' + item.text.substring(0, 30) + '...'
-          : 'You: ' + item.text;
-      } else if (item.type === 'file') {
-        return 'You: send a file';
-      } else {
-        return 'You: send a photo';
-      }
-    } else {
-      if (item.type === 'chat') {
-        return item.text.length > 30
-          ? item.sender_name.split(' ')[0] +
-              ': ' +
-              item.text.substring(0, 30) +
-              '...'
-          : item.sender_name.split(' ')[0] + ': ' + item.text;
-      } else if (item.type === 'file') {
-        return item.sender_name.split(' ')[0] + ': send a file';
-      } else {
-        return item.sender_name.split(' ')[0] + ': send a photo';
-      }
-    }
-  };
+		if (item.sender_id === adminId) {
+			if (item.type === 'chat') {
+				return item.text.length > 30
+					? 'You: ' + item.text.substring(0, 30) + '...'
+					: 'You: ' + item.text;
+			} else if (item.type === 'file') {
+				return 'You: send a file';
+			} else {
+				return 'You: send a photo';
+			}
+		} else {
+			if (item.type === 'chat') {
+				return item.text.length > 30
+					? item.sender_name.split(' ')[0] +
+					': ' +
+					item.text.substring(0, 30) +
+					'...'
+					: item.sender_name.split(' ')[0] + ': ' + item.text;
+			} else if (item.type === 'file') {
+				return item.sender_name.split(' ')[0] + ': send a file';
+			} else {
+				return item.sender_name.split(' ')[0] + ': send a photo';
+			}
+		}
+	};
 	const History = ({ item }) => {
 		return (
 			<AntdList.Item
@@ -152,15 +152,15 @@ function List(props) {
 						>
 							<TimeText>
 								{toDay ===
-								format(utcToZonedTime(new Date(item.time), thTimeZone), 'dd-MM-yyyy', {
-									timeZone: 'Asia/Bangkok',
-								})
+									format(utcToZonedTime(new Date(item.time), thTimeZone), 'dd-MM-yyyy', {
+										timeZone: 'Asia/Bangkok',
+									})
 									? format(utcToZonedTime(new Date(item.time), thTimeZone), 'HH:mm', {
-											timeZone: 'Asia/Bangkok',
-									  })
+										timeZone: 'Asia/Bangkok',
+									})
 									: format(utcToZonedTime(new Date(item.time), thTimeZone), 'dd/MM/yyyy HH:mm', {
-											timeZone: 'Asia/Bangkok',
-									  })}
+										timeZone: 'Asia/Bangkok',
+									})}
 							</TimeText>
 							<Col
 								style={{
@@ -204,7 +204,7 @@ function List(props) {
 				<div
 					id='scrollableDiv'
 					style={{
-						height: '60vh',
+						height: '72vh',
 						overflow: 'auto',
 					}}
 				>

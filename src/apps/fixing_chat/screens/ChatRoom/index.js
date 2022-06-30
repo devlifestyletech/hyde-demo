@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { socket } from '../../../../services/web-sockets';
 import Heading from '../../../../components/header';
 import Header from '../../Header';
-import Messages from '../../Messages';
+import Messages from '../../../../components/Messages';
 import List from '../../List';
 import ReportDetail from '../Report';
 import {
@@ -66,7 +66,7 @@ function ChatRoom(props) {
       if (room) {
         await axios
           .get(
-            process.env.REACT_APP_API_URL + '/chats?_where[room]=' + room,
+            process.env.REACT_APP_API_URL + `/chats?_where[room]=${room}&_sort=time`,
             headers
           )
           .then((res) => {
@@ -95,6 +95,7 @@ function ChatRoom(props) {
   };
 
   useEffect(() => {
+    console.log('headers',headers)
     connectChat();
   }, [room]);
 

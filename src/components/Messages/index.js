@@ -6,7 +6,7 @@ import './messageStyle.css';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import moment from 'moment';
 
-import { socket } from '../../../services/web-sockets';
+import { socket } from '../../services/web-sockets';
 
 function Messages(props) {
   const thTimeZone = 'Asia/Bangkok';
@@ -24,9 +24,9 @@ function Messages(props) {
   });
 
   function timeFormat(date) {
-    let today = moment().diff(date, 'DD/MM/YYYY') / 86400000;
-    console.log('today', today);
-    return today > 1
+    let today = moment().isSame(date, 'days') ;
+    // console.log('today',today);
+    return !today 
       ? format(utcToZonedTime(new Date(date), thTimeZone), 'dd/MMM/yyyy', {
           timeZone: 'Asia/Bangkok',
         })
@@ -47,7 +47,7 @@ function Messages(props) {
   }, [messages]);
 
   useEffect(() => {
-    console.log('Mess: ', reduceMess);
+    // console.log('Mess: ', reduceMess);
     if (reduceMess) {
       Object.keys(reduceMess).map((item, index) =>
         console.log('reduceMess: ', item, [reduceMess[item]])
