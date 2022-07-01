@@ -48,6 +48,10 @@ function Announcement() {
   const [editVisible, setEditVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  function disabledDate(current) {
+    return current && current < moment().startOf('day');
+  }
+
   const showEditModal = () => {
     setEditVisible(true);
   };
@@ -646,7 +650,7 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker className="dateTime" />
+                    <DatePicker disabledDate={disabledDate} className="dateTime" />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
@@ -680,7 +684,7 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker className="dateTime" />
+                  <DatePicker disabledDate={disabledDate} className="dateTime" />
                 </Form.Item>
               </div>
               <div style={{ width: 10 }} />
@@ -1026,7 +1030,7 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker className="dateTime" />
+                    <DatePicker disabledDate={disabledDate} className="dateTime" />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
@@ -1060,7 +1064,7 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker className="dateTime" />
+                  <DatePicker disabledDate={disabledDate} className="dateTime" />
                 </Form.Item>
               </div>
               <div style={{ width: 10 }} />

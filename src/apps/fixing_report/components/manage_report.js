@@ -1,33 +1,29 @@
-import React, { useState, useEffect } from "react";
-import Heading from "../../components/Heading";
-import {
-  Button, Table, Image, Input, Row, Col, Popconfirm, DatePicker, Form, Modal,
-  TimePicker,
-} from "antd";
-import { FormOutlined, DeleteOutlined, PictureOutlined } from "@ant-design/icons";
-import axios from "axios";
-import { encryptStorage } from "../../../config/encrypt";
+import React, { useState } from 'react';
+import { Button, Input, Col, DatePicker, Form, Modal, TimePicker } from 'antd';
+import { PictureOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import moment from 'moment';
+import { encryptStorage } from '../../../config/encrypt';
 
-const session = encryptStorage.getItem("user_session");
-const URLreScript = process.env.REACT_APP_API_URL + "/fixing-reports/";
+const session = encryptStorage.getItem('user_session');
+const URLreScript = process.env.REACT_APP_API_URL + '/fixing-reports/';
 const { format } = require('date-fns');
 const ManageReport = ({ visible, onCancel }) => {
   const [form] = Form.useForm();
-  const [publishPicked, setPublishPicked] = useState();
   const [pickedImage, setPickedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [datePicked, setDatePicked] = useState("");
-  const [timePicked, setTimePicked] = useState("");
+  const [datePicked, setDatePicked] = useState('');
+  const [timePicked, setTimePicked] = useState('');
 
   function onDateChange(date, dateString) {
-    console.log("date", date);
-    console.log("dateString", dateString);
+    console.log('date', date);
+    console.log('dateString', dateString);
     setDatePicked(dateString);
   }
 
   function onTimeChange(time, timeString) {
-    console.log("time", time);
-    console.log("timeString", timeString);
+    console.log('time', time);
+    console.log('timeString', timeString);
     setTimePicked(timeString);
   }
 
@@ -36,12 +32,11 @@ const ManageReport = ({ visible, onCancel }) => {
     setImageFile(null);
   };
 
-  function publishPickedHandle(key) {
-    console.log("publishPickedHandle", key);
-    setPublishPicked(key);
+  function disabledDate(current) {
+    return current && current < moment().startOf('day');
   }
 
-  console.log("rerender modal1");
+  console.log('rerender modal1');
 
   const selectHandle = (e) => {
     setImageFile(e.target.files[0]);
@@ -55,30 +50,30 @@ const ManageReport = ({ visible, onCancel }) => {
   };
 
   const handleOnAdd = async (value) => {
-    console.log("value", value);
+    console.log('value', value);
     let today = Date.now();
-    let dateNow = format(today, "yyyy-MM-dd");
-    let timeNow = format(today, "HH:mm");
-    console.log("today", today);
-    console.log("Date", dateNow, datePicked);
-    console.log("Time", timeNow, timePicked);
+    let dateNow = format(today, 'yyyy-MM-dd');
+    let timeNow = format(today, 'HH:mm');
+    console.log('today', today);
+    console.log('Date', dateNow, datePicked);
+    console.log('Time', timeNow, timePicked);
 
     // console.log("value time", value["time"]);
     let dataImage = new FormData();
-    dataImage.append("files", imageFile);
+    dataImage.append('files', imageFile);
     await axios
-      .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
+      .post(process.env.REACT_APP_API_URL + 'upload/', dataImage)
       .then((res) => {
-        console.log("res", res);
+        console.log('res', res);
         let imageId = res.data[0];
         axios
           .post(
             `${URLreScript}`,
             {
-              title_name: `${value["title_name"]}`,
-              post_status: `${value["publish_status"]}`,
-              announcer: "Admin1",
-              detail: `${value["detail"]}`,
+              title_name: `${value['title_name']}`,
+              post_status: `${value['publish_status']}`,
+              announcer: 'Admin1',
+              detail: `${value['detail']}`,
               date_announce: datePicked ? `${datePicked}` : `${dateNow}`,
               time_announce: timePicked
                 ? `${timePicked}:00.000`
@@ -86,35 +81,35 @@ const ManageReport = ({ visible, onCancel }) => {
               image: imageId,
             },
             {
-              headers: { Authorization: "Bearer " + session.jwt },
+              headers: { Authorization: 'Bearer ' + session.jwt },
             }
           )
-          .then((res) => {
-          })
+          .then((res) => {})
           .catch((err) => {
             console.error("Can't add data: ", err);
           });
       })
       .catch((err) => {
-        console.log("ERROR", err);
+        console.log('ERROR', err);
       });
   };
 
   const uploadImg = async () => {
     let dataImage = new FormData();
-    dataImage.append("image", imageFile);
-    console.log('imageFile', imageFile)
-    dataImage ?
-      await axios
-        .post(process.env.REACT_APP_API_URL + "upload/", dataImage)
-        .then((res) => {
-          console.log("res", res);
-          // let imageId = res.data[0];
-        })
-        .catch((err) => {
-          console.log("ERROR", err);
-        }) : alert('noImage')
-  }
+    dataImage.append('image', imageFile);
+    console.log('imageFile', imageFile);
+    dataImage
+      ? await axios
+          .post(process.env.REACT_APP_API_URL + 'upload/', dataImage)
+          .then((res) => {
+            console.log('res', res);
+            // let imageId = res.data[0];
+          })
+          .catch((err) => {
+            console.log('ERROR', err);
+          })
+      : alert('noImage');
+  };
 
   return (
     <Modal
@@ -123,8 +118,8 @@ const ManageReport = ({ visible, onCancel }) => {
       footer={[
         <Button
           style={{
-            backgroundColor: "#B2A37A",
-            color: "#F5F4EC",
+            backgroundColor: '#B2A37A',
+            color: '#F5F4EC',
           }}
           className="add-btn"
           key="add"
@@ -134,8 +129,8 @@ const ManageReport = ({ visible, onCancel }) => {
         </Button>,
         <Button
           style={{
-            backgroundColor: "#B2A37A",
-            color: "#F5F4EC",
+            backgroundColor: '#B2A37A',
+            color: '#F5F4EC',
           }}
           className="add-btn"
           key="add"
@@ -150,7 +145,7 @@ const ManageReport = ({ visible, onCancel }) => {
                 handleOnAdd(newValues);
               })
               .catch((info) => {
-                console.log("Validate Failed:", info);
+                console.log('Validate Failed:', info);
               });
           }}
         >
@@ -165,9 +160,9 @@ const ManageReport = ({ visible, onCancel }) => {
         layout="vertical"
         name="form_in_modal"
         initialValues={{
-          modifier: "public",
+          modifier: 'public',
         }}
-        style={{ display: "flex" }}
+        style={{ display: 'flex' }}
       >
         <div style={{ flex: 1 }}>
           <Form.Item
@@ -176,7 +171,7 @@ const ManageReport = ({ visible, onCancel }) => {
             rules={[
               {
                 required: true,
-                message: "Please input title",
+                message: 'Please input title',
               },
             ]}
           >
@@ -193,17 +188,17 @@ const ManageReport = ({ visible, onCancel }) => {
                     <div
                       class="child"
                       style={{
-                        width: "100%",
-                        height: "40vh",
-                        textAlign: "center",
+                        width: '100%',
+                        height: '40vh',
+                        textAlign: 'center',
                       }}
                     >
                       <Col>
                         <PictureOutlined
                           style={{
-                            width: "100%",
+                            width: '100%',
                             fontSize: 64,
-                            color: "#818282",
+                            color: '#818282',
                           }}
                         />
                         Click to this area to upload
@@ -220,12 +215,12 @@ const ManageReport = ({ visible, onCancel }) => {
                 onClick={(event) => {
                   event.target.value = null;
                 }}
-                style={{ display: "none", float: "left" }}
+                style={{ display: 'none', float: 'left' }}
               />
               {pickedImage ? (
                 <div>
                   <img
-                    style={{ width: "100%", height: "50vh" }}
+                    style={{ width: '100%', height: '50vh' }}
                     src={pickedImage}
                     alt="test"
                   />
@@ -234,7 +229,7 @@ const ManageReport = ({ visible, onCancel }) => {
               <div style={{ marginTop: 12 }}>
                 {pickedImage ? (
                   <div className="delete">
-                    <Button style={{ float: "right" }} onClick={deleteHandle}>
+                    <Button style={{ float: 'right' }} onClick={deleteHandle}>
                       Delete
                     </Button>
                   </div>
@@ -251,54 +246,56 @@ const ManageReport = ({ visible, onCancel }) => {
             rules={[
               {
                 required: true,
-                message: "Please input details",
+                message: 'Please input details',
               },
             ]}
           >
             <Input.TextArea
               placeholder="Please input details"
-              style={{ minHeight: "40vh" }}
+              style={{ minHeight: '40vh' }}
             />
           </Form.Item>
-          {publishPicked === "Scheduled" ? (
-            <div className="flex-container">
-              <div style={{ flex: 1 }}>
-                <Form.Item
-                  name="date"
-                  label="Date"
-                  rules={[
-                    {
-                      type: "date",
-                      required: true,
-                      message: "Please select date",
-                    },
-                  ]}
-                >
-                  <DatePicker className="dateTime" onChange={onDateChange} />
-                </Form.Item>
-              </div>
-              <div style={{ width: 10 }}></div>
-              <div style={{ flex: 1 }}>
-                <Form.Item
-                  name="time"
-                  label="Time"
-                  rules={[
-                    {
-                      type: "object",
-                      required: true,
-                      message: "Please select time",
-                    },
-                  ]}
-                >
-                  <TimePicker
-                    className="dateTime"
-                    onChange={onTimeChange}
-                    format="HH:mm"
-                  />
-                </Form.Item>
-              </div>
+          <div className="flex-container">
+            <div style={{ flex: 1 }}>
+              <Form.Item
+                name="date"
+                label="Date"
+                rules={[
+                  {
+                    type: 'date',
+                    required: true,
+                    message: 'Please select date',
+                  },
+                ]}
+              >
+                <DatePicker
+                  disabledDate={disabledDate}
+                  className="dateTime"
+                  onChange={onDateChange}
+                />
+              </Form.Item>
             </div>
-          ) : null}
+            <div style={{ width: 10 }}></div>
+            <div style={{ flex: 1 }}>
+              <Form.Item
+                name="time"
+                label="Time"
+                rules={[
+                  {
+                    type: 'object',
+                    required: true,
+                    message: 'Please select time',
+                  },
+                ]}
+              >
+                <TimePicker
+                  className="dateTime"
+                  onChange={onTimeChange}
+                  format="HH:mm"
+                />
+              </Form.Item>
+            </div>
+          </div>
         </div>
       </Form>
     </Modal>
