@@ -10,15 +10,20 @@ import './styles/side-menu.css';
 
 //icon svg
 import MenuLogo from './assets/menu-logo.svg';
-import nearbyIcon from './assets/nearby.svg';
-import annouceIcon from './assets/announcement.svg';
 import serviceIcon from './assets/service.svg';
-import logoutIcon from './assets/logout.svg';
-import pieIcon from './assets/pie.svg';
-import facilitiesIcon from './assets/facilities.svg';
+import facilitiesIcon from './assets/facility_reservation.svg';
 import groupIcon from './assets/group.svg';
 import paymentIcon from './assets/payment.svg';
-import chatIcon from './assets/chat.png';
+import settingIcon from './assets/setting.svg';
+
+import { ReactComponent as AnnouncementInActiveIcon } from './assets/icons/announce.svg';
+import { ReactComponent as AnnouncementActiveIcon } from './assets/icons/announce_2.svg';
+import { ReactComponent as MonitoringInActiveIcon } from './assets/icons/monitoring_inactive.svg';
+import { ReactComponent as MonitoringActiveIcon } from './assets/icons/monitoring_active.svg';
+import { ReactComponent as ChatActiveIcon } from './assets/icons/chat_active.svg';
+import { ReactComponent as ChatInActiveIcon } from './assets/icons/chat_inactive.svg';
+import { ReactComponent as NearbyInActiveIcon } from './assets/icons/nearby.svg';
+import { ReactComponent as NearbyActiveIcon } from './assets/icons/nearby_active.svg';
 
 import authService from '../services/auth.service';
 
@@ -29,6 +34,8 @@ let path = window.location.pathname.split('/');
 
 function NewSideMenu() {
   const [openKeys, setOpenKeys] = useState([path[2]]);
+  const [activeKeys, setActiveKeys] = useState(window.location.pathname);
+  const [activeKeysPath, setActiveKeysPath] = useState();
 
   const rootSubmenuKeys = ['facilities', 'members', 'services', 'payment'];
 
@@ -41,7 +48,6 @@ function NewSideMenu() {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
-
   return (
     <React.Fragment>
       <div className="side-menu">
@@ -53,6 +59,10 @@ function NewSideMenu() {
             defaultSelectedKeys={window.location.pathname}
             onOpenChange={onOpenChange}
             openKeys={openKeys}
+            onClick={(k) => {
+              setActiveKeysPath(k.keyPath.slice(-1));
+              setActiveKeys(k.key);
+            }}
             mode="inline"
             style={{ width: 300, backgroundColor: 'rgba(32, 38, 58, 1)' }}
           >
@@ -60,14 +70,27 @@ function NewSideMenu() {
             <Menu.Item
               onClick={() => setOpenKeys([])}
               key={`${main_link}/summary`}
-              icon={<img src={pieIcon} alt="main" />}
+              icon={
+                activeKeys === `${main_link}/summary` ? (
+                  <MonitoringActiveIcon className={'menu_icon'} />
+                ) : (
+                  <MonitoringInActiveIcon className={'menu_icon'} />
+                )
+              }
             >
               <Link to={`${main_link}/summary`}>Monitoring</Link>
             </Menu.Item>
             <div className={'group-name'}>Management</div>
             <SubMenu
               key="facilities"
-              icon={<img src={facilitiesIcon} alt="booking" />}
+              icon={
+                <img
+                  src={facilitiesIcon}
+                  alt="booking"
+                  width={20}
+                  height={20}
+                />
+              }
               title="Facilities Reservation"
             >
               <Menu.Item key={`${main_link}/facilities/reservation-dashboard`}>
@@ -99,14 +122,26 @@ function NewSideMenu() {
             <Menu.Item
               onClick={() => setOpenKeys([])}
               key={`${main_link}/announcement`}
-              icon={<img src={annouceIcon} alt="chat" />}
+              icon={
+                activeKeys === `${main_link}/announcement` ? (
+                  <AnnouncementActiveIcon className="menu_icon" />
+                ) : (
+                  <AnnouncementInActiveIcon className="menu_icon" />
+                )
+              }
             >
               <Link to={`${main_link}/announcement`}>Announcement</Link>
             </Menu.Item>
             <Menu.Item
               onClick={() => setOpenKeys([])}
               key={`${main_link}/nearby`}
-              icon={<img src={nearbyIcon} alt="chat" />}
+              icon={
+                activeKeys === `${main_link}/nearby` ? (
+                  <NearbyActiveIcon className="menu_icon" />
+                ) : (
+                  <NearbyInActiveIcon className="menu_icon" />
+                )
+              }
             >
               <Link to={`${main_link}/nearby`}>Nearby</Link>
             </Menu.Item>
@@ -135,7 +170,13 @@ function NewSideMenu() {
             <Menu.Item
               onClick={() => setOpenKeys([])}
               key={`${main_link}/live-chat`}
-              icon={<img src={chatIcon} width="20" height="20" alt="chat" />}
+              icon={
+                activeKeys === `${main_link}/live-chat` ? (
+                  <ChatActiveIcon className="menu_icon" />
+                ) : (
+                  <ChatInActiveIcon className="menu_icon" />
+                )
+              }
             >
               <Link to={`${main_link}/live-chat`}>Chat</Link>
             </Menu.Item>
@@ -174,18 +215,17 @@ function NewSideMenu() {
               </Menu.Item>
             </SubMenu>
             <div className="group-name">Settings</div>
-            <div className="logout">
-              <img
-                src={logoutIcon}
-                alt="logout"
-                style={{ float: 'left', paddingTop: 5 }}
-              />
-              <div className="menu-txt">
+            <SubMenu
+              key="settings"
+              icon={<img src={settingIcon} alt="payment" />}
+              title="Settings"
+            >
+              <Menu.Item key={`${main_link}/settings/signout`}>
                 <a href="/" onClick={() => authService.signOut()}>
-                  Logout
+                  Sign Out
                 </a>
-              </div>
-            </div>
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </div>
       </div>

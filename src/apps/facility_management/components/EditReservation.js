@@ -81,7 +81,6 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
           user_amount: val.number_of_people,
           note: val.note ? val.note : '',
         };
-        console.log(newData);
         var timeSlot = {
           start: new Date(val.range[0]),
           end: new Date(val.range[1]),
@@ -163,9 +162,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
           }
         });
       },
-      onCancel() {
-        // console.log("Cancel");
-      },
+      onCancel() {},
     });
   };
 

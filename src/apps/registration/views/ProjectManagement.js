@@ -44,7 +44,6 @@ function ProjectManagementPage() {
             allowClear
             size="large"
             onSearch={(val) => {
-              console.log(val);
               setSearch(val);
             }}
           />

@@ -33,7 +33,6 @@ function RegistrationPage() {
       });
     })();
   }, [refresh]);
-  console.log(searchResident);
 
   const handleSearch = (value) => {
     setSearch(value);
@@ -74,7 +73,7 @@ function RegistrationPage() {
           style={{ width: 400 }}
           size="large"
           shape="round"
-          placeholder="Search by address"
+          placeholder="Search by name"
           allowClear
           enterButton
           onSearch={handleSearch}

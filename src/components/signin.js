@@ -25,7 +25,6 @@ function Signin() {
     authService
       .signIn(value)
       .then((res) => {
-        console.log(res);
         if (res?.data?.user?.role?.type === 'juristic') {
           try {
             encryptStorage.setItem('user_session', JSON.stringify(res.data));
@@ -55,7 +54,7 @@ function Signin() {
       );
   };
   const onFinishFailed = (error) => {
-    console.log(error);
+    console.debug(error);
   };
 
   return (

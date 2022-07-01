@@ -33,7 +33,7 @@ function ForgotPasswordPage() {
   }
 
   function onFinishFailed(error) {
-    console.log(error);
+    console.debug(error);
   }
 
   return (

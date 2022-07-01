@@ -10,7 +10,6 @@ export default function ResetPasswordPage() {
   let code = searchParams.get('code');
 
   async function onFinish(value) {
-    console.log({ code: code, ...value });
     authService
       .resetPassword({
         code: code,

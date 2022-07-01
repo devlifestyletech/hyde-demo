@@ -69,3 +69,10 @@
 .logout a:hover {
   color: rgba(216, 170, 129, 1);
 }
+
+/* icons style */
+
+.menu_icon {
+  width: 22px;
+  height: 22px;
+}

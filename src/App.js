@@ -41,7 +41,7 @@ const App = () => {
     signInAnonymously(auth)
       .then(() => {
         // Signed in..
-        console.log('Firebase signed in succcessfully');
+        console.debug('Firebase signed in succcessfully');
       })
       .catch((error) => {
         const errorCode = error.code;

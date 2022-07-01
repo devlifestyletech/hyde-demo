@@ -59,7 +59,6 @@ export default {
   signOut: async function () {
     try {
       encryptStorage.removeItem('user_session');
-      console.log('remove');
       window.location.href = '/';
     } catch (error) {
       console.error(error);

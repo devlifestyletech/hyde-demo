@@ -30,7 +30,6 @@ export default function BookingCalendarPage() {
     start: startDateTime.toDate(),
     end: endDateTime.toDate(),
   }));
-  // console.log(selectedFacility);
 
   useEffect(() => {
     const queryFacilities = query(collection(db, 'facilities'));
