@@ -6,36 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditFacility.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditFacility.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditOccupation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditOccupation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/Facilities.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/Facilities.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/Occupations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/Occupations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/live_chat/List/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/live_chat/List/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/AppendUserModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/AppendUserModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/ProjectData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/ProjectData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/RoomInfoModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/RoomInfoModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/assets/announcement.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/assets/announcement.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/assets/nearby.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/assets/nearby.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/assets/service.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/assets/service.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forgot_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forgot_password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/new_side_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/new_side_menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/reset_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/reset_password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/signin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/signin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/styles/side-menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/styles/side-menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useAuth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +85,7 @@
       <workItem from="1656419014870" duration="515000" />
       <workItem from="1656481907149" duration="6995000" />
       <workItem from="1656568692860" duration="37000" />
-      <workItem from="1656663896778" duration="1980000" />
+      <workItem from="1656663896778" duration="2426000" />
     </task>
     <servers />
   </component>

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-// react router
+
 import { Link } from 'react-router-dom';
 
-//antd components
 import { Menu } from 'antd';
+import { encryptStorage } from '../utils/encryptStorage';
 
-//styles sheet
 import './styles/side-menu.css';
 
 //icon svg
@@ -33,6 +32,8 @@ const main_link = '/dashboard';
 let path = window.location.pathname.split('/');
 
 function NewSideMenu() {
+  let session = encryptStorage.getItem('user_session');
+
   const [openKeys, setOpenKeys] = useState([path[2]]);
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
   const [activeKeysPath, setActiveKeysPath] = useState();
@@ -48,6 +49,8 @@ function NewSideMenu() {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
+  console.log(session);
+
   return (
     <React.Fragment>
       <div className="side-menu">
@@ -166,6 +169,7 @@ function NewSideMenu() {
                   Room Management
                 </Link>
               </Menu.Item>
+              {/* {user?.role?.type !== ''} */}
             </SubMenu>
             <Menu.Item
               onClick={() => setOpenKeys([])}

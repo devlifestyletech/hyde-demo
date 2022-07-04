@@ -25,7 +25,7 @@ function Signin() {
     authService
       .signIn(value)
       .then((res) => {
-        if (res?.data?.user?.role?.type === 'juristic') {
+        if (res?.data?.user?.role?.type !== 'resident') {
           try {
             encryptStorage.setItem('user_session', JSON.stringify(res.data));
             signin();
