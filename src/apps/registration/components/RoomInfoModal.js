@@ -83,11 +83,9 @@ export const RoomInfoModal = ({
             });
         })
         .catch((err) => {
-          console.log('Err', err);
           setEnable(false);
         });
     } else {
-      console.log('No file coming');
       setEnable(false);
     }
   };
@@ -274,7 +272,6 @@ export const RoomInfoModal = ({
                             id="input"
                             accept="image/*"
                             onChange={(e) => {
-                              // console.log(e.target.files);
                               setImageFile(e.target.files);
                               selectHandle(e);
                               setEnable(false);
@@ -299,7 +296,6 @@ export const RoomInfoModal = ({
                   disabled={enable}
                   // disabled={false}
                   onClick={() => {
-                    // console.log(addressId);
                     handleQrCode(imageFile, addressId);
                   }}
                 >

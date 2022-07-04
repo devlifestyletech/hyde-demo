@@ -40,8 +40,8 @@ function ChatRoom(props) {
     if (sender_name && room) {
       // console.log("messages", messages);
       // console.log("roomNum", room);
-      let sender_id = session.user._id;
-      let sender_name = session.user.fullname;
+      let sender_id = session?.user?._id;
+      let sender_name = session?.user?.fullname;
       setChatData({
         sender_id: sender_id,
         sender_name: sender_name,
@@ -172,33 +172,33 @@ function ChatRoom(props) {
 
         imageFile.type.split('/')[0] === 'image'
           ? socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'image',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'image',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            )
+            }
+          )
           : socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'file',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'file',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            );
+            }
+          );
         deleteHandle();
         setOnSend(false);
       })

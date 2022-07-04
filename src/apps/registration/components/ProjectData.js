@@ -42,7 +42,6 @@ export default function ProjectData({ projectName, search = '' }) {
   };
 
   const isLoading = (bool) => {
-    console.log('SET LOAD ACTIVATE : ' + bool);
     setLoading(bool);
   };
 

@@ -32,6 +32,8 @@ import LiveChat from './apps/live_chat/screens/ChatRoom';
 import PaymentSuccess from './apps/payment/Payment_success';
 import PaymentDashboard from './apps/payment/payment_dashbord';
 
+import JuristicManage from './apps/account_management/views/juristic_manage';
+
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import NoContent from './components/no_content';
 
@@ -41,7 +43,7 @@ const App = () => {
     signInAnonymously(auth)
       .then(() => {
         // Signed in..
-        console.log('Firebase signed in succcessfully');
+        console.debug('Firebase signed in succcessfully');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -49,6 +51,7 @@ const App = () => {
         console.error('error: ', errorCode, errorMessage);
       });
   }, []);
+
   return (
     <AuthProvider>
       <Routes>
@@ -83,6 +86,10 @@ const App = () => {
           <Route path="members/dashboard" element={<MemberDashboardPage />} />
           <Route path="members/registration" element={<RegistrationPage />} />
           <Route path="members/rooms-management" element={<RoomManagement />} />
+          <Route
+            path="members/juristic-management"
+            element={<JuristicManage />}
+          />
           <Route path="nearby" element={<Nearby />} />
           <Route path="announcement" element={<Announcement />} />
           <Route path="services/reports" element={<FixingReports />} />

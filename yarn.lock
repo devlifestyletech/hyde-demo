@@ -7152,6 +7152,11 @@ dotenv@8.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
+dotenv@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.1.tgz#8f8f9d94876c35dac989876a5d3a82a267fdce1d"
+  integrity sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==
+
 dotenv@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
@@ -7301,7 +7306,7 @@ encoding@^0.1.11, encoding@^0.1.13:
   dependencies:
     iconv-lite "^0.6.2"
 
-encrypt-storage@^2.2.3:
+encrypt-storage@^2.2.10:
   version "2.2.10"
   resolved "https://registry.yarnpkg.com/encrypt-storage/-/encrypt-storage-2.2.10.tgz#80a0071b137f786e7b8dff3871b4eaad15b4454e"
   integrity sha512-3Z2gD+kBQYrFXvofNzLB6p5kMuoq9wHTGrR6srJoUhMrbWSbpoCsOAd0pfCiVJ2VS+5rbZzZXNCjhB1s4uykXA==

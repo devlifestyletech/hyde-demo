@@ -60,7 +60,7 @@ export default function TableRender({ data, key, onEvent }) {
       title: 'Address',
       dataIndex: 'address',
       key: 'idx',
-      render: (address, idx) => <div key={idx}>{address.address_number}</div>,
+      render: (address, idx) => <div key={idx}>{address?.address_number}</div>,
     },
     {
       title: 'Owner',
@@ -74,11 +74,8 @@ export default function TableRender({ data, key, onEvent }) {
     },
     {
       title: 'Type',
-      dataIndex: 'project',
+      dataIndex: 'resident_type',
       key: 'idx',
-      render: (project, idx) => (
-        <div key={idx}>{project ? project.project_type : null}</div>
-      ),
     },
     {
       title: 'Tel',

@@ -49,15 +49,10 @@ export default function EditOccupation({
       icon: null,
       autoFocusButton: null,
       onOk: () => {
-        console.log('OK');
-        console.log(value);
-        console.log(id);
         onEdit(value, files, id);
         onCancel();
       },
-      onCancel: () => {
-        console.log('Cancel');
-      },
+      onCancel: () => {},
     });
   };
 
@@ -88,7 +83,6 @@ export default function EditOccupation({
         onCancel={() => {
           onCancel();
           setImg(null);
-          console.log('set Null');
         }}
         footer={[
           <Button
@@ -110,12 +104,9 @@ export default function EditOccupation({
                     closed: values['closed'].format('HH:mm:ss'),
                   };
                   form.resetFields();
-                  // console.log(newValues);
                   onConfirm(newValues, imageFile, id);
                 })
-                .catch((info) => {
-                  console.log('Validate Failed:', info);
-                });
+                .catch((info) => {});
             }}
           >
             Save Change
@@ -232,7 +223,6 @@ export default function EditOccupation({
                           id="input"
                           accept="image/*"
                           onChange={(e) => {
-                            // console.log(e.target.files);
                             setImageFile(e.target.files);
                             selectHandle(e);
                           }}
