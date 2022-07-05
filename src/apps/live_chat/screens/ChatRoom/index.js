@@ -14,8 +14,9 @@ import {
   InputBar,
   SendIcon,
   StyledContainer,
+  TextInput,
 } from './styles';
-import { Input, Spin } from 'antd';
+import { Spin } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
@@ -38,8 +39,6 @@ function ChatRoom(props) {
 
   const connectChat = () => {
     if (sender_name && room) {
-      // console.log("messages", messages);
-      // console.log("roomNum", room);
       let sender_id = session?.user?._id;
       let sender_name = session?.user?.fullname;
       setChatData({
@@ -134,6 +133,9 @@ function ChatRoom(props) {
       sender_name: sender_name,
     });
     setMessage(e.target.value);
+  };
+  const handleInputFocus = () => {
+    console.log('FoCUS');
   };
 
   const handleClick = (e) => {
@@ -324,18 +326,11 @@ function ChatRoom(props) {
                 }}
                 style={{ display: 'none' }}
               />
-              <Input
-                style={{
-                  borderRadius: 20,
-                  width: '80%',
-                  marginLeft: 10,
-                  marginRight: 20,
-                }}
-                size="large"
-                type="text"
-                placeholder="Type your message"
+              <TextInput
+                placeholder={room!==''?"Type your message":"Please select room to connect"}
                 value={message}
                 onChange={handleChange}
+                onFocus={handleInputFocus}
                 onKeyPress={(event) => {
                   event.key === 'Enter' && handleClick();
                 }}
