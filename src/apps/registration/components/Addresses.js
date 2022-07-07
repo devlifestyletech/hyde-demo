@@ -71,7 +71,7 @@ export default function Addresses({ data, update }) {
             {residentList.length
               ? residentList.map((resident, index) => (
                   <div key={index} style={{ marginLeft: -20 }}>
-                    {resident?.users_permissions_user?.avatar ? (
+                    {resident?.users_permissions_user?.image ? (
                       <div>
                         <img
                           src={
@@ -79,7 +79,7 @@ export default function Addresses({ data, update }) {
                               resident?.users_permissions_user?.image?.url ??
                             null
                           }
-                          alt="avatar"
+                          alt="img"
                           style={{
                             width: 50,
                             height: 50,
