@@ -9,7 +9,8 @@ import {
 import residentService from '../services/resident.service';
 import ChangeUserModal from './ChangeUserModal';
 
-function UsersInfo({ user, onEvent }) {
+function UsersInfo({ user, onEvent, isOwner = false }) {
+  // console.log(user);
   const [appendUserModalVisibility, setAppendUserModalVisibility] =
     useState(false);
 
@@ -19,7 +20,9 @@ function UsersInfo({ user, onEvent }) {
       icon: <ExclamationCircleOutlined />,
       content: 'The resident will remove from this address',
       onOk() {
-        residentService.removeUserFromAddress(id).then(() => onEvent());
+        residentService
+          .removeUserFromAddress(id, user.users_permissions_user.id)
+          .then(() => onEvent());
       },
       onCancel() {
         onEvent();
@@ -32,7 +35,9 @@ function UsersInfo({ user, onEvent }) {
       <ChangeUserModal
         visible={appendUserModalVisibility}
         id={user.id}
-        userRule={user.roles}
+        userRule={user.resident_role}
+        userId={user.users_permissions_user.id}
+        addressId={user.address.id}
         onCancel={() => {
           setAppendUserModalVisibility(false);
           onEvent();
@@ -53,9 +58,11 @@ function UsersInfo({ user, onEvent }) {
             <Menu.Item key="edit" icon={<EditOutlined />}>
               Change user
             </Menu.Item>
-            <Menu.Item key="delete" danger icon={<DeleteOutlined />}>
-              Delete user
-            </Menu.Item>
+            {isOwner ? null : (
+              <Menu.Item key="delete" danger icon={<DeleteOutlined />}>
+                Delete user
+              </Menu.Item>
+            )}
           </Menu>
         }
       >
@@ -64,15 +71,15 @@ function UsersInfo({ user, onEvent }) {
       <br />
       <Row>
         <Col span="10">
-          {user?.users_permissions_user?.avatar ? (
+          {user.users_permissions_user.image ? (
             <div style={{ textAlign: 'center', margin: 20 }}>
               <img
                 src={
                   process.env.REACT_APP_API_URL +
-                  user.users_permissions_user.avatar.url
+                  user.users_permissions_user.image.url
                 }
                 alt="avatar"
-                style={{ borderRadius: 20, maxHeight: 250 }}
+                style={{ borderRadius: 20, maxHeight: 250, maxWidth: '100%' }}
               />
             </div>
           ) : (

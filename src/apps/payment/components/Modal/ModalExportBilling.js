@@ -1,7 +1,7 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Modal, Row, Col } from "antd";
-import Pdf from "react-to-pdf";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Modal, Row, Col } from 'antd';
+import Pdf from 'react-to-pdf';
 import logo from '../../assets/images/hyde-logo.svg';
 const ref = React.createRef();
 const ModalExportBilling = () => {
@@ -10,7 +10,7 @@ const ModalExportBilling = () => {
   );
   const dispatch = useDispatch();
   const handleCancel = async () => {
-    dispatch({ type: "CHANGE_STATE_EXPORT_BILLING", payload: false });
+    dispatch({ type: 'CHANGE_STATE_EXPORT_BILLING', payload: false });
   };
   return (
     <div>
@@ -20,7 +20,7 @@ const ModalExportBilling = () => {
             <Modal
               title="Payment Receipt"
               visible={statusExportBilling}
-              width={"45%"}
+              width={'45%'}
               onOk={toPdf}
               okText="Create"
               okType="default"
@@ -28,19 +28,19 @@ const ModalExportBilling = () => {
                 style: {
                   width: 80,
                   height: 35,
-                  borderRadius: "15px",
-                  background: "#B2A37A",
-                  color: "#F5F4EC",
+                  borderRadius: '15px',
+                  background: '#B2A37A',
+                  color: '#F5F4EC',
                 },
               }}
               cancelButtonProps={{
                 style: {
                   width: 80,
                   height: 35,
-                  borderRadius: "15px",
-                  marginRight: "34.5vw",
-                  background: "#B8B7B2",
-                  color: "#F5F4EC",
+                  borderRadius: '15px',
+                  marginRight: '34.5vw',
+                  background: '#B8B7B2',
+                  color: '#F5F4EC',
                 },
               }}
               onCancel={handleCancel}
@@ -55,15 +55,15 @@ const ModalExportBilling = () => {
                             <Col span={12}>
                               <div
                                 className="col-4"
-                                style={{ textAlign: "left" }}
+                                style={{ textAlign: 'left' }}
                               >
                                 <img
                                   src={logo}
                                   style={{
-                                    width: "6vw",
-                                    marginTop: "6%",
-                                    marginLeft: "15%",
-                                    paddingBottom: "5%",
+                                    width: '6vw',
+                                    marginTop: '6%',
+                                    marginLeft: '15%',
+                                    paddingBottom: '5%',
                                   }}
                                 />
                               </div>
@@ -71,11 +71,13 @@ const ModalExportBilling = () => {
                             <Col span={12}>
                               <div
                                 className="col-8"
-                                style={{ textAlign: "left" }}
+                                style={{ textAlign: 'left' }}
                               >
-                                <h3 style={{ margin: "4%", fontStyle: "bold" }}>
+                                <h3 style={{ margin: '4%', fontStyle: 'bold' }}>
                                   <b>
-                                  Hyde Heritage at Thonglor Condominium Juristic Person 1199 Sukhumvit Rd., Klongton Nua, Wattana, Bangkok, 10110
+                                    Hyde Heritage at Thonglor Condominium
+                                    Juristic Person 1199 Sukhumvit Rd., Klongton
+                                    Nua, Wattana, Bangkok, 10110
                                     <br />
                                     Tel. 0987645822
                                   </b>
@@ -84,12 +86,12 @@ const ModalExportBilling = () => {
                             </Col>
                           </Row>
 
-                          <Row style={{ paddingBottom: "2vh" }}>
+                          <Row style={{ paddingBottom: '2vh' }}>
                             <Col
                               span={12}
                               style={{
-                                textAlign: "left",
-                                paddingLeft: "5%",
+                                textAlign: 'left',
+                                paddingLeft: '5%',
                               }}
                             >
                               <b>
@@ -106,8 +108,8 @@ const ModalExportBilling = () => {
                             <Col
                               span={12}
                               style={{
-                                textAlign: "left",
-                                paddingLeft: "2%",
+                                textAlign: 'left',
+                                paddingLeft: '2%',
                               }}
                             >
                               <b>
@@ -129,29 +131,29 @@ const ModalExportBilling = () => {
                               <tr>
                                 <th
                                   style={{
-                                    backgroundColor: "#B8B8B8",
+                                    backgroundColor: '#B8B8B8',
                                     // borderTopLeftRadius: "10px",
-                                    width: "30%",
-                                    textAlign: "center",
+                                    width: '30%',
+                                    textAlign: 'center',
                                   }}
                                 >
                                   No.
                                 </th>
                                 <th
                                   style={{
-                                    backgroundColor: "#B8B8B8",
-                                    width: "30%",
-                                    textAlign: "center",
+                                    backgroundColor: '#B8B8B8',
+                                    width: '30%',
+                                    textAlign: 'center',
                                   }}
                                 >
                                   Detail
                                 </th>
                                 <th
                                   style={{
-                                    backgroundColor: "#B8B8B8",
+                                    backgroundColor: '#B8B8B8',
                                     // borderTopRightRadius: "10px",
-                                    width: "30%",
-                                    textAlign: "center",
+                                    width: '30%',
+                                    textAlign: 'center',
                                   }}
                                 >
                                   Amount
@@ -162,8 +164,8 @@ const ModalExportBilling = () => {
                                     return (
                                       <tr
                                         style={{
-                                          textAlign: "center",
-                                          backgroundColor: "#E2E1E1",
+                                          textAlign: 'center',
+                                          backgroundColor: '#E2E1E1',
                                         }}
                                       >
                                         <td>{j + 1}</td>
@@ -194,19 +196,19 @@ const ModalExportBilling = () => {
                             <div
                               className="row"
                               style={{
-                                paddingTop: "2vh",
-                                backgroundColor: "#E2E1E1",
+                                paddingTop: '2vh',
+                                backgroundColor: '#E2E1E1',
                               }}
                             >
                               <Row>
-                                <Col span={8} style={{ textAlign: "left" }}>
-                                  {" "}
+                                <Col span={8} style={{ textAlign: 'left' }}>
+                                  {' '}
                                 </Col>
                                 <Col
                                   span={8}
                                   style={{
-                                    textAlign: "left",
-                                    paddingLeft: "10%",
+                                    textAlign: 'left',
+                                    paddingLeft: '10%',
                                   }}
                                 >
                                   Sub Total:
@@ -218,7 +220,7 @@ const ModalExportBilling = () => {
                                     <br />
                                   </b>
                                 </Col>
-                                <Col span={4} style={{ textAlign: "left" }}>
+                                <Col span={4} style={{ textAlign: 'left' }}>
                                   {e?.Total_BillsPayment}
                                   <br />
                                   0 <br />
@@ -227,14 +229,14 @@ const ModalExportBilling = () => {
                                     <br />
                                   </b>
                                 </Col>
-                                <Col span={2} style={{ textAlign: "left" }}>
-                                  {" "}
+                                <Col span={2} style={{ textAlign: 'left' }}>
+                                  {' '}
                                   THB.
                                   <br />
                                   THB.
                                   <br />
                                   <b>
-                                    {" "}
+                                    {' '}
                                     THB.
                                     <br />
                                   </b>

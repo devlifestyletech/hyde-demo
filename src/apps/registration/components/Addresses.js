@@ -11,7 +11,7 @@ import { Button, Row } from 'antd';
 import { FormOutlined, PhoneOutlined } from '@ant-design/icons';
 import './styles/addresses.css';
 
-export default function Addresses({ data }) {
+export default function Addresses({ data, update }) {
   const [residentList, setResidentList] = useState([]);
   const [owner, setOwner] = useState([]);
   const [roomInfoModalVisibility, setRoomInfoModalVisibility] = useState(false);
@@ -25,6 +25,8 @@ export default function Addresses({ data }) {
   useEffect(() => {
     (async () => {
       ProjectService.getResidentListByResidenceId(data.id).then((res) => {
+        update(data.id, res.data);
+        // console.log(res.data);
         setResidentList(res.data);
         setOwner(res.data.filter((user) => user.resident_role === 'Owner'));
         setInhabitant(
@@ -74,7 +76,7 @@ export default function Addresses({ data }) {
                         <img
                           src={
                             process.env.REACT_APP_API_URL +
-                              resident?.users_permissions_user?.avatar?.url ??
+                              resident?.users_permissions_user?.image?.url ??
                             null
                           }
                           alt="avatar"

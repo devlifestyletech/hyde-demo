@@ -3,7 +3,14 @@ import { Form, Button, Select, Modal } from 'antd';
 import ResidentService from '../services/resident.service';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
+export default function ChangeUserModal({
+  userRule,
+  visible,
+  onCancel,
+  id,
+  userId,
+  addressId,
+}) {
   const [users, setUsers] = useState();
   const [form] = Form.useForm();
   useEffect(() => {
@@ -18,7 +25,15 @@ export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
       icon: <ExclamationCircleOutlined />,
       content: 'This role will change user',
       onOk() {
-        ResidentService.changeRoleUser(value, id).then((res) => onCancel());
+        let newValue = {
+          address: addressId,
+          resident_role: userRule,
+          ...value,
+        };
+
+        ResidentService.removeUserFromAddress(id, userId).then(() => {
+          ResidentService.addUserToAddress(newValue).then(() => onCancel());
+        });
       },
       onCancel() {},
     });
