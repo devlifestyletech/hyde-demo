@@ -97,7 +97,6 @@ export default {
   },
   editUserData: async function (id, value) {
     const session = await encryptStorage.getItem('user_session');
-
     try {
       return await axios.put(
         `${process.env.REACT_APP_API_URL}/users/${id}`,

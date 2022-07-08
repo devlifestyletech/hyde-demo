@@ -5,30 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/prettier.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/EditReservation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/QrModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/ReservationTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/ReservationTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/dashboard.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/facilities.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/facilities.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/lists.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/occupation.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/occupation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/payment/components/table_payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/components/table_payment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/payment/services/bankNamecode.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/services/bankNamecode.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/RoomDashboard.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/new_side_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/new_side_menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/MainLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/MainLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/NoAuthLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/NoAuthLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/address.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/address.service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/upload.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/upload.service.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,26 +46,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "prettierjs.PrettierConfiguration.Package": "/opt/homebrew/lib/node_modules/prettier",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/opt/homebrew/lib/node_modules/prettier&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components" />
@@ -117,7 +96,8 @@
       <workItem from="1656568692860" duration="37000" />
       <workItem from="1656663896778" duration="2426000" />
       <workItem from="1657011214683" duration="625000" />
-      <workItem from="1657247242558" duration="6544000" />
+      <workItem from="1657247242558" duration="6615000" />
+      <workItem from="1657253935696" duration="120000" />
     </task>
     <servers />
   </component>
