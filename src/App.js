@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.less';
 import 'devextreme/dist/css/dx.light.css';
 import { AuthProvider } from './hooks/useAuth';
+import { auth } from './utils/firebaseConfig';
 
 //Layout Component
 import MainLayout from './layout/MainLayout';
@@ -33,12 +34,11 @@ import PaymentDashboard from './apps/payment/payment_dashbord';
 
 import JuristicManage from './apps/account_management/views/juristic_manage';
 
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import { signInAnonymously } from 'firebase/auth';
 import NoContent from './components/no_content';
 
 const App = () => {
   useEffect(() => {
-    const auth = getAuth();
     signInAnonymously(auth)
       .then(() => {
         // Signed in..
@@ -106,86 +106,6 @@ const App = () => {
       </Routes>
     </AuthProvider>
   );
-  // return (
-  //   <>
-  //     <h1>React Router</h1>
-  //     <Navigation />
-  //     <button onClick={() => authService.logout()}>Logout</button>
-  //     <Routes>
-  //       <Route element={<PublicRoute isSignIn={isSignIn} location={location} />}>
-  //         <Route index element={<Signin />} />
-  //         <Route path='/landing' element={<Signin />} />
-  //       </Route>
-  //       <Route element={<ProtectedRoute isSignIn={isSignIn} />}>
-  //         <Route path='/home' element={<Home />} />
-  //         <Route path='/dashboard' element={<Dashboard />} />
-  //         <Route path='/analytics' element={<Analytics />} />
-  //         <Route path='/admin' element={<Admin />} />
-  //       </Route>
-  //       <Route path='*' element={<p>There's nothing here: 404!</p>} />
-  //     </Routes>
-  //   </>
-  // );
 };
 
 export default App;
-
-//
-// const ProtectedRoute = ({
-//                           isSignIn,
-//                         }) => {
-//   if (!isSignIn) {
-//     return <Navigate to={'/landing'} />;
-//   }
-//   return <Outlet />;
-// };
-//
-//
-// const PublicRoute = ({
-//                        isSignIn,
-//                      }) => {
-//   if (!!isSignIn) {
-//     return <Navigate to={from !== "/" ? from : '/home'}/>;
-//     // return navigate(from);
-//   }
-//   return <Outlet />;
-// };
-// const Navigation = () => (
-//   <nav style={{ background: '#000' }}>
-//     <NavLink to='/landing'>Landing</NavLink>
-//     <NavLink to='/home'>Home</NavLink>
-//     <NavLink to='/dashboard'>Dashboard</NavLink>
-//     <NavLink to='/analytics'>Analytics</NavLink>
-//     <NavLink to='/admin'>Admin</NavLink>
-//   </nav>
-// );
-//
-//
-// const Landing = () => {
-//   return <h2>Landing (Public: anyone can access this page)</h2>;
-// };
-//
-// const Home = () => {
-//   return <h2>Home (Protected: authenticated user required)</h2>;
-// };
-//
-// const Dashboard = () => {
-//   return <h2>Dashboard (Protected: authenticated user required)</h2>;
-// };
-//
-// const Analytics = () => {
-//   return (
-//     <h2>
-//       Analytics (Protected: authenticated user with permission
-//       'analyze' required)
-//     </h2>
-//   );
-// };
-//
-// const Admin = () => {
-//   return (
-//     <h2>
-//       Admin (Protected: authenticated user with role 'admin' required)
-//     </h2>
-//   );
-// };

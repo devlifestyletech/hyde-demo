@@ -52,51 +52,53 @@ function CreateModal({ visible, onCancel }) {
   };
 
   function showConfirm(value, imageData) {
-    confirm({
+    return confirm({
       centered: true,
       title: 'Are you sure you want to add?',
       icon: null,
       okButtonProps: { shape: 'round', size: 'large' },
       cancelButtonProps: { shape: 'round', size: 'large' },
       onOk() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           message.loading('Action in progress please wait...');
-          uploadService
-            .uploadImage(imageData)
-            .then((res) => {
-              let new_value = { image: res.data[0], ...value };
-              authService
-                .registration(new_value)
-                .then((response) => {
+          try {
+            const uploadImage = await uploadService.uploadImage(imageData);
+            if (uploadImage) {
+              let new_value = { image: uploadImage.data[0], ...value };
+              try {
+                const registered = await authService.registration(new_value);
+                if (registered) {
                   let newValue = {
-                    address: response.data.address,
-                    users_permissions_user: response.data.id,
-                    resident_role: response.data.resident_type,
+                    address: registered.data.address,
+                    users_permissions_user: registered.data.id,
+                    resident_role: registered.data.resident_type,
                   };
-                  authService
-                    .addUserToAddress(newValue)
-                    .then(() => {
+                  try {
+                    const result = await authService.addUserToAddress(newValue);
+                    if (result) {
                       message.success('Registration finished');
                       resolve('Success');
                       onCancel();
-                    })
-                    .catch((err) => {
-                      console.error(err);
-                      reject(err);
-                    });
-                })
-                .catch((err) => {
-                  console.error(err);
-                  reject(err);
-                });
-            })
-            .catch((err) => {
-              console.error(err);
-              reject(err);
-            });
+                    }
+                  } catch (e) {
+                    console.error(e);
+                    reject(e);
+                  }
+                }
+              } catch (e) {
+                console.error(e);
+                reject(e);
+              }
+            }
+          } catch (e) {
+            console.error(e);
+            reject(e);
+          }
         });
       },
-      onCancel() {},
+      onCancel() {
+        return null;
+      },
       bodyStyle: { borderRadius: 20 },
       maskStyle: { borderRadius: 20 },
       autoFocusButton: null,
@@ -104,11 +106,11 @@ function CreateModal({ visible, onCancel }) {
   }
 
   function makeUname(length) {
-    var result = '';
-    var characters =
+    let result = '';
+    let characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
@@ -132,10 +134,11 @@ function CreateModal({ visible, onCancel }) {
               background: 'rgba(216, 170, 129, 1)',
               color: 'rgba(255, 255, 255,1)',
             }}
-            onClick={() => {
+            onClick={async () => {
               let imageData = new FormData();
               imageData.append('files', imageFile);
-              CreateResidentForm.validateFields().then((value) => {
+              const value = await CreateResidentForm.validateFields();
+              if (value) {
                 let submit_value = {
                   username: 'hyde_' + makeUname(8),
                   email: value.email,
@@ -158,7 +161,7 @@ function CreateModal({ visible, onCancel }) {
                   project: '61b464ff4abbaa01b461bc5f',
                 };
                 showConfirm(submit_value, imageData);
-              });
+              }
             }}
           >
             Add
@@ -301,8 +304,8 @@ function CreateModal({ visible, onCancel }) {
                         .indexOf(input.toLowerCase()) >= 0
                     }
                   >
-                    {locale.map((country, index) => (
-                      <Option key={index} value={country['ISO CODES']}>
+                    {locale.map((country, idx) => (
+                      <Option key={idx} value={country['ISO CODES']}>
                         {country['COUNTRY']}
                       </Option>
                     ))}
@@ -347,8 +350,8 @@ function CreateModal({ visible, onCancel }) {
                     placeholder="Please select address"
                   >
                     {addresses
-                      ? addresses.map((address, index) => (
-                          <Option key={index} value={address.id}>
+                      ? addresses.map((address, idx) => (
+                          <Option key={idx} value={address.id}>
                             {address.address_number}
                           </Option>
                         ))

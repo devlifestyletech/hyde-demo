@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Spin, Tabs } from 'antd';
+import { Button, Input, Tabs } from 'antd';
 import TableRender from '../components/TableRender';
 import Header from '../../../components/header';
 import { PlusOutlined } from '@ant-design/icons';
@@ -19,18 +19,23 @@ function Registration() {
 
   useEffect(() => {
     (async () => {
-      authService.getAllResident().then((res) => {
-        let data = [];
-        res.data.forEach((res, index) => {
+      const { data } = await authService.getAllResident();
+      if (data) {
+        let d = [];
+        data.forEach((res, index) => {
           let user = {
             number: index + 1,
             ...res,
           };
-          data.push(user);
+          d.push(user);
         });
-        setResidents(data);
+        setResidents(d);
         setLoading(false);
-      });
+      }
+      try {
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }, [refresh]);
 
@@ -88,34 +93,28 @@ function Registration() {
           Add new
         </Button>
       </div>
-      <br />
-      {loading ? (
-        <div style={{ textAlign: 'center', margin: 80 }}>
-          <Spin />
-          <p>Please wait...</p>
-        </div>
-      ) : (
-        <div className="regis-table">
-          <Tabs>
-            <TabPane tab="All" key="1">
-              <TableRender
-                data={search !== '' ? searchResident : residents}
-                key="1"
-                onEvent={() => setRefresh(!refresh)}
-              />
-            </TabPane>
-            <TabPane tab="Owner" key="2">
-              <TableRender data={owner_users} key="2" />
-            </TabPane>
-            <TabPane tab="Inhabitant" key="3">
-              <TableRender data={inhabitant_users} key="3" />
-            </TabPane>
-            <TabPane tab="Tenant" key="4">
-              <TableRender data={tenant_users} key="4" />
-            </TabPane>
-          </Tabs>
-        </div>
-      )}
+
+      <div className="regis-table">
+        <Tabs>
+          <TabPane tab="All" key="1">
+            <TableRender
+              loading={loading}
+              data={search !== '' ? searchResident : residents}
+              key="1"
+              onEvent={() => setRefresh(!refresh)}
+            />
+          </TabPane>
+          <TabPane tab="Owner" key="2">
+            <TableRender loading={loading} data={owner_users} key="2" />
+          </TabPane>
+          <TabPane tab="Inhabitant" key="3">
+            <TableRender loading={loading} data={inhabitant_users} key="3" />
+          </TabPane>
+          <TabPane tab="Tenant" key="4">
+            <TableRender loading={loading} data={tenant_users} key="4" />
+          </TabPane>
+        </Tabs>
+      </div>
 
       <CreateModal
         visible={addNewModalVisibility}

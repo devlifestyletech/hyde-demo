@@ -1,16 +1,18 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyAhhRKA1XyYtnyd8dQYJndqjSqGldlJJzU',
-	authDomain: 'hyde-heritage-9df6e.firebaseapp.com',
-	projectId: 'hyde-heritage-9df6e',
-	storageBucket: 'hyde-heritage-9df6e.appspot.com',
-	messagingSenderId: '716906153647',
-	appId: '1:716906153647:web:2190cbd7399d7644ed765a',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+const auth = getAuth();
 
-export { app, db };
+export { app, db, auth };

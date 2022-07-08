@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/upload.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/upload.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/services/resident.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/services/resident.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/firebaseConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/firebaseConfig.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +107,9 @@
       <workItem from="1656663896778" duration="2426000" />
       <workItem from="1657011214683" duration="625000" />
       <workItem from="1657247242558" duration="6615000" />
-      <workItem from="1657253935696" duration="120000" />
+      <workItem from="1657253935696" duration="2512000" />
+      <workItem from="1657257571137" duration="7932000" />
+      <workItem from="1657273003587" duration="540000" />
     </task>
     <servers />
   </component>

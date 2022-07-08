@@ -8,21 +8,30 @@ export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
   const [form] = Form.useForm();
   useEffect(() => {
     (async () => {
-      ResidentService.getAllUsers().then((users) => setUsers(users));
+      const users = await ResidentService.getAllUsers();
+      if (users) {
+        setUsers(users);
+      }
     })();
   }, []);
 
   function showConfirm(value) {
-    Modal.confirm({
+    return Modal.confirm({
       title: 'Do you Want to change resident role?',
       icon: <ExclamationCircleOutlined />,
       content: 'This role will change user',
-      onOk() {
-        ResidentService.changeRoleUser(value, id).then((res) => onCancel());
+      async onOk() {
+        const result = await ResidentService.changeRoleUser(value, id);
+        if (result) {
+          onCancel();
+        }
       },
-      onCancel() {},
+      onCancel() {
+        return null;
+      },
     });
   }
+
   return (
     <Modal
       centered
@@ -31,11 +40,12 @@ export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
       onCancel={() => onCancel()}
       footer={[
         <Button
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
-            form.validateFields().then((value) => {
+            const value = await form.validateFields();
+            if (value) {
               showConfirm(value);
-            });
+            }
           }}
         >
           Save Change
@@ -57,13 +67,11 @@ export default function ChangeUserModal({ userRule, visible, onCancel, id }) {
                 .localeCompare(optionB.children.toLowerCase())
             }
           >
-            {users
-              ? users.map((user, index) => (
-                  <Select.Option key={index} value={user.id}>
-                    {user.firstname + ' ' + user.lastname}
-                  </Select.Option>
-                ))
-              : null}
+            {users.map((user, idx) => (
+              <Select.Option key={idx} value={user.id}>
+                {user.firstname + ' ' + user.lastname}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
       </Form>

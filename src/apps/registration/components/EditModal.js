@@ -19,6 +19,7 @@ import { locale } from '../../../utils/locale';
 import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
 import uploadService from '../../../services/upload.service';
+
 const { Option } = Select;
 
 export default function EditModal({ user, visible, onCancel }) {
@@ -34,7 +35,10 @@ export default function EditModal({ user, visible, onCancel }) {
       if (user?.image) {
         setImg(true);
       }
-      addressService.getAllAddresses().then((res) => setAddresses(res.data));
+      const { data } = await addressService.getAllAddresses();
+      if (data) {
+        setAddresses(data);
+      }
     })();
   }, [user]);
 
@@ -69,7 +73,7 @@ export default function EditModal({ user, visible, onCancel }) {
   };
 
   function showConfirm(value, imageData) {
-    Modal.confirm({
+    return Modal.confirm({
       centered: true,
       title: 'Do you Want to save these change?',
       icon: <ExclamationCircleOutlined />,
@@ -78,36 +82,41 @@ export default function EditModal({ user, visible, onCancel }) {
         borderRadius: 20,
       },
       okText: 'Save',
-      okButtonProps: { shape: 'round' },
+      okButtonProps: { shape: 'round', type: 'danger' },
       cancelButtonProps: { shape: 'round' },
+      autoFocusButton: null,
       onOk() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           if (pickedImage) {
-            uploadService.uploadImage(imageData).then((res) => {
-              let new_value = { image: res.data[0], ...value };
-              authService
-                .editUserData(user.id, new_value)
-                .then(() => {
+            try {
+              const uploadImage = await uploadService.uploadImage(imageData);
+              if (uploadImage) {
+                let new_value = { image: uploadImage.data[0], ...value };
+                const edited = await authService.editUserData(
+                  user.id,
+                  new_value
+                );
+                if (edited) {
                   message.success('Save finished');
                   resolve('Success');
                   onCancel();
-                })
-                .catch((err) => {
-                  reject(err);
-                });
-            });
+                }
+              }
+            } catch (e) {
+              reject(e);
+            }
           } else {
             let new_value = { image: '61bab50dbbf38e05d8a666fd', ...value };
-            authService
-              .editUserData(user.id, new_value)
-              .then(() => {
+            try {
+              const edited = await authService.editUserData(user.id, new_value);
+              if (edited) {
                 message.success('Save finished');
                 resolve('Success');
                 onCancel();
-              })
-              .catch((err) => {
-                reject(err);
-              });
+              }
+            } catch (e) {
+              reject(e);
+            }
           }
         });
       },
