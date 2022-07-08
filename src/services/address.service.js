@@ -1,10 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { encryptStorage } from '../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 export default {
   getAllAddresses: async function () {
+    const session = await encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/addresses/?_limit=500`,

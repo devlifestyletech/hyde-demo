@@ -16,7 +16,11 @@ const FixingReports = () => {
   const [reportValue, setReportValue] = useState(null);
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';
-  const status = { Pending: '#E86A6B', Repairing: '#EEC84D', Success: '#79CA6C' };
+  const status = {
+    Pending: '#E86A6B',
+    Repairing: '#EEC84D',
+    Success: '#79CA6C',
+  };
 
   const { Search } = Input;
 
@@ -89,8 +93,16 @@ const FixingReports = () => {
           <Image
             width={300}
             height={200}
-            src={record?.image_pending[0] ? process.env.REACT_APP_API_URL + record.image_pending[0].url : '/main/images/artani-logo.png'}
-            alt={record?.image_pending[0] ? process.env.REACT_APP_API_URL + record.image_pending[0].url : '/main/images/artani-logo.png'}
+            src={
+              record?.image_pending[0]
+                ? process.env.REACT_APP_API_URL + record.image_pending[0].url
+                : '/main/images/artani-logo.png'
+            }
+            alt={
+              record?.image_pending[0]
+                ? process.env.REACT_APP_API_URL + record.image_pending[0].url
+                : '/main/images/artani-logo.png'
+            }
           />
         </>
       ),
@@ -147,7 +159,7 @@ const FixingReports = () => {
             color: '#F5F4EC',
             borderRadius: 20,
           }}
-          key='manage_report'
+          key="manage_report"
           onClick={() => {
             setVisible(true);
             console.log('record', record);
@@ -185,31 +197,37 @@ const FixingReports = () => {
     let residencesData = [];
     let combinesData = [];
 
-    await axios.get(process.env.REACT_APP_API_URL + '/addresses', headers).then((res) => {
-      console.log('resData', res.data);
-      residencesData = res.data;
-      residencesData
-        // .filter((item) => item.owner != null && item.owner !== undefined)
-        .filter((item) => item.fixing_reports.length > 0)
-        .forEach((residence, index) => {
-          let residenceData = { key: index, number: index + 1, ...residence };
-          residence.fixing_reports.forEach((report, index) => {
-            let date_show = format(utcToZonedTime(new Date(report.submission_date), thTimeZone), 'dd MMM yyyy', { timeZone: 'Asia/Bangkok' });
-            let newReport = {
-              key: residence.fixing_reports[index].id,
-              number: index + 1,
-              submission_date_show: date_show,
-              address_number: residence.address_number,
-              owner: residence.owner.fullname,
-              ...report,
-            };
-            residence.fixing_reports[index] = newReport;
+    await axios
+      .get(process.env.REACT_APP_API_URL + '/addresses', headers)
+      .then((res) => {
+        console.log('resData', res.data);
+        residencesData = res.data;
+        residencesData
+          // .filter((item) => item.owner != null && item.owner !== undefined)
+          .filter((item) => item.fixing_reports.length > 0)
+          .forEach((residence, index) => {
+            let residenceData = { key: index, number: index + 1, ...residence };
+            residence.fixing_reports.forEach((report, index) => {
+              let date_show = format(
+                utcToZonedTime(new Date(report.submission_date), thTimeZone),
+                'dd MMM yyyy',
+                { timeZone: 'Asia/Bangkok' }
+              );
+              let newReport = {
+                key: residence.fixing_reports[index].id,
+                number: index + 1,
+                submission_date_show: date_show,
+                address_number: residence.address_number,
+                owner: residence.owner?.fullname,
+                ...report,
+              };
+              residence.fixing_reports[index] = newReport;
+            });
+            // console.log('residenceData', residenceData);
+            // console.log(residenceData.fixing_reports);
+            combinesData.push(residenceData);
           });
-          // console.log('residenceData', residenceData);
-          // console.log(residenceData.fixing_reports);
-          combinesData.push(residenceData);
-        });
-    });
+      });
     setData(combinesData);
     //console.log('combinesData');
     //console.log(combinesData);
@@ -223,30 +241,44 @@ const FixingReports = () => {
 
   return (
     <>
-      <Heading title='Service Center Lists' />
+      <Heading title="Service Center Lists" />
       <Search
-        placeholder='Search by address number'
+        placeholder="Search by address number"
         allowClear
         onSearch={handleSearch}
         style={{ width: 250, marginBottom: 19, marginTop: 10 }}
         onChange={handleSearchChange}
-        className='search-box'
+        className="search-box"
       />
       <Table
         columns={columns}
-        className='tableContainer'
+        className="tableContainer"
         expandable={{
           expandedRowRender: (record) => (
             <div>
-              <Table columns={extendsColumns} dataSource={record?.fixing_reports} pagination={false} />
+              <Table
+                columns={extendsColumns}
+                dataSource={record?.fixing_reports}
+                pagination={false}
+              />
             </div>
           ),
           rowExpandable: (record) => record.fixing_reports != null,
         }}
-        dataSource={searchName === '' ? data : data.filter((item) => item.address_number.includes(searchName))}
+        dataSource={
+          searchName === ''
+            ? data
+            : data.filter((item) => item.address_number.includes(searchName))
+        }
       />
-      {visible ? <ReportModal visible={visible} reportValue={reportValue} fetchData={fetchData}
-                              closeModal={closeModal} /> : null}
+      {visible ? (
+        <ReportModal
+          visible={visible}
+          reportValue={reportValue}
+          fetchData={fetchData}
+          closeModal={closeModal}
+        />
+      ) : null}
     </>
   );
 };

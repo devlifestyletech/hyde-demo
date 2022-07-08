@@ -9,7 +9,7 @@ import CreateModal from '../components/CreateModal';
 
 const { TabPane } = Tabs;
 
-function RegistrationPage() {
+function Registration() {
   const [residents, setResidents] = useState([]);
   const [addNewModalVisibility, setAddNewModalVisibility] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -128,4 +128,4 @@ function RegistrationPage() {
   );
 }
 
-export default RegistrationPage;
+export default Registration;

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Table,
   Input,
@@ -12,33 +12,34 @@ import {
   DatePicker,
   Row,
   Col,
-} from "antd";
+} from 'antd';
 import {
   DeleteFilled,
   SearchOutlined,
   ExclamationCircleOutlined,
   PlusOutlined,
-} from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
-import ModalExportBilling from "./Modal/ModalExportBilling";
-import ModalPendingBill from "./Modal/ModalPending";
-import ModalReject from "./Modal/ModalReject";
+} from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
+import ModalExportBilling from './Modal/ModalExportBilling';
+import ModalPendingBill from './Modal/ModalPending';
+import ModalReject from './Modal/ModalReject';
 import {
   getDataSCB,
   deleteBillingPayment,
   getOutDate,
-} from "../services/API/payment_api";
+} from '../services/API/payment_api';
 import {
   getBillingPayment,
   getCustomerList,
-} from "../services/thunk-action/payment_thunk";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
+} from '../services/thunk-action/payment_thunk';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
 import logo from '../../assets/images/hyde-logo.svg';
+
 const { RangePicker } = DatePicker;
 const statePayment = {
-  searchText: "",
-  searchedColumn: "",
+  searchText: '',
+  searchedColumn: '',
   dataBillingPayment: null,
   dataCreateBilling: null,
   visible2: false,
@@ -64,14 +65,14 @@ export const Table_payment = () => {
 
   const [Export, setExport] = useState([]);
   useEffect(() => {
-    dispatch({ type: "CHANGE_PARAMS_BILLING", payload: paramsBillingPayment });
+    dispatch({ type: 'CHANGE_PARAMS_BILLING', payload: paramsBillingPayment });
     dispatch(getBillingPayment(paramsBillingPayment));
   }, []);
 
   const getTime = (e) => {
     let Time = [];
     e.map((e) => {
-      Time.push(moment(e).format("YYYY-MM-DD HH:mm:ss"));
+      Time.push(moment(e).format('YYYY-MM-DD HH:mm:ss'));
     });
 
     paramsBilling.filters = {
@@ -82,12 +83,12 @@ export const Table_payment = () => {
   const dateImeRender = (
     <RangePicker
       ranges={{
-        Today: [moment().startOf("day"), moment().endOf("day")],
-        "This Month": [moment().startOf("month"), moment().endOf("month")],
+        Today: [moment().startOf('day'), moment().endOf('day')],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
       }}
-      size={"small"}
+      size={'small'}
       style={{ marginBottom: 8 }}
-      showTime={{ format: "HH:mm" }}
+      showTime={{ format: 'HH:mm' }}
       format="DD/MM/YYYY HH:mm"
       onChange={getTime}
       // onOk={onOk}
@@ -95,7 +96,7 @@ export const Table_payment = () => {
   );
 
   // setting pagination Option
-  const pageSizeOptions = ["5", "20", "30", "40"];
+  const pageSizeOptions = ['5', '20', '30', '40'];
   const PaginationConfig = {
     defaultPageSize: pageSizeOptions[0],
     pageSizeOptions: pageSizeOptions,
@@ -104,7 +105,7 @@ export const Table_payment = () => {
     total: dataSize,
   };
   const paramsBillingPayment = {
-    status: "Payment successfull",
+    status: 'Payment successfull',
     defaultPage: 1,
     sorter: undefined,
     filters: {
@@ -123,8 +124,8 @@ export const Table_payment = () => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
 
-    dispatch({ type: "EXPORT_ALL_DATABILLING", payload: result });
-    dispatch({ type: "CHANGE_STATE_EXPORT_BILLING", payload: true });
+    dispatch({ type: 'EXPORT_ALL_DATABILLING', payload: result });
+    dispatch({ type: 'CHANGE_STATE_EXPORT_BILLING', payload: true });
     exportLoading[currentTarget.value] = false;
     await setExport(exportLoading);
   };
@@ -146,8 +147,8 @@ export const Table_payment = () => {
     resultSCB.idBilling = result.id;
     resultSCB.imageURL = result.imageURL;
     resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
-    dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
-    dispatch({ type: "MODAL_PENDING", payload: true });
+    dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
+    dispatch({ type: 'MODAL_PENDING', payload: true });
     verifyLoading[currentTarget.value] = false;
     await setVerify(verifyLoading);
   };
@@ -169,8 +170,8 @@ export const Table_payment = () => {
     resultSCB.imageURL = result.imageURL;
     resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
     resultSCB.annotation_payment = result.annotation_payment;
-    dispatch({ type: "CHANGE_STATE_EXPORT_APPROVE", payload: [resultSCB] });
-    dispatch({ type: "MODAL_REJECT", payload: true });
+    dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
+    dispatch({ type: 'MODAL_REJECT', payload: true });
     verifyLoadingReject[currentTarget.value] = false;
     await setVerifyReject(verifyLoadingReject);
   };
@@ -183,10 +184,10 @@ export const Table_payment = () => {
     const result = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
-    if (status_billing !== "Bill not generated") {
+    if (status_billing !== 'Bill not generated') {
       Modal.info({
-        title: "Billing Payment Detail",
-        width: "45%",
+        title: 'Billing Payment Detail',
+        width: '45%',
         // icon: <ExclamationCircleOutlined />,
         content: (
           <div>
@@ -199,15 +200,15 @@ export const Table_payment = () => {
                           <Col span={12}>
                             <div
                               className="col-4"
-                              style={{ textAlign: "left" }}
+                              style={{ textAlign: 'left' }}
                             >
                               <img
                                 src={logo}
                                 style={{
-                                  width: "6vw",
-                                  marginTop: "6%",
-                                  marginLeft: "15%",
-                                  paddingBottom: "5%",
+                                  width: '6vw',
+                                  marginTop: '6%',
+                                  marginLeft: '15%',
+                                  paddingBottom: '5%',
                                 }}
                               />
                             </div>
@@ -215,11 +216,13 @@ export const Table_payment = () => {
                           <Col span={12}>
                             <div
                               className="col-8"
-                              style={{ textAlign: "left" }}
+                              style={{ textAlign: 'left' }}
                             >
-                              <h3 style={{ margin: "4%", fontStyle: "bold" }}>
+                              <h3 style={{ margin: '4%', fontStyle: 'bold' }}>
                                 <b>
-                                  Hyde Heritage at Thonglor Condominium Juristic Person 1199 Sukhumvit Rd., Klongton Nua, Wattana, Bangkok, 10110
+                                  Hyde Heritage at Thonglor Condominium Juristic
+                                  Person 1199 Sukhumvit Rd., Klongton Nua,
+                                  Wattana, Bangkok, 10110
                                   <br />
                                   Tel. 0987645822
                                 </b>
@@ -228,12 +231,12 @@ export const Table_payment = () => {
                           </Col>
                         </Row>
 
-                        <Row style={{ paddingBottom: "2vh" }}>
+                        <Row style={{ paddingBottom: '2vh' }}>
                           <Col
                             span={12}
                             style={{
-                              textAlign: "left",
-                              paddingLeft: "5%",
+                              textAlign: 'left',
+                              paddingLeft: '5%',
                             }}
                           >
                             <b>
@@ -250,8 +253,8 @@ export const Table_payment = () => {
                           <Col
                             span={12}
                             style={{
-                              textAlign: "left",
-                              paddingLeft: "2%",
+                              textAlign: 'left',
+                              paddingLeft: '2%',
                             }}
                           >
                             <b>
@@ -273,29 +276,29 @@ export const Table_payment = () => {
                             <tr>
                               <th
                                 style={{
-                                  backgroundColor: "#B8B8B8",
+                                  backgroundColor: '#B8B8B8',
                                   // borderTopLeftRadius: "10px",
-                                  width: "30%",
-                                  textAlign: "center",
+                                  width: '30%',
+                                  textAlign: 'center',
                                 }}
                               >
                                 No.
                               </th>
                               <th
                                 style={{
-                                  backgroundColor: "#B8B8B8",
-                                  width: "30%",
-                                  textAlign: "center",
+                                  backgroundColor: '#B8B8B8',
+                                  width: '30%',
+                                  textAlign: 'center',
                                 }}
                               >
                                 Detail
                               </th>
                               <th
                                 style={{
-                                  backgroundColor: "#B8B8B8",
+                                  backgroundColor: '#B8B8B8',
                                   // borderTopRightRadius: "10px",
-                                  width: "30%",
-                                  textAlign: "center",
+                                  width: '30%',
+                                  textAlign: 'center',
                                 }}
                               >
                                 Amount
@@ -306,8 +309,8 @@ export const Table_payment = () => {
                                   return (
                                     <tr
                                       style={{
-                                        textAlign: "center",
-                                        backgroundColor: "#E2E1E1",
+                                        textAlign: 'center',
+                                        backgroundColor: '#E2E1E1',
                                       }}
                                     >
                                       <td>{j + 1}</td>
@@ -338,19 +341,19 @@ export const Table_payment = () => {
                           <div
                             className="row"
                             style={{
-                              paddingTop: "2vh",
-                              backgroundColor: "#E2E1E1",
+                              paddingTop: '2vh',
+                              backgroundColor: '#E2E1E1',
                             }}
                           >
                             <Row>
-                              <Col span={8} style={{ textAlign: "left" }}>
-                                {" "}
+                              <Col span={8} style={{ textAlign: 'left' }}>
+                                {' '}
                               </Col>
                               <Col
                                 span={8}
                                 style={{
-                                  textAlign: "left",
-                                  paddingLeft: "10%",
+                                  textAlign: 'left',
+                                  paddingLeft: '10%',
                                 }}
                               >
                                 Sub Total:
@@ -362,7 +365,7 @@ export const Table_payment = () => {
                                   <br />
                                 </b>
                               </Col>
-                              <Col span={4} style={{ textAlign: "left" }}>
+                              <Col span={4} style={{ textAlign: 'left' }}>
                                 {e?.Total_BillsPayment}
                                 <br />
                                 0 <br />
@@ -371,14 +374,14 @@ export const Table_payment = () => {
                                   <br />
                                 </b>
                               </Col>
-                              <Col span={2} style={{ textAlign: "left" }}>
-                                {" "}
+                              <Col span={2} style={{ textAlign: 'left' }}>
+                                {' '}
                                 THB.
                                 <br />
                                 THB.
                                 <br />
                                 <b>
-                                  {" "}
+                                  {' '}
                                   THB.
                                   <br />
                                 </b>
@@ -409,16 +412,16 @@ export const Table_payment = () => {
     await setDel(delLoading);
 
     Modal.confirm({
-      title: "Are you sure delete billing payment",
+      title: 'Are you sure delete billing payment',
       icon: <ExclamationCircleOutlined />,
       content: ` payment id ${currentTarget.value} ?`,
-      okText: "Yes",
+      okText: 'Yes',
       async onOk() {
         await deleteID(currentTarget.value);
         delLoading[currentTarget.value] = false;
         await setDel(delLoading);
       },
-      cancelText: "No",
+      cancelText: 'No',
       async onCancel() {
         delLoading[currentTarget.value] = false;
         await setDel(delLoading);
@@ -428,22 +431,22 @@ export const Table_payment = () => {
   const deleteID = async (id) => {
     const resultDelete = await deleteBillingPayment(id);
     if (resultDelete) {
-      notification["success"]({
+      notification['success']({
         duration: 2,
-        message: "DeleteBillingPayment",
-        description: "Delete billing payment by ID successfully.",
-        style: { borderRadius: "25px" },
+        message: 'DeleteBillingPayment',
+        description: 'Delete billing payment by ID successfully.',
+        style: { borderRadius: '25px' },
       });
-      paramsBilling.status = "Wait for payment";
+      paramsBilling.status = 'Wait for payment';
       paramsBilling.defaultPage = 1;
-      dispatch({ type: "CHANGE_PAGE_DEFAULT", payload: 1 });
+      dispatch({ type: 'CHANGE_PAGE_DEFAULT', payload: 1 });
       dispatch(getBillingPayment(paramsBilling));
     } else {
-      notification["error"]({
+      notification['error']({
         duration: 2,
-        message: "DeleteBillingPayment",
-        description: "Delete billing payment by ID failed.",
-        style: { borderRadius: "25px" },
+        message: 'DeleteBillingPayment',
+        description: 'Delete billing payment by ID failed.',
+        style: { borderRadius: '25px' },
       });
     }
   };
@@ -465,14 +468,14 @@ export const Table_payment = () => {
         total += parseFloat(e.Total_BillsPayment);
       });
       result.totalCost = total;
-      result.Cost = "Overdue";
+      result.Cost = 'Overdue';
     } else {
       result.totalCost = null;
       result.Cost = null;
     }
     // console.log("createBilling:", dataOutdate);
-    await dispatch({ type: "CREATE_BILLING", payload: result });
-    dispatch({ type: "CHANGE_STATE", payload: true });
+    await dispatch({ type: 'CREATE_BILLING', payload: result });
+    dispatch({ type: 'CHANGE_STATE', payload: true });
     newLoadings[currentTarget.value] = false;
     await setloadingCreate(newLoadings);
   };
@@ -482,9 +485,9 @@ export const Table_payment = () => {
   // table change
 
   const handleTableChange = async (pagination, filters, sorter) => {
-    console.log("handleTableChange:", pagination);
+    console.log('handleTableChange:', pagination);
     await dispatch({
-      type: "CHANGE_PAGE_DEFAULT",
+      type: 'CHANGE_PAGE_DEFAULT',
       payload: pagination?.current,
     });
     (paramsBilling.status = status_billing),
@@ -515,7 +518,7 @@ export const Table_payment = () => {
     } else {
       paramsBilling.sorter = sorter.order;
     }
-    if (status_billing === "Bill not generated") {
+    if (status_billing === 'Bill not generated') {
       dispatch(getCustomerList(paramsBilling));
     } else {
       dispatch(getBillingPayment(paramsBilling));
@@ -524,92 +527,92 @@ export const Table_payment = () => {
   // table change
   let columns = [
     {
-      title: "Invoice Bill",
-      align: "center",
-      dataIndex: "BillsPayment_Invoice",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Invoice Bill',
+      align: 'center',
+      dataIndex: 'BillsPayment_Invoice',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "Address_Customer",
-      key: "Address_Customer",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'Address_Customer',
+      key: 'Address_Customer',
+      width: '10%',
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "Name_Customer",
-      key: "Name_Customer",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'Name_Customer',
+      key: 'Name_Customer',
+      width: '10%',
 
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     },
     {
-      title: "Due Date",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Due Date',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <Space size="middle">
           <a>
-            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
-            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+            {moment(record.BillsPayment_Date_Start).format('DD/MM/YYYY')} -{' '}
+            {moment(record.BillsPayment_Date_End).format('DD/MM/YYYY')}
           </a>
         </Space>
       ),
     },
     {
-      title: "Total",
-      align: "center",
-      dataIndex: "Total_BillsPayment",
-      key: "Total_BillsPayment",
-      width: "10%",
+      title: 'Total',
+      align: 'center',
+      dataIndex: 'Total_BillsPayment',
+      key: 'Total_BillsPayment',
+      width: '10%',
 
       sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
     },
     {
-      title: "Status",
-      align: "center",
-      dataIndex: "BillsPayment_Status",
-      key: "BillsPayment_Status",
-      width: "10%",
+      title: 'Status',
+      align: 'center',
+      dataIndex: 'BillsPayment_Status',
+      key: 'BillsPayment_Status',
+      width: '10%',
       render: (BillsPayment_Status) => {
         return <Tag color="green">{BillsPayment_Status}</Tag>;
       },
     },
     {
-      title: "Create Bill",
-      align: "center",
-      dataIndex: "createdAt",
-      key: "createBill",
-      width: "10%",
+      title: 'Create Bill',
+      align: 'center',
+      dataIndex: 'createdAt',
+      key: 'createBill',
+      width: '10%',
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
     {
-      title: "Export",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Export',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -627,95 +630,95 @@ export const Table_payment = () => {
   ];
   const PendingReview = [
     {
-      title: "Invoice Bill",
-      align: "center",
-      dataIndex: "BillsPayment_Invoice",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Invoice Bill',
+      align: 'center',
+      dataIndex: 'BillsPayment_Invoice',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "Address_Customer",
-      key: "Address_Customer",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'Address_Customer',
+      key: 'Address_Customer',
+      width: '10%',
 
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
 
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "Name_Customer",
-      key: "Name_Customer",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'Name_Customer',
+      key: 'Name_Customer',
+      width: '10%',
       sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
     },
     {
-      title: "Due Date",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Due Date',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <Space size="middle">
           <a>
-            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
-            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+            {moment(record.BillsPayment_Date_Start).format('DD/MM/YYYY')} -{' '}
+            {moment(record.BillsPayment_Date_End).format('DD/MM/YYYY')}
           </a>
         </Space>
       ),
     },
 
     {
-      title: "Total",
-      align: "center",
-      dataIndex: "Total_BillsPayment",
-      key: "Total_BillsPayment",
-      width: "10%",
+      title: 'Total',
+      align: 'center',
+      dataIndex: 'Total_BillsPayment',
+      key: 'Total_BillsPayment',
+      width: '10%',
 
       sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
     },
     {
-      title: "Status",
-      align: "center",
-      dataIndex: "BillsPayment_Status",
-      key: "BillsPayment_Status",
-      width: "10%",
+      title: 'Status',
+      align: 'center',
+      dataIndex: 'BillsPayment_Status',
+      key: 'BillsPayment_Status',
+      width: '10%',
       render: (BillsPayment_Status) => {
         return <Tag color="orange">{BillsPayment_Status}</Tag>;
       },
     },
     {
-      title: "Create Bill",
-      align: "center",
-      dataIndex: "createdAt",
-      key: "createBill",
-      width: "10%",
+      title: 'Create Bill',
+      align: 'center',
+      dataIndex: 'createdAt',
+      key: 'createBill',
+      width: '10%',
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
 
     {
-      title: "Action",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Action',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -735,101 +738,103 @@ export const Table_payment = () => {
 
   const waitForPayment = [
     {
-      title: "Invoice Bill",
-      align: "center",
-      dataIndex: "BillsPayment_Invoice",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Invoice Bill',
+      align: 'center',
+      dataIndex: 'BillsPayment_Invoice',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "Address_Customer",
-      key: "Address_Customer",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'Address_Customer',
+      key: 'Address_Customer',
+      width: '10%',
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "Name_Customer",
-      key: "Name_Customer",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'Name_Customer',
+      key: 'Name_Customer',
+      width: '10%',
 
       sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
     },
     {
-      title: "Due Date",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Due Date',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <Space size="middle">
           <a>
-            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
-            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+            {moment(record.BillsPayment_Date_Start).format('DD/MM/YYYY')} -{' '}
+            {moment(record.BillsPayment_Date_End).format('DD/MM/YYYY')}
           </a>
         </Space>
       ),
     },
     {
-      title: "Total",
-      align: "center",
-      dataIndex: "Total_BillsPayment",
-      key: "Total_BillsPayment",
-      width: "10%",
+      title: 'Total',
+      align: 'center',
+      dataIndex: 'Total_BillsPayment',
+      key: 'Total_BillsPayment',
+      width: '10%',
       sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
     },
     {
-      title: "Status",
-      align: "center",
-      dataIndex: "BillsPayment_Status",
-      key: "BillsPayment_Status",
-      width: "10%",
+      title: 'Status',
+      align: 'center',
+      dataIndex: 'BillsPayment_Status',
+      key: 'BillsPayment_Status',
+      width: '10%',
       render: (BillsPayment_Status) => {
         switch (BillsPayment_Status) {
-          case "Payment successfull":
+          case 'Payment successfull':
             return <Tag color="green">{BillsPayment_Status}</Tag>;
             break;
-          case "Pending review":
+          case 'Pending review':
             return <Tag color="orange">{BillsPayment_Status}</Tag>;
             break;
-          case "Wait for payment":
+          case 'Wait for payment':
             return <Tag color="red">{BillsPayment_Status}</Tag>;
             break;
+          default:
+            return null;
         }
       },
     },
     {
-      title: "Create Bill",
-      align: "center",
-      dataIndex: "createdAt",
-      key: "createBill",
-      width: "10%",
+      title: 'Create Bill',
+      align: 'center',
+      dataIndex: 'createdAt',
+      key: 'createBill',
+      width: '10%',
 
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
     {
-      title: "Detail",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Detail',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -845,11 +850,11 @@ export const Table_payment = () => {
       ),
     },
     {
-      title: "Action",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Action',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -859,7 +864,7 @@ export const Table_payment = () => {
             disabled={record.Receipt_Status}
             loading={Del[record.id]}
             shape="round"
-            icon={<DeleteFilled style={{ verticalAlign: "baseline" }} />}
+            icon={<DeleteFilled style={{ verticalAlign: 'baseline' }} />}
             onClick={deleteBillingByID}
           >
             delete
@@ -871,31 +876,31 @@ export const Table_payment = () => {
 
   const BillingNotGen = [
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "address",
-      key: "address",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'address',
+      key: 'address',
+      width: '10%',
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
       sorter: (a, b) => a.address.localeCompare(b.address),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "fullname",
-      key: "fullname",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'fullname',
+      key: 'fullname',
+      width: '10%',
       // render: (text, record) => (
       //   <>
       //   <p>
@@ -914,22 +919,22 @@ export const Table_payment = () => {
     //   sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     // },
     {
-      title: "ฺBilling of the month",
-      align: "center",
-      dataIndex: "status_billing",
-      key: "status_billing",
-      width: "10%",
+      title: 'ฺBilling of the month',
+      align: 'center',
+      dataIndex: 'status_billing',
+      key: 'status_billing',
+      width: '10%',
       render: (status_billing) => {
-        return <Tag color="red">{moment().format("MMMM")}</Tag>;
+        return <Tag color="red">{moment().format('MMMM')}</Tag>;
       },
     },
 
     {
-      title: "Action",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Action',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -950,90 +955,90 @@ export const Table_payment = () => {
   ];
   const outDate = [
     {
-      title: "Invoice Bill",
-      align: "center",
-      dataIndex: "BillsPayment_Invoice",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Invoice Bill',
+      align: 'center',
+      dataIndex: 'BillsPayment_Invoice',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "Address_Customer",
-      key: "Address_Customer",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'Address_Customer',
+      key: 'Address_Customer',
+      width: '10%',
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "Name_Customer",
-      key: "Name_Customer",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'Name_Customer',
+      key: 'Name_Customer',
+      width: '10%',
 
       sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
     },
     {
-      title: "Due Date",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Due Date',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <Space size="middle">
           <a>
-            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
-            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+            {moment(record.BillsPayment_Date_Start).format('DD/MM/YYYY')} -{' '}
+            {moment(record.BillsPayment_Date_End).format('DD/MM/YYYY')}
           </a>
         </Space>
       ),
     },
     {
-      title: "Total",
-      align: "center",
-      dataIndex: "Total_BillsPayment",
-      key: "Total_BillsPayment",
-      width: "10%",
+      title: 'Total',
+      align: 'center',
+      dataIndex: 'Total_BillsPayment',
+      key: 'Total_BillsPayment',
+      width: '10%',
       sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
     },
     {
-      title: "Status",
-      align: "center",
-      dataIndex: "BillsPayment_Status",
-      key: "BillsPayment_Status",
-      width: "10%",
+      title: 'Status',
+      align: 'center',
+      dataIndex: 'BillsPayment_Status',
+      key: 'BillsPayment_Status',
+      width: '10%',
       render: (BillsPayment_Status) => {
         return <Tag color="gray">{BillsPayment_Status}</Tag>;
       },
     },
     {
-      title: "Create Bill",
-      align: "center",
-      dataIndex: "createdAt",
-      key: "createBill",
-      width: "10%",
+      title: 'Create Bill',
+      align: 'center',
+      dataIndex: 'createdAt',
+      key: 'createBill',
+      width: '10%',
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
     {
-      title: "Detail",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Detail',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -1051,90 +1056,90 @@ export const Table_payment = () => {
 
   const reject = [
     {
-      title: "Invoice Bill",
-      align: "center",
-      dataIndex: "BillsPayment_Invoice",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Invoice Bill',
+      align: 'center',
+      dataIndex: 'BillsPayment_Invoice',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       sorter: (a, b) =>
         a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
     },
     {
-      title: "Room Number",
-      align: "center",
-      dataIndex: "Address_Customer",
-      key: "Address_Customer",
-      width: "10%",
+      title: 'Room Number',
+      align: 'center',
+      dataIndex: 'Address_Customer',
+      key: 'Address_Customer',
+      width: '10%',
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#D8AA81", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
           searchWords={
             paramsBilling.filters.Address_Customer !== null
               ? paramsBilling.filters.Address_Customer
-              : [""]
+              : ['']
           }
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ),
       sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
     },
     {
-      title: "Name Owner",
-      align: "center",
-      dataIndex: "Name_Customer",
-      key: "Name_Customer",
-      width: "10%",
+      title: 'Name Owner',
+      align: 'center',
+      dataIndex: 'Name_Customer',
+      key: 'Name_Customer',
+      width: '10%',
 
       sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
     },
     {
-      title: "Due Date",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Due Date',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <Space size="middle">
           <a>
-            {moment(record.BillsPayment_Date_Start).format("DD/MM/YYYY")} -{" "}
-            {moment(record.BillsPayment_Date_End).format("DD/MM/YYYY")}
+            {moment(record.BillsPayment_Date_Start).format('DD/MM/YYYY')} -{' '}
+            {moment(record.BillsPayment_Date_End).format('DD/MM/YYYY')}
           </a>
         </Space>
       ),
     },
     {
-      title: "Total",
-      align: "center",
-      dataIndex: "Total_BillsPayment",
-      key: "Total_BillsPayment",
-      width: "10%",
+      title: 'Total',
+      align: 'center',
+      dataIndex: 'Total_BillsPayment',
+      key: 'Total_BillsPayment',
+      width: '10%',
       sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
     },
     {
-      title: "Status",
-      align: "center",
-      dataIndex: "BillsPayment_Status",
-      key: "BillsPayment_Status",
-      width: "10%",
+      title: 'Status',
+      align: 'center',
+      dataIndex: 'BillsPayment_Status',
+      key: 'BillsPayment_Status',
+      width: '10%',
       render: (BillsPayment_Status) => {
         return <Tag color="warning">{BillsPayment_Status}</Tag>;
       },
     },
     {
-      title: "Create Bill",
-      align: "center",
-      dataIndex: "createdAt",
-      key: "createBill",
-      width: "10%",
+      title: 'Create Bill',
+      align: 'center',
+      dataIndex: 'createdAt',
+      key: 'createBill',
+      width: '10%',
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
     },
     {
-      title: "Action",
-      align: "center",
-      dataIndex: "action",
-      key: "BillsPayment_Invoice",
-      width: "10%",
+      title: 'Action',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
       render: (text, record) => (
         <>
           <Button
@@ -1156,19 +1161,19 @@ export const Table_payment = () => {
     <div>
       {(() => {
         switch (status_billing) {
-          case "Pending review":
+          case 'Pending review':
             columns = PendingReview;
             break;
-          case "Bill not generated":
+          case 'Bill not generated':
             columns = BillingNotGen;
             break;
-          case "Wait for payment":
+          case 'Wait for payment':
             columns = waitForPayment;
             break;
-          case "Out Date":
+          case 'Out Date':
             columns = outDate;
             break;
-          case "Payment annotation":
+          case 'Payment annotation':
             columns = reject;
             break;
           default:
@@ -1185,7 +1190,7 @@ export const Table_payment = () => {
       />
       <ModalExportBilling paymentDetail={state.paymentDetail} />
       <ModalPendingBill />
-      <ModalReject/>
+      <ModalReject />
     </div>
   );
 };

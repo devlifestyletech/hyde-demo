@@ -28,7 +28,7 @@ export default function BookingListsPage() {
 
     setLoading(true);
     (async () => {
-      onSnapshot(queryFacilities, (QuerySnapshot) => {
+      await onSnapshot(queryFacilities, (QuerySnapshot) => {
         let facility = [];
         QuerySnapshot.forEach((doc) => {
           let data = { id: doc.id, ...doc.data() };
@@ -36,7 +36,7 @@ export default function BookingListsPage() {
         });
         setFacilities(facility);
       });
-      onSnapshot(queryReservations, (QuerySnapshot) => {
+      await onSnapshot(queryReservations, (QuerySnapshot) => {
         let reservation = [];
         QuerySnapshot.forEach((doc) => {
           let data = { id: doc.id, ...doc.data() };
@@ -71,8 +71,8 @@ export default function BookingListsPage() {
         >
           {!facilities.length
             ? null
-            : facilities.map((facility, index) => (
-                <Option key={index} value={facility.id}>
+            : facilities.map((facility, idx) => (
+                <Option key={idx} value={facility.id}>
                   Room Name : {facility.name}
                 </Option>
               ))}
@@ -86,22 +86,11 @@ export default function BookingListsPage() {
         />
       </div>
       <div className="content-container">
-        {loading ? (
-          <div
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}
-          >
-            <Spin />
-          </div>
-        ) : (
-          <ReservationTable
-            data={search !== '' ? reservationSearch : reservations}
-            facility={facilities}
-          />
-        )}
+        <ReservationTable
+          loading={loading}
+          data={search !== '' ? reservationSearch : reservations}
+          facility={facilities}
+        />
       </div>
     </>
   );

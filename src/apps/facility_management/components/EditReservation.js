@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Button,
   Col,
@@ -31,9 +31,12 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 export default function EditReservation({ data, facility, visible, onCancel }) {
+  const isMounted = useRef(false);
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    isMounted.current = true;
     const queryReservations = query(collection(db, 'reservations'));
     (async () => {
       onSnapshot(queryReservations, (QuerySnapshot) => {
@@ -44,10 +47,13 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
             reservation.push(data);
           }
         });
-        setReservations(reservation);
-        setLoading(false);
+        if (isMounted.current) {
+          setReservations(reservation);
+          setLoading(false);
+        }
       });
     })();
+    return () => (isMounted.current = false);
   }, [data]);
 
   var time_slot = reservations?.map((item) => ({
@@ -162,7 +168,8 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
           }
         });
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 
@@ -247,7 +254,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
                         min={1}
                         max={f ? f.max_users : null}
                         style={{ width: '100%', borderRadius: 20 }}
-                        defaultValue={data?.user_amount}
+                        initialValues={data?.user_amount}
                       />
                     </Form.Item>
                     <Form.Item label="Room Number">
@@ -286,7 +293,7 @@ export default function EditReservation({ data, facility, visible, onCancel }) {
                       <TextArea
                         placeholder=""
                         autoSize={{ minRows: 3, maxRows: 6 }}
-                        defaultValue={data?.note}
+                        initialValues={data?.note}
                       />
                     </Form.Item>
                   </div>

@@ -8,7 +8,7 @@ import { Button, Col, DatePicker, Row } from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-function MemberDashboardPage() {
+function MemberDashboard() {
   const monthFormat = 'MMMM ,YYYY';
 
   const customMonthStartEndFormat = (value) =>
@@ -70,4 +70,4 @@ function MemberDashboardPage() {
   );
 }
 
-export default MemberDashboardPage;
+export default MemberDashboard;

@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../../../components/header';
 import Facilities from '../components/Facilities';
 
-export default function FacilitiesPage() {
+export default function FacilitiesManage() {
   return (
     <>
       <Header title="Facilities" />

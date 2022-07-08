@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../../../components/header';
 import Occupations from '../components/Occupations';
 
-export default function OccupationPage() {
+export default function Occupation() {
   return (
     <div>
       <Header title="Occupation" />

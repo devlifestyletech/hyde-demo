@@ -9,7 +9,7 @@ import qrlogo from '../assets/hyde_2.svg';
 export default function QrModal({ data, visible, onCancel }) {
   const qrRef = useRef();
   return (
-    <>
+    <React.Fragment key={data?.id}>
       <Modal
         centered
         title="Reservation"
@@ -86,6 +86,6 @@ export default function QrModal({ data, visible, onCancel }) {
           </Button>
         </div>
       </Modal>
-    </>
+    </React.Fragment>
   );
 }

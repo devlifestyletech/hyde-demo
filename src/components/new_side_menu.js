@@ -36,7 +36,6 @@ function NewSideMenu() {
 
   const [openKeys, setOpenKeys] = useState([path[2]]);
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
-  const [activeKeysPath, setActiveKeysPath] = useState();
 
   const rootSubmenuKeys = ['facilities', 'members', 'services', 'payment'];
 
@@ -63,7 +62,6 @@ function NewSideMenu() {
             onOpenChange={onOpenChange}
             openKeys={openKeys}
             onClick={(k) => {
-              setActiveKeysPath(k.keyPath.slice(-1));
               setActiveKeys(k.key);
             }}
             mode="inline"

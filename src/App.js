@@ -14,14 +14,13 @@ import ForgotPasswordPage from './components/forgot_password';
 import ConfirmRegistrationPage from './components/confirm_registration';
 //Authorized routes
 import MainDashboard from './components/main_dashboard';
-import FacilitiesManagementDashboardPage from './apps/facility_management/views/dashboard.page';
-import BookingCalendarPage from './apps/facility_management/views/calendar.page';
-import BookingListsPage from './apps/facility_management/views/lists.page';
-import FacilitiesPage from './apps/facility_management/views/facilities.page';
-import OccupationPage from './apps/facility_management/views/occupation.page';
-import MemberDashboardPage from './apps/registration/views/RoomDashboard';
-import RoomDashboardPage from './apps/registration/views/RoomDashboard';
-import RegistrationPage from './apps/registration/views/Registration.page';
+import FacilitiesManagementDashboardPage from './apps/facility_management/views/dashboard';
+import BookingCalendarPage from './apps/facility_management/views/calendar';
+import BookingListsPage from './apps/facility_management/views/lists';
+import FacilitiesManage from './apps/facility_management/views/facilities';
+import Occupation from './apps/facility_management/views/occupation';
+import MemberDashboardPage from './apps/registration/views/MemberDashboard';
+import Registration from './apps/registration/views/Registration';
 import RoomManagement from './apps/registration/views/ProjectManagement';
 import Nearby from './apps/nearby/NearbyService';
 import Announcement from './apps/announcement/Announcement';
@@ -81,10 +80,10 @@ const App = () => {
             path="facilities/reservation-list"
             element={<BookingListsPage />}
           />
-          <Route path="facilities/management" element={<FacilitiesPage />} />
-          <Route path="facilities/occupation" element={<OccupationPage />} />
+          <Route path="facilities/management" element={<FacilitiesManage />} />
+          <Route path="facilities/occupation" element={<Occupation />} />
           <Route path="members/dashboard" element={<MemberDashboardPage />} />
-          <Route path="members/registration" element={<RegistrationPage />} />
+          <Route path="members/registration" element={<Registration />} />
           <Route path="members/rooms-management" element={<RoomManagement />} />
           <Route
             path="members/juristic-management"

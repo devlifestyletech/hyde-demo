@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../../components/header';
 import { Button, Select, Spin } from 'antd';
 import './styles/main.style.css';
@@ -14,6 +14,9 @@ import CreateReservation from '../components/CreateReservation';
 const { Option } = Select;
 
 export default function BookingCalendarPage() {
+  const isFacilitiesMounted = useRef(false);
+  const isReservationsMounted = useRef(false);
+
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [facilities, setFacilities] = useState([]);
   const [reservations, setReservations] = useState([]);
@@ -32,6 +35,8 @@ export default function BookingCalendarPage() {
   }));
 
   useEffect(() => {
+    isFacilitiesMounted.current = true;
+    isReservationsMounted.current = true;
     const queryFacilities = query(collection(db, 'facilities'));
     const queryReservations = query(
       collection(db, 'reservations'),
@@ -39,27 +44,36 @@ export default function BookingCalendarPage() {
     );
     setLoading(true);
     (async () => {
-      await addressService
-        .getAllAddresses()
-        .then((res) => setAddresses(res.data));
-      onSnapshot(queryFacilities, (QuerySnapshot) => {
+      const { data } = await addressService.getAllAddresses();
+      if (data) {
+        setAddresses(data);
+      }
+      await onSnapshot(queryFacilities, (QuerySnapshot) => {
         let facility = [];
         QuerySnapshot.forEach((doc) => {
           let data = { id: doc.id, ...doc.data() };
           facility.push(data);
         });
-        setFacilities(facility);
+        if (isFacilitiesMounted) {
+          setFacilities(facility);
+        }
       });
-      onSnapshot(queryReservations, (QuerySnapshot) => {
+      await onSnapshot(queryReservations, (QuerySnapshot) => {
         let reservation = [];
         QuerySnapshot.forEach((doc) => {
           let data = { id: doc.id, ...doc.data() };
           reservation.push(data);
         });
-        setReservations(reservation);
-        setLoading(false);
+        if (isReservationsMounted) {
+          setReservations(reservation);
+          setLoading(false);
+        }
       });
     })();
+    return () => {
+      isFacilitiesMounted.current = false;
+      isReservationsMounted.current = false;
+    };
   }, [selectedFacilities]);
 
   return (
@@ -74,8 +88,8 @@ export default function BookingCalendarPage() {
         >
           {!facilities.length
             ? null
-            : facilities.map((facility, index) => (
-                <Option key={index} value={facility.id}>
+            : facilities.map((facility, idx) => (
+                <Option key={idx} value={facility.id}>
                   Room Name : {facility.name}
                 </Option>
               ))}

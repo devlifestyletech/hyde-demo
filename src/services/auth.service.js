@@ -1,7 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { encryptStorage } from '../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 export default {
   signIn: async function (value) {
@@ -16,6 +15,7 @@ export default {
     }
   },
   registration: async function (value) {
+    const session = await encryptStorage.getItem('user_session');
     try {
       return await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/local/register`,
@@ -30,6 +30,7 @@ export default {
     }
   },
   getAllResident: async function () {
+    const session = await encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/users?_where[role]=61b40d9a268f0d019c9c0e7e`,
@@ -43,6 +44,8 @@ export default {
     }
   },
   getAllFixing: async function () {
+    const session = await encryptStorage.getItem('user_session');
+
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/fixing-reports`,
@@ -66,6 +69,8 @@ export default {
     }
   },
   deleteUser: async function (id) {
+    const session = await encryptStorage.getItem('user_session');
+
     try {
       return await axios.delete(
         `${process.env.REACT_APP_API_URL}/users/${id}`,
@@ -79,6 +84,8 @@ export default {
     }
   },
   getUserData: async function (id) {
+    const session = await encryptStorage.getItem('user_session');
+
     try {
       return await axios.get(`${process.env.REACT_APP_API_URL}/users/${id}`, {
         headers: { Authorization: 'Bearer ' + session.jwt },
@@ -89,6 +96,8 @@ export default {
     }
   },
   editUserData: async function (id, value) {
+    const session = await encryptStorage.getItem('user_session');
+
     try {
       return await axios.put(
         `${process.env.REACT_APP_API_URL}/users/${id}`,
@@ -103,6 +112,7 @@ export default {
     }
   },
   addUserToAddress: async function (value) {
+    const session = await encryptStorage.getItem('user_session');
     try {
       return await axios.post(
         `${process.env.REACT_APP_API_URL}/resident-lists`,
