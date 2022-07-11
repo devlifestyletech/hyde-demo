@@ -33,12 +33,7 @@ export default function ChangeUserModal({
           resident_role: userRule,
           ...value,
         };
-
-        ResidentService.removeUserFromAddress(id, userId).then(() => {
-          ResidentService.addUserToAddress(newValue).then(() => onCancel());
-        });
         const removing = await ResidentService.changeRoleUser(value, id);
-
         if (removing) {
           const adding = await ResidentService.addUserToAddress(newValue);
           if (adding) onCancel();
