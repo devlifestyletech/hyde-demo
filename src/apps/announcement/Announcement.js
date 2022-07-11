@@ -650,7 +650,10 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker disabledDate={disabledDate} className="dateTime" />
+                    <DatePicker
+                      disabledDate={disabledDate}
+                      className="dateTime"
+                    />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
@@ -684,7 +687,10 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker disabledDate={disabledDate} className="dateTime" />
+                  <DatePicker
+                    disabledDate={disabledDate}
+                    className="dateTime"
+                  />
                 </Form.Item>
               </div>
               <div style={{ width: 10 }} />
@@ -1030,7 +1036,10 @@ function Announcement() {
                       },
                     ]}
                   >
-                    <DatePicker disabledDate={disabledDate} className="dateTime" />
+                    <DatePicker
+                      disabledDate={disabledDate}
+                      className="dateTime"
+                    />
                   </Form.Item>
                 </div>
                 <div style={{ width: 10 }}></div>
@@ -1064,7 +1073,10 @@ function Announcement() {
                     },
                   ]}
                 >
-                  <DatePicker disabledDate={disabledDate} className="dateTime" />
+                  <DatePicker
+                    disabledDate={disabledDate}
+                    className="dateTime"
+                  />
                 </Form.Item>
               </div>
               <div style={{ width: 10 }} />
