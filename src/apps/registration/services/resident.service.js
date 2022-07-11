@@ -64,11 +64,6 @@ export default {
     }
   },
 
-  updateResidentData: async function (data, id) {
-    try {
-    } catch (error) {}
-  },
-
   getUserData: async function (id) {
     try {
       const data = await axios.get(
