@@ -11,7 +11,7 @@ export default function ChangeUserModal({
   userId,
   addressId,
 }) {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   const [form] = Form.useForm();
   useEffect(() => {
     (async () => {
