@@ -37,7 +37,13 @@ function NewSideMenu() {
   const [openKeys, setOpenKeys] = useState([path[2]]);
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
 
-  const rootSubmenuKeys = ['facilities', 'members', 'services', 'payment'];
+  const rootSubmenuKeys = [
+    'facilities',
+    'members',
+    'services',
+    'payment',
+    'settings',
+  ];
 
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);

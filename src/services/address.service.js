@@ -1,16 +1,14 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
-import { encryptStorage } from '../utils/encryptStorage';
+import { headersConfig } from '../utils/headersConfig';
 
 export default {
   getAllAddresses: async function () {
-    const session = await encryptStorage.getItem('user_session');
+    const headers = await headersConfig();
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/addresses/?_limit=500`,
-        {
-          headers: { Authorization: 'Bearer ' + session.jwt },
-        }
+        headers
       );
     } catch (error) {
       console.error(error);
