@@ -8,10 +8,10 @@ function ForgotPasswordPage() {
   const [ForgotPasswordForm] = Form.useForm();
 
   async function onFinish(value) {
-    await authService
-      .forgotPassword(value)
-      .then(() => {
-        Modal.success({
+    try {
+      const { data } = await authService.forgotPassword(value);
+      if (data) {
+        return Modal.success({
           title: 'Success !',
           content: 'Please check your email to reset your password',
           onOk: () => {
@@ -19,17 +19,17 @@ function ForgotPasswordPage() {
             window.location.href = '/signin';
           },
         });
-      })
-      .catch(() => {
-        Modal.error({
-          title: 'Error !',
-          content:
-            "Email doesn't exist, please try again or contact your administrator",
-          onOk: () => {
-            ForgotPasswordForm.resetFields();
-          },
-        });
+      }
+    } catch (error) {
+      return Modal.error({
+        title: 'Error !',
+        content:
+          "Email doesn't exist, please try again or contact your administrator",
+        onOk: () => {
+          ForgotPasswordForm.resetFields();
+        },
       });
+    }
   }
 
   function onFinishFailed(error) {

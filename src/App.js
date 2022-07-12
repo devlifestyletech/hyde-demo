@@ -32,10 +32,11 @@ import LiveChat from './apps/live_chat/screens/ChatRoom';
 import PaymentSuccess from './apps/payment/Payment_success';
 import PaymentDashboard from './apps/payment/payment_dashbord';
 
-import JuristicManage from './apps/account_management/views/juristic_manage';
-
 import { signInAnonymously } from 'firebase/auth';
 import NoContent from './components/no_content';
+import ProfilePage from './apps/settings/views/profile';
+import ChangePasswordPage from './apps/settings/views/change_password';
+import AdminManagementPage from './apps/settings/views/admin_manage';
 
 const App = () => {
   useEffect(() => {
@@ -85,10 +86,6 @@ const App = () => {
           <Route path="members/dashboard" element={<MemberDashboardPage />} />
           <Route path="members/registration" element={<Registration />} />
           <Route path="members/rooms-management" element={<RoomManagement />} />
-          <Route
-            path="members/juristic-management"
-            element={<JuristicManage />}
-          />
           <Route path="nearby" element={<Nearby />} />
           <Route path="announcement" element={<Announcement />} />
           <Route path="services/reports" element={<FixingReports />} />
@@ -100,6 +97,15 @@ const App = () => {
           <Route path="live-chat" element={<LiveChat />} />
           <Route path="payment/billing" element={<PaymentSuccess />} />
           <Route path="payment/dashboard" element={<PaymentDashboard />} />
+          <Route path="settings/profile" element={<ProfilePage />} />
+          <Route
+            path="settings/change-password"
+            element={<ChangePasswordPage />}
+          />
+          <Route
+            path="settings/admin-management"
+            element={<AdminManagementPage />}
+          />
           <Route path="*" element={<NoContent />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />

@@ -1,19 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-//import antd component
 import { Button, Form, Input, Modal } from 'antd';
-//import customize css
 import './styles/signin.css';
 
-//import image
 import UserIcon from '../apps/assets/icons/user.svg';
 import PasswordIcon from '../apps/assets/icons/password.svg';
-
-//import service file
 import authService from '../services/auth.service';
 
-//import encrypt Storage configure
 import { encryptStorage } from '../utils/encryptStorage';
 import { useAuth } from '../hooks/useAuth';
 
@@ -21,37 +14,34 @@ function Signin() {
   const [LoginForm] = Form.useForm();
   const { signin } = useAuth();
 
-  const onFinish = (value) => {
-    authService
-      .signIn(value)
-      .then((res) => {
-        if (res?.data?.user?.role?.type !== 'resident') {
-          try {
-            encryptStorage.setItem('user_session', JSON.stringify(res.data));
-            signin();
-          } catch (e) {
-            console.error(e.message);
-          }
-        } else {
-          Modal.error({
-            title: 'Error !',
-            content:
-              'This web application available for juristic account only.',
-            onOk: () => {
-              LoginForm.resetFields();
-            },
-          });
+  const onFinish = async (value) => {
+    try {
+      const { data } = await authService.signIn(value);
+      if (data.user.role.type !== 'resident') {
+        try {
+          await encryptStorage.setItem('user_session', JSON.stringify(data));
+          await signin();
+        } catch (e) {
+          console.error(e.message);
         }
-      })
-      .catch(() =>
+      } else {
         Modal.error({
           title: 'Error !',
-          content: 'Username or password is incorrect',
+          content: 'This web application available for juristic account only.',
           onOk: () => {
             LoginForm.resetFields();
           },
-        })
-      );
+        });
+      }
+    } catch (error) {
+      Modal.error({
+        title: 'Error !',
+        content: 'Username or password is incorrect',
+        onOk: () => {
+          LoginForm.resetFields();
+        },
+      });
+    }
   };
   const onFinishFailed = (error) => {
     console.debug(error);

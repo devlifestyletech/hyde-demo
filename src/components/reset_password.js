@@ -10,12 +10,12 @@ export default function ResetPasswordPage() {
   let code = searchParams.get('code');
 
   async function onFinish(value) {
-    authService
-      .resetPassword({
+    try {
+      const { data } = await authService.resetPassword({
         code: code,
         ...value,
-      })
-      .then(() =>
+      });
+      if (data) {
         Modal.success({
           title: 'Success !',
           content: 'Please signin in with your new password',
@@ -23,18 +23,18 @@ export default function ResetPasswordPage() {
             window.open('about:blank', '_self');
             window.close();
           },
-        })
-      )
-      .catch(() =>
-        Modal.error({
-          title: 'Error !',
-          content: 'Some things went wrong, please try again later',
-          onOk: () => {
-            window.open('about:blank', '_self');
-            window.close();
-          },
-        })
-      );
+        });
+      }
+    } catch (e) {
+      return Modal.error({
+        title: 'Error !',
+        content: 'Some things went wrong, please try again later',
+        onOk: () => {
+          window.open('about:blank', '_self');
+          window.close();
+        },
+      });
+    }
   }
 
   return (

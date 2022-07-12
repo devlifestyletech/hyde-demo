@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/header';
-import { Input, Select, Spin } from 'antd';
+import { Input, Select } from 'antd';
 import ReservationTable from '../components/ReservationTable';
 
 import { db } from '../../../utils/firebaseConfig';

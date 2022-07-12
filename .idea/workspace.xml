@@ -5,10 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/headersConfig.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/account_management/styles/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/account_management/views/juristic_manage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/account_management/views/resident_manage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forgot_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forgot_password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/new_side_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/new_side_menu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/reset_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/reset_password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sideMenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/signin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/signin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authorize_route.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/unauthorize_route.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/address.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/address.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/headersConfig.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +65,8 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components",
@@ -102,6 +118,8 @@
       <workItem from="1657253935696" duration="2512000" />
       <workItem from="1657257571137" duration="7932000" />
       <workItem from="1657273003587" duration="3049000" />
+      <workItem from="1657542923271" duration="153000" />
+      <workItem from="1657543088027" duration="149000" />
     </task>
     <servers />
   </component>

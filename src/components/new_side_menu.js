@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-import { Menu } from 'antd';
-import { encryptStorage } from '../utils/encryptStorage';
-
+import { Menu, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import './styles/side-menu.css';
 
 //icon svg
@@ -14,6 +11,7 @@ import facilitiesIcon from './assets/facility_reservation.svg';
 import groupIcon from './assets/group.svg';
 import paymentIcon from './assets/payment.svg';
 import settingIcon from './assets/setting.svg';
+import logoutIcon from './assets/logout.svg';
 
 import { ReactComponent as AnnouncementInActiveIcon } from './assets/icons/announce.svg';
 import { ReactComponent as AnnouncementActiveIcon } from './assets/icons/announce_2.svg';
@@ -25,6 +23,7 @@ import { ReactComponent as NearbyInActiveIcon } from './assets/icons/nearby.svg'
 import { ReactComponent as NearbyActiveIcon } from './assets/icons/nearby_active.svg';
 
 import authService from '../services/auth.service';
+import { encryptStorage } from '../utils/encryptStorage';
 
 //antd constraints components
 const { SubMenu } = Menu;
@@ -32,8 +31,7 @@ const main_link = '/dashboard';
 let path = window.location.pathname.split('/');
 
 function NewSideMenu() {
-  let session = encryptStorage.getItem('user_session');
-
+  const [user, setUser] = useState();
   const [openKeys, setOpenKeys] = useState([path[2]]);
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
 
@@ -45,6 +43,13 @@ function NewSideMenu() {
     'settings',
   ];
 
+  useEffect(() => {
+    (async () => {
+      const { user } = await encryptStorage.getItem('user_session');
+      setUser(user);
+    })();
+  }, []);
+
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
 
@@ -54,7 +59,23 @@ function NewSideMenu() {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
-  console.log(session);
+
+  const showConfirm = () => {
+    Modal.confirm({
+      title: 'Do you Want to sign out?',
+      icon: <ExclamationCircleOutlined />,
+      async onOk() {
+        console.log('OK');
+        await authService.signOut();
+      },
+      okButtonProps: { shape: 'round', size: 'large', type: 'danger' },
+      onCancel() {
+        console.log('Cancel');
+      },
+      cancelButtonProps: { shape: 'round', size: 'large' },
+      autoFocusButton: null,
+    });
+  };
 
   return (
     <React.Fragment>
@@ -152,7 +173,7 @@ function NewSideMenu() {
             >
               <Link to={`${main_link}/nearby`}>Nearby</Link>
             </Menu.Item>
-            <div className={'group-name'}>User Management</div>
+            <div className={'group-name'}>Resident Management</div>
             <SubMenu
               key="members"
               icon={<img src={groupIcon} alt="chat" />}
@@ -173,7 +194,6 @@ function NewSideMenu() {
                   Room Management
                 </Link>
               </Menu.Item>
-              {/* {user?.role?.type !== ''} */}
             </SubMenu>
             <Menu.Item
               onClick={() => setOpenKeys([])}
@@ -228,12 +248,29 @@ function NewSideMenu() {
               icon={<img src={settingIcon} alt="payment" />}
               title="Settings"
             >
-              <Menu.Item key={`${main_link}/settings/signout`}>
-                <a href="/" onClick={() => authService.signOut()}>
-                  Sign Out
-                </a>
+              <Menu.Item key={`${main_link}/settings/profile`}>
+                <Link to={`${main_link}/settings/profile`}>Profile</Link>
               </Menu.Item>
+              <Menu.Item key={`${main_link}/settings/change-password`}>
+                <Link to={`${main_link}/settings/change-password`}>
+                  Change password
+                </Link>
+              </Menu.Item>
+              {user?.role?.type === 'admin_project' ? (
+                <Menu.Item key={`${main_link}/settings/admin-management`}>
+                  <Link to={`${main_link}/settings/admin-management`}>
+                    Admin Management
+                  </Link>
+                </Menu.Item>
+              ) : null}
             </SubMenu>
+            <Menu.Item
+              key={`${main_link}/signout`}
+              icon={<img src={logoutIcon} alt="logout" />}
+              onClick={showConfirm}
+            >
+              <Link to={'/signin'}>Sign Out</Link>
+            </Menu.Item>
           </Menu>
         </div>
       </div>
