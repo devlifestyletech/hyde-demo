@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Empty, Button, Modal, Tabs } from 'antd';
 import axios from 'axios';
 import { encryptStorage } from '../../../utils/encryptStorage';
-// import ProjectService from "../services/project.service";
 
 //components
 import AppendUserModal from './AppendUserModal';
@@ -83,9 +82,11 @@ export const RoomInfoModal = ({
             });
         })
         .catch((err) => {
+          console.log('Err', err);
           setEnable(false);
         });
     } else {
+      console.log('No file coming');
       setEnable(false);
     }
   };
@@ -107,7 +108,11 @@ export const RoomInfoModal = ({
               {owner.length ? (
                 owner.map((owner, index) => (
                   <div key={'owner' + index}>
-                    <UsersInfo user={owner} onEvent={() => refresh()} />
+                    <UsersInfo
+                      user={owner}
+                      onEvent={() => refresh()}
+                      isOwner={true}
+                    />
                   </div>
                 ))
               ) : (
@@ -272,6 +277,7 @@ export const RoomInfoModal = ({
                             id="input"
                             accept="image/*"
                             onChange={(e) => {
+                              // console.log(e.target.files);
                               setImageFile(e.target.files);
                               selectHandle(e);
                               setEnable(false);
@@ -296,6 +302,7 @@ export const RoomInfoModal = ({
                   disabled={enable}
                   // disabled={false}
                   onClick={() => {
+                    // console.log(addressId);
                     handleQrCode(imageFile, addressId);
                   }}
                 >
@@ -310,6 +317,7 @@ export const RoomInfoModal = ({
         userRule={userRule}
         visible={appendUserModalVisibility}
         id={id}
+        refresh={() => refresh()}
         onCancel={() => {
           setAppendUserModalVisibility(!appendUserModalVisibility);
           refresh();

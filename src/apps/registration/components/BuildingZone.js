@@ -4,29 +4,35 @@ import './styles/building_zone.css';
 import Addresses from './Addresses';
 
 export default function BuildingZone({ floorsData }) {
-	const [residences, setResidences] = useState(null);
+  const [residences, setResidences] = useState(null);
 
-	useEffect(() => {
-		(async () => {
-			setResidences(floorsData);
-		})();
-	}, [floorsData]);
+  const updateFloorsData = (id, val) => {
+    let floors = floorsData;
+    let objIndex = floors.findIndex((obj) => obj.id === id);
 
-	return (
-		<>
-			<div className='zone-build'>
-				{residences ? (
-					<Space size={[20, 24]} wrap>
-						{residences.map((residence, idx) => (
-							<div key={idx}>
-								<Addresses data={residence} />
-							</div>
-						))}
-					</Space>
-				) : (
-					<Empty />
-				)}
-			</div>
-		</>
-	);
+    floors[objIndex].resident_lists = val;
+    setResidences(floors);
+  };
+
+  useEffect(() => {
+    setResidences(floorsData);
+  }, [floorsData]);
+
+  return (
+    <>
+      <div className="zone-build">
+        {residences ? (
+          <Space size={[20, 24]} wrap>
+            {residences.map((residence, index) => (
+              <div key={index}>
+                <Addresses data={residence} update={updateFloorsData} />
+              </div>
+            ))}
+          </Space>
+        ) : (
+          <Empty />
+        )}
+      </div>
+    </>
+  );
 }

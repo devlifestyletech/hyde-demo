@@ -81,7 +81,18 @@ export default {
   addUserToAddress: async function (value) {
     const session = await encryptStorage.getItem('user_session');
     try {
-      return await axios.post(
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/users/${value.users_permissions_user}`,
+        {
+          address: value.address,
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + session.jwt,
+          },
+        }
+      );
+      await axios.post(
         `${process.env.REACT_APP_API_URL}/resident-lists`,
         value,
         {
@@ -90,23 +101,50 @@ export default {
           },
         }
       );
+      if (value.resident_role === 'Owner') {
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/addresses/${value.address}`,
+          {
+            owner: value.users_permissions_user,
+            Status_billpayment: true,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + session.jwt,
+            },
+          }
+        );
+      }
+      return true;
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  removeUserFromAddress: async function (id) {
+  removeUserFromAddress: async function (residentListId, userId) {
     const session = await encryptStorage.getItem('user_session');
     try {
-      return await axios.delete(
-        `${process.env.REACT_APP_API_URL}/resident-lists/${id}`,
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          address: null,
+        },
         {
           headers: {
             Authorization: 'Bearer ' + session.jwt,
           },
         }
       );
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/resident-lists/${residentListId}`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + session.jwt,
+          },
+        }
+      );
+      return true;
     } catch (error) {
       console.error(error);
       throw error;
