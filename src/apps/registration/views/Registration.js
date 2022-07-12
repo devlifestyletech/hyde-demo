@@ -87,6 +87,7 @@ function Registration() {
           shape="round"
           type="primary"
           icon={<PlusOutlined />}
+          className="btn-create"
           size="large"
           onClick={() => setAddNewModalVisibility(true)}
         >

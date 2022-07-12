@@ -419,6 +419,10 @@ function CreateModal({ visible, onCancel }) {
                       required: true,
                       message: 'Please input email!',
                     },
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
                   ]}
                 >
                   <Input placeholder="Please input email" />
