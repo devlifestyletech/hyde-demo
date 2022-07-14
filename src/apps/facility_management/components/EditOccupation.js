@@ -72,7 +72,7 @@ export default function EditOccupation({
       setImg(image);
     }
     handleValue();
-  }, []);
+  }, [visible]);
 
   return (
     <>
@@ -131,10 +131,6 @@ export default function EditOccupation({
             <Form.Item label="Medium status will show at" name="mediumAt">
               <Input
                 type={'number'}
-                // value={mediumClone}
-                // onChange={(val) => {
-                //   setMediumClone(val);
-                // }}
                 min={0}
                 style={{
                   borderRadius: 20,
@@ -146,10 +142,6 @@ export default function EditOccupation({
             <Form.Item label="High status will show at" name="highAt">
               <Input
                 type={'number'}
-                // value={highClone}
-                // onChange={(val) => {
-                //   setHighClone(val);
-                // }}
                 min={0}
                 style={{
                   borderRadius: 20,
