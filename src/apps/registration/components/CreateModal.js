@@ -13,15 +13,15 @@ import {
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-import './styles/ModalStyle.css';
+import './styles/modal_style.css';
 import { locale } from '../../../utils/locale';
 
 //import services from "../services"
-import addressService from '../../../services/address.service';
-import authService from '../../../services/auth.service';
+import addressService from '../../../services/addressServices';
+import authService from '../../../services/authServices';
 
 //import svg icon
-import uploadService from '../../../services/upload.service';
+import uploadService from '../../../services/uploadServices';
 import ImageIcon from '../assets/icons/image.svg';
 
 //antd variable constraints

@@ -11,14 +11,14 @@ import {
   DatePicker,
   Spin,
 } from 'antd';
-import './styles/ModalStyle.css';
+import './styles/modal_style.css';
 import moment from 'moment';
 import { ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import ImageIcon from '../assets/icons/image.svg';
 import { locale } from '../../../utils/locale';
-import addressService from '../../../services/address.service';
-import authService from '../../../services/auth.service';
-import uploadService from '../../../services/upload.service';
+import addressService from '../../../services/addressServices';
+import authService from '../../../services/authServices';
+import uploadService from '../../../services/uploadServices';
 
 const { Option } = Select;
 
@@ -210,7 +210,12 @@ export default function EditModal({ user, visible, onCancel }) {
                                     alt="upload"
                                     className="img-upload"
                                   />
-                                  <p style={{ color: 'white', fontSize: 18 }}>
+                                  <p
+                                    style={{
+                                      color: 'white',
+                                      fontSize: 18,
+                                    }}
+                                  >
                                     Click to upload image
                                   </p>
                                 </label>

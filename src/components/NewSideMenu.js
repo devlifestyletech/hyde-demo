@@ -22,7 +22,7 @@ import { ReactComponent as ChatInActiveIcon } from './assets/icons/chat_inactive
 import { ReactComponent as NearbyInActiveIcon } from './assets/icons/nearby.svg';
 import { ReactComponent as NearbyActiveIcon } from './assets/icons/nearby_active.svg';
 
-import authService from '../services/auth.service';
+import authService from '../services/authServices';
 import { encryptStorage } from '../utils/encryptStorage';
 
 //antd constraints components

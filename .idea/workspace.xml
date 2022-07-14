@@ -5,26 +5,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/apps/assets/icons/admin_divider.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/assets/icons/admin_information.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/assets/icons/admin_trash.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/assets/icons/allow.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/components/ModalAccessInfo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/components/ModalCreateJuristic.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/components/RoleAccessTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/components/style/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/settings/utils/user_role.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/apps/settings/components/style/user_table.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/craco.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/craco.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/announcement/Announcement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/announcement/Announcement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/AreaChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/AreaChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/GraphReserves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/GraphReserves.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/components/PieChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/components/PieChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/utils/facilities.data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/utils/facilitiesData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/utils/graph.data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/utils/graphData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/utils/occupation.data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/utils/occupationData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/utils/reservation.data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/utils/reservationData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/CalendarPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/FacilitiesManagementDashboardPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/facilities.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/FacilitiesManagePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/ListsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/occupation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/OccupationPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/styles/main.style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/styles/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_chat/List/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_chat/List/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_chat/screens/ChatRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_chat/screens/ChatRoom/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Report_DashBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Report_DashBoard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/fixing_report/view/Fixing_Reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/live_chat/List/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/live_chat/List/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/live_chat/screens/ChatRoom/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/nearby/NearbyService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/nearby/NearbyService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/payment/Payment_success.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/Payment_success.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/payment/payment_dashbord.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/payment/payment_dashbord.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/Addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/AppendUserModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/AppendUserModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/ChangeUserModal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/ProjectData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/ProjectData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/Statistic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/Statistic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/UserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/UserInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/styles/ModalStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/styles/modal_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/styles/Statistic.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/styles/statistic.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/services/project.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/services/projectServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/services/resident.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/services/residentServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/MemberDashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/ProjectManagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/styles/room-mng.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/styles/room_mng.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/components/ModalCreateJuristic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/components/ModalCreateJuristic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/components/RoleAccessTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/components/RoleAccessTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/settings/components/UserTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/components/UserTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/settings/styles/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/styles/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/settings/views/admin_manage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/views/admin_manage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/services/admin.services.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/services/adminServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/styles/user_table.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/utils/user_role.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/utils/userRoles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/views/admin_manage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/views/AdminManagementPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/views/change_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/views/ChangePasswordPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/views/language_setting.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/views/LanguageSettingPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/settings/views/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/settings/views/ProfilePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Messages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Messages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/confirm_registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConfirmRegistrationPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forgot_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ForgotPasswordPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/main_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainDashboardPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/new_side_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NewSideMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/no_content.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NoContentPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/reset_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ResetPasswordPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/signin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignInPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/styles/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/styles/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/MainLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/MainLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/address.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/addressServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/authServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/upload.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/uploadServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/web-sockets.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/webSocketService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,36 +150,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "code.cleanup.on.save": "true",
-    "last_opened_file_path": "/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "prettierjs.PrettierConfiguration.Package": "/opt/homebrew/lib/node_modules/prettier",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.rainbow.brackets",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/opt/homebrew/lib/node_modules/prettier&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.rainbow.brackets&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/apps/settings/components/style" />
       <recent name="$PROJECT_DIR$/src/apps/settings/components/styles" />
     </key>
   </component>
@@ -172,6 +221,7 @@
       <workItem from="1657589769818" duration="1924000" />
       <workItem from="1657591711758" duration="4730000" />
       <workItem from="1657601581580" duration="15016000" />
+      <workItem from="1657800138137" duration="2271000" />
     </task>
     <servers />
   </component>

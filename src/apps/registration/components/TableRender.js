@@ -6,7 +6,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import editIcon from '../assets/icons/edit.svg';
 import trashIcon from '../assets/icons/trash.svg';
 import EditModal from './EditModal';
-import authService from '../../../services/auth.service';
+import authService from '../../../services/authServices';
 
 export default function TableRender({ data, key, onEvent, loading }) {
   const [user, setUser] = useState();

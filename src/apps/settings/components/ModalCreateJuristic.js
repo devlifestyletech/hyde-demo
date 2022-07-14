@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import ImageIcon from '../../registration/assets/icons/image.svg';
 import { DeleteOutlined } from '@ant-design/icons';
-import uploadService from '../../../services/upload.service';
-import authService from '../../../services/auth.service';
+import uploadService from '../../../services/uploadServices';
+import authService from '../../../services/authServices';
 
 const ModalCreateJuristic = ({ visible, cancelHandler }) => {
   const [createJuristicForm] = Form.useForm();

@@ -6,7 +6,7 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
-import residentService from '../services/resident.service';
+import residentService from '../services/residentServices';
 import ChangeUserModal from './ChangeUserModal';
 
 function UsersInfo({ user, onEvent, isOwner = false }) {
@@ -79,7 +79,11 @@ function UsersInfo({ user, onEvent, isOwner = false }) {
                   user.users_permissions_user.image.url
                 }
                 alt="avatar"
-                style={{ borderRadius: 20, maxHeight: 250, maxWidth: '100%' }}
+                style={{
+                  borderRadius: 20,
+                  maxHeight: 250,
+                  maxWidth: '100%',
+                }}
               />
             </div>
           ) : (

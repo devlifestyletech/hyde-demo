@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 // import styled from "styled-components";
-import { socket } from '../../../../services/web-sockets';
-import Heading from '../../../../components/header';
+import { socket } from '../../../../services/webSocketService';
+import Heading from '../../../../components/Header';
 import Header from '../../Header';
 import Messages from '../../../../components/Messages';
 import List from '../../List';
@@ -20,6 +20,7 @@ import { Input, Spin, Tabs, Row } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
+
 const session = encryptStorage.getItem('user_session');
 
 function ChatRoom(props) {
@@ -66,7 +67,8 @@ function ChatRoom(props) {
       if (room) {
         await axios
           .get(
-            process.env.REACT_APP_API_URL + `/chats?_where[room]=${room}&_sort=time`,
+            process.env.REACT_APP_API_URL +
+              `/chats?_where[room]=${room}&_sort=time`,
             headers
           )
           .then((res) => {
@@ -95,7 +97,7 @@ function ChatRoom(props) {
   };
 
   useEffect(() => {
-    console.log('headers',headers)
+    console.log('headers', headers);
     connectChat();
   }, [room]);
 
@@ -176,34 +178,35 @@ function ChatRoom(props) {
         let imageUrl = res.data[0].url;
         // console.log('type',imageFile.type.split('/')[0])
 
-        imageFile.type.split('/')[0]==='image'?
-        socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'image',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        ):socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'file',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        )
+        imageFile.type.split('/')[0] === 'image'
+          ? socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'image',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            )
+          : socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'file',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            );
         deleteHandle();
         setOnSend(false);
       })

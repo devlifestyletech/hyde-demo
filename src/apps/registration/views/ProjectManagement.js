@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from 'react';
 
 //import services file
-import ProjectService from '../services/project.service';
+import ProjectService from '../services/projectServices';
 
 //import project component
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 
 //import ant design component
 import { Empty, Input, Spin } from 'antd';
 
 //import css file
-import './styles/room-mng.css';
+import './styles/room_mng.css';
 
 //import icons assets
 import ProjectData from '../components/ProjectData';

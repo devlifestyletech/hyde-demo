@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import authService from '../services/auth.service';
+import authService from '../services/authServices';
 import { Button, Form, Input, Modal } from 'antd';
 import './styles/main.css';
 

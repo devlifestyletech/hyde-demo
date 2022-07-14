@@ -5,12 +5,12 @@ import './styles/signin.css';
 
 import UserIcon from '../apps/assets/icons/user.svg';
 import PasswordIcon from '../apps/assets/icons/password.svg';
-import authService from '../services/auth.service';
+import authService from '../services/authServices';
 
 import { encryptStorage } from '../utils/encryptStorage';
 import { useAuth } from '../hooks/useAuth';
 
-function Signin() {
+function SigninPage() {
   const [LoginForm] = Form.useForm();
   const { signin } = useAuth();
 
@@ -94,4 +94,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default SigninPage;

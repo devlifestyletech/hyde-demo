@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import { Navigate, useLocation, useOutlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import NewSideMenu from '../components/new_side_menu';
+import NewSideMenu from '../components/NewSideMenu';
 
 const { Sider, Content } = Layout;
 

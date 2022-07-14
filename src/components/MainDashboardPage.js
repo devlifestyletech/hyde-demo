@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './header';
+import Header from './Header';
 
-function MainDashboard() {
+function MainDashboardPage() {
   return (
     <>
       <Header title="Monitoring" />
@@ -9,4 +9,4 @@ function MainDashboard() {
   );
 }
 
-export default MainDashboard;
+export default MainDashboardPage;

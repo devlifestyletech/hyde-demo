@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import { Input, Select } from 'antd';
 import ReservationTable from '../components/ReservationTable';
 
@@ -9,7 +9,7 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 // constraint
 const { Option } = Select;
 
-export default function BookingListsPage() {
+export default function ListsPage() {
   const [facilities, setFacilities] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);

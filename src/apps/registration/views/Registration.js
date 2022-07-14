@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Tabs } from 'antd';
 import TableRender from '../components/TableRender';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import { PlusOutlined } from '@ant-design/icons';
 import './styles/registration.css';
-import authService from '../../../services/auth.service';
+import authService from '../../../services/authServices';
 import CreateModal from '../components/CreateModal';
 
 const { TabPane } = Tabs;

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import { Button, Select, Spin } from 'antd';
-import './styles/main.style.css';
+import './styles/main.css';
 import { PlusOutlined } from '@ant-design/icons';
 import { db } from '../../../utils/firebaseConfig';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import addressService from '../../../services/address.service';
+import addressService from '../../../services/addressServices';
 
 //components import
 import SchedularComponent from '../components/Reservationschedular';
@@ -13,7 +13,7 @@ import CreateReservation from '../components/CreateReservation';
 
 const { Option } = Select;
 
-export default function BookingCalendarPage() {
+export default function CalendarPage() {
   const isFacilitiesMounted = useRef(false);
   const isReservationsMounted = useRef(false);
 

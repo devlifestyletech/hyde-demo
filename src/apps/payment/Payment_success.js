@@ -11,7 +11,7 @@ import {
 import { MenuBillPayment } from './components/menuBillPayment';
 import CreateBillModal from './components/Modal/ModalCreateBill';
 import './style/payment.css';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 // import io from "socket.io-client";
 // const URL = "https://crud-firestore-swagger-node.herokuapp.com/"
 // const URL ="http://localhost:8080/test"

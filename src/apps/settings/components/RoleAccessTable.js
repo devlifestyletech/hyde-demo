@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 
-import { admin_access, juristic_access } from '../utils/user_role';
+import { admin_access, juristic_access } from '../utils/userRoles';
 import { ReactComponent as AllowIcon } from '../assets/icons/allow.svg';
 import { MinusOutlined } from '@ant-design/icons';
 

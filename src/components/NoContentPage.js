@@ -1,6 +1,7 @@
 import React from 'react';
 import { Empty, Button } from 'antd';
-function NoContent() {
+
+function NoContentPage() {
   return (
     <div
       style={{
@@ -30,4 +31,4 @@ function NoContent() {
   );
 }
 
-export default NoContent;
+export default NoContentPage;

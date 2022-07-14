@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 //import services file
-import ProjectService from '../services/project.service';
+import ProjectService from '../services/projectServices';
 
 //import project components
 import { RoomInfoModal } from './RoomInfoModal';

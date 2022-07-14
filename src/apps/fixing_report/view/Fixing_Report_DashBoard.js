@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import Heading from '../../../components/header';
+import Heading from '../../../components/Header';
 import { Button, Card, Col, DatePicker, Row, Table } from 'antd';
 import { G2, Pie } from '@ant-design/charts';
 import '../style/fixingStyle.css';
@@ -31,7 +31,8 @@ export default function FixingReportDashBoard() {
     },
     {
       type: 'Repairing',
-      value: fixingData.filter((item) => item.status === 'Repairing').length || 0,
+      value:
+        fixingData.filter((item) => item.status === 'Repairing').length || 0,
     },
     {
       type: 'Success',
@@ -45,7 +46,8 @@ export default function FixingReportDashBoard() {
     },
     {
       type: 'Repairing',
-      value: todayData.filter((item) => item.status === 'Repairing').length || 0,
+      value:
+        todayData.filter((item) => item.status === 'Repairing').length || 0,
     },
     {
       type: 'Success',
@@ -234,42 +236,54 @@ export default function FixingReportDashBoard() {
   // function
   const fetchData = async () => {
     console.log('========== FETCHING ==========');
-    await axios.get(`${process.env.REACT_APP_API_URL}/fixing-reports?submission_date_gte=${year}-01-01&submission_date_lt=${parseInt(year) + 1}-01-01`, headers).then((res) => {
-      console.log('res', res.data);
-      console.log('new', new Date().toISOString().slice(0, 10));
-      setFixingData(res.data);
-      let todayTemp = [];
-      res.data.forEach((data) => {
-        let month = parseInt(data.submission_date.substring(5, 7)) - 1;
+    await axios
+      .get(
+        `${
+          process.env.REACT_APP_API_URL
+        }/fixing-reports?submission_date_gte=${year}-01-01&submission_date_lt=${
+          parseInt(year) + 1
+        }-01-01`,
+        headers
+      )
+      .then((res) => {
+        console.log('res', res.data);
+        console.log('new', new Date().toISOString().slice(0, 10));
+        setFixingData(res.data);
+        let todayTemp = [];
+        res.data.forEach((data) => {
+          let month = parseInt(data.submission_date.substring(5, 7)) - 1;
 
-        if (data.submission_date.split('T')[0] === new Date().toISOString().slice(0, 10)) {
-          todayTemp.push(data);
-        }
-
-        for (let i = 0; i < 12; i++) {
-          console.log('month', month, i);
-
-          if (month === i) {
-            if (data.status === 'Pending') {
-              console.log('Pending');
-              mockData[i].total += 1;
-              mockData[i].pending += 1;
-            } else if (data.status === 'Repairing') {
-              console.log('Repairing');
-              mockData[i].total += 1;
-              mockData[i].repairing += 1;
-            } else if (data.status === 'Success') {
-              console.log('Success');
-              mockData[i].total += 1;
-              mockData[i].success += 1;
-            }
-            break;
+          if (
+            data.submission_date.split('T')[0] ===
+            new Date().toISOString().slice(0, 10)
+          ) {
+            todayTemp.push(data);
           }
-        }
+
+          for (let i = 0; i < 12; i++) {
+            console.log('month', month, i);
+
+            if (month === i) {
+              if (data.status === 'Pending') {
+                console.log('Pending');
+                mockData[i].total += 1;
+                mockData[i].pending += 1;
+              } else if (data.status === 'Repairing') {
+                console.log('Repairing');
+                mockData[i].total += 1;
+                mockData[i].repairing += 1;
+              } else if (data.status === 'Success') {
+                console.log('Success');
+                mockData[i].total += 1;
+                mockData[i].success += 1;
+              }
+              break;
+            }
+          }
+        });
+        setTodayData(todayTemp);
+        setMonthData(mockData);
       });
-      setTodayData(todayTemp);
-      setMonthData(mockData);
-    });
   };
 
   const onChange = (value, dateString) => {
@@ -285,14 +299,17 @@ export default function FixingReportDashBoard() {
 
   return (
     <>
-      <Heading title='Service Center Dashboard' />
+      <Heading title="Service Center Dashboard" />
       {/* Card View */}
       <Row gutter={16} style={{ paddingTop: 18 }}>
         <Col span={6}>
           <Card
-            title={fixingData.filter((item) => item.status === 'Pending').length || '0'}
+            title={
+              fixingData.filter((item) => item.status === 'Pending').length ||
+              '0'
+            }
             bordered={false}
-            className='card'
+            className="card"
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -305,9 +322,12 @@ export default function FixingReportDashBoard() {
         </Col>
         <Col span={6}>
           <Card
-            title={fixingData.filter((item) => item.status === 'Repairing').length || '0'}
+            title={
+              fixingData.filter((item) => item.status === 'Repairing').length ||
+              '0'
+            }
             bordered={false}
-            className='card'
+            className="card"
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -319,9 +339,12 @@ export default function FixingReportDashBoard() {
         </Col>
         <Col span={6}>
           <Card
-            title={fixingData.filter((item) => item.status === 'Success').length || '0'}
+            title={
+              fixingData.filter((item) => item.status === 'Success').length ||
+              '0'
+            }
             bordered={false}
-            className='card'
+            className="card"
             headStyle={headStyle}
             bodyStyle={{ ...bodyStyle, background: '#79CA6C' }}
           >
@@ -332,7 +355,7 @@ export default function FixingReportDashBoard() {
           <Card
             title={fixingData.length || '0'}
             bordered={false}
-            className='card'
+            className="card"
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -345,25 +368,38 @@ export default function FixingReportDashBoard() {
       </Row>
 
       {/* Year Picker */}
-      <div className='flex-container' style={{ marginTop: 30, marginBottom: 30 }}>
+      <div
+        className="flex-container"
+        style={{ marginTop: 30, marginBottom: 30 }}
+      >
         <Row>
           <h1 style={{ marginRight: 10 }}>Fixing Management Date: </h1>
-          <DatePicker style={{ width: 250 }} onChange={onChange} picker='year' defaultValue={moment()} />
+          <DatePicker
+            style={{ width: 250 }}
+            onChange={onChange}
+            picker="year"
+            defaultValue={moment()}
+          />
         </Row>
 
-        <Button icon={<VerticalAlignBottomOutlined />} type='primary' size='large' shape='round'
-                style={{ float: 'right' }}>
+        <Button
+          icon={<VerticalAlignBottomOutlined />}
+          type="primary"
+          size="large"
+          shape="round"
+          style={{ float: 'right' }}
+        >
           Export
         </Button>
       </div>
 
       {/* Chart View */}
-      <Row gutter={[16, 16]} align='top'>
+      <Row gutter={[16, 16]} align="top">
         <Col span={12}>
           <Card
             title="Today's service status"
             bordered={false}
-            className='card'
+            className="card"
             headStyle={{
               backgroundColor: '#D3D3D3',
               height: 20,
@@ -374,12 +410,19 @@ export default function FixingReportDashBoard() {
               ...bodyStyle,
             }}
           >
-            <Pie style={{ height: 320, paddingRight: '20%', paddingLeft: '20%' }} {...todayPieChart} />
+            <Pie
+              style={{
+                height: 320,
+                paddingRight: '20%',
+                paddingLeft: '20%',
+              }}
+              {...todayPieChart}
+            />
           </Card>
           <Card
             title={`${year}'s service status`}
             bordered={false}
-            className='card'
+            className="card"
             style={{ marginTop: 28 }}
             headStyle={{
               backgroundColor: '#D3D3D3',
@@ -391,13 +434,20 @@ export default function FixingReportDashBoard() {
               ...bodyStyle,
             }}
           >
-            <Pie style={{ height: 320, paddingRight: '20%', paddingLeft: '20%' }} {...configPieChart} />
+            <Pie
+              style={{
+                height: 320,
+                paddingRight: '20%',
+                paddingLeft: '20%',
+              }}
+              {...configPieChart}
+            />
           </Card>
         </Col>
 
         <Col span={12}>
           <Table
-            className='styTableControl'
+            className="styTableControl"
             columns={columns}
             title={() => 'Status of service sorted by month'}
             dataSource={monthData}

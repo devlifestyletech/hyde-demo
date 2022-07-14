@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../../components/header';
-import { getAllJuristic } from '../services/admin.services';
+import Header from '../../../components/Header';
+import { getAllJuristic } from '../services/adminServices';
 import UserTable from '../components/UserTable';
 import { Tabs, Input, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
