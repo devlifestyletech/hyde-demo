@@ -38,7 +38,7 @@ const ModalCreateJuristic = ({ visible, cancelHandler }) => {
       try {
         const { data } = await uploadService.uploadImage(imageData);
         if (data) {
-          const newValue = JSON.stringify({ image: data[0], ...value });
+          const newValue = { image: data[0], ...value };
           console.log(typeof newValue);
           try {
             const { data } = await authService.registration(newValue);

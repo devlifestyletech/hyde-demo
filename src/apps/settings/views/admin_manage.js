@@ -30,11 +30,9 @@ function AdminManagementPage() {
   }, []);
 
   let project_admin = users.filter(
-    (user) => user.role.type === 'admin_project'
+    (user) => user?.role?.type === 'admin_project'
   );
-  let juristics = users.filter((user) => user.role.type === 'juristic');
-
-  console.log(users);
+  let juristics = users.filter((user) => user?.role?.type === 'juristic');
 
   const handleSearch = (value) => {};
 

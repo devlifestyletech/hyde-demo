@@ -64,15 +64,18 @@ function CreateModal({ visible, onCancel }) {
           try {
             const uploadImage = await uploadService.uploadImage(imageData);
             if (uploadImage) {
-              let new_value = { image: uploadImage.data[0], ...value };
+              const new_value = JSON.stringify({
+                image: uploadImage.data[0],
+                ...value,
+              });
               try {
                 const registered = await authService.registration(new_value);
                 if (registered) {
-                  let newValue = {
+                  const newValue = JSON.stringify({
                     address: registered.data.address,
                     users_permissions_user: registered.data.id,
                     resident_role: registered.data.resident_type,
-                  };
+                  });
                   try {
                     const result = await authService.addUserToAddress(newValue);
                     if (result) {
