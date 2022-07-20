@@ -105,7 +105,7 @@ export const Table_payment = () => {
     total: dataSize,
   };
   const paramsBillingPayment = {
-    status: 'Payment successfull',
+    status: 'Payment successful',
     defaultPage: 1,
     sorter: undefined,
     filters: {
@@ -806,7 +806,7 @@ export const Table_payment = () => {
       width: '10%',
       render: (BillsPayment_Status) => {
         switch (BillsPayment_Status) {
-          case 'Payment successfull':
+          case 'Payment successful':
             return <Tag color="green">{BillsPayment_Status}</Tag>;
             break;
           case 'Pending review':

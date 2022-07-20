@@ -110,7 +110,7 @@ const updateRescrpt = async (data) => {
   let result = null;
   result = await Axios.put(
     `${URLreScrpit3}/${data.idBilling}`,
-    { BillsPayment_Status: "Payment successfull" },
+    { BillsPayment_Status: "Payment successful" },
     options
   )
     .then((res) => {

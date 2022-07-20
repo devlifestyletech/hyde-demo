@@ -4144,6 +4144,13 @@ ansicolors@~0.3.2:
   resolved "https://registry.yarnpkg.com/ansicolors/-/ansicolors-0.3.2.tgz#665597de86a9ffe3aa9bfbe6cae5c6ea426b4979"
   integrity sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==
 
+antd-img-crop@^4.2.0:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/antd-img-crop/-/antd-img-crop-4.2.3.tgz#9d1127415e1230fed27d691482363985f4eb188d"
+  integrity sha512-YZgsUdfHnkBCOQ1sLXTwfVRgBdMRM//joddFnSlWe/QU52m8PPbBxtgt0YdEf+UTPXOAx6RQJp1gUjAmMU2knA==
+  dependencies:
+    react-easy-crop "^4.1.5"
+
 antd@^4.17.1:
   version "4.21.2"
   resolved "https://registry.yarnpkg.com/antd/-/antd-4.21.2.tgz#07cf60b3100cca0484ed2eee3f7068785d670a20"
@@ -12425,6 +12432,11 @@ normalize-url@^4.1.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.5.1.tgz#0dd90cf1288ee1d1313b87081c9a5932ee48518a"
   integrity sha512-9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==
 
+normalize-wheel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/normalize-wheel/-/normalize-wheel-1.0.1.tgz#aec886affdb045070d856447df62ecf86146ec45"
+  integrity sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA==
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -14733,6 +14745,14 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-easy-crop@^4.1.5:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/react-easy-crop/-/react-easy-crop-4.4.0.tgz#723832a07d6809ae45e974405c1258b57e79c565"
+  integrity sha512-fR1+rU9wSSloton0RwATI/CMVa04Ox0mufc+bgwA4LY8NAhNgGQdO/tZukrijYnaaFTF4AzcnBNKOIwJWTR3wg==
+  dependencies:
+    normalize-wheel "^1.0.1"
+    tslib "2.0.1"
 
 react-error-overlay@6.0.9, react-error-overlay@^6.0.9:
   version "6.0.9"
