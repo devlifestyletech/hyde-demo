@@ -99,7 +99,7 @@ const ModalCreateBill = () => {
           notification["success"]({
             duration: 2,
             message: "CreateBillingPayment",
-            description: "Create billing payment successfully.",
+            description: "Create billing payment successful.",
             style: { borderRadius: "25px" },
           });
           form.resetFields();

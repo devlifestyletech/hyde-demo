@@ -31,11 +31,11 @@ const ModalPendingBill = () => {
       notification["success"]({
         duration: 2,
         message: "ApproveBillingPayment",
-        description: "Approve billing payment successfully.",
+        description: "Approve billing payment successful.",
         style: { borderRadius: "25px" },
       });
       dispatch({ type: "CHANGE_COUNT", payload: 3 });
-      paramsBilling.status = "Payment successfull";
+      paramsBilling.status = "Payment successful";
       dispatch(getBillingPayment(paramsBilling));
       dispatch({ type: "MODAL_PENDING", payload: false });
     } else {
@@ -86,7 +86,7 @@ await setcommentText(currentTarget.value)
       notification["warning"]({
         duration: 2,
         message: "RejectBillingPayment",
-        description: "Reject billing payment successfully.",
+        description: "Reject billing payment successful.",
         style: { borderRadius: "25px" },
       });
       setvisible(!visible)

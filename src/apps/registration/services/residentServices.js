@@ -17,7 +17,7 @@ export default {
       if (data) {
         let d = [];
         data
-          .filter((user) => user.role.type === 'resident')
+          .filter((user) => user?.role?.type === 'resident')
           .forEach((user, index) => {
             let newData = {
               key: index,

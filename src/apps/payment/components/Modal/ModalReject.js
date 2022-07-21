@@ -64,7 +64,7 @@ const ModalReject = () => {
       notification['warning']({
         duration: 2,
         message: 'RejectBillingPayment',
-        description: 'Reject billing payment successfully.',
+        description: 'Reject billing payment successful.',
         style: { borderRadius: '25px' },
       });
       setvisible(!visible);

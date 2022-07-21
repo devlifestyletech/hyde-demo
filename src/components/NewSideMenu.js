@@ -173,6 +173,20 @@ function NewSideMenu() {
             >
               <Link to={`${main_link}/nearby`}>Nearby</Link>
             </Menu.Item>
+            <SubMenu
+              key="payment"
+              icon={<img src={paymentIcon} alt="payment" />}
+              title="Payment"
+            >
+              <Menu.Item key={`${main_link}/payment/dashboard`}>
+                <Link to={`${main_link}/payment/dashboard`}>
+                  Payment Dashboard
+                </Link>
+              </Menu.Item>
+              <Menu.Item key={`${main_link}/payment/billing`}>
+                <Link to={`${main_link}/payment/billing`}>Bill payment</Link>
+              </Menu.Item>
+            </SubMenu>
             <div className={'group-name'}>Resident Management</div>
             <SubMenu
               key="members"
@@ -226,20 +240,6 @@ function NewSideMenu() {
               </Menu.Item>
               <Menu.Item key={`${main_link}/services/chat`}>
                 <Link to={`${main_link}/services/chat`}>Message</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="payment"
-              icon={<img src={paymentIcon} alt="payment" />}
-              title="Payment"
-            >
-              <Menu.Item key={`${main_link}/payment/dashboard`}>
-                <Link to={`${main_link}/payment/dashboard`}>
-                  Payment Dashboard
-                </Link>
-              </Menu.Item>
-              <Menu.Item key={`${main_link}/payment/billing`}>
-                <Link to={`${main_link}/payment/billing`}>Bill payment</Link>
               </Menu.Item>
             </SubMenu>
             <div className="group-name">Settings</div>
