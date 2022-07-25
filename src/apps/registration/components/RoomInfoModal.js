@@ -64,13 +64,15 @@ export const RoomInfoModal = ({
         },
         header
       );
-      if (result)
+      if (result) {
         notification['success']({
           duration: 2,
           message: 'Add QR code',
           description: 'Add QR code successfully.',
           style: { borderRadius: '25px' },
         });
+        setConfirmVisible(false);
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -170,7 +172,7 @@ export const RoomInfoModal = ({
       );
     }
     return (
-      <div>
+      <Col>
         <div className="more">
           <FormOutlined
             onClick={() => {
@@ -200,7 +202,7 @@ export const RoomInfoModal = ({
             </Space>
           </Col>
         </Row>
-      </div>
+      </Col>
     );
   };
 
