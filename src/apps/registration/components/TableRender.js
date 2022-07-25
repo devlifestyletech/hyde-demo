@@ -9,7 +9,7 @@ import EditModal from './EditModal';
 import authService from '../../../services/authServices';
 
 export default function TableRender({ data, key, onEvent, loading }) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [EditModalVisibility, setEditModalVisibility] = useState(false);
   const [handleId, setHandleId] = useState(null);
 
@@ -59,24 +59,16 @@ export default function TableRender({ data, key, onEvent, loading }) {
       key: 'idx',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'idx',
-      render: (address, idx) => <div key={idx}>{address?.address_number}</div>,
-    },
-    {
-      title: 'Owner',
+      title: 'Full Name',
       dataIndex: 'fullname',
       key: 'idx',
+      render: (fullname, idx) => (
+        <div key={idx}>{fullname ? fullname : null}</div>
+      ),
     },
     {
       title: 'Nationality',
       dataIndex: 'nationality',
-      key: 'idx',
-    },
-    {
-      title: 'Type',
-      dataIndex: 'resident_type',
       key: 'idx',
     },
     {
@@ -113,12 +105,20 @@ export default function TableRender({ data, key, onEvent, loading }) {
 
   return (
     <React.Fragment key={key}>
-      <Table dataSource={data} columns={columns} loading={loading} />
+      <Table
+        dataSource={data}
+        columns={columns}
+        loading={loading}
+        pagination={{
+          pageSize: 50,
+        }}
+      />
       <EditModal
         visible={EditModalVisibility}
         onCancel={() => {
+          setUser(null);
           setEditModalVisibility(false);
-          setUser();
+          onEvent();
         }}
         user={user}
       />

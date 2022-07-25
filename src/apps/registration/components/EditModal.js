@@ -27,17 +27,10 @@ export default function EditModal({ user, visible, onCancel }) {
   const [pickedImage, setPickedImage] = useState(null);
   const [img, setImg] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-
-  const [addresses, setAddresses] = useState();
-
   useEffect(() => {
     (async () => {
       if (user?.image) {
         setImg(true);
-      }
-      const { data } = await addressService.getAllAddresses();
-      if (data) {
-        setAddresses(data);
       }
     })();
   }, [user]);
@@ -53,8 +46,6 @@ export default function EditModal({ user, visible, onCancel }) {
       lp_number: user.lp_number,
       id_number: user.id_number,
       passport_number: user.passport_number,
-      address: user.address.id,
-      resident_type: user.resident_type,
       resident_class: user.resident_class,
       vehicle_type: user.vehicle_type,
       email: user.email,
@@ -321,6 +312,10 @@ export default function EditModal({ user, visible, onCancel }) {
                         </Select.Option>
                       </Select>
                     </Form.Item>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div className="md-form">
                     <Form.Item
                       label="Nationality"
                       name="nationality"
@@ -347,10 +342,6 @@ export default function EditModal({ user, visible, onCancel }) {
                         ))}
                       </Select>
                     </Form.Item>
-                  </div>
-                </Col>
-                <Col span={12}>
-                  <div className="md-form">
                     <Form.Item
                       label="ID Number"
                       name="id_number"
@@ -366,25 +357,7 @@ export default function EditModal({ user, visible, onCancel }) {
                     <Form.Item label="Passport Number" name="passport_number">
                       <Input placeholder="Please input passport number" />
                     </Form.Item>
-                    <Form.Item label="Address" name="address">
-                      <Select
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.children
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
-                        }
-                        placeholder="Please select address"
-                      >
-                        {addresses
-                          ? addresses.map((address, index) => (
-                              <Option key={index} value={address.id}>
-                                {address.address_number}
-                              </Option>
-                            ))
-                          : null}
-                      </Select>
-                    </Form.Item>
+
                     <Form.Item
                       label="Resident Class"
                       rules={[
@@ -404,28 +377,7 @@ export default function EditModal({ user, visible, onCancel }) {
                         </Select.Option>
                       </Select>
                     </Form.Item>
-                    <Form.Item
-                      label="Resident Type"
-                      name="resident_type"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please select resident type!',
-                        },
-                      ]}
-                    >
-                      <Select placeholder="Please select resident type">
-                        <Select.Option key={'owner'} value="Owner">
-                          Owner
-                        </Select.Option>
-                        <Select.Option key={'inhabitant'} value="Inhabitant">
-                          Inhabitant
-                        </Select.Option>
-                        <Select.Option key={'tenant'} value="Tenant">
-                          Tenant
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
+
                     <Form.Item
                       label="Telephone Number"
                       name="tel"
