@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import GraphReserves from '../components/GraphReserves';
 import './styles/dashboard.css';
 import { Button, Row } from 'antd';

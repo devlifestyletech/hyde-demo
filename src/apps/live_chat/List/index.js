@@ -17,8 +17,8 @@ import noImg from '../../assets/images/noImg.jpg';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { encryptStorage } from '../../../utils/encryptStorage';
-import Service from '../../../services/auth.service';
-import { socket } from '../../../services/web-sockets';
+import Service from '../../../services/authServices';
+import { socket } from '../../../services/webSocketService';
 
 const session = encryptStorage.getItem('user_session');
 
@@ -34,6 +34,7 @@ function List(props) {
   const toDay = format(utcToZonedTime(new Date(), thTimeZone), 'dd-MM-yyyy', {
     timeZone: 'Asia/Bangkok',
   });
+
   function handleChange(value) {
     console.log(contactList[value]);
     props.handleCallback(
@@ -284,24 +285,30 @@ export default List;
 const StyledList = styled(AntdList)`
   flex: 0 0 35%;
   padding: 20px;
+
   .ant-list-item {
     padding: 0 !important;
   }
+
   .ant-list-split .ant-list-item {
     border-bottom: 0px;
   }
+
   .ant-list-item-meta-content {
     flex-grow: 0;
   }
+
   h4 {
     font-size: 25px;
   }
+
   a {
     color: #097ef0;
   }
 `;
 const ListComp = styled.div`
   background-color: white;
+
   :hover {
     background-color: rgba(0, 0, 0, 0.1);
   }

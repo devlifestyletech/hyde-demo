@@ -1,15 +1,15 @@
-import React ,{useEffect,useState} from 'react';
-import Header from '../../components/header';
+import React, { useEffect, useState } from 'react';
+import Header from '../../components/Header';
 import './components/chart/styles/dashboard.css';
-import { Button, Row,Space,Text ,Table, DatePicker} from 'antd';
+import { Button, Row, Space, Text, Table, DatePicker } from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import PieChart from './components/chart/PieChart';
 import GraphReserves from './components/chart/GraphReserves';
-import {getDashboard} from "./services/thunk-action/payment_thunk";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import { exportExcel } from './services/API/payment_api'
-import { CSVLink } from "react-csv";
+import { getDashboard } from './services/thunk-action/payment_thunk';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { exportExcel } from './services/API/payment_api';
+import { CSVLink } from 'react-csv';
 
 const columns = [
   {
@@ -19,9 +19,7 @@ const columns = [
     key: 'Date_table',
     render: (text, record) => (
       <Space size="middle">
-        <a>
-          {moment(record.Date_table).format("DD/MM/YYYY")}
-        </a>
+        <a>{moment(record.Date_table).format('DD/MM/YYYY')}</a>
       </Space>
     ),
   },
@@ -32,7 +30,7 @@ const columns = [
     key: 'Count_Bills_Date',
     render: (text, record) => (
       <p>{record.Count_Bills_Date.toLocaleString('en-US')}</p>
-     ),
+    ),
   },
   {
     title: 'Total Amount Water',
@@ -41,7 +39,7 @@ const columns = [
     key: 'Amount_water',
     render: (text, record) => (
       <p>{record.Amount_water.toLocaleString('en-US')}</p>
-     ),
+    ),
   },
   {
     title: 'Total Amount Common Fee',
@@ -50,16 +48,14 @@ const columns = [
     key: 'Amount_common_fee',
     render: (text, record) => (
       <p>{record.Amount_common_fee.toLocaleString('en-US')}</p>
-     ),
+    ),
   },
   {
     title: 'Total Overdue',
     align: 'center',
     dataIndex: 'Overdue',
     key: 'Overdue',
-    render: (text, record) => (
-     <p>{record.Overdue.toLocaleString('en-US')}</p>
-    ),
+    render: (text, record) => <p>{record.Overdue.toLocaleString('en-US')}</p>,
   },
   {
     title: 'Received Amount',
@@ -68,28 +64,33 @@ const columns = [
     key: 'Total_BillsPayment_Dashboard',
     render: (text, record) => (
       <p>{record.Total_BillsPayment_Dashboard.toLocaleString('en-US')}</p>
-     ),
+    ),
   },
 ];
 
 const Payment_dashbord = () => {
-  const {dataPaymentDashboard } = useSelector((state) => state.PaymentActionRedux);
+  const { dataPaymentDashboard } = useSelector(
+    (state) => state.PaymentActionRedux
+  );
   const { MonthPicker } = DatePicker;
-  const [month, setMonth] = useState("");
+  const [month, setMonth] = useState('');
   const dispatch = useDispatch();
-  const [FileNameExcel, setFileNameExcel] = useState("Report Payment All");
+  const [FileNameExcel, setFileNameExcel] = useState('Report Payment All');
 
   const headers = [
-    { label:"Date_table",key:"Date_table"},
-    { label:"Count_Bills_Dater",key:"Count_Bills_Date"}, 
-    { label:"Amount_water",key:"Amount_water"},
-    { label:"Amount_common_fee",key:"Amount_common_fee"},
-    { label:"Overdue",key:"Overdue"},
-    { label:"Total_BillsPayment_Dashboard",key:"Total_BillsPayment_Dashboard"},
+    { label: 'Date_table', key: 'Date_table' },
+    { label: 'Count_Bills_Dater', key: 'Count_Bills_Date' },
+    { label: 'Amount_water', key: 'Amount_water' },
+    { label: 'Amount_common_fee', key: 'Amount_common_fee' },
+    { label: 'Overdue', key: 'Overdue' },
+    {
+      label: 'Total_BillsPayment_Dashboard',
+      key: 'Total_BillsPayment_Dashboard',
+    },
   ];
-  const data =dataPaymentDashboard
+  const data = dataPaymentDashboard;
 
-  const pageSizeOptions = ["10", "30", "50", "100"];
+  const pageSizeOptions = ['10', '30', '50', '100'];
   const PaginationConfig = {
     defaultPageSize: pageSizeOptions[0],
     pageSizeOptions: pageSizeOptions,
@@ -105,33 +106,42 @@ const Payment_dashbord = () => {
   async function onMonthChange(date, dateString) {
     // console.log("date", date);
 
-     console.log("dateString", dateString);
-     if (dateString!=='') {
-       const params={filters:null}
-       const firstDayOfTheMonth = moment(dateString).startOf('month').format('YYYY-MM-DD'); //2021-04-01
-       const lastDayOfTheMonth = moment(dateString).endOf('month').format('YYYY-MM-DD'); //2021-04-30
-       await setFileNameExcel(`Report Payment Of ${moment(dateString).startOf('month').format('MMM YYYY')}`)
+    console.log('dateString', dateString);
+    if (dateString !== '') {
+      const params = { filters: null };
+      const firstDayOfTheMonth = moment(dateString)
+        .startOf('month')
+        .format('YYYY-MM-DD'); //2021-04-01
+      const lastDayOfTheMonth = moment(dateString)
+        .endOf('month')
+        .format('YYYY-MM-DD'); //2021-04-30
+      await setFileNameExcel(
+        `Report Payment Of ${moment(dateString)
+          .startOf('month')
+          .format('MMM YYYY')}`
+      );
 
-  //  console.log("firstDayOfTheMonth:",firstDayOfTheMonth);
-  //  console.log("firstDayOfTheMonth:",lastDayOfTheMonth);
-  //  console.log("dateString:",dateString);
+      //  console.log("firstDayOfTheMonth:",firstDayOfTheMonth);
+      //  console.log("firstDayOfTheMonth:",lastDayOfTheMonth);
+      //  console.log("dateString:",dateString);
 
-   params.filters={
-     firstDayOfTheMonth:firstDayOfTheMonth,
-     lastDayOfTheMonth:lastDayOfTheMonth
-   }
-   
-      await setMonth(dateString)
-      await dispatch(getDashboard(params))
-    }else{
-      await setFileNameExcel(`Report Payment All`)
-      await dispatch(getDashboard())
+      params.filters = {
+        firstDayOfTheMonth: firstDayOfTheMonth,
+        lastDayOfTheMonth: lastDayOfTheMonth,
+      };
+
+      await setMonth(dateString);
+      await dispatch(getDashboard(params));
+    } else {
+      await setFileNameExcel(`Report Payment All`);
+      await dispatch(getDashboard());
     }
   }
-  const exportExcelPayment =async () => {
-    await exportExcel(month)
-  }
-  
+
+  const exportExcelPayment = async () => {
+    await exportExcel(month);
+  };
+
   return (
     <>
       <Header title="Payment Dashboard" />
@@ -165,38 +175,44 @@ const Payment_dashbord = () => {
             </p>
           </div>
           <div className="month-graph">
-
-          <MonthPicker
-            style={{  color: '#fff',
-            width: 410,
-            borderRadius: 20,
-            backgroundColor: '#fff',}}
-            onChange={onMonthChange}
-            format="MMM YYYY"
-            picker="month"
-            placeholder="Please select Month"
-          // className="search-box"
-          />
+            <MonthPicker
+              style={{
+                color: '#fff',
+                width: 410,
+                borderRadius: 20,
+                backgroundColor: '#fff',
+              }}
+              onChange={onMonthChange}
+              format="MMM YYYY"
+              picker="month"
+              placeholder="Please select Month"
+              // className="search-box"
+            />
           </div>
 
           <div className="export-button">
-          <CSVLink filename={FileNameExcel} data={data} headers={headers}>
-            <Button
-              icon={<VerticalAlignBottomOutlined />}
-              disabled={false}
-              type="primary"
-              size="large"
-              shape="round"
-              style={{ float: 'right' }}
-              // onClick={exportExcelPayment}
-            >
-              Export All
-            </Button>
+            <CSVLink filename={FileNameExcel} data={data} headers={headers}>
+              <Button
+                icon={<VerticalAlignBottomOutlined />}
+                disabled={false}
+                type="primary"
+                size="large"
+                shape="round"
+                style={{ float: 'right' }}
+                // onClick={exportExcelPayment}
+              >
+                Export All
+              </Button>
             </CSVLink>
           </div>
 
           <div className="table-graph">
-            <Table columns={columns} dataSource={dataPaymentDashboard}  pagination={PaginationConfig} />;
+            <Table
+              columns={columns}
+              dataSource={dataPaymentDashboard}
+              pagination={PaginationConfig}
+            />
+            ;
           </div>
         </Row>
       </div>

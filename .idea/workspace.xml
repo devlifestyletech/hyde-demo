@@ -5,24 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/account_management/styles/main.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/account_management/views/juristic_manage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/account_management/views/resident_manage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/facility_management/views/lists.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forgot_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forgot_password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/new_side_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/new_side_menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/reset_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/reset_password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sideMenu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/signin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/signin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/authorize_route.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/unauthorize_route.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/address.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/address.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/auth.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/headersConfig.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/CreateModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/EditModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/components/TableRender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/registration/views/Registration.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +19,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="CSS File" />
         <option value="JavaScript File" />
       </list>
     </option>
@@ -40,12 +28,50 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="my-dev(Nueng)" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="my-dev(Nueng)" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="my-dev(Nueng)" />
+                    <option name="lastUsedInstant" value="1657589836" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="dev" />
+                    <option name="lastUsedInstant" value="1657589835" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -69,7 +95,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "code.cleanup.on.save": "true",
     "last_opened_file_path": "/Users/phongsakornsuttama/Documents/GitHub/hyde-demo/src/components",
+    "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -79,7 +107,7 @@
     "nodejs_package_manager_path": "yarn",
     "prettierjs.PrettierConfiguration.Package": "/opt/homebrew/lib/node_modules/prettier",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "advanced.settings",
     "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -87,6 +115,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/apps/settings/components/style" />
+      <recent name="$PROJECT_DIR$/src/apps/settings/components/styles" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -96,6 +128,9 @@
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>$USER_HOME$/.subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="e5e9b865-941f-45f9-a02a-b2929b2be058" name="Changes" comment="" />
@@ -120,6 +155,11 @@
       <workItem from="1657273003587" duration="3049000" />
       <workItem from="1657542923271" duration="153000" />
       <workItem from="1657543088027" duration="149000" />
+      <workItem from="1657589769818" duration="1924000" />
+      <workItem from="1657591711758" duration="4730000" />
+      <workItem from="1657601581580" duration="15016000" />
+      <workItem from="1657800138137" duration="2271000" />
+      <workItem from="1658381781230" duration="6003000" />
     </task>
     <servers />
   </component>
@@ -138,7 +178,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Select, Modal } from 'antd';
-import ResidentService from '../services/resident.service';
+import ResidentService from '../services/residentServices';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export default function ChangeUserModal({

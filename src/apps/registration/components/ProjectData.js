@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './styles/project.css';
 import { Spin, Empty, Pagination } from 'antd';
-import ProjectService from '../services/project.service';
+import ProjectService from '../services/projectServices';
 import BuildingZone from './BuildingZone';
 import './styles/building_zone.css';
 

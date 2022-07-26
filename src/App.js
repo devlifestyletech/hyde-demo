@@ -9,17 +9,17 @@ import { auth } from './utils/firebaseConfig';
 import MainLayout from './layout/MainLayout';
 import NoAuthLayout from './layout/NoAuthLayout';
 //Unauthorized routes
-import Signin from './components/signin';
-import ResetPasswordPage from './components/reset_password';
-import ForgotPasswordPage from './components/forgot_password';
-import ConfirmRegistrationPage from './components/confirm_registration';
+import Signin from './components/SignInPage';
+import ResetPasswordPage from './components/ResetPasswordPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage';
+import ConfirmRegistrationPage from './components/ConfirmRegistrationPage';
 //Authorized routes
-import MainDashboard from './components/main_dashboard';
-import FacilitiesManagementDashboardPage from './apps/facility_management/views/dashboard';
-import BookingCalendarPage from './apps/facility_management/views/calendar';
-import BookingListsPage from './apps/facility_management/views/lists';
-import FacilitiesManage from './apps/facility_management/views/facilities';
-import Occupation from './apps/facility_management/views/occupation';
+import MainDashboard from './components/MainDashboardPage';
+import FacilitiesManagementDashboardPage from './apps/facility_management/views/FacilitiesManagementDashboardPage';
+import BookingCalendarPage from './apps/facility_management/views/CalendarPage';
+import BookingListsPage from './apps/facility_management/views/ListsPage';
+import FacilitiesManage from './apps/facility_management/views/FacilitiesManagePage';
+import Occupation from './apps/facility_management/views/OccupationPage';
 import MemberDashboardPage from './apps/registration/views/MemberDashboard';
 import Registration from './apps/registration/views/Registration';
 import RoomManagement from './apps/registration/views/ProjectManagement';
@@ -33,10 +33,10 @@ import PaymentSuccess from './apps/payment/Payment_success';
 import PaymentDashboard from './apps/payment/payment_dashbord';
 
 import { signInAnonymously } from 'firebase/auth';
-import NoContent from './components/no_content';
-import ProfilePage from './apps/settings/views/profile';
-import ChangePasswordPage from './apps/settings/views/change_password';
-import AdminManagementPage from './apps/settings/views/admin_manage';
+import NoContent from './components/NoContentPage';
+import ProfilePage from './apps/settings/views/ProfilePage';
+import ChangePasswordPage from './apps/settings/views/ChangePasswordPage';
+import AdminManagementPage from './apps/settings/views/AdminManagementPage';
 
 const App = () => {
   useEffect(() => {

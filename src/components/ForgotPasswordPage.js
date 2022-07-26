@@ -2,7 +2,7 @@ import { Button, Form, Input, Modal, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import EmailIcon from './assets/email.svg';
-import authService from '../services/auth.service';
+import authService from '../services/authServices';
 
 function ForgotPasswordPage() {
   const [ForgotPasswordForm] = Form.useForm();

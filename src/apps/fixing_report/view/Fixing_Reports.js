@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import Heading from '../../../components/header';
+import Heading from '../../../components/Header';
 import { Button, Image, Input, Table } from 'antd';
 import ReportModal from '../service/reportModal';
 import axios from 'axios';
@@ -206,7 +206,11 @@ const FixingReports = () => {
           // .filter((item) => item.owner != null && item.owner !== undefined)
           .filter((item) => item.fixing_reports.length > 0)
           .forEach((residence, index) => {
-            let residenceData = { key: index, number: index + 1, ...residence };
+            let residenceData = {
+              key: index,
+              number: index + 1,
+              ...residence,
+            };
             residence.fixing_reports.forEach((report, index) => {
               let date_show = format(
                 utcToZonedTime(new Date(report.submission_date), thTimeZone),
