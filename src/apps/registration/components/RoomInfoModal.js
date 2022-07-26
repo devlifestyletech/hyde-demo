@@ -246,65 +246,76 @@ export const RoomInfoModal = ({
                 </div>
               )}
             </TabPane>
-            <TabPane tab="Inhabitant" key="inhabitant">
-              {inhabitant.length ? (
-                inhabitant.map((inhabitant, index) => (
-                  <div key={'inhabitant' + index}>
-                    <UsersInfo user={inhabitant} onEvent={() => refresh()} />
-                  </div>
-                ))
-              ) : (
-                <div style={{ textAlign: 'center' }}>
-                  <Empty />
-                </div>
-              )}
-              {inhabitant.length < 4 ? (
-                <div style={{ textAlign: 'center' }}>
-                  <Button
-                    style={{ alignSelf: 'center' }}
-                    shape="round"
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                      setUserRule('Inhabitant');
-                      setAppendUserModalVisibility(!appendUserModalVisibility);
-                    }}
-                  >
-                    Add inhabitant user
-                  </Button>
-                </div>
-              ) : null}
-            </TabPane>
-            <TabPane tab="Tenant" key="tenant">
-              {tenant.length ? (
-                tenant.map((tenant, index) => (
-                  <div key={'tenant' + index}>
-                    <UsersInfo user={tenant} onEvent={() => refresh()} />
-                  </div>
-                ))
-              ) : (
-                <div style={{ textAlign: 'center' }}>
-                  <Empty />
-                </div>
-              )}
-              {tenant.length < 4 ? (
-                <div style={{ textAlign: 'center' }}>
-                  <Button
-                    style={{ alignSelf: 'center' }}
-                    shape="round"
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                      setUserRule('Tenant');
-                      setAppendUserModalVisibility(!appendUserModalVisibility);
-                    }}
-                  >
-                    Add tenant user
-                  </Button>
-                </div>
-              ) : null}
-            </TabPane>
-            <TabPane tab="QR Code" key="qrCode">
-              <TabsQrCode />
-            </TabPane>
+            {owner.length ? (
+              <>
+                <TabPane tab="Inhabitant" key="inhabitant">
+                  {inhabitant.length ? (
+                    inhabitant.map((inhabitant, index) => (
+                      <div key={'inhabitant' + index}>
+                        <UsersInfo
+                          user={inhabitant}
+                          onEvent={() => refresh()}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: 'center' }}>
+                      <Empty />
+                    </div>
+                  )}
+                  {inhabitant.length < 4 ? (
+                    <div style={{ textAlign: 'center' }}>
+                      <Button
+                        style={{ alignSelf: 'center' }}
+                        shape="round"
+                        icon={<PlusCircleOutlined />}
+                        onClick={() => {
+                          setUserRule('Inhabitant');
+                          setAppendUserModalVisibility(
+                            !appendUserModalVisibility
+                          );
+                        }}
+                      >
+                        Add inhabitant user
+                      </Button>
+                    </div>
+                  ) : null}
+                </TabPane>
+                <TabPane tab="Tenant" key="tenant">
+                  {tenant.length ? (
+                    tenant.map((tenant, index) => (
+                      <div key={'tenant' + index}>
+                        <UsersInfo user={tenant} onEvent={() => refresh()} />
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: 'center' }}>
+                      <Empty />
+                    </div>
+                  )}
+                  {tenant.length < 4 ? (
+                    <div style={{ textAlign: 'center' }}>
+                      <Button
+                        style={{ alignSelf: 'center' }}
+                        shape="round"
+                        icon={<PlusCircleOutlined />}
+                        onClick={() => {
+                          setUserRule('Tenant');
+                          setAppendUserModalVisibility(
+                            !appendUserModalVisibility
+                          );
+                        }}
+                      >
+                        Add tenant user
+                      </Button>
+                    </div>
+                  ) : null}
+                </TabPane>
+                <TabPane tab="QR Code" key="qrCode">
+                  <TabsQrCode />
+                </TabPane>
+              </>
+            ) : null}
           </Tabs>
         </div>
       </Modal>
