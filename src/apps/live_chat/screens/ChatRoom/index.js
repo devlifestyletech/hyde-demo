@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 // import styled from "styled-components";
-import { socket } from '../../../../services/web-sockets';
-import Heading from '../../../../components/header';
+import { socket } from '../../../../services/webSocketService';
+import Heading from '../../../../components/Header';
 import Header from '../../Header';
 import Messages from '../../../../components/Messages';
 import List from '../../List';
@@ -174,33 +174,33 @@ function ChatRoom(props) {
 
         imageFile.type.split('/')[0] === 'image'
           ? socket.emit(
-            'sendMessage',
-            {
-              userData: chatData,
-              type: 'image',
-              message: imageUrl,
-              time: new Date().toISOString(),
-            },
-            (error) => {
-              if (error) {
-                alert(error);
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'image',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
               }
-            }
-          )
+            )
           : socket.emit(
-            'sendMessage',
-            {
-              userData: chatData,
-              type: 'file',
-              message: imageUrl,
-              time: new Date().toISOString(),
-            },
-            (error) => {
-              if (error) {
-                alert(error);
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'file',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
               }
-            }
-          );
+            );
         deleteHandle();
         setOnSend(false);
       })
@@ -327,7 +327,11 @@ function ChatRoom(props) {
                 style={{ display: 'none' }}
               />
               <TextInput
-                placeholder={room!==''?"Type your message":"Please select room to connect"}
+                placeholder={
+                  room !== ''
+                    ? 'Type your message'
+                    : 'Please select room to connect'
+                }
                 value={message}
                 onChange={handleChange}
                 onFocus={handleInputFocus}

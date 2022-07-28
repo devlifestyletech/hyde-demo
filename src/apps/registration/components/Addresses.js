@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 //import services file
-import ProjectService from '../services/project.service';
+import ProjectService from '../services/projectServices';
 
 //import project components
 import { RoomInfoModal } from './RoomInfoModal';
@@ -17,27 +17,27 @@ export default function Addresses({ data, update }) {
   const [roomInfoModalVisibility, setRoomInfoModalVisibility] = useState(false);
   const [inhabitant, setInhabitant] = useState([]);
   const [tenant, setTenant] = useState([]);
-  const [qrCode, setQrCode] = useState(null);
   const [addressId, setAddressId] = useState(null);
+  const [qrOpenGate, setqrOpenGate] = useState('');
+  const [qeCodeSmartLocker, setQeCodeSmartLocker] = useState('');
   const [refresh, setRefresh] = useState(true);
 
   //actions
   useEffect(() => {
-    (async () => {
-      ProjectService.getResidentListByResidenceId(data.id).then((res) => {
-        update(data.id, res.data);
-        // console.log(res.data);
-        setResidentList(res.data);
-        setOwner(res.data.filter((user) => user.resident_role === 'Owner'));
-        setInhabitant(
-          res.data.filter((user) => user.resident_role === 'Inhabitant')
-        );
-        setTenant(res.data.filter((user) => user.resident_role === 'Tenant'));
-        setQrCode(res.data[0]?.address?.qr_parking?.url ?? undefined);
-        setAddressId(res.data[0]?.address.id ?? null);
-      });
-      setRefresh(false);
-    })();
+    ProjectService.getResidentListByResidenceId(data.id).then((res) => {
+      update(data.id, res.data);
+      // console.log(res.data);
+      setResidentList(res.data);
+      setOwner(res.data.filter((user) => user.resident_role === 'Owner'));
+      setInhabitant(
+        res.data.filter((user) => user.resident_role === 'Inhabitant')
+      );
+      setTenant(res.data.filter((user) => user.resident_role === 'Tenant'));
+      setAddressId(res.data[0]?.address.id ?? null);
+      setqrOpenGate(res.data[0]?.address.qr_code_open_gate ?? null);
+      setQeCodeSmartLocker(res.data[0]?.address.qr_code_smart_locker ?? null);
+    });
+    setRefresh(false);
   }, [data.id, refresh]);
 
   return (
@@ -138,9 +138,10 @@ export default function Addresses({ data, update }) {
           owner={owner}
           inhabitant={inhabitant}
           tenant={tenant}
-          qrCode={qrCode}
           addressId={addressId}
           visible={roomInfoModalVisibility}
+          qrOpenGate={qrOpenGate}
+          qrCodeSmartLocker={qeCodeSmartLocker}
           refresh={() => {
             setRefresh(!refresh);
           }}

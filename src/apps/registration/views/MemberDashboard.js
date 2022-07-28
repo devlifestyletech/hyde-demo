@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import BarGraph from '../components/BarGraph';
 import PieGraph from '../components/PieGraph';
 import Statistic from '../components/Statistic';

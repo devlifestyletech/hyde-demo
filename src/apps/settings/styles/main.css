@@ -1,1 +1,13 @@
-@import './user_table.css';
+.container {
+    flex: 1;
+}
+
+.search-container {
+    flex-direction: row;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.search-container .ant-btn {
+    float: right;
+}

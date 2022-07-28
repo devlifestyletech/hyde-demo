@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
-import Heading from '../../components/header';
+import Heading from '../../components/Header';
 import {
   Button,
   Col,
@@ -300,7 +300,7 @@ function Announcement() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-        return;
+
       } else {
         if (pickedImage) {
           setImageBorder('inputImage');
@@ -750,7 +750,7 @@ function Announcement() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-        return;
+
       } else {
         if (pickedImage) {
           setImageBorder('inputImage');

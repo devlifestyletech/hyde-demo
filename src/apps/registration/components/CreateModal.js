@@ -13,15 +13,15 @@ import {
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-import './styles/ModalStyle.css';
+import './styles/modal_style.css';
 import { locale } from '../../../utils/locale';
 
 //import services from "../services"
-import addressService from '../../../services/address.service';
-import authService from '../../../services/auth.service';
+import addressService from '../../../services/addressServices';
+import authService from '../../../services/authServices';
 
 //import svg icon
-import uploadService from '../../../services/upload.service';
+import uploadService from '../../../services/uploadServices';
 import ImageIcon from '../assets/icons/image.svg';
 
 //antd variable constraints
@@ -32,13 +32,6 @@ function CreateModal({ visible, onCancel }) {
   const [CreateResidentForm] = Form.useForm();
   const [imageFile, setImageFile] = useState(null);
   const [pickedImage, setPickedImage] = useState(null);
-  const [addresses, setAddresses] = useState();
-
-  useEffect(() => {
-    (async () => {
-      addressService.getAllAddresses().then((res) => setAddresses(res.data));
-    })();
-  }, []);
 
   const selectImage = (e) => {
     setImageFile(e.target.files[0]);
@@ -64,26 +57,16 @@ function CreateModal({ visible, onCancel }) {
           try {
             const uploadImage = await uploadService.uploadImage(imageData);
             if (uploadImage) {
-              let new_value = { image: uploadImage.data[0], ...value };
+              const new_value = JSON.stringify({
+                image: uploadImage.data[0],
+                ...value,
+              });
               try {
                 const registered = await authService.registration(new_value);
                 if (registered) {
-                  let newValue = {
-                    address: registered.data.address,
-                    users_permissions_user: registered.data.id,
-                    resident_role: registered.data.resident_type,
-                  };
-                  try {
-                    const result = await authService.addUserToAddress(newValue);
-                    if (result) {
-                      message.success('Registration finished');
-                      resolve('Success');
-                      onCancel();
-                    }
-                  } catch (e) {
-                    console.error(e);
-                    reject(e);
-                  }
+                  message.success('Registration finished');
+                  resolve('Success');
+                  onCancel();
                 }
               } catch (e) {
                 console.error(e);
@@ -154,8 +137,6 @@ function CreateModal({ visible, onCancel }) {
                   nationality: value.nationality,
                   id_number: value.id_number,
                   passport_number: value.passport_number,
-                  address: value.address,
-                  resident_type: value.resident_type,
                   resident_class: value.resident_class,
                   vehicle_type: value.vehicle_type,
                   project: '61b464ff4abbaa01b461bc5f',
@@ -285,6 +266,10 @@ function CreateModal({ visible, onCancel }) {
                     </Select.Option>
                   </Select>
                 </Form.Item>
+              </div>
+            </Col>
+            <Col span={12}>
+              <div className="md-form">
                 <Form.Item
                   label="Nationality"
                   name="nationality"
@@ -311,10 +296,6 @@ function CreateModal({ visible, onCancel }) {
                     ))}
                   </Select>
                 </Form.Item>
-              </div>
-            </Col>
-            <Col span={12}>
-              <div className="md-form">
                 <Form.Item
                   label="ID Number"
                   name="id_number"
@@ -330,34 +311,34 @@ function CreateModal({ visible, onCancel }) {
                 <Form.Item label="Passport Number" name="passport_number">
                   <Input placeholder="Please input passport number" />
                 </Form.Item>
-                <Form.Item
-                  label="Address"
-                  name="address"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select address number!',
-                    },
-                  ]}
-                >
-                  <Select
-                    showSearch
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                    placeholder="Please select address"
-                  >
-                    {addresses
-                      ? addresses.map((address, idx) => (
-                          <Option key={idx} value={address.id}>
-                            {address.address_number}
-                          </Option>
-                        ))
-                      : null}
-                  </Select>
-                </Form.Item>
+                {/*<Form.Item*/}
+                {/*  label="Address"*/}
+                {/*  name="address"*/}
+                {/*  rules={[*/}
+                {/*    {*/}
+                {/*      required: true,*/}
+                {/*      message: 'Please select address number!',*/}
+                {/*    },*/}
+                {/*  ]}*/}
+                {/*>*/}
+                {/*  <Select*/}
+                {/*    showSearch*/}
+                {/*    filterOption={(input, option) =>*/}
+                {/*      option.children*/}
+                {/*        .toLowerCase()*/}
+                {/*        .indexOf(input.toLowerCase()) >= 0*/}
+                {/*    }*/}
+                {/*    placeholder="Please select address"*/}
+                {/*  >*/}
+                {/*    {addresses*/}
+                {/*      ? addresses.map((address, idx) => (*/}
+                {/*          <Option key={idx} value={address.id}>*/}
+                {/*            {address.address_number}*/}
+                {/*          </Option>*/}
+                {/*        ))*/}
+                {/*      : null}*/}
+                {/*  </Select>*/}
+                {/*</Form.Item>*/}
                 <Form.Item
                   label="Resident Class"
                   rules={[
@@ -377,28 +358,28 @@ function CreateModal({ visible, onCancel }) {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-                <Form.Item
-                  label="Resident Type"
-                  name="resident_type"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select resident type!',
-                    },
-                  ]}
-                >
-                  <Select placeholder="Please select resident type">
-                    <Select.Option key={'owner'} value="Owner">
-                      Owner
-                    </Select.Option>
-                    <Select.Option key={'inhabitant'} value="Inhabitant">
-                      Inhabitant
-                    </Select.Option>
-                    <Select.Option key={'tenant'} value="Tenant">
-                      Tenant
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
+                {/*<Form.Item*/}
+                {/*  label="Resident Type"*/}
+                {/*  name="resident_type"*/}
+                {/*  rules={[*/}
+                {/*    {*/}
+                {/*      required: true,*/}
+                {/*      message: 'Please select resident type!',*/}
+                {/*    },*/}
+                {/*  ]}*/}
+                {/*>*/}
+                {/*  <Select placeholder="Please select resident type">*/}
+                {/*    <Select.Option key={'owner'} value="Owner">*/}
+                {/*      Owner*/}
+                {/*    </Select.Option>*/}
+                {/*    <Select.Option key={'inhabitant'} value="Inhabitant">*/}
+                {/*      Inhabitant*/}
+                {/*    </Select.Option>*/}
+                {/*    <Select.Option key={'tenant'} value="Tenant">*/}
+                {/*      Tenant*/}
+                {/*    </Select.Option>*/}
+                {/*  </Select>*/}
+                {/*</Form.Item>*/}
                 <Form.Item
                   label="Telephone Number"
                   name="tel"
@@ -418,6 +399,10 @@ function CreateModal({ visible, onCancel }) {
                     {
                       required: true,
                       message: 'Please input email!',
+                    },
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
                     },
                   ]}
                 >

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Tabs } from 'antd';
 import TableRender from '../components/TableRender';
-import Header from '../../../components/header';
+import Header from '../../../components/Header';
 import { PlusOutlined } from '@ant-design/icons';
 import './styles/registration.css';
-import authService from '../../../services/auth.service';
+import authService from '../../../services/authServices';
 import CreateModal from '../components/CreateModal';
 
 const { TabPane } = Tabs;
@@ -50,26 +50,6 @@ function Registration() {
     setSearchResident(data);
   };
 
-  let owner_users = residents.filter((user) => user.resident_type === 'Owner');
-  let inhabitant_users = residents.filter(
-    (user) => user.resident_type === 'Inhabitant'
-  );
-  let tenant_users = residents.filter(
-    (user) => user.resident_type === 'Tenant'
-  );
-
-  if (search !== '') {
-    owner_users = searchResident.filter(
-      (user) => user.resident_type === 'Owner'
-    );
-    inhabitant_users = searchResident.filter(
-      (user) => user.resident_type === 'Inhabitant'
-    );
-    tenant_users = searchResident.filter(
-      (user) => user.resident_type === 'Tenant'
-    );
-  }
-
   return (
     <>
       <Header title="Registration" />
@@ -87,35 +67,21 @@ function Registration() {
           shape="round"
           type="primary"
           icon={<PlusOutlined />}
+          className="btn-create"
           size="large"
           onClick={() => setAddNewModalVisibility(true)}
         >
           Add new
         </Button>
       </div>
-
       <div className="regis-table">
-        <Tabs>
-          <TabPane tab="All" key="1">
-            <TableRender
-              loading={loading}
-              data={search !== '' ? searchResident : residents}
-              key="1"
-              onEvent={() => setRefresh(!refresh)}
-            />
-          </TabPane>
-          <TabPane tab="Owner" key="2">
-            <TableRender loading={loading} data={owner_users} key="2" />
-          </TabPane>
-          <TabPane tab="Inhabitant" key="3">
-            <TableRender loading={loading} data={inhabitant_users} key="3" />
-          </TabPane>
-          <TabPane tab="Tenant" key="4">
-            <TableRender loading={loading} data={tenant_users} key="4" />
-          </TabPane>
-        </Tabs>
+        <TableRender
+          loading={loading}
+          data={search !== '' ? searchResident : residents}
+          key="1"
+          onEvent={() => setRefresh(!refresh)}
+        />
       </div>
-
       <CreateModal
         visible={addNewModalVisibility}
         onCancel={() => {

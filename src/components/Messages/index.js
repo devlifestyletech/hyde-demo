@@ -6,7 +6,7 @@ import './messageStyle.css';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import moment from 'moment';
 
-import { socket } from '../../services/web-sockets';
+import { socket } from '../../services/webSocketService';
 
 function Messages(props) {
   const thTimeZone = 'Asia/Bangkok';
@@ -24,9 +24,9 @@ function Messages(props) {
   });
 
   function timeFormat(date) {
-    let today = moment().isSame(date, 'days') ;
+    let today = moment().isSame(date, 'days');
     // console.log('today',today);
-    return !today 
+    return !today
       ? format(utcToZonedTime(new Date(date), thTimeZone), 'dd/MMM/yyyy', {
           timeZone: 'Asia/Bangkok',
         })
@@ -82,6 +82,7 @@ function Messages(props) {
     </StyledMessages>
   );
 }
+
 export default Messages;
 const StyledMessages = styled.div`
   padding: 5% 0;
