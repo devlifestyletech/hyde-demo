@@ -66,6 +66,9 @@ function NewSideMenu() {
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         console.log('OK');
+        const dataFCMToken = await encryptStorage.getItem('fcm_token');
+        console.log("dataFCM_Token:",dataFCMToken);
+        await authService.unsubscribeFCMToken(dataFCMToken)
         await authService.signOut();
       },
       okButtonProps: { shape: 'round', size: 'large', type: 'danger' },

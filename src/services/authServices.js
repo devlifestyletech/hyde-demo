@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { encryptStorage } from '../utils/encryptStorage';
-
+require("dotenv").config();
 export default {
   signIn: async function (value) {
     try {
@@ -144,6 +144,40 @@ export default {
         `${process.env.REACT_APP_API_URL}/auth/reset-password`,
         value
       );
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  registrationFCMToken:async function (value) {
+    console.log("log process",process.env.NOTI_DEV_SERVER)
+    try {
+      return await axios.post(
+        `https://noti-dev.ap.ngrok.io/api/message/registration`,
+        value
+      )
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  subscribeFCMToken:async function (value) {
+    try {
+      return await axios.post(
+        `https://noti-dev.ap.ngrok.io/api/message/topics/subscribe`,
+        value
+      )
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  unsubscribeFCMToken:async function (value) {
+    try {
+      return await axios.post(
+        `https://noti-dev.ap.ngrok.io/api/message/topics/unsubscribe`,
+        value
+      )
     } catch (error) {
       console.error(error);
       throw error;

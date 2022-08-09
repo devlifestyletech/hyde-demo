@@ -9,7 +9,8 @@ import authService from '../services/authServices';
 
 import { encryptStorage } from '../utils/encryptStorage';
 import { useAuth } from '../hooks/useAuth';
-
+import { fcmWeb } from '../utils/firebaseConfig'
+import { AxisConstantLineStyle } from 'devextreme-react/chart';
 function SigninPage() {
   const [LoginForm] = Form.useForm();
   const { signin } = useAuth();
@@ -21,6 +22,7 @@ function SigninPage() {
         try {
           await encryptStorage.setItem('user_session', JSON.stringify(data));
           await signin();
+          await fcmTokenDashboard(data.user.id)
         } catch (e) {
           console.error(e.message);
         }
@@ -43,6 +45,29 @@ function SigninPage() {
       });
     }
   };
+  const fcmTokenDashboard = async(userId)=>{
+    const payload={
+        token:null,
+        userId:null
+    }
+if (userId !==undefined) {
+    payload.userId=userId
+}
+   const dataFCMWeb=await fcmWeb()
+   if (dataFCMWeb.status) {
+    payload.token=dataFCMWeb.fcm_token
+   }
+
+    if (payload.token&&payload.userId) {
+   const {status}= await authService.registrationFCMToken(payload)
+   console.log("status",status)
+   if (status ===201) {
+     payload.topic="Admins"
+    await authService.subscribeFCMToken(payload)
+    await encryptStorage.setItem('fcm_token', payload);
+   }
+    }
+  }
   const onFinishFailed = (error) => {
     console.debug(error);
   };
