@@ -9,18 +9,18 @@ import '../styles/profile.css';
 
 import NoImage from '../../assets/images/noImg.jpg';
 
-// set static variable
-const session = encryptStorage.getItem('user_session');
-const header = {
-  headers: {
-    Authorization: 'Bearer ' + session.jwt,
-  },
-};
-const URL = process.env.REACT_APP_API_URL;
-const userWithIdURL = `/users/${session.user.id}`;
-const uploadURL = `/upload`;
-
 function ProfilePage() {
+  // set static variables
+  const session = encryptStorage.getItem('user_session');
+  const header = {
+    headers: {
+      Authorization: 'Bearer ' + session.jwt,
+    },
+  };
+  // variables
+  const URL = process.env.REACT_APP_API_URL;
+  const userWithIdURL = `/users/${session.user.id}`;
+  const uploadURL = `/upload`;
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
 
