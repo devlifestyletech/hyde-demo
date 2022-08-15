@@ -90,8 +90,8 @@ await setcommentText(currentTarget.value)
         style: { borderRadius: "25px" },
       });
       setvisible(!visible)
-      dispatch({ type: "CHANGE_COUNT", payload: 1 });
-      paramsBilling.status = "Wait for payment";
+      dispatch({ type: "CHANGE_COUNT", payload: 4 });
+      paramsBilling.status = "Payment annotation";
       dispatch(getBillingPayment(paramsBilling));
       dispatch({ type: "MODAL_PENDING", payload: false });
     } else {

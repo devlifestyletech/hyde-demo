@@ -5,6 +5,7 @@ require("dotenv").config();
 const URLreScrpit = `${process.env.REACT_APP_API_URL}/payments`;
 const URLreScrpit2 = `${process.env.REACT_APP_API_URL}/payments/createBillingPayment`;
 const URLreScrpit3 = `${process.env.REACT_APP_API_URL}/payments/updatePayment`;
+const URLreScrpit4 = `${process.env.REACT_APP_API_URL}/payments/rejectReceipt`;
 const URLPaymentDashboard = `${process.env.REACT_APP_API_URL}/payment-data`;
 const URLPaymentCountBills = `${process.env.REACT_APP_API_URL}/payments/reportBillingPayment`;
 const URLPaymentCountBillsOfMonth = `${process.env.REACT_APP_API_URL}/payments/getTotalYear`;
@@ -139,7 +140,7 @@ const updateRescrpt = async (data) => {
 const rejectRescrpt = async (data, annotaion) => {
   console.log("update:", annotaion);
   const result = await Axios.put(
-    `${URLreScrpit}/${data.idBilling}`,
+    `${URLreScrpit4}/${data.idBilling}`,
     { BillsPayment_Status: "Payment annotation", annotation_payment: annotaion },
     options
   )
