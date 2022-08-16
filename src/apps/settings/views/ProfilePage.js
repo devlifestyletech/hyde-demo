@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../../components/Header';
-import { Row, Col, Avatar, Button, Space } from 'antd';
+import { Row, Col, Avatar, Button, Space, notification } from 'antd';
 import axios from 'axios';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import EditProfileModal from '../components/EditProfileModal';
@@ -62,7 +62,12 @@ function ProfilePage() {
       )
       .then(() => {
         setVisible(false);
-        alert('Edit profile success!');
+        notification['success']({
+          duration: 2,
+          message: 'Edit profile',
+          description: 'Edit profile successfully.',
+          style: { borderRadius: '25px' },
+        });
         fetchData();
       })
       .catch((err) => {
@@ -78,7 +83,7 @@ function ProfilePage() {
     <>
       <Header title={'Profile'} />
       <div className="profileContainer">
-        <Col style={{ width: '100%' }} align="middle">
+        <Col align="middle">
           <Col span={12}>
             <div
               style={{
