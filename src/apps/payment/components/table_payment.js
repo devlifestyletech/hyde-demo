@@ -96,7 +96,7 @@ export const Table_payment = () => {
   );
 
   // setting pagination Option
-  const pageSizeOptions = ['5', '20', '30', '40'];
+  const pageSizeOptions = ['20', '40', '60', '100'];
   const PaginationConfig = {
     defaultPageSize: pageSizeOptions[0],
     pageSizeOptions: pageSizeOptions,
