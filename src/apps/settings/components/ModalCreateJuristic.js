@@ -4,8 +4,9 @@ import ImageIcon from '../../registration/assets/icons/image.svg';
 import { DeleteOutlined } from '@ant-design/icons';
 import uploadService from '../../../services/uploadServices';
 import authService from '../../../services/authServices';
+import { da } from 'date-fns/locale';
 
-const ModalCreateJuristic = ({ visible, cancelHandler }) => {
+const ModalCreateJuristic = ({ visible, cancelHandler, onRefresh }) => {
   const [createJuristicForm] = Form.useForm();
   const [imageFile, setImageFile] = useState(null);
   const [pickedImage, setPickedImage] = useState(null);
@@ -39,11 +40,19 @@ const ModalCreateJuristic = ({ visible, cancelHandler }) => {
         const { data } = await uploadService.uploadImage(imageData);
         if (data) {
           const newValue = { image: data[0], ...value };
-          console.log(typeof newValue);
+          // console.log(typeof newValue);
           try {
             const { data } = await authService.registration(newValue);
             if (data) {
-              resolve('Success');
+              try {
+                await authService.editUserData(data.user.id, {
+                  role: '61b32a96268f0d019c9c0dff',
+                });
+                resolve('Success');
+                onRefresh();
+              } catch (error) {
+                console.error(error);
+              }
             }
           } catch (e) {
             reject(new Error(e.message));
@@ -67,14 +76,13 @@ const ModalCreateJuristic = ({ visible, cancelHandler }) => {
         username: makeUname(8),
         password: 'hyde_thonglor',
         email: value.email,
-        role: '61b32a96268f0d019c9c0dff',
         fullname: value.name,
         firstname: name[0],
         lastname: name[1],
         tel: value.tel,
         project: '61b464ff4abbaa01b461bc5f',
       };
-      console.log(submitValue);
+      // console.log(submitValue);
       try {
         const result = await createAccount(submitValue, imageData);
         if (result) {
@@ -184,7 +192,7 @@ const ModalCreateJuristic = ({ visible, cancelHandler }) => {
         >
           <Input placeholder="Enter Name" />
         </Form.Item>
-        <Form.Item label="Email Address" name="email">
+        <Form.Item label="Role" name="role">
           <div className="role_box">Juristic</div>
         </Form.Item>
       </Form>

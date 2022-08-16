@@ -10,31 +10,59 @@ import ModalCreateJuristic from '../components/ModalCreateJuristic';
 const { TabPane } = Tabs;
 
 function AdminManagementPage() {
+  const [refresh, setRefresh] = useState(true);
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState(null);
+  const [projectAdmin, setProjectAdmin] = useState(null);
+  const [juristics, setJuristics] = useState(null);
   const [modalCreateJuristicVisible, setModalCreateJuristicVisible] =
     useState(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await getAllJuristic();
-        if (data) {
-          setLoading(false);
-          setUsers(data);
+    if (refresh) {
+      (async () => {
+        try {
+          const { data } = await getAllJuristic();
+          if (data) {
+            let projectAdminResult = data.filter(
+              (item) => item?.role?.type === 'admin_project'
+            );
+            let juristicsResult = data.filter(
+              (item) => item?.role?.type === 'juristic'
+            );
+            setLoading(false);
+            setUsers(data);
+            setSearch(data);
+            setProjectAdmin(projectAdminResult);
+            setJuristics(juristicsResult);
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, []);
+      })();
+      setRefresh(false);
+    }
+  }, [refresh]);
 
-  let project_admin = users.filter(
-    (user) => user?.role?.type === 'admin_project'
-  );
-  let juristics = users.filter((user) => user?.role?.type === 'juristic');
+  const handleSearch = async (value) => {
+    let result = users.filter((item) =>
+      item.fullname.toLowerCase().includes(value)
+    );
+    let projectAdminResult = result.filter(
+      (item) => item?.role?.type === 'admin_project'
+    );
+    let juristicsResult = result.filter(
+      (item) => item?.role?.type === 'juristic'
+    );
+    setSearch(result);
+    setProjectAdmin(projectAdminResult);
+    setJuristics(juristicsResult);
+  };
 
-  const handleSearch = (value) => {};
+  const refreshHandle = () => {
+    setRefresh(true);
+  };
 
   return (
     <>
@@ -63,15 +91,21 @@ function AdminManagementPage() {
         </Button>
       </div>
       <div className="container">
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="all">
           <TabPane key="all" tab="All">
-            <UserTable key="all_user_table" data={users} loading={loading} />
+            <UserTable
+              key="all_user_table"
+              data={search}
+              loading={loading}
+              onRefresh={refreshHandle}
+            />
           </TabPane>
           <TabPane key="admin_projects" tab="Project Admin">
             <UserTable
               key="admin_user_table"
-              data={project_admin}
+              data={projectAdmin}
               loading={loading}
+              onRefresh={refreshHandle}
             />
           </TabPane>
           <TabPane key="juristic" tab="Juristic">
@@ -79,6 +113,7 @@ function AdminManagementPage() {
               key="juristic_user_table"
               data={juristics}
               loading={loading}
+              onRefresh={refreshHandle}
             />
           </TabPane>
         </Tabs>
@@ -88,6 +123,7 @@ function AdminManagementPage() {
         cancelHandler={() =>
           setModalCreateJuristicVisible(!modalCreateJuristicVisible)
         }
+        onRefresh={refreshHandle}
       />
     </>
   );
