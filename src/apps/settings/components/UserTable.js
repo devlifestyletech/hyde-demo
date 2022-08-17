@@ -7,7 +7,7 @@ import { ReactComponent as DividerIcon } from '../../assets/icons/admin_divider.
 import ModalAccessInfo from './ModalAccessInfo';
 import authService from '../../../services/authServices';
 
-function UserTable({ data, loading, key, onRefresh }) {
+function UserTable({ data, loading, tableKey, onRefresh }) {
   const [modalAccessInfoVisible, setModalAccessInfoVisible] = useState(false);
   const [role, setRole] = useState(null);
   const [isSwitchLoad, setIsSwitchLoad] = useState(false);
@@ -163,7 +163,12 @@ function UserTable({ data, loading, key, onRefresh }) {
 
   return (
     <>
-      <Table key={key} dataSource={data} columns={columns} loading={loading} />
+      <Table
+        key={tableKey}
+        dataSource={data}
+        columns={columns}
+        loading={loading}
+      />
       <ModalAccessInfo
         role={role}
         visible={modalAccessInfoVisible}
