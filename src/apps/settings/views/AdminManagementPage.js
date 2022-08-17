@@ -94,7 +94,7 @@ function AdminManagementPage() {
         <Tabs defaultActiveKey="all">
           <TabPane key="all" tab="All">
             <UserTable
-              key="all_user_table"
+              tableKey="all_user_table"
               data={search}
               loading={loading}
               onRefresh={refreshHandle}
@@ -102,7 +102,7 @@ function AdminManagementPage() {
           </TabPane>
           <TabPane key="admin_projects" tab="Project Admin">
             <UserTable
-              key="admin_user_table"
+              tableKey="admin_user_table"
               data={projectAdmin}
               loading={loading}
               onRefresh={refreshHandle}
@@ -110,7 +110,7 @@ function AdminManagementPage() {
           </TabPane>
           <TabPane key="juristic" tab="Juristic">
             <UserTable
-              key="juristic_user_table"
+              tableKey="juristic_user_table"
               data={juristics}
               loading={loading}
               onRefresh={refreshHandle}

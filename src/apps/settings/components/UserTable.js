@@ -63,9 +63,16 @@ function UserTable({ data, loading, key, onRefresh }) {
             try {
               const { data } = await authService.deleteUser(id);
               if (data) {
+                console.log(data);
                 message.success('Delete account successfully.');
                 resolve('Success');
                 onRefresh();
+              }
+              if (data?.image?.id) {
+                await authService.deleteImage(data.image.id);
+              }
+              if (data?.avatar?.id) {
+                await authService.deleteImage(data.avatar.id);
               }
             } catch (error) {
               reject(new Error(error));
