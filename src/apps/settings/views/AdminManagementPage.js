@@ -47,7 +47,7 @@ function AdminManagementPage() {
 
   const handleSearch = async (value) => {
     let result = users.filter((item) =>
-      item.fullname.toLowerCase().includes(value)
+      item.fullname.toLowerCase().includes(value.toLowerCase())
     );
     let projectAdminResult = result.filter(
       (item) => item?.role?.type === 'admin_project'

@@ -96,7 +96,7 @@ function UserTable({ data, loading, tableKey, onRefresh }) {
         <div key={idx}>
           <Row>
             <Image
-              src={process.env.REACT_APP_API_URL + image?.url}
+              src={`${process.env.REACT_APP_API_URL}${image?.url}`}
               width={50}
               height={50}
               style={{ borderRadius: 25 }}
