@@ -223,11 +223,7 @@ export const RoomInfoModal = ({
               {owner.length ? (
                 owner.map((owner, index) => (
                   <div key={'owner' + index}>
-                    <UsersInfo
-                      user={owner}
-                      onEvent={() => refresh()}
-                      isOwner={true}
-                    />
+                    <UsersInfo user={owner} onEvent={() => refresh()} />
                   </div>
                 ))
               ) : (

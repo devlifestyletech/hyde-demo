@@ -28,6 +28,28 @@ import ImageIcon from '../assets/icons/image.svg';
 const { Option } = Select;
 const { confirm } = Modal;
 
+// rules
+const normalRules = [
+  {
+    required: true,
+    message: 'This field is required!',
+  },
+  {
+    pattern: new RegExp(/^[ก-๏a-zA-Z0-9 ]+$/i),
+    message: 'ไม่สามารถใช้ตัวอักษรพิเศษ',
+  },
+];
+const telRules = [
+  {
+    required: true,
+    message: 'This field is required!',
+  },
+  {
+    pattern: new RegExp(/^0[1-9][0-9]{8}/),
+    message: 'เบอร์ติดต่อไม่ถูกต้อง',
+  },
+];
+
 function CreateModal({ visible, onCancel }) {
   const [CreateResidentForm] = Form.useForm();
   const [imageFile, setImageFile] = useState(null);
@@ -153,7 +175,7 @@ function CreateModal({ visible, onCancel }) {
           <Row gutter={40} style={{ padding: 20 }}>
             <Col span={12}>
               <div className="md-form">
-                <Form.Item label="Image">
+                <Form.Item required={true} label="Image">
                   <div className="select-img">
                     {pickedImage ? null : (
                       <div className="avatar">
@@ -208,24 +230,14 @@ function CreateModal({ visible, onCancel }) {
                 <Form.Item
                   label="First Name"
                   name="firstname"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input firstname!',
-                    },
-                  ]}
+                  rules={normalRules}
                 >
                   <Input placeholder="Please input first name" />
                 </Form.Item>
                 <Form.Item
                   label="Last Name"
                   name="lastname"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input lastname!',
-                    },
-                  ]}
+                  rules={normalRules}
                 >
                   <Input placeholder="Please input last name" />
                 </Form.Item>
@@ -304,9 +316,13 @@ function CreateModal({ visible, onCancel }) {
                       required: true,
                       message: 'Please input ID Card number!',
                     },
+                    {
+                      pattern: new RegExp(/^[0-9]+$/i),
+                      message: 'Please input number!',
+                    },
                   ]}
                 >
-                  <Input placeholder="Please input id card" />
+                  <Input maxLength={13} placeholder="Please input id card" />
                 </Form.Item>
                 <Form.Item label="Passport Number" name="passport_number">
                   <Input placeholder="Please input passport number" />
@@ -380,16 +396,7 @@ function CreateModal({ visible, onCancel }) {
                 {/*    </Select.Option>*/}
                 {/*  </Select>*/}
                 {/*</Form.Item>*/}
-                <Form.Item
-                  label="Telephone Number"
-                  name="tel"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input phone number!',
-                    },
-                  ]}
-                >
+                <Form.Item label="Telephone Number" name="tel" rules={telRules}>
                   <Input placeholder="Please input phone number" />
                 </Form.Item>
                 <Form.Item
