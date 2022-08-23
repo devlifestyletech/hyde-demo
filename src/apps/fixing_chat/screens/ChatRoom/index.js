@@ -83,6 +83,7 @@ function ChatRoom(props) {
                   type: data.type,
                   sender_id: data.sender_id,
                   sender_name: data.sender_name,
+                  users_read: data.users_read,
                 },
               ]);
             });
@@ -98,9 +99,30 @@ function ChatRoom(props) {
   };
 
   useEffect(() => {
-    console.log('headers', headers);
     connectChat();
+    console.log('RoomChange', room);
+    setRoom(room);
+    socket.off('message');
   }, [room]);
+
+  const setRead = (room, adminId) => {
+    console.log('setRead', room, adminId);
+    if (adminId)
+      socket.emit('testRead', {
+        room: room,
+        userId: adminId,
+      });
+  };
+
+  useEffect(() => {
+    console.log('RoomSocket room: ', room, 'adminId', session.user._id, socket);
+    if (room !== '' && session.user._id) setRead(room, session.user._id);
+    socket.on('message', (newMessage, error) => {
+      if (newMessage.room === room) {
+        setMessages((msgs) => [...msgs, newMessage]);
+      }
+    });
+  }, [socket, room]);
 
   const handleCallback = (childData) => {
     if (room !== childData.split(',')[1]) {
@@ -108,6 +130,9 @@ function ChatRoom(props) {
       setRoom(childData.split(',')[1]);
       setReceiver(childData.split(',')[0]);
       setFixingReportId(childData.split(',')[1].split('!')[0]);
+      socket.emit('testRead', {
+        room: childData.split(',')[1],
+      });
     }
   };
 
@@ -118,22 +143,20 @@ function ChatRoom(props) {
     setFixingStatus(status);
   };
 
-  const handleDisconnect = () => {
-    setMessages([]);
-    setRoom('');
+  // const handleDisconnect = () => {
+  //   setMessages([]);
+  //   setRoom('');
+  // };
+
+  const handleClickOutside = (e) => {
+    console.log('RoomOut', room);
+    if (!allInput.current.contains(e.target)) {
+      console.log('Click outside.', room);
+    } else {
+      console.log('RoomIn', room, session.user._id);
+      if (room !== '' && session.user._id) setRead(room, session.user._id);
+    }
   };
-
-  useEffect(() => {
-    socket.off('message');
-  }, [room]);
-
-  useEffect(() => {
-    socket.on('message', (newMessage, error) => {
-      if (newMessage.room === room) {
-        setMessages((msgs) => [...msgs, newMessage]);
-      }
-    });
-  }, [socket, room]);
 
   const handleChange = (e) => {
     socket.emit('typing', {
@@ -164,16 +187,11 @@ function ChatRoom(props) {
   }, [imageFile]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    document.body.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside, true);
+    };
   }, []);
-
-  const handleClickOutside = (e) => {
-    if (!allInput.current.contains(e.target)) {
-      console.log('Click outside.');
-    } else {
-      console.log('Click inside.', room);
-    }
-  };
 
   const uploadImg = async () => {
     setOnSend(true);
@@ -294,7 +312,7 @@ function ChatRoom(props) {
                 status={fixingStatus}
                 username={receiver}
                 room={room}
-                handleDisconnect={handleDisconnect}
+                // handleDisconnect={handleDisconnect}
               />
               {loading ? (
                 <Loading />
@@ -379,8 +397,8 @@ function ChatRoom(props) {
                 />
                 {!onSend ? (
                   <SendIcon
-                    // onClick={handleClick}
-                    onClick={() => allInput.current.focus()}
+                    onClick={handleClick}
+                    // onClick={() => allInput.current.focus()}
                   >
                     <i className="fa fa-paper-plane" />
                   </SendIcon>

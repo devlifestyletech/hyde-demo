@@ -19,16 +19,13 @@ import { encryptStorage } from '../../../utils/encryptStorage';
 import Service from '../../../services/authServices';
 import { socket } from '../../../services/webSocketService';
 
-const session = encryptStorage.getItem('user_session');
-
 const { Option } = Select;
 
 function List(props) {
   const [contactList, setContactList] = useState([]);
+  const [adminId, setAdminId] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const adminId = session.user._id;
-  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';
   const toDay = format(utcToZonedTime(new Date(), thTimeZone), 'dd-MM-yyyy', {
     timeZone: 'Asia/Bangkok',
@@ -46,13 +43,26 @@ function List(props) {
       : (element = contactList.filter((item) =>
           item.status.toLowerCase().includes(props.searchTag.toLowerCase())
         )[value]);
-    // console.log(element);
+    // console.log('element', element);
     props.handleCallback(element.name + ',' + element.id + '!' + element.room);
     props.getAvatar(element.avatar);
     props.getStatus(status[element.status]);
+    setRead(element.id + '!' + element.room, adminId);
   }
 
+  const setRead = (room, adminId) => {
+    console.log('XXX', room, adminId);
+    if (adminId)
+      socket.emit('testRead', {
+        room: room,
+        userId: adminId,
+      });
+  };
+
   const fetchData = async () => {
+    const session = await encryptStorage.getItem('user_session');
+    setAdminId(session.user._id);
+    const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
     try {
       if (loading) {
         return;
@@ -143,10 +153,12 @@ function List(props) {
   };
 
   const History = ({ item }) => {
+    const read = item.users_read === 'unread' && item.sender_id !== adminId;
     return (
       <AntdList.Item
         key={item.id}
         onClick={() => {
+          setRead(item.room, adminId);
           props.handleCallback(item.fixing_info.problem + ',' + item.room);
           props.getAvatar(
             item.fixing_info.image_pending
@@ -218,16 +230,17 @@ function List(props) {
                   alignSelf: 'center',
                 }}
               >
-                <TitleText>
+                <TitleText boolRead={read}>
                   {`${
                     item.fixing_info.problem.length > 20
                       ? item.fixing_info.problem.substring(0, 20) + '...'
                       : item.fixing_info.problem
                   } (${item.room.split('!')[1]})`}
                 </TitleText>
-                <ChatText>
+                <ChatText boolRead={read}>
                   <ChatComponent item={item} />
                 </ChatText>
+                <ChatText>{item.users_read}</ChatText>
               </Col>
             </div>
           </Row>
@@ -349,16 +362,18 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  // background-color: cyan;
+   background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
   margin-left: 1vh;
-  font-size: 0.88vw;
-  font-style: SukhumvitSet;
+  font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
+  font-style: SukhumvitSet-Bold;
+  font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
 `;
 const ChatText = styled.div`
   // background-color: coral;
   margin-left: 1vh;
-  font-size: 0.76vw;
+  font-size: ${(props) => (props.boolRead ? '0.76vw' : '0.64vw')};
   font-style: SukhumvitSet;
+  font-boolread: ${(props) => (props.weight ? 'Bold' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`

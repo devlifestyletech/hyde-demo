@@ -15,7 +15,7 @@ const session = encryptStorage.getItem('user_session');
 function Message(props) {
   const thTimeZone = 'Asia/Bangkok';
   const {
-    message: { sender_id, type, sender_name, text, time },
+    message: { sender_id, type, sender_name, text, time, users_read },
   } = props;
 
   const chatTime = format(utcToZonedTime(new Date(time), thTimeZone), 'HH:mm', {
@@ -66,8 +66,8 @@ function Message(props) {
             href={process.env.REACT_APP_API_URL + text}
             color={textColor}
             target="_blank"
-            download 
-						rel="noreferrer"
+            download
+            rel="noreferrer"
           >
             <LinkText color={textColor}>{text.split('/')[2]}</LinkText>
           </a>
@@ -76,7 +76,7 @@ function Message(props) {
 
       {sentBy === 'left' ? (
         <SentBy sentBy={sentBy}>
-          {sender_name}
+          {users_read === 'unread' ? sender_name : sender_name + ' ✔'}
           <br />
           {chatTime}
         </SentBy>
