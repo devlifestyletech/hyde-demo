@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // import styled from "styled-components";
 import { socket } from '../../../../services/webSocketService';
 import Heading from '../../../../components/Header';
@@ -24,6 +24,7 @@ import { encryptStorage } from '../../../../utils/encryptStorage';
 const session = encryptStorage.getItem('user_session');
 
 function ChatRoom(props) {
+  const allInput = useRef(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
@@ -102,7 +103,6 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    // console.log('ReportId', childData.split(',')[1].split('!')[0]);
     if (room !== childData.split(',')[1]) {
       setMessages([]);
       setRoom(childData.split(',')[1]);
@@ -112,11 +112,9 @@ function ChatRoom(props) {
   };
 
   const getAvatar = (avatar) => {
-    // console.log('room', avatar);
     setUserAvatar(avatar);
   };
   const getStatus = (status) => {
-    // console.log('status', status);
     setFixingStatus(status);
   };
 
@@ -154,7 +152,6 @@ function ChatRoom(props) {
   };
 
   const deleteHandle = () => {
-    // setPickedImage(null);
     setImageFile(null);
   };
 
@@ -165,6 +162,18 @@ function ChatRoom(props) {
   useEffect(() => {
     if (imageFile) uploadImg();
   }, [imageFile]);
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+  }, []);
+
+  const handleClickOutside = (e) => {
+    if (!allInput.current.contains(e.target)) {
+      console.log('Click outside.');
+    } else {
+      console.log('Click inside.', room);
+    }
+  };
 
   const uploadImg = async () => {
     setOnSend(true);
@@ -279,7 +288,7 @@ function ChatRoom(props) {
               getStatus={getStatus}
               searchTag={searchTag}
             />
-            <ChatBox>
+            <ChatBox ref={allInput}>
               <Header
                 avatar={userAvatar}
                 status={fixingStatus}
@@ -369,7 +378,10 @@ function ChatRoom(props) {
                   }}
                 />
                 {!onSend ? (
-                  <SendIcon onClick={handleClick}>
+                  <SendIcon
+                    // onClick={handleClick}
+                    onClick={() => allInput.current.focus()}
+                  >
                     <i className="fa fa-paper-plane" />
                   </SendIcon>
                 ) : (

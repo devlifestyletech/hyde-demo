@@ -35,7 +35,6 @@ export default function ReportDetail({ reportId }) {
   };
 
   const fetchData = async () => {
-    // console.log('reportId',reportId);
     try {
       if (reportId) {
         await axios

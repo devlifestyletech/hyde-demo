@@ -16,6 +16,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
+import { socket } from '../../../services/webSocketService';
 const session = encryptStorage.getItem('user_session');
 
 export default function ReportModal({
@@ -183,6 +184,7 @@ export default function ReportModal({
         headers
       )
       .then((res) => {
+        socket.emit('reportStatus', {});
         console.log('res', res);
         if (
           pendingImgFile.length > 0 &&

@@ -105,7 +105,6 @@ function ChatRoom(props) {
     }
   };
   const getAvatar = (avatar) => {
-    console.log('avatarDx', avatar);
     setUserAvatar(avatar);
   };
 
@@ -142,13 +141,11 @@ function ChatRoom(props) {
     if (room !== '') {
       if (message) sendMessage(message);
     } else {
-      // console.log('Please select room to connect')
       alert('Please select room to connect');
     }
   };
 
   const deleteHandle = () => {
-    // setPickedImage(null);
     setImageFile(null);
   };
 

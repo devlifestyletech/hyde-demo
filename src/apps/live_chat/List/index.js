@@ -60,7 +60,6 @@ function List(props) {
           headers
         )
         .then((res) => {
-          // console.log('res', res.data);
           var flags = [],
             output = [],
             l = res.data.length,
@@ -70,7 +69,6 @@ function List(props) {
             flags[res.data[i].room] = true;
             output.push(res.data[i]);
           }
-          // console.log('output', output);
           setData(output);
           setLoading(false);
         })
