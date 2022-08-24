@@ -10,7 +10,7 @@ import { socket } from '../../services/webSocketService';
 
 function Messages(props) {
   const thTimeZone = 'Asia/Bangkok';
-  const { messages, room } = props;
+  const { messages, room, userId } = props;
   const [onTyping, setOnTyping] = useState('');
   const [reduceMess, setReduceMess] = useState();
 
@@ -35,7 +35,10 @@ function Messages(props) {
 
   useEffect(() => {
     console.log('messages', messages);
-
+    socket.emit('testRead', {
+      room,
+      userId,
+    });
     let mess = messages.reduce(
       (prev, cur) => ({
         ...prev,

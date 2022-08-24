@@ -100,25 +100,13 @@ function ChatRoom(props) {
 
   useEffect(() => {
     connectChat();
-    console.log('RoomChange', room);
-    setRoom(room);
     socket.off('message');
   }, [room]);
 
-  const setRead = (room, adminId) => {
-    console.log('setRead', room, adminId);
-    if (adminId)
-      socket.emit('testRead', {
-        room: room,
-        userId: adminId,
-      });
-  };
-
   useEffect(() => {
-    console.log('RoomSocket room: ', room, 'adminId', session.user._id, socket);
-    if (room !== '' && session.user._id) setRead(room, session.user._id);
     socket.on('message', (newMessage, error) => {
       if (newMessage.room === room) {
+        console.log('newMessage', newMessage);
         setMessages((msgs) => [...msgs, newMessage]);
       }
     });
@@ -143,21 +131,6 @@ function ChatRoom(props) {
     setFixingStatus(status);
   };
 
-  // const handleDisconnect = () => {
-  //   setMessages([]);
-  //   setRoom('');
-  // };
-
-  const handleClickOutside = (e) => {
-    console.log('RoomOut', room);
-    if (!allInput.current.contains(e.target)) {
-      console.log('Click outside.', room);
-    } else {
-      console.log('RoomIn', room, session.user._id);
-      if (room !== '' && session.user._id) setRead(room, session.user._id);
-    }
-  };
-
   const handleChange = (e) => {
     socket.emit('typing', {
       room: room,
@@ -167,6 +140,7 @@ function ChatRoom(props) {
   };
 
   const handleClick = (e) => {
+    console.log('RoomSend', room);
     if (room !== '') {
       if (message) sendMessage(message);
     } else {
@@ -186,12 +160,26 @@ function ChatRoom(props) {
     if (imageFile) uploadImg();
   }, [imageFile]);
 
-  useEffect(() => {
-    document.body.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside, true);
-    };
-  }, []);
+  // const handleDisconnect = () => {
+  //   setMessages([]);
+  //   setRoom('');
+  // };
+
+  // const handleClickOutside = (e) => {
+  //   if (!allInput.current.contains(e.target)) {
+  //     console.log('Click outside.', room);
+  //   } else {
+  //     console.log('RoomInside', room);
+  //     if (room !== '' && session.user._id) setRead(room, session.user._id);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.body.addEventListener('click', handleClickOutside, true);
+  //   return () => {
+  //     document.body.removeEventListener('click', handleClickOutside, true);
+  //   };
+  // }, []);
 
   const uploadImg = async () => {
     setOnSend(true);
@@ -312,12 +300,15 @@ function ChatRoom(props) {
                 status={fixingStatus}
                 username={receiver}
                 room={room}
-                // handleDisconnect={handleDisconnect}
               />
               {loading ? (
                 <Loading />
               ) : (
-                <Messages room={room} messages={messages} />
+                <Messages
+                  room={room}
+                  messages={messages}
+                  userId={session.user._id}
+                />
               )}
               <InputBar>
                 {room !== '' && !onSend ? (
@@ -396,10 +387,7 @@ function ChatRoom(props) {
                   }}
                 />
                 {!onSend ? (
-                  <SendIcon
-                    onClick={handleClick}
-                    // onClick={() => allInput.current.focus()}
-                  >
+                  <SendIcon onClick={handleClick}>
                     <i className="fa fa-paper-plane" />
                   </SendIcon>
                 ) : (
