@@ -47,9 +47,12 @@ function ChatRoom(props) {
     if (sender_name && room) {
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
+      let sender_role = session.user.role.type;
+      console.log('Role', session.user.role.type);
       setChatData({
         sender_id: sender_id,
         sender_name: sender_name,
+        sender_role: sender_role,
         room: room,
       });
 
@@ -87,6 +90,7 @@ function ChatRoom(props) {
                 },
               ]);
             });
+            // setMessages(res.data);
             setLoading(false);
           })
           .catch((err) => {
@@ -104,9 +108,17 @@ function ChatRoom(props) {
   }, [room]);
 
   useEffect(() => {
-    socket.on('message', (newMessage, error) => {
+    socket.once('fetchRead', () => {
+      console.log('chatRead');
+      // fetchData();
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('message', (newMessage) => {
       if (newMessage.room === room) {
         console.log('newMessage', newMessage);
+        // fetchData();
         setMessages((msgs) => [...msgs, newMessage]);
       }
     });
@@ -118,9 +130,6 @@ function ChatRoom(props) {
       setRoom(childData.split(',')[1]);
       setReceiver(childData.split(',')[0]);
       setFixingReportId(childData.split(',')[1].split('!')[0]);
-      socket.emit('testRead', {
-        room: childData.split(',')[1],
-      });
     }
   };
 
@@ -183,16 +192,12 @@ function ChatRoom(props) {
 
   const uploadImg = async () => {
     setOnSend(true);
-    // console.log('File', imageFile);
     let dataImage = new FormData();
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        // console.log('type',imageFile.type.split('/')[0])
-
         imageFile.type.split('/')[0] === 'image'
           ? socket.emit(
               'sendMessage',
@@ -308,6 +313,7 @@ function ChatRoom(props) {
                   room={room}
                   messages={messages}
                   userId={session.user._id}
+                  userRole={session.user.role.type}
                 />
               )}
               <InputBar>
