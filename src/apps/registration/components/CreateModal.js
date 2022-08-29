@@ -79,10 +79,10 @@ function CreateModal({ visible, onCancel }) {
           try {
             const uploadImage = await uploadService.uploadImage(imageData);
             if (uploadImage) {
-              const new_value = JSON.stringify({
+              const new_value = {
                 image: uploadImage.data[0],
                 ...value,
-              });
+              };
               try {
                 const registered = await authService.registration(new_value);
                 if (registered) {
