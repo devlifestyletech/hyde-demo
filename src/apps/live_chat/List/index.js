@@ -45,7 +45,22 @@ function List(props) {
         contactList[value].room
     );
     props.getAvatar(contactList[value].avatar);
+    setRead(
+      contactList[value].id + ':' + contactList[value].room,
+      session.user._id,
+      session.user.role.type
+    );
   }
+
+  const setRead = (room, adminId, userRole) => {
+    console.log('setRead', room, adminId, userRole);
+    if (adminId)
+      socket.emit('setRead', {
+        room: room,
+        userId: adminId,
+        userRole: userRole,
+      });
+  };
 
   const fetchData = async () => {
     try {
@@ -82,9 +97,7 @@ function List(props) {
   };
 
   useEffect(() => {
-    console.log('fetch Socket');
     socket.on('fetchHistory', () => {
-      console.log('fetchData');
       fetchData();
     });
   }, [socket]);
@@ -144,10 +157,13 @@ function List(props) {
     }
   };
   const History = ({ item }) => {
+    const read =
+      item.users_read === 'unread' && item.sender_id !== session.user._id;
     return (
       <AntdList.Item
         key={item.id}
         onClick={() => {
+          setRead(item.room, session.user._id, session.user.role.type);
           props.handleCallback(item.room_info.fullname + ',' + item.room);
           props.getAvatar(
             item.room_info.avatar ? item.room_info.avatar.url : ''
@@ -208,16 +224,17 @@ function List(props) {
                   alignSelf: 'center',
                 }}
               >
-                <TitleText>
+                <TitleText boolRead={read}>
                   {`${
                     item.room_info.fullname.length > 20
                       ? item.room_info.fullname.substring(0, 20) + '...'
                       : item.room_info.fullname
                   } (${item.room.split(':')[1]})`}
                 </TitleText>
-                <ChatText>
+                <ChatText boolRead={read}>
                   <ChatComponent item={item} />
                 </ChatText>
+                <ChatText>{item.users_read}</ChatText>
               </Col>
             </div>
           </Row>
@@ -317,16 +334,18 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  // background-color: cyan;
+  background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
   margin-left: 1vh;
-  font-size: 0.88vw;
+  font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
   font-style: SukhumvitSet;
+  font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
 `;
 const ChatText = styled.div`
   // background-color: coral;
   margin-left: 1vh;
-  font-size: 0.76vw;
+  font-size: ${(props) => (props.boolRead ? '0.76vw' : '0.64vw')};
   font-style: SukhumvitSet;
+  font-weight: ${(props) => (props.weight ? 'Bold' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`

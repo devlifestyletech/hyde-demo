@@ -47,9 +47,12 @@ function ChatRoom(props) {
     if (sender_name && room) {
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
+      let sender_role = session.user.role.type;
+      console.log('Role', session.user.role.type);
       setChatData({
         sender_id: sender_id,
         sender_name: sender_name,
+        sender_role: sender_role,
         room: room,
       });
 
@@ -87,6 +90,7 @@ function ChatRoom(props) {
                 },
               ]);
             });
+            // setMessages(res.data);
             setLoading(false);
           })
           .catch((err) => {
@@ -100,25 +104,21 @@ function ChatRoom(props) {
 
   useEffect(() => {
     connectChat();
-    console.log('RoomChange', room);
-    setRoom(room);
     socket.off('message');
   }, [room]);
 
-  const setRead = (room, adminId) => {
-    console.log('setRead', room, adminId);
-    if (adminId)
-      socket.emit('testRead', {
-        room: room,
-        userId: adminId,
-      });
-  };
+  useEffect(() => {
+    socket.once('fetchRead', () => {
+      console.log('chatRead');
+      // fetchData();
+    });
+  }, [socket]);
 
   useEffect(() => {
-    console.log('RoomSocket room: ', room, 'adminId', session.user._id, socket);
-    if (room !== '' && session.user._id) setRead(room, session.user._id);
-    socket.on('message', (newMessage, error) => {
+    socket.on('message', (newMessage) => {
       if (newMessage.room === room) {
+        console.log('newMessage', newMessage);
+        // fetchData();
         setMessages((msgs) => [...msgs, newMessage]);
       }
     });
@@ -130,9 +130,6 @@ function ChatRoom(props) {
       setRoom(childData.split(',')[1]);
       setReceiver(childData.split(',')[0]);
       setFixingReportId(childData.split(',')[1].split('!')[0]);
-      socket.emit('testRead', {
-        room: childData.split(',')[1],
-      });
     }
   };
 
@@ -141,21 +138,6 @@ function ChatRoom(props) {
   };
   const getStatus = (status) => {
     setFixingStatus(status);
-  };
-
-  // const handleDisconnect = () => {
-  //   setMessages([]);
-  //   setRoom('');
-  // };
-
-  const handleClickOutside = (e) => {
-    console.log('RoomOut', room);
-    if (!allInput.current.contains(e.target)) {
-      console.log('Click outside.', room);
-    } else {
-      console.log('RoomIn', room, session.user._id);
-      if (room !== '' && session.user._id) setRead(room, session.user._id);
-    }
   };
 
   const handleChange = (e) => {
@@ -167,6 +149,7 @@ function ChatRoom(props) {
   };
 
   const handleClick = (e) => {
+    console.log('RoomSend', room);
     if (room !== '') {
       if (message) sendMessage(message);
     } else {
@@ -186,25 +169,35 @@ function ChatRoom(props) {
     if (imageFile) uploadImg();
   }, [imageFile]);
 
-  useEffect(() => {
-    document.body.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside, true);
-    };
-  }, []);
+  // const handleDisconnect = () => {
+  //   setMessages([]);
+  //   setRoom('');
+  // };
+
+  // const handleClickOutside = (e) => {
+  //   if (!allInput.current.contains(e.target)) {
+  //     console.log('Click outside.', room);
+  //   } else {
+  //     console.log('RoomInside', room);
+  //     if (room !== '' && session.user._id) setRead(room, session.user._id);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.body.addEventListener('click', handleClickOutside, true);
+  //   return () => {
+  //     document.body.removeEventListener('click', handleClickOutside, true);
+  //   };
+  // }, []);
 
   const uploadImg = async () => {
     setOnSend(true);
-    // console.log('File', imageFile);
     let dataImage = new FormData();
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        // console.log('type',imageFile.type.split('/')[0])
-
         imageFile.type.split('/')[0] === 'image'
           ? socket.emit(
               'sendMessage',
@@ -312,12 +305,16 @@ function ChatRoom(props) {
                 status={fixingStatus}
                 username={receiver}
                 room={room}
-                // handleDisconnect={handleDisconnect}
               />
               {loading ? (
                 <Loading />
               ) : (
-                <Messages room={room} messages={messages} />
+                <Messages
+                  room={room}
+                  messages={messages}
+                  userId={session.user._id}
+                  userRole={session.user.role.type}
+                />
               )}
               <InputBar>
                 {room !== '' && !onSend ? (
@@ -396,10 +393,7 @@ function ChatRoom(props) {
                   }}
                 />
                 {!onSend ? (
-                  <SendIcon
-                    onClick={handleClick}
-                    // onClick={() => allInput.current.focus()}
-                  >
+                  <SendIcon onClick={handleClick}>
                     <i className="fa fa-paper-plane" />
                   </SendIcon>
                 ) : (

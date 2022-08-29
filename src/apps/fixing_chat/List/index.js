@@ -19,13 +19,15 @@ import { encryptStorage } from '../../../utils/encryptStorage';
 import Service from '../../../services/authServices';
 import { socket } from '../../../services/webSocketService';
 
+const session = encryptStorage.getItem('user_session');
+
 const { Option } = Select;
 
 function List(props) {
   const [contactList, setContactList] = useState([]);
-  const [adminId, setAdminId] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';
   const toDay = format(utcToZonedTime(new Date(), thTimeZone), 'dd-MM-yyyy', {
     timeZone: 'Asia/Bangkok',
@@ -43,26 +45,27 @@ function List(props) {
       : (element = contactList.filter((item) =>
           item.status.toLowerCase().includes(props.searchTag.toLowerCase())
         )[value]);
-    // console.log('element', element);
     props.handleCallback(element.name + ',' + element.id + '!' + element.room);
     props.getAvatar(element.avatar);
     props.getStatus(status[element.status]);
-    setRead(element.id + '!' + element.room, adminId);
+    setRead(
+      element.id + '!' + element.room,
+      session.user._id,
+      session.user.role.type
+    );
   }
 
-  const setRead = (room, adminId) => {
-    console.log('XXX', room, adminId);
+  const setRead = (room, adminId, userRole) => {
+    console.log('setRead', room, adminId, userRole);
     if (adminId)
-      socket.emit('testRead', {
+      socket.emit('setRead', {
         room: room,
         userId: adminId,
+        userRole: userRole,
       });
   };
 
   const fetchData = async () => {
-    const session = await encryptStorage.getItem('user_session');
-    setAdminId(session.user._id);
-    const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
     try {
       if (loading) {
         return;
@@ -98,6 +101,7 @@ function List(props) {
 
   useEffect(() => {
     socket.on('fetchHistory', () => {
+      console.log('fetchHistory');
       fetchData();
     });
   }, [socket]);
@@ -126,7 +130,7 @@ function List(props) {
   }, []);
 
   const ChatComponent = ({ item }) => {
-    if (item.sender_id === adminId) {
+    if (item.sender_id === session.user._id) {
       if (item.type === 'chat') {
         return item.text.length > 30
           ? 'You: ' + item.text.substring(0, 30) + '...'
@@ -153,12 +157,13 @@ function List(props) {
   };
 
   const History = ({ item }) => {
-    const read = item.users_read === 'unread' && item.sender_id !== adminId;
+    const read =
+      item.users_read === 'unread' && item.sender_id !== session.user._id;
     return (
       <AntdList.Item
         key={item.id}
         onClick={() => {
-          setRead(item.room, adminId);
+          setRead(item.room, session.user._id, session.user.role.type);
           props.handleCallback(item.fixing_info.problem + ',' + item.room);
           props.getAvatar(
             item.fixing_info.image_pending
@@ -362,10 +367,10 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-   background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
+  background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
   margin-left: 1vh;
   font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
-  font-style: SukhumvitSet-Bold;
+  font-style: SukhumvitSet;
   font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
 `;
 const ChatText = styled.div`
@@ -373,7 +378,7 @@ const ChatText = styled.div`
   margin-left: 1vh;
   font-size: ${(props) => (props.boolRead ? '0.76vw' : '0.64vw')};
   font-style: SukhumvitSet;
-  font-boolread: ${(props) => (props.weight ? 'Bold' : null)};
+  font-weight: ${(props) => (props.weight ? 'Bold' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`

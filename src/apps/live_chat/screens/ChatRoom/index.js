@@ -41,9 +41,11 @@ function ChatRoom(props) {
     if (sender_name && room) {
       let sender_id = session?.user?._id;
       let sender_name = session?.user?.fullname;
+      let sender_role = session?.user?.role.type;
       setChatData({
         sender_id: sender_id,
         sender_name: sender_name,
+        sender_role: sender_role,
         room: room,
       });
 
@@ -78,6 +80,7 @@ function ChatRoom(props) {
                   type: data.type,
                   sender_id: data.sender_id,
                   sender_name: data.sender_name,
+                  users_read: data.users_read,
                 },
               ]);
             });
@@ -261,7 +264,12 @@ function ChatRoom(props) {
             {loading ? (
               <Loading />
             ) : (
-              <Messages room={room} messages={messages} />
+              <Messages
+                room={room}
+                messages={messages}
+                userId={session.user._id}
+                userRole={session.user.role.type}
+              />
             )}
             <InputBar>
               {room !== '' && !onSend ? (

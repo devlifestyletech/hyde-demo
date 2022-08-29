@@ -10,22 +10,23 @@ import { socket } from '../../services/webSocketService';
 
 function Messages(props) {
   const thTimeZone = 'Asia/Bangkok';
-  const { messages, room } = props;
+  const { messages, room, userId, userRole } = props;
   const [onTyping, setOnTyping] = useState('');
   const [reduceMess, setReduceMess] = useState();
 
   socket.on('typing', (data) => {
+    // console.log('typingX', data.room, room);
     if (data.room === room) {
       setOnTyping(data.sender_name + ' is typing...');
       setTimeout(() => {
         setOnTyping('');
+        socket.off('typing');
       }, 5000);
     }
   });
 
   function timeFormat(date) {
     let today = moment().isSame(date, 'days');
-    // console.log('today',today);
     return !today
       ? format(utcToZonedTime(new Date(date), thTimeZone), 'dd/MMM/yyyy', {
           timeZone: 'Asia/Bangkok',
@@ -34,8 +35,12 @@ function Messages(props) {
   }
 
   useEffect(() => {
-    console.log('messages', messages);
-
+    console.log('GoMessages', messages);
+    socket.emit('setRead', {
+      room,
+      userId,
+      userRole,
+    });
     let mess = messages.reduce(
       (prev, cur) => ({
         ...prev,
@@ -44,7 +49,7 @@ function Messages(props) {
       {}
     );
     setReduceMess(mess);
-  }, [messages]);
+  }, [messages, room, userId, userRole]);
 
   useEffect(() => {
     // console.log('Mess: ', reduceMess);

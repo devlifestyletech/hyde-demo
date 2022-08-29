@@ -50,8 +50,10 @@ function Message(props) {
     <MessagesContainer textPosition={textPosition}>
       {sentBy === 'right' ? (
         <SentBy sentBy={sentBy}>
-          <br />
-          {chatTime}
+          {users_read === undefined || users_read === 'unread'
+            ? null
+            : '✔ read'}
+          <br /> {chatTime + users_read}
         </SentBy>
       ) : null}
       {type === 'image' ? (
@@ -76,7 +78,7 @@ function Message(props) {
 
       {sentBy === 'left' ? (
         <SentBy sentBy={sentBy}>
-          {users_read === 'unread' ? sender_name : sender_name + ' ✔'}
+          {sender_name.split(' ')[0]}
           <br />
           {chatTime}
         </SentBy>
