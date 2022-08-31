@@ -36,11 +36,11 @@ function Messages(props) {
 
   useEffect(() => {
     console.log('GoMessages', messages);
-    socket.emit('setRead', {
-      room,
-      userId,
-      userRole,
-    });
+    // socket.emit('setRead', {
+    //   room,
+    //   userId,
+    //   userRole,
+    // });
     let mess = messages.reduce(
       (prev, cur) => ({
         ...prev,

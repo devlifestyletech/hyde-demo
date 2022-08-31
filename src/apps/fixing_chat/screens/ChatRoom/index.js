@@ -60,8 +60,8 @@ function ChatRoom(props) {
         console.log('JoinData', data);
       });
       if (messages.length === 0) {
-        setLoading(true);
-        fetchData();
+        // setLoading(true);
+        // fetchData();
       }
     }
   };
@@ -108,17 +108,9 @@ function ChatRoom(props) {
   }, [room]);
 
   useEffect(() => {
-    socket.once('fetchRead', () => {
-      console.log('chatRead');
-      // fetchData();
-    });
-  }, [socket]);
-
-  useEffect(() => {
     socket.on('message', (newMessage) => {
       if (newMessage.room === room) {
         console.log('newMessage', newMessage);
-        // fetchData();
         setMessages((msgs) => [...msgs, newMessage]);
       }
     });
@@ -131,6 +123,11 @@ function ChatRoom(props) {
       setReceiver(childData.split(',')[0]);
       setFixingReportId(childData.split(',')[1].split('!')[0]);
     }
+  };
+  const handleSetMessage = (data) => {
+    console.log('room', room);
+    console.log('data', data);
+    setMessages(data.mess);
   };
 
   const getAvatar = (avatar) => {
@@ -169,26 +166,20 @@ function ChatRoom(props) {
     if (imageFile) uploadImg();
   }, [imageFile]);
 
-  // const handleDisconnect = () => {
-  //   setMessages([]);
-  //   setRoom('');
-  // };
+  const handleClickOutside = (e) => {
+    if (!allInput.current.contains(e.target)) {
+      console.log('Click outside.', room);
+    } else {
+      console.log('RoomInside', room);
+    }
+  };
 
-  // const handleClickOutside = (e) => {
-  //   if (!allInput.current.contains(e.target)) {
-  //     console.log('Click outside.', room);
-  //   } else {
-  //     console.log('RoomInside', room);
-  //     if (room !== '' && session.user._id) setRead(room, session.user._id);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   document.body.addEventListener('click', handleClickOutside, true);
-  //   return () => {
-  //     document.body.removeEventListener('click', handleClickOutside, true);
-  //   };
-  // }, []);
+  useEffect(() => {
+    document.body.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   const uploadImg = async () => {
     setOnSend(true);
@@ -294,6 +285,7 @@ function ChatRoom(props) {
         <ChatContainer>
           <StyledContainer>
             <List
+              handleSetMessage={handleSetMessage}
               handleCallback={handleCallback}
               getAvatar={getAvatar}
               getStatus={getStatus}

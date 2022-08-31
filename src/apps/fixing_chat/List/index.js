@@ -27,6 +27,7 @@ function List(props) {
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [curRoom, setCurRoom] = useState([]);
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';
   const toDay = format(utcToZonedTime(new Date(), thTimeZone), 'dd-MM-yyyy', {
@@ -53,6 +54,7 @@ function List(props) {
       session.user._id,
       session.user.role.type
     );
+    // setCurRoom()
   }
 
   const setRead = (room, adminId, userRole) => {
@@ -65,7 +67,7 @@ function List(props) {
       });
   };
 
-  const fetchData = async () => {
+  const fetchData = async (dataRoom) => {
     try {
       if (loading) {
         return;
@@ -87,6 +89,17 @@ function List(props) {
             flags[res.data[i].room] = true;
             output.push(res.data[i]);
           }
+          if (dataRoom) {
+            const filtered = res.data.reduce(
+              (a, o) => (o.room === dataRoom && a.push(o), a),
+              []
+            );
+            const reversed = [...filtered].reverse();
+            props.handleSetMessage({
+              mess: reversed,
+              room: dataRoom,
+            });
+          }
           setData(output);
           setLoading(false);
         })
@@ -100,9 +113,9 @@ function List(props) {
   };
 
   useEffect(() => {
-    socket.on('fetchHistory', () => {
-      console.log('fetchHistory');
-      fetchData();
+    socket.on('fetchHistory', (dataRoom) => {
+      console.log('fetchHistory', dataRoom);
+      fetchData(dataRoom);
     });
   }, [socket]);
 

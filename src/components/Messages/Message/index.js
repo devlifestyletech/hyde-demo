@@ -51,9 +51,9 @@ function Message(props) {
       {sentBy === 'right' ? (
         <SentBy sentBy={sentBy}>
           {users_read === undefined || users_read === 'unread'
-            ? null
+            ? 'unread'
             : '✔ read'}
-          <br /> {chatTime + users_read}
+          <br /> {chatTime}
         </SentBy>
       ) : null}
       {type === 'image' ? (
