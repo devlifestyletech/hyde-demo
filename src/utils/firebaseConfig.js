@@ -45,12 +45,6 @@ return	await getToken(messaging, {vapidKey: `${process.env.REACT_APP_VAPID_KEY}`
 	});
   }
   
-const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-		console.log("onMessageListener:",payload);
-      resolve(payload);
-    });
-});
 
-export { app, db,auth,onMessageListener,fcmWeb };
+
+export { app, db,auth,messaging,onMessage,fcmWeb };

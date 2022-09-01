@@ -37,6 +37,9 @@ import NoContent from './components/NoContentPage';
 import ProfilePage from './apps/settings/views/ProfilePage';
 import ChangePasswordPage from './apps/settings/views/ChangePasswordPage';
 import AdminManagementPage from './apps/settings/views/AdminManagementPage';
+import { messaging, onMessage } from './utils/firebaseConfig';
+
+
 
 const App = () => {
   useEffect(() => {
@@ -49,6 +52,9 @@ const App = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error('error: ', errorCode, errorMessage);
+      });
+      onMessage(messaging, (payload) => {
+        // (payload);
       });
   }, []);
 

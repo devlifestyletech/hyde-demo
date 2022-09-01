@@ -15,7 +15,8 @@ const billingPaymentData = {
     status_billing: null,
     statusModalPending: false,
     statusModalReject: false,
-    dataPaymentDashboard:[]
+    dataPaymentDashboard:[],
+    countFCM:0
 };
 
 const PaymentActionRedux = (state = billingPaymentData, action) => {
@@ -52,10 +53,12 @@ const PaymentActionRedux = (state = billingPaymentData, action) => {
             return {...state, dataCreateBilling: action.payload};
         case "CHANGE_COUNT":
             return {...state, count: action.payload};
-            case "CHANGE_PAGE_DEFAULT":
-                return {...state, pageDefault: action.payload};
-                case "CHANGE_LOADING_CREATE":
-                    return {...state, loadingCreate: action.payload};
+        case "CHANGE_PAGE_DEFAULT":
+            return {...state, pageDefault: action.payload};
+        case "CHANGE_LOADING_CREATE":
+            return {...state, loadingCreate: action.payload};
+        case "CHANGE_FCM_COUNT":
+            return{...state,countFCM: action.payload}
         default:
             return state;
     }

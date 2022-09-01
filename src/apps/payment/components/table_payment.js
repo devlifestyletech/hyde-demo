@@ -35,7 +35,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import logo from '../../assets/images/hyde-logo.svg';
-
+import { encryptStorage } from '../../../utils/encryptStorage'
 const { RangePicker } = DatePicker;
 const statePayment = {
   searchText: '',
@@ -54,8 +54,10 @@ export const Table_payment = () => {
     dataSize,
     paramsBilling,
     pageDefault,
+    countFCM
   } = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
+  let countTotal=countFCM
   const [state, setPayment] = useState(statePayment);
   const [loadingCreate, setloadingCreate] = useState([]);
   const [View, setView] = useState([]);
@@ -64,11 +66,50 @@ export const Table_payment = () => {
   const [VerifyReject, setVerifyReject] = useState([]);
 
   const [Export, setExport] = useState([]);
-  useEffect(() => {
-    dispatch({ type: 'CHANGE_PARAMS_BILLING', payload: paramsBillingPayment });
-    dispatch(getBillingPayment(paramsBillingPayment));
+  useEffect(async () => {
+   await getAllnotFCMList()
+   await dispatch({ type: 'CHANGE_PARAMS_BILLING', payload: paramsBillingPayment });
+  await  dispatch(getBillingPayment(paramsBillingPayment));
   }, []);
-
+    // setting pagination Option
+    const pageSizeOptions = ['20', '40', '60', '100'];
+    const PaginationConfig = {
+      defaultPageSize: pageSizeOptions[0],
+      pageSizeOptions: pageSizeOptions,
+      current: pageDefault,
+      showSizeChanger: true,
+      total: dataSize,
+    };
+    const paramsBillingPayment = {
+      status: 'Payment successful',
+      defaultPage: 1,
+      sorter: undefined,
+      filters: {
+        Address_Customer: null,
+      },
+      pagesize: PaginationConfig.defaultPageSize,
+    };
+  const getAllnotFCMList = async () => {
+    const FCMtoken = await encryptStorage.getItem('fcm_token_data');
+    if (FCMtoken !== null && FCMtoken !== undefined) {
+      let countFCMTotal=0
+      FCMtoken.map((e)=>{
+        if (e.readStatus===false) {
+          countFCMTotal=countFCMTotal+1
+        }
+      })
+      dispatch({ type: "CHANGE_FCM_COUNT", payload: countFCMTotal });
+      if (countFCMTotal>0) {
+        paramsBillingPayment.status = "Pending review";
+        await dispatch({type:"CHANGE_COUNT",payload:2})
+      }
+      console.log('====================================');
+      console.log("countFCMTotal:",countFCMTotal);
+      console.log('====================================');
+      FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
+     
+    }
+  };
   const getTime = (e) => {
     let Time = [];
     e.map((e) => {
@@ -95,24 +136,7 @@ export const Table_payment = () => {
     />
   );
 
-  // setting pagination Option
-  const pageSizeOptions = ['20', '40', '60', '100'];
-  const PaginationConfig = {
-    defaultPageSize: pageSizeOptions[0],
-    pageSizeOptions: pageSizeOptions,
-    current: pageDefault,
-    showSizeChanger: true,
-    total: dataSize,
-  };
-  const paramsBillingPayment = {
-    status: 'Payment successful',
-    defaultPage: 1,
-    sorter: undefined,
-    filters: {
-      Address_Customer: null,
-    },
-    pagesize: PaginationConfig.defaultPageSize,
-  };
+
 
   // setting pagination Option
 
@@ -151,6 +175,32 @@ export const Table_payment = () => {
     dispatch({ type: 'MODAL_PENDING', payload: true });
     verifyLoading[currentTarget.value] = false;
     await setVerify(verifyLoading);
+
+    const FCMtoken = await encryptStorage.getItem('fcm_token_data');
+    if (FCMtoken !== null && FCMtoken !== undefined) {
+      let countFCMTotal=countFCM
+      FCMtoken.map((e)=>{
+        console.log('====================================');
+        console.log("billPaymentRef1:",e,result.BillsPayment_Invoice);
+        console.log('====================================');
+        if (e.billPaymentRef1===result.BillsPayment_Invoice && e.readStatus===false) {
+          e.readStatus=true
+          countFCMTotal=countFCMTotal-1
+        }
+      })
+      await encryptStorage.setItem(
+        'fcm_token_data',
+        JSON.stringify(FCMtoken)
+      );
+      dispatch({ type: "CHANGE_FCM_COUNT", payload: countFCMTotal });
+     
+      console.log('====================================');
+      console.log("countFCMTotal:",countFCMTotal);
+      console.log('====================================');
+      FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
+     
+    }
+
   };
   //approve
   const approveBillingModalReject = async ({ currentTarget }) => {

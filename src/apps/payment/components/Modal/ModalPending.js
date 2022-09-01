@@ -1,11 +1,6 @@
 import React from "react";
-import { Input, Modal, notification, Button, Radio, Col, Row, Form } from "antd";
-import {
-  DeleteFilled,
-  SearchOutlined,
-  ExclamationCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { Input, Modal, notification, Button, Radio, Col, Row } from "antd";
+
 import bill from "../../assets/images/bill.jpg";
 import { bankNamecode } from "../../services/bankNamecode";
 import { updateRescrpt, rejectRescrpt } from "../../services/API/payment_api";
@@ -18,12 +13,14 @@ const ModalPendingBill = () => {
   const {
     statusModalPending,
     dataBillingAllApprove,
-    dataBilling,
+    countFCM,
     paramsBilling,
   } = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
   // handleOK
+  let countTotal=countFCM-1
   const handleOk = async () => {
+    // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
     const result = dataBillingAllApprove;
     console.log("resultUPdate:", result);
     const status = await updateRescrpt(result[0]);
@@ -61,10 +58,11 @@ const ModalPendingBill = () => {
     setValue(e.target.value);
   };
   const handleCancel = () => {
+    // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
     dispatch({ type: "MODAL_PENDING", payload: false });
   };
 
-  const rejcetPayment = async () => {
+  const rejcetPayment = async () => { 
     await setvisible(!visible)
   };
 const textChange = async({currentTarget}) => {
@@ -80,6 +78,7 @@ await setcommentText(currentTarget.value)
   
   }
   const rejcetOK =async ()=> {
+    // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
       const result = dataBillingAllApprove;
     const status = await rejectRescrpt(result[0],value);
     if (status) {

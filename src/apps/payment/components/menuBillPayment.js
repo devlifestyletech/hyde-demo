@@ -4,9 +4,9 @@ import {
   getCustomerList,
 } from "../services/thunk-action/payment_thunk";
 import { useDispatch, useSelector } from "react-redux";
-import { Menu } from "antd";
+import { Menu,Badge } from "antd";
 export const MenuBillPayment = () => {
-  const { count, paramsBilling } = useSelector(
+  const { count, paramsBilling,countFCM } = useSelector(
     (state) => state.PaymentActionRedux
   );
   const dispatch = useDispatch();
@@ -38,7 +38,6 @@ export const MenuBillPayment = () => {
     { title: "Payment successful", titleText: "Payment successful" },
     { title: "Payment annotation", titleText: "Payment annotation" },
     { title: "Out Date", titleText: "Out Date" },
-    
   ];
 
   return (
@@ -51,8 +50,11 @@ export const MenuBillPayment = () => {
         {MenuPayment.map((e, i) => {
           return (
             <Menu.Item key={i} title={e.title}>
+              
               <text style={{ fontWeight: "bold", fontSize: "1rem" }}>
                 {e.title || e.titleText}
+                {e.title === "Pending review" &&countFCM !==0 ? <Badge count={countFCM}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+               
               </text>
             </Menu.Item>
           );

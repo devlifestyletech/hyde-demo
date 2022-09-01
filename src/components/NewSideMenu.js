@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Modal } from 'antd';
+import { Menu, Modal,Badge } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import './styles/side-menu.css';
-
+import { useSelector, useDispatch } from 'react-redux';
 //icon svg
 import MenuLogo from './assets/menu-logo.svg';
 import serviceIcon from './assets/service.svg';
@@ -33,8 +33,9 @@ let path = window.location.pathname.split('/');
 function NewSideMenu() {
   const [user, setUser] = useState();
   const [openKeys, setOpenKeys] = useState([path[2]]);
+  const[paymentNotication,setPaymentNotication]=useState("Payments")
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
-
+  const {countFCM} = useSelector((state) => state.PaymentActionRedux);
   const rootSubmenuKeys = [
     'facilities',
     'members',
@@ -47,8 +48,9 @@ function NewSideMenu() {
     (async () => {
       const { user } = await encryptStorage.getItem('user_session');
       setUser(user);
+      setPaymentNotication(`Payments${<Badge count={countFCM>0?countFCM:null}><div style={{paddingLeft:15 ,paddingBottom:2}}></div></Badge>}`)
     })();
-  }, []);
+  }, [countFCM]);
 
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -66,9 +68,12 @@ function NewSideMenu() {
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         console.log('OK');
+       await encryptStorage.removeItem("fcm_token_data")
         const dataFCMToken = await encryptStorage.getItem('fcm_token');
         console.log("dataFCM_Token:",dataFCMToken);
-        await authService.unsubscribeFCMToken(dataFCMToken)
+        if (dataFCMToken !== undefined && dataFCMToken !== null&&typeof dataFCMToken !== 'string') {
+          await authService.unsubscribeFCMToken(dataFCMToken)
+        }
         await authService.signOut();
       },
       okButtonProps: { shape: 'round', size: 'large', type: 'danger' },
@@ -179,7 +184,7 @@ function NewSideMenu() {
             <SubMenu
               key="payment"
               icon={<img src={paymentIcon} alt="payment" />}
-              title="Payment"
+              title={countFCM>0?<div style={{ color:"#fff",paddingBottom:5}}><text style={{paddingRight:10}}>Payment</text><Badge count={countFCM>0?countFCM:null}></Badge></div>:"Payment"}
             >
               <Menu.Item key={`${main_link}/payment/dashboard`}>
                 <Link to={`${main_link}/payment/dashboard`}>
@@ -187,7 +192,7 @@ function NewSideMenu() {
                 </Link>
               </Menu.Item>
               <Menu.Item key={`${main_link}/payment/billing`}>
-                <Link to={`${main_link}/payment/billing`}>Bill payment</Link>
+                <Link to={`${main_link}/payment/billing`}>Bill Payment <Badge count={countFCM>0?countFCM:null}><div style={{paddingLeft:15 ,paddingBottom:2}}></div></Badge></Link>
               </Menu.Item>
             </SubMenu>
             <div className={'group-name'}>Resident Management</div>

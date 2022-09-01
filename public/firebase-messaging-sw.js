@@ -18,13 +18,43 @@ firebase.initializeApp(firebaseConfig);
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function(payload) {
+messaging.onBackgroundMessage(async function(payload) {
   console.log('Received background message ', payload);
-  // const notificationTitle = payload.notification.title;
-  // const notificationOptions = {body: payload.notification.body,
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = payload.notification.body
   //   icon: "/android-chrome-512x512.png",
   // };
     // self.registration.showNotification(notificationTitle,
     // notificationOptions);
+     // Add
+     const db = await openDatabase();
+  const userReadWriteTransaction = db.transaction("fcm", "readwrite");
+  const newObjectStore = userReadWriteTransaction.objectStore("fcm");
+
+  newObjectStore.add({
+      fcmid: new Date().getTime(),
+      title: notificationTitle,
+      body: notificationOptions,
+      // status:true ,
+      // mobilePhone:"0963292414"
+  });
+
+  userReadWriteTransaction.onsuccess = function(e) {
+      console.log("Data Added");
+  }
 });
 
+async function openDatabase() {
+  return new Promise((resolve, reject) => {
+      const request = indexedDB.open("fcm_notication");
+      request.onsuccess = function(event) {
+          resolve(event.target.result);
+      }
+      request.onupgradeneeded = function(event) {
+          const db = event.target.result;
+          const userObjectStore = db.createObjectStore("fcm", {keyPath: "fcmid"});
+          userObjectStore.createIndex("title", "title", { unique: false });
+          userObjectStore.createIndex("body", "body", { unique: true });
+      }       
+  }) 
+}
