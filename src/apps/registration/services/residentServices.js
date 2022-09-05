@@ -17,7 +17,11 @@ export default {
       if (data) {
         let d = [];
         data
-          .filter((user) => user?.role?.type === 'resident')
+          .filter(
+            (user) =>
+              user?.role?.type === 'resident' &&
+              (user?.address === null || user?.address === undefined)
+          )
           .forEach((user, index) => {
             let newData = {
               key: index,
@@ -78,8 +82,10 @@ export default {
     }
   },
 
-  addUserToAddress: async function (value) {
+  addUserToAddress: async function (value, callback) {
     const session = await encryptStorage.getItem('user_session');
+    console.log(value);
+    let result;
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}/users/${value.users_permissions_user}`,
@@ -92,17 +98,8 @@ export default {
           },
         }
       );
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/resident-lists`,
-        value,
-        {
-          headers: {
-            Authorization: 'Bearer ' + session.jwt,
-          },
-        }
-      );
       if (value.resident_role === 'Owner') {
-        await axios.put(
+        result = await axios.put(
           `${process.env.REACT_APP_API_URL}/addresses/${value.address}`,
           {
             owner: value.users_permissions_user,
@@ -114,21 +111,50 @@ export default {
             },
           }
         );
+      } else if (value.resident_role === 'Inhabitant') {
+        result = await axios.put(
+          `${process.env.REACT_APP_API_URL}/users/${value.users_permissions_user}`,
+          {
+            inhabitant: value.address,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + session.jwt,
+            },
+          }
+        );
+      } else {
+        result = await axios.put(
+          `${process.env.REACT_APP_API_URL}/users/${value.users_permissions_user}`,
+          {
+            tenant: value.address,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + session.jwt,
+            },
+          }
+        );
       }
-      return true;
+      if (callback && result) {
+        callback(result.data);
+      }
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  removeUserFromAddress: async function (residentListId, userId) {
+  removeUserFromAddress: async function (userId) {
     const session = await encryptStorage.getItem('user_session');
     try {
-      await axios.put(
+      return await axios.put(
         `${process.env.REACT_APP_API_URL}/users/${userId}`,
         {
           address: null,
+          owners: [],
+          inhabitant: null,
+          tenant: null,
         },
         {
           headers: {
@@ -136,15 +162,6 @@ export default {
           },
         }
       );
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/resident-lists/${residentListId}`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + session.jwt,
-          },
-        }
-      );
-      return true;
     } catch (error) {
       console.error(error);
       throw error;

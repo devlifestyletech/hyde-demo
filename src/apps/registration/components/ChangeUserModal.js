@@ -7,9 +7,9 @@ export default function ChangeUserModal({
   userRule,
   visible,
   onCancel,
-  id,
-  userId,
   addressId,
+  userId,
+  refresh,
 }) {
   const [users, setUsers] = useState([]);
   const [form] = Form.useForm();
@@ -29,14 +29,20 @@ export default function ChangeUserModal({
       content: 'This role will change user',
       async onOk() {
         let newValue = {
-          address: addressId,
           resident_role: userRule,
+          address: addressId,
           ...value,
         };
-        const removing = await ResidentService.changeRoleUser(value, id);
+        console.log(newValue);
+        const removing = await ResidentService.removeUserFromAddress(userId);
         if (removing) {
-          const adding = await ResidentService.addUserToAddress(newValue);
-          if (adding) onCancel();
+          const adding = await ResidentService.addUserToAddress(
+            newValue,
+            refresh
+          );
+          if (adding) {
+            onCancel();
+          }
         }
       },
       onCancel() {

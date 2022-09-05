@@ -2,12 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Select, Modal } from 'antd';
 import ResidentService from '../services/residentServices';
 
-export default function AppendUserModal({ userRule, visible, onCancel, id }) {
+export default function AppendUserModal({
+  userRule,
+  visible,
+  onCancel,
+  id,
+  refresh,
+}) {
   const [users, setUsers] = useState();
   const [form] = Form.useForm();
   useEffect(() => {
     (async () => {
-      ResidentService.getAllUsers().then((users) => setUsers(users));
+      ResidentService.getAllUsers().then((users) => {
+        setUsers(users);
+      });
     })();
   }, []);
   return (
@@ -26,7 +34,9 @@ export default function AppendUserModal({ userRule, visible, onCancel, id }) {
                 resident_role: userRule,
                 ...value,
               };
-              ResidentService.addUserToAddress(newValue).then(() => onCancel());
+              ResidentService.addUserToAddress(newValue, refresh).then(() => {
+                onCancel();
+              });
             });
           }}
         >

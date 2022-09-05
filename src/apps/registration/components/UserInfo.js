@@ -9,9 +9,9 @@ import {
 import residentService from '../services/residentServices';
 import ChangeUserModal from './ChangeUserModal';
 
-function UsersInfo({ user, onEvent }) {
+function UsersInfo({ user, userRule, onEvent }) {
   // console.log(user);
-  const [appendUserModalVisibility, setAppendUserModalVisibility] =
+  const [changeUserModalVisibility, setChangeUserModalVisibility] =
     useState(false);
 
   function showConfirm(id) {
@@ -21,7 +21,7 @@ function UsersInfo({ user, onEvent }) {
       content: 'The resident will remove from this address',
       onOk() {
         residentService
-          .removeUserFromAddress(id, user.users_permissions_user.id)
+          .removeUserFromAddress(id, user.id)
           .then(() => onEvent());
       },
       onCancel() {
@@ -33,22 +33,21 @@ function UsersInfo({ user, onEvent }) {
   return (
     <>
       <ChangeUserModal
-        visible={appendUserModalVisibility}
-        id={user.id}
-        userRule={user.resident_role}
-        userId={user.users_permissions_user.id}
-        addressId={user.address.id}
+        visible={changeUserModalVisibility}
+        userRule={userRule}
+        userId={user.id}
+        addressId={user.address}
         onCancel={() => {
-          setAppendUserModalVisibility(false);
-          onEvent();
+          setChangeUserModalVisibility(false);
         }}
+        refresh={onEvent}
       />
       <Dropdown
         overlay={
           <Menu
             onClick={(e) => {
               if (e.key === 'edit') {
-                setAppendUserModalVisibility(true);
+                setChangeUserModalVisibility(true);
               }
               if (e.key === 'delete') {
                 showConfirm(user.id);
@@ -70,13 +69,10 @@ function UsersInfo({ user, onEvent }) {
       <br />
       <Row>
         <Col span="10">
-          {user.users_permissions_user.image ? (
+          {user.image ? (
             <div style={{ textAlign: 'center', margin: 20 }}>
               <img
-                src={
-                  process.env.REACT_APP_API_URL +
-                  user.users_permissions_user.image.url
-                }
+                src={process.env.REACT_APP_API_URL + user.image.url}
                 alt="avatar"
                 style={{
                   borderRadius: 20,
@@ -97,14 +93,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Firstname</strong>
                 <br />
-                {user ? user.users_permissions_user.firstname ?? '-' : null}
+                {user ? user.firstname ?? '-' : null}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Lastname</strong>
                 <br />
-                {user.users_permissions_user.lastname ?? '-'}
+                {user.lastname ?? '-'}
               </div>
             </Col>
           </Row>
@@ -113,14 +109,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Email address</strong>
                 <br />
-                {user.users_permissions_user.email ?? '-'}
+                {user.email ?? '-'}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Telephone number</strong>
                 <br />
-                {user.users_permissions_user.tel ?? '-'}
+                {user.tel ?? '-'}
               </div>
             </Col>
           </Row>
@@ -129,14 +125,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Gender</strong>
                 <br />
-                {user.users_permissions_user.gender ?? '-'}
+                {user.gender ?? '-'}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>Nationality</strong>
                 <br />
-                {user.users_permissions_user.nationality ?? '-'}
+                {user.nationality ?? '-'}
               </div>
             </Col>
           </Row>
@@ -145,14 +141,14 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>ID Card number</strong>
                 <br />
-                {user.users_permissions_user.id_number ?? '-'}
+                {user.id_number ?? '-'}
               </div>
             </Col>
             <Col span="12">
               <div>
                 <strong>License plate number</strong>
                 <br />
-                {user.users_permissions_user.lp_number ?? '-'}
+                {user.lp_number ?? '-'}
               </div>
             </Col>
           </Row>
@@ -161,7 +157,7 @@ function UsersInfo({ user, onEvent }) {
               <div>
                 <strong>Birth day</strong>
                 <br />
-                {user.users_permissions_user.birth_day ?? '-'}
+                {user.birth_day ?? '-'}
               </div>
             </Col>
           </Row>

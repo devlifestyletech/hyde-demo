@@ -220,12 +220,14 @@ export const RoomInfoModal = ({
         <div>
           <Tabs defaultActiveKey="owner">
             <TabPane tab="Owner" key="owner">
-              {owner.length ? (
-                owner.map((owner, index) => (
-                  <div key={'owner' + index}>
-                    <UsersInfo user={owner} onEvent={() => refresh()} />
-                  </div>
-                ))
+              {owner ? (
+                <div>
+                  <UsersInfo
+                    user={owner}
+                    userRule={'Owner'}
+                    onEvent={refresh}
+                  />
+                </div>
               ) : (
                 <div style={{ textAlign: 'center' }}>
                   <Empty />
@@ -242,7 +244,7 @@ export const RoomInfoModal = ({
                 </div>
               )}
             </TabPane>
-            {owner.length ? (
+            {owner ? (
               <>
                 <TabPane tab="Inhabitant" key="inhabitant">
                   {inhabitant.length ? (
@@ -250,7 +252,8 @@ export const RoomInfoModal = ({
                       <div key={'inhabitant' + index}>
                         <UsersInfo
                           user={inhabitant}
-                          onEvent={() => refresh()}
+                          userRule={'Inhabitant'}
+                          onEvent={refresh}
                         />
                       </div>
                     ))
@@ -281,7 +284,11 @@ export const RoomInfoModal = ({
                   {tenant.length ? (
                     tenant.map((tenant, index) => (
                       <div key={'tenant' + index}>
-                        <UsersInfo user={tenant} onEvent={() => refresh()} />
+                        <UsersInfo
+                          user={tenant}
+                          userRule={'Tenant'}
+                          onEvent={refresh}
+                        />
                       </div>
                     ))
                   ) : (
@@ -319,11 +326,10 @@ export const RoomInfoModal = ({
         userRule={userRule}
         visible={appendUserModalVisibility}
         id={id}
-        refresh={() => refresh()}
         onCancel={() => {
           setAppendUserModalVisibility(!appendUserModalVisibility);
-          refresh();
         }}
+        refresh={refresh}
       />
       <ConfirmModal
         visible={confirmVisible}

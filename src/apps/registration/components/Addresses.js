@@ -13,36 +13,21 @@ import './styles/addresses.css';
 
 export default function Addresses({ data, update }) {
   const [residentList, setResidentList] = useState([]);
-  const [owner, setOwner] = useState([]);
   const [roomInfoModalVisibility, setRoomInfoModalVisibility] = useState(false);
-  const [inhabitant, setInhabitant] = useState([]);
-  const [tenant, setTenant] = useState([]);
-  const [addressId, setAddressId] = useState(null);
-  const [qrOpenGate, setqrOpenGate] = useState('');
-  const [qeCodeSmartLocker, setQeCodeSmartLocker] = useState('');
   const [refresh, setRefresh] = useState(true);
 
   //actions
   useEffect(() => {
-    ProjectService.getResidentListByResidenceId(data.id).then((res) => {
-      update(data.id, res.data);
-      // console.log(res.data);
-      setResidentList(res.data);
-      setOwner(res.data.filter((user) => user.resident_role === 'Owner'));
-      setInhabitant(
-        res.data.filter((user) => user.resident_role === 'Inhabitant')
-      );
-      setTenant(res.data.filter((user) => user.resident_role === 'Tenant'));
-      setAddressId(res.data[0]?.address.id ?? null);
-      setqrOpenGate(res.data[0]?.address.qr_code_open_gate ?? null);
-      setQeCodeSmartLocker(res.data[0]?.address.qr_code_smart_locker ?? null);
-    });
-    setRefresh(false);
-  }, [data.id, refresh]);
+    if (refresh) {
+      let list = [data.owner, ...data.inhabitants, ...data.tenants];
+      setResidentList(list);
+      setRefresh(false);
+    }
+  }, [refresh, data]);
 
   return (
     <>
-      {data.resident_lists.length ? (
+      {data.owner ? (
         <div className="address">
           <div className="more">
             <FormOutlined
@@ -56,28 +41,26 @@ export default function Addresses({ data, update }) {
             />
           </div>
           <p className="addressTxt">Address: {data.address_number}</p>
+          <p className="addressTxt roomTxt">{`Room No: ${data.room_number}(${data.room_type})`}</p>
           <div>
-            {owner.length
-              ? owner.map((owner, index) => (
-                  <div key={index} style={{ fontSize: 16 }}>
-                    {owner?.users_permissions_user?.fullname}
-                    <br />
-                    <PhoneOutlined /> {owner?.users_permissions_user?.tel}
-                  </div>
-                ))
-              : null}
+            {data.owner ? (
+              <div style={{ fontSize: 16 }}>
+                {data?.owner?.fullname}
+                <br />
+                <PhoneOutlined /> {data?.owner?.tel}
+              </div>
+            ) : null}
           </div>
           <Row style={{ float: 'right', marginTop: 8 }}>
             {residentList.length
               ? residentList.map((resident, index) => (
                   <div key={index} style={{ marginLeft: -20 }}>
-                    {resident?.users_permissions_user?.image ? (
+                    {resident?.image ? (
                       <div>
                         <img
                           src={
                             process.env.REACT_APP_API_URL +
-                              resident?.users_permissions_user?.image?.url ??
-                            null
+                              resident?.image?.url ?? null
                           }
                           alt="img"
                           style={{
@@ -117,7 +100,8 @@ export default function Addresses({ data, update }) {
               }}
             />
           </div>
-          Address: {data.address_number}
+          <p className="addressTxt">Address: {data.address_number}</p>
+          <p className="addressTxt roomTxt">{`Room No: ${data.room_number}(${data.room_type})`}</p>
           <div className="room-empty">
             Available Room
             <Button
@@ -135,14 +119,15 @@ export default function Addresses({ data, update }) {
       <div>
         <RoomInfoModal
           id={data.id}
-          owner={owner}
-          inhabitant={inhabitant}
-          tenant={tenant}
-          addressId={addressId}
+          owner={data?.owner}
+          inhabitant={data?.inhabitants}
+          tenant={data?.tenants}
+          addressId={data?.id}
           visible={roomInfoModalVisibility}
-          qrOpenGate={qrOpenGate}
-          qrCodeSmartLocker={qeCodeSmartLocker}
-          refresh={() => {
+          qrOpenGate={data.qr_code_open_gate}
+          qrCodeSmartLocker={data.qr_code_smart_locker}
+          refresh={(val) => {
+            update(data.id, val);
             setRefresh(!refresh);
           }}
           onCancel={() => {

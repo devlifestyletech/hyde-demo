@@ -13,6 +13,7 @@ export default function ProjectData({ projectName, search = '' }) {
   const [maxIndex, setMaxIndex] = useState(0);
   const [totalLength, setTotalLength] = useState(0);
   const [current, setCurrent] = useState(1);
+  const [refresh, setRefresh] = useState(true);
   const pageSize = 3;
   let isCancelled = false;
 
@@ -45,17 +46,24 @@ export default function ProjectData({ projectName, search = '' }) {
     setLoading(bool);
   };
 
+  const refreshPage = () => {
+    setRefresh(true);
+  };
+
   //actions
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      ProjectService.getResidences().then((res) => {
-        setData(res.data);
-        filterData(res.data);
-      });
-    })();
+    if (refresh) {
+      setLoading(true);
+      setRefresh(false);
+      (async () => {
+        ProjectService.getResidences().then((res) => {
+          setData(res.data);
+          filterData(res.data);
+        });
+      })();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     setLoading(true);
@@ -103,10 +111,11 @@ export default function ProjectData({ projectName, search = '' }) {
                       backgroundColor: index % 2 === 0 ? '#ECEBEB' : '#E4E4E4',
                     }}
                   >
-                    <p className="floor">FLOOR {floor.substring(1, 4)}</p>
+                    <p className="floor">FLOOR {floor}</p>
                     <BuildingZone
                       isLoading={isLoading}
                       floorsData={floors[floor]}
+                      refresh={refreshPage}
                     />
                   </div>
                 )
