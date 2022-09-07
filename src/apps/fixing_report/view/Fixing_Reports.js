@@ -29,48 +29,39 @@ const FixingReports = () => {
       title: 'No.',
       dataIndex: 'number',
       key: 'number',
+      align: 'center',
     },
     {
       title: 'Address',
       dataIndex: 'address_number',
       key: 'address_number',
+      align: 'center',
       render: (index, record) => <div>{record.address_number}</div>,
     },
     {
       title: 'Owner',
       dataIndex: 'owner',
       key: 'owner',
+      align: 'center',
       sorter: (a, b) => (a.owner > b.owner ? 1 : -1),
       render: (index, record) => (
         <div>
-          {record.owner?.first_name_en} {record.owner?.last_name_en}
+          {record.owner?.fullname}
         </div>
       ),
-    },
-    {
-      title: 'Nationality',
-      dataIndex: 'nationality',
-      key: 'nationality',
-      sorter: (a, b) => (a.nationality > b.nationality ? 1 : -1),
-      render: (index, record) => <div>{record.owner?.nationality}</div>,
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-      sorter: (a, b) => (a.type > b.type ? 1 : -1),
-      render: (index, record) => <div>{record.project?.type}</div>,
     },
     {
       title: 'Tel',
       dataIndex: 'tel',
       key: 'tel',
+      align: 'center',
       render: (index, record) => <div>{record.owner?.tel}</div>,
     },
     {
       title: 'E-Mail',
       dataIndex: 'email',
       key: 'email',
+      align: 'center',
       sorter: (a, b) => (a.email > b.email ? 1 : -1),
       render: (index, record) => <div>{record.owner?.email}</div>,
     },
@@ -80,54 +71,36 @@ const FixingReports = () => {
     {
       width: '4vw',
       title: 'No.',
+      align: 'center',
       dataIndex: 'number',
       key: 'number',
     },
-    {
-      width: '8vw',
-      title: 'Image',
-      dataIndex: 'image_pending',
-      key: 'image_pending',
-      render: (index, record) => (
-        <>
-          <Image
-            width={300}
-            height={200}
-            src={
-              record?.image_pending[0]
-                ? process.env.REACT_APP_API_URL + record.image_pending[0].url
-                : '/main/images/artani-logo.png'
-            }
-            alt={
-              record?.image_pending[0]
-                ? process.env.REACT_APP_API_URL + record.image_pending[0].url
-                : '/main/images/artani-logo.png'
-            }
-          />
-        </>
-      ),
-    },
+  
     {
       width: '8vw',
       title: 'Submission Date',
       dataIndex: 'submission_date_show',
       key: 'submission_date_show',
+      
     },
     {
       title: 'Problem',
       dataIndex: 'problem',
       key: 'problem',
+      align: 'center',
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      align: 'center',
     },
     {
       hidden: true,
       title: 'Address',
       dataIndex: 'address_number',
       key: 'address_number',
+      align: 'center',
     },
     {
       hidden: true,
@@ -139,6 +112,7 @@ const FixingReports = () => {
       width: '4vw',
       title: 'Status',
       dataIndex: 'status',
+      align: 'center',
       key: 'status',
       sorter: (a, b) => (a.status > b.status ? 1 : -1),
       render: (text) => (
