@@ -258,7 +258,7 @@ function List(props) {
                 <ChatText boolRead={read}>
                   <ChatComponent item={item} />
                 </ChatText>
-                <ChatText>{item.users_read}</ChatText>
+                {/* <ChatText>{item.users_read}</ChatText> */}
               </Col>
             </div>
           </Row>
@@ -380,11 +380,12 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
+  background-color: ${(props) => (props.boolRead ? null : null)};
   margin-left: 1vh;
   font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
   font-style: SukhumvitSet;
   font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
+  -webkit-text-stroke:${(props) => (props.boolRead ? '0.5px black' : null)};
 `;
 const ChatText = styled.div`
   // background-color: coral;
@@ -392,6 +393,8 @@ const ChatText = styled.div`
   font-size: ${(props) => (props.boolRead ? '0.76vw' : '0.64vw')};
   font-style: SukhumvitSet;
   font-weight: ${(props) => (props.weight ? 'Bold' : null)};
+  font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
+  -webkit-text-stroke:${(props) => (props.boolRead ? '0.5px black' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`

@@ -234,7 +234,7 @@ function List(props) {
                 <ChatText boolRead={read}>
                   <ChatComponent item={item} />
                 </ChatText>
-                
+                {/* <ChatText>{item.users_read}</ChatText> */}
               </Col>
             </div>
           </Row>
@@ -339,6 +339,7 @@ const TitleText = styled.div`
   font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
   font-style: SukhumvitSet;
   font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
+  -webkit-text-stroke:${(props) => (props.boolRead ? '0.5px black' : null)};
 `;
 const ChatText = styled.div`
   // background-color: coral;
@@ -346,6 +347,8 @@ const ChatText = styled.div`
   font-size: ${(props) => (props.boolRead ? '0.76vw' : '0.64vw')};
   font-style: SukhumvitSet;
   font-weight: ${(props) => (props.weight ? 'Bold' : null)};
+  font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
+  -webkit-text-stroke:${(props) => (props.boolRead ? '0.5px black' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`
