@@ -169,7 +169,7 @@ export default {
     console.log('log process', process.env.NOTI_DEV_SERVER);
     try {
       return await axios.post(
-        `https://noti-dev.ap.ngrok.io/api/message/admin/registration`,
+        `https://noti-dev.ap.ngrok.io/api/message/registration`,
         value
       );
     } catch (error) {
