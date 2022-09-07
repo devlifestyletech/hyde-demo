@@ -1,16 +1,14 @@
-import {
-  Button, Card, Col, Row, Space,
-} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Space, Row, Col, Button } from 'antd';
+import noImg from '../assets/img/no_img.png';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { encryptStorage } from '../../../utils/encryptStorage';
 
-// components
+//components
 import editIcon from '../assets/edit.svg';
-import highIcon from '../assets/high.svg';
-import noImg from '../assets/img/no_img.png';
 import lowIcon from '../assets/low.svg';
 import mediumIcon from '../assets/medium.svg';
+import highIcon from '../assets/high.svg';
 import EditOccupation from './EditOccupation';
 
 const session = encryptStorage.getItem('user_session');
@@ -18,12 +16,13 @@ const session = encryptStorage.getItem('user_session');
 export default function Occupations() {
   const headers = {
     headers: {
-      Authorization: `Bearer ${session.jwt}`,
+      Authorization: 'Bearer ' + session.jwt,
     },
   };
   const [id, setId] = useState(null);
   const [occupations, setOccupations] = useState([]);
-  const [editOccupationModalVisibility, setEditOccupationModalVisibility] = useState(false);
+  const [editOccupationModalVisibility, setEditOccupationModalVisibility] =
+    useState(false);
   const [roomName, setRoomName] = useState('');
   const [roomDetail, setRoomDetail] = useState('');
   const [mediumAt, setMediumAt] = useState(null);
@@ -45,12 +44,12 @@ export default function Occupations() {
   };
 
   const editOccupation = async (value, files, id) => {
-    const dataImage = new FormData();
+    let dataImage = new FormData();
     let imageId = [];
     if (files) {
       dataImage.append('files', files[0]);
       await axios
-        .post(`${process.env.REACT_APP_API_URL}/upload/`, dataImage, headers)
+        .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
         .then((res) => {
           imageId = res.data[0];
           axios
@@ -65,14 +64,14 @@ export default function Occupations() {
                 closed: value.closed,
                 image: imageId,
               },
-              headers,
+              headers
             )
             .then((res) => {
               fetchData();
               alert('Edit occupation room success');
             })
             .catch((err) => {
-              console.error('Can\'t edit data: ', err);
+              console.error("Can't edit data: ", err);
             });
         })
         .catch((err) => {
@@ -90,14 +89,14 @@ export default function Occupations() {
             opened: value.opened,
             closed: value.closed,
           },
-          headers,
+          headers
         )
         .then((res) => {
           fetchData();
           alert('Edit occupation room success');
         })
         .catch((err) => {
-          console.error('Can\'t edit data: ', err);
+          console.error("Can't edit data: ", err);
         });
     }
   };
@@ -116,7 +115,7 @@ export default function Occupations() {
           occupations.map((occupation, index) => (
             <div key={index} className="facilities-card">
               <Card
-                cover={(
+                cover={
                   <img
                     src={
                       occupation.image
@@ -131,7 +130,7 @@ export default function Occupations() {
                       borderTopRightRadius: 20,
                     }}
                   />
-                )}
+                }
                 style={{ width: 435 }}
               >
                 <Row>
@@ -171,8 +170,8 @@ export default function Occupations() {
                         Low
                       </div>
                     </Row>
-                  ) : occupation.current_people
-                  < occupation.medium_status_people ? (
+                  ) : occupation.current_people <
+                    occupation.medium_status_people ? (
                     <Row>
                       <div>
                         <img
@@ -183,24 +182,24 @@ export default function Occupations() {
                         Medium
                       </div>
                     </Row>
-                    ) : (
-                      <Row>
-                        <div>
-                          <img
-                            src={highIcon}
-                            alt="low"
-                            style={{ marginRight: 10 }}
-                          />
-                          High
-                        </div>
-                      </Row>
-                    )}
+                  ) : (
+                    <Row>
+                      <div>
+                        <img
+                          src={highIcon}
+                          alt="low"
+                          style={{ marginRight: 10 }}
+                        />
+                        High
+                      </div>
+                    </Row>
+                  )}
                 </div>
               </Card>
             </div>
           ))
         ) : (
-          <div />
+          <div></div>
         )}
       </Space>
       <EditOccupation
