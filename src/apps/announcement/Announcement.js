@@ -806,7 +806,6 @@ function Announcement() {
                     : value.publish_status,
                 Status_announcements:
                   value.publish_status === 'Now' ? true : false,
-                Status_announcements_noti:false,
                 announcer: session.user.fullname,
                 detail: value.detail,
                 link: value.link,
@@ -828,9 +827,6 @@ function Announcement() {
               headers
             )
             .then((res) => {
-              if ( value.publish_status === 'Now') {
-                sendTopic()
-              }
               fetchData();
               closeModal();
               message.success('Announcement has been added successfully.');
@@ -843,22 +839,6 @@ function Announcement() {
           console.log('ERROR', err);
         });
     };
-const sendTopic = async () => {
- await axios.post("https://noti-dev.ap.ngrok.io/api/message/sendToTopic",{
-    "message": {
-        "notification": {
-            "title": "Announce",
-            "body": "You have bill to pay this month. Notification"
-        },
-        "data": {
-            "title": "Announce",
-            "body": "You have bill to pay this month. data",
-        },
-        "topic": "Announce"
-    }
-})
-  
-}
 
     return (
       <Modal
