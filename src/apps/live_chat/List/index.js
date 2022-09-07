@@ -318,7 +318,7 @@ const StyledList = styled(AntdList)`
   }
 
   a {
-    color: #222;
+    color: #097ef0;
   }
 `;
 const ListComp = styled.div`
