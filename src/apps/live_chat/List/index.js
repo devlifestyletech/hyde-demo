@@ -234,7 +234,7 @@ function List(props) {
                 <ChatText boolRead={read}>
                   <ChatComponent item={item} />
                 </ChatText>
-                <ChatText>{item.users_read}</ChatText>
+                
               </Col>
             </div>
           </Row>
@@ -318,7 +318,7 @@ const StyledList = styled(AntdList)`
   }
 
   a {
-    color: #097ef0;
+    color: #222;
   }
 `;
 const ListComp = styled.div`
@@ -334,7 +334,7 @@ const ListHeading = styled.div`
   border-bottom: 1px solid #757591;
 `;
 const TitleText = styled.div`
-  background-color: ${(props) => (props.boolRead ? 'cyan' : null)};
+  background-color: ${(props) => (props.boolRead ? null : null)};
   margin-left: 1vh;
   font-size: font-size: ${(props) => (props.boolRead ? '0.88vw' : '0.72vw')};
   font-style: SukhumvitSet;
