@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Table, Button, Divider, Modal, message } from 'antd';
-import { format } from 'date-fns';
-import qrIcon from '../assets/qr.svg';
+import {Button, Divider, message, Modal, Table} from 'antd';
+import {format} from 'date-fns';
+import {deleteDoc, doc} from 'firebase/firestore';
+import React, {useState} from 'react';
+import {db} from '../../../utils/firebaseConfig';
 import editIcon from '../assets/edit.svg';
+import qrIcon from '../assets/qr.svg';
 import delIcon from '../assets/trash-2.svg';
 import EditReservation from './EditReservation';
 import QrModal from './QrModal';
-import { db } from '../../../utils/firebaseConfig';
-import { doc, deleteDoc } from 'firebase/firestore';
 
-export default function ReservationTable({ data, loading, facility }) {
+export default function ReservationTable({data, loading, facility}) {
   const [editReservationModalVisibility, setEditReservationModalVisibility] =
-    useState(false);
+      useState(false);
   const [handleItem, setHandleItem] = useState();
   const [showQrModalVisible, setShowQrModalVisible] = useState(false);
 
@@ -23,19 +23,17 @@ export default function ReservationTable({ data, loading, facility }) {
       autoFocusButton: null,
       okText: 'Confirm',
       okType: 'danger',
-      okButtonProps: { shape: 'round', type: 'danger', size: 'large' },
-      cancelButtonProps: { shape: 'round', size: 'large' },
+      okButtonProps: {shape: 'round', type: 'danger', size: 'large'},
+      cancelButtonProps: {shape: 'round', size: 'large'},
       onOk() {
-        return new Promise(async function (resolve, reject) {
-          await deleteDoc(doc(db, 'reservations', item))
-            .then(() => {
-              resolve();
-              message.success('Delete reservation successfully');
-            })
-            .catch((err) => {
-              console.error(err);
-              reject(err);
-            });
+        return new Promise(async function(resolve, reject) {
+          await deleteDoc(doc(db, 'reservations', item)).then(() => {
+            resolve();
+            message.success('Delete reservation successfully');
+          }).catch((err) => {
+            console.error(err);
+            reject(err);
+          });
         });
       },
       onCancel() {
@@ -75,7 +73,7 @@ export default function ReservationTable({ data, loading, facility }) {
       dataIndex: 'startDateTime',
       key: 'idx',
       render: (item, idx) => (
-        <div key={idx}>{format(item.toDate(), 'yyyy-MM-dd')}</div>
+          <div key={idx}>{format(item.toDate(), 'yyyy-MM-dd')}</div>
       ),
     },
     {
@@ -83,7 +81,7 @@ export default function ReservationTable({ data, loading, facility }) {
       dataIndex: 'startDateTime',
       key: 'idx',
       render: (item, idx) => (
-        <div key={idx}>{format(item.toDate(), 'HH:mm')}</div>
+          <div key={idx}>{format(item.toDate(), 'HH:mm')}</div>
       ),
     },
     {
@@ -91,7 +89,7 @@ export default function ReservationTable({ data, loading, facility }) {
       dataIndex: 'endDateTime',
       key: 'idx',
       render: (item, idx) => (
-        <div key={idx}>{format(item.toDate(), 'HH:mm')}</div>
+          <div key={idx}>{format(item.toDate(), 'HH:mm')}</div>
       ),
     },
     {
@@ -99,53 +97,54 @@ export default function ReservationTable({ data, loading, facility }) {
       dataIndex: 'id',
       key: 'idx',
       render: (item, idx) => (
-        <div key={idx}>
-          <Button
-            type="link"
-            onClick={() => {
-              let dataId = data.find((i) => i.id === item);
-              setHandleItem(dataId);
-              setShowQrModalVisible(true);
-            }}
-            icon={<img src={qrIcon} alt="qrcode" />}
-          />
-          <Divider type="vertical" />
-          <Button
-            type="link"
-            onClick={() => {
-              let dataId = data.find((i) => i.id === item);
-              setHandleItem(dataId);
-              setEditReservationModalVisibility(true);
-            }}
-            icon={<img src={editIcon} alt="edit" />}
-          />
-          <Divider type="vertical" />
-          <Button
-            type="link"
-            onClick={() => {
-              showConfirmDelete(item);
-            }}
-            icon={<img src={delIcon} alt="delete" />}
-          />
-        </div>
+          <div key={idx}>
+            <Button
+                type='link'
+                onClick={() => {
+                  let dataId = data.find((i) => i.id === item);
+                  setHandleItem(dataId);
+                  setShowQrModalVisible(true);
+                }}
+                icon={<img src={qrIcon} alt='qrcode' />}
+            />
+            <Divider type='vertical' />
+            <Button
+                type='link'
+                onClick={() => {
+                  let dataId = data.find((i) => i.id === item);
+                  setHandleItem(dataId);
+                  setEditReservationModalVisibility(true);
+                }}
+                icon={<img src={editIcon} alt='edit' />}
+            />
+            <Divider type='vertical' />
+            <Button
+                type='link'
+                onClick={() => {
+                  showConfirmDelete(item);
+                }}
+                icon={<img src={delIcon} alt='delete' />}
+            />
+          </div>
       ),
     },
   ];
 
   return (
-    <div>
-      <Table loading={loading} dataSource={data} columns={columns} />
-      <EditReservation
-        visible={editReservationModalVisibility}
-        facility={facility}
-        data={handleItem}
-        onCancel={() => setEditReservationModalVisibility(false)}
-      />
-      <QrModal
-        visible={showQrModalVisible}
-        data={handleItem}
-        onCancel={() => setShowQrModalVisible(false)}
-      />
-    </div>
+      <div>
+        <Table loading={loading} dataSource={data} columns={columns}
+               pagination={{defaultPageSize: 50}} />
+        <EditReservation
+            visible={editReservationModalVisibility}
+            facility={facility}
+            data={handleItem}
+            onCancel={() => setEditReservationModalVisibility(false)}
+        />
+        <QrModal
+            visible={showQrModalVisible}
+            data={handleItem}
+            onCancel={() => setShowQrModalVisible(false)}
+        />
+      </div>
   );
 }

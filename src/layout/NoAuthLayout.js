@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate, useOutlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { Row, Col } from 'antd';
+import {Col, Row} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Navigate, useLocation, useOutlet} from 'react-router-dom';
+import HydeLogo from '../apps/assets/images/hyde-logo.svg';
 
 import CoverImage from '../apps/assets/images/hyde_building2.png';
-import HydeLogo from '../apps/assets/images/hyde-logo.svg';
+import {useAuth} from '../hooks/useAuth';
 
 const from = window.location.pathname;
 
 function NoAuthLayout() {
-  const { isSignIn } = useAuth();
+  const {isSignIn} = useAuth();
   const location = useLocation();
   const outlet = useOutlet();
 
-  const { width } = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   //Responsive helper login page function
   function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
+    const {innerWidth: width, innerHeight: height} = window;
     return {
       width,
       height,
@@ -26,7 +26,7 @@ function NoAuthLayout() {
 
   function useWindowDimensions() {
     const [windowDimensions, setWindowDimensions] = useState(
-      getWindowDimensions()
+        getWindowDimensions(),
     );
 
     useEffect(() => {
@@ -43,34 +43,34 @@ function NoAuthLayout() {
 
   if (isSignIn)
     return (
-      <Navigate
-        to={from !== '/' ? from : '/dashboard/summary'}
-        state={{ from: location }}
-        replace
-      />
+        <Navigate
+            to={from !== '/' ? from : '/dashboard/summary'}
+            state={{from: location}}
+            replace
+        />
     );
 
   return (
-    <div className="bg">
-      <Row>
-        {width < 1180 ? null : (
-          <Col style={{ height: '100vh', width: 675 }}>
-            <img
-              src={CoverImage}
-              alt="hyde cover"
-              className="cover-image"
-              style={{ height: '100vh' }}
-            />
+      <div className='bg'>
+        <Row>
+          {width < 1180 ? null : (
+              <Col style={{height: '100%', width: 675}}>
+                <img
+                    src={CoverImage}
+                    alt='hyde cover'
+                    className='cover-image'
+                    style={{height: '100vh'}}
+                />
+              </Col>
+          )}
+          <Col flex='1 1 auto' style={{textAlign: 'center'}}>
+            <div className='hyde-logo'>
+              <img src={HydeLogo} alt='hyde logo' />
+              {outlet}
+            </div>
           </Col>
-        )}
-        <Col flex="1 1 auto" style={{ textAlign: 'center' }}>
-          <div className="hyde-logo">
-            <img src={HydeLogo} alt="hyde logo" />
-            {outlet}
-          </div>
-        </Col>
-      </Row>
-    </div>
+        </Row>
+      </div>
   );
 }
 

@@ -19,8 +19,6 @@
 		"craco-less-plugin": "^0.0.3",
 		"date-fns": "^2.27.0",
 		"date-fns-tz": "^1.1.6",
-		"devextreme": "^21.2.4",
-		"devextreme-react": "^21.2.4",
 		"dotenv": "^16.0.1",
 		"encrypt-storage": "^2.2.10",
 		"firebase": "^9.6.3",

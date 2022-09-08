@@ -18,6 +18,7 @@ export default function QrReservationModal({data, visible, onCancel}) {
           width={400}
       >
         <div
+            ref={qrRef}
             style={{
               textAlign: 'center',
               backgroundColor: 'white',
@@ -25,7 +26,7 @@ export default function QrReservationModal({data, visible, onCancel}) {
             }}
         >
           <QRCode
-              ref={qrRef}
+
               value={data?.id}
               size={200}
               imageSettings={{
