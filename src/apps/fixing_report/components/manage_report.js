@@ -5,10 +5,10 @@ import axios from 'axios';
 import moment from 'moment';
 import { encryptStorage } from '../../../config/encrypt';
 
-const session = encryptStorage.getItem('user_session');
 const URLreScript = process.env.REACT_APP_API_URL + '/fixing-reports/';
 const { format } = require('date-fns');
 const ManageReport = ({ visible, onCancel }) => {
+  const session = encryptStorage.getItem('user_session');
   const [form] = Form.useForm();
   const [pickedImage, setPickedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);

@@ -19,9 +19,9 @@ import noImg from '../../../assets/images/noImg.jpg';
 import axios from 'axios';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 export default function ReportDetail({ reportId }) {
+  const session = encryptStorage.getItem('user_session');
   const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);

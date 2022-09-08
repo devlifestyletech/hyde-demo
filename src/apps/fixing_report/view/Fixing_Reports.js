@@ -7,9 +7,8 @@ import axios from 'axios';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
 
-const session = encryptStorage.getItem('user_session');
-
 const FixingReports = () => {
+  const session = encryptStorage.getItem('user_session');
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [searchName, setSearchName] = useState('');

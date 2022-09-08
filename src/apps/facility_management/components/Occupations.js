@@ -11,9 +11,8 @@ import mediumIcon from '../assets/medium.svg';
 import highIcon from '../assets/high.svg';
 import EditOccupation from './EditOccupation';
 
-const session = encryptStorage.getItem('user_session');
-
 export default function Occupations() {
+  const session = encryptStorage.getItem('user_session');
   const headers = {
     headers: {
       Authorization: 'Bearer ' + session.jwt,
