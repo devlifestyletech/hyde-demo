@@ -44,11 +44,7 @@ const FixingReports = () => {
       key: 'owner',
       align: 'center',
       sorter: (a, b) => (a.owner > b.owner ? 1 : -1),
-      render: (index, record) => (
-        <div>
-          {record.owner?.fullname}
-        </div>
-      ),
+      render: (index, record) => <div>{record.owner?.fullname}</div>,
     },
     {
       title: 'Tel',
@@ -75,13 +71,12 @@ const FixingReports = () => {
       dataIndex: 'number',
       key: 'number',
     },
-  
+
     {
       width: '8vw',
       title: 'Submission Date',
       dataIndex: 'submission_date_show',
       key: 'submission_date_show',
-      
     },
     {
       title: 'Problem',
@@ -172,10 +167,14 @@ const FixingReports = () => {
     let combinesData = [];
 
     await axios
-      .get(process.env.REACT_APP_API_URL + '/addresses', headers)
+      .get(process.env.REACT_APP_API_URL + '/addresses?_limit=500', headers)
       .then((res) => {
-        console.log('resData', res.data);
+        // console.log('resData', res.data.length);
         residencesData = res.data;
+        // console.log(
+        //   'residences DATA => ',
+        //   residencesData.filter((item) => item.fixing_reports.length > 0)
+        // );
         residencesData
           // .filter((item) => item.owner != null && item.owner !== undefined)
           .filter((item) => item.fixing_reports.length > 0)
