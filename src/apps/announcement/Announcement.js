@@ -1,31 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {PictureOutlined, PlusOutlined} from '@ant-design/icons';
-import {
-  Button, Col, DatePicker, Divider, Form, Image, Input, message, Modal, Select,
-  Spin, Table, TimePicker,
-} from 'antd';
-import axios from 'axios';
-import {format, utcToZonedTime} from 'date-fns-tz';
-import moment from 'moment';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Heading from '../../components/Header';
-
-import {encryptStorage} from '../../utils/encryptStorage';
+import {
+  Button, Col, DatePicker, Divider, Form, Image, Input, message, Modal, Select, Spin, Table, TimePicker,
+} from 'antd';
+import { PictureOutlined, PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import moment from 'moment';
+import './style/announcementsStyle.css';
+import { format, utcToZonedTime } from 'date-fns-tz';
 
 import editIcon from './assets/icons/edit.svg';
 import trashIcon from './assets/icons/trash.svg';
 import noImg from './assets/images/noImg.jpg';
-import './style/announcementsStyle.css';
+
+import { encryptStorage } from '../../utils/encryptStorage';
+
+const session = encryptStorage.getItem('user_session');
 
 function Announcement() {
-  const session = encryptStorage.getItem('user_session');
   const URLreScript = process.env.REACT_APP_API_URL + '/announcements';
-  const headers = {headers: {Authorization: 'Bearer ' + session.jwt}};
+  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
 
   const publish = ['Now', 'Scheduled'];
-  const {Search} = Input;
-  const {Option} = Select;
-  const {MonthPicker} = DatePicker;
+  const { Search } = Input;
+  const { Option } = Select;
+  const { MonthPicker } = DatePicker;
   const thTimeZone = 'Asia/Bangkok';
   const [data, setData] = useState([]);
   const [month, setMonth] = useState('');
@@ -66,91 +66,48 @@ function Announcement() {
     }
   };
 
-  let columns = [
-    {
-      width: '2vw',
-      title: 'No.',
-      dataIndex: 'number',
-      key: 'number',
-      sorter: (a, b) => a.number - b.number,
-    },
-    {
-      width: '8vw',
-      title: 'Image',
-      dataIndex: 'image',
-      key: 'image',
-      render: (_, image) => (
-          <>
-            <Image
-                width={200}
-                height={100}
-                src={
-                  image?.image?.url
-                      ? process.env.REACT_APP_API_URL + image.image.url
-                      : noImg
-                }
-                alt={image.image.url}
-            />
-          </>
-      ),
-    },
-    {
-      title: 'Title',
-      dataIndex: 'title_name',
-      key: 'title_name',
-    },
-    {
-      width: '8vw',
-      title: 'Post Status',
-      dataIndex: 'post_status',
-      key: 'post_status',
-      render: (_, item) =>
-          item.post_status === 'Scheduled' ? (
-              <span style={{color: 'red'}}>{item.post_status}</span>
-          ) : (
-              <span>{item.post_status}</span>
-          ),
-      sorter: (a, b) => (a.post_status > b.post_status ? 1 : -1),
-    },
-    {
-      width: '10vw',
-      title: 'Date Announced',
-      dataIndex: 'date_announced_show',
-      key: 'date_announced_show',
-    },
-    {
-      width: '10vw',
-      title: 'Date Expired',
-      dataIndex: 'date_expired_show',
-      key: 'date_expired_show',
-    },
-    {
-      width: '10vw',
-      title: 'Announcer',
-      dataIndex: 'announcer',
-      key: 'announcer',
-    },
-    {
-      align: 'center',
-      title: 'Action',
-      dataIndex: 'operation',
-      render: (_, record) => (
-          <div class='flex-container'>
-            <Button
-                type='link'
-                icon={<img src={editIcon} alt='Edit' />}
-                onClick={() => handleEdit(record)}
-            />
-            <Divider type='vertical' style={{height: 30}} />
-            <Button
-                type='link'
-                icon={<img src={trashIcon} alt='delete' />}
-                onClick={() => onDelete(record.id)}
-            />
-          </div>
-      ),
-    },
-  ].filter((item) => !item.hidden);
+  let columns = [{
+    width: '2vw', title: 'No.', dataIndex: 'number', key: 'number', sorter: (a, b) => a.number - b.number,
+  }, {
+    width: '8vw', title: 'Image', dataIndex: 'image', key: 'image', render: (_, image) => (<>
+        <Image
+          width={200}
+          height={100}
+          src={image?.image?.url ? process.env.REACT_APP_API_URL + image.image.url : noImg}
+          alt={image.image.url}
+        />
+      </>),
+  }, {
+    title: 'Title', dataIndex: 'title_name', key: 'title_name',
+  }, {
+    width: '8vw',
+    title: 'Post Status',
+    dataIndex: 'post_status',
+    key: 'post_status',
+    render: (_, item) => item.post_status === 'Scheduled' ? (
+      <span style={{ color: 'red' }}>{item.post_status}</span>) : (<span>{item.post_status}</span>),
+    sorter: (a, b) => (a.post_status > b.post_status ? 1 : -1),
+  }, {
+    width: '10vw', title: 'Date Announced', dataIndex: 'date_announced_show', key: 'date_announced_show',
+  }, {
+    width: '10vw', title: 'Date Expired', dataIndex: 'date_expired_show', key: 'date_expired_show',
+  }, {
+    width: '10vw', title: 'Announcer', dataIndex: 'announcer', key: 'announcer',
+  }, {
+    align: 'center', title: 'Action', dataIndex: 'operation', render: (_, record) => (<div class='flex-container'>
+        <Button
+          type='link'
+          icon={<img src={editIcon} alt='Edit' />}
+          onClick={() => handleEdit(record)}
+        />
+        <Divider type='vertical' style={{ height: 30 }} />
+        <Button
+          type='link'
+          icon={<img src={trashIcon} alt='delete' />}
+          onClick={() => onDelete(record.id)}
+        />
+      </div>),
+  }].filter((item) => !item.hidden);
 
   const handleEdit = async (record) => {
     console.log('Edit', record);
@@ -163,29 +120,32 @@ function Announcement() {
       title: 'Are you sure you want to delete this announcement?',
       okText: 'Confirm',
       okType: 'danger',
-      okButtonProps: {shape: 'round', type: 'danger', size: 'large'},
-      cancelButtonProps: {shape: 'round', size: 'large'},
-      // icon: <DeleteOutlined style={{ color: "red" }} />,
+      okButtonProps: { shape: 'round', type: 'danger', size: 'large' },
+      cancelButtonProps: { shape: 'round', size: 'large' }, // icon: <DeleteOutlined style={{ color: "red" }} />,
       icon: null,
       autoFocusButton: null,
       centered: true,
       onOk() {
         handleDelete(key);
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 
   const handleDelete = async (key) => {
     console.log('record.name', key);
-    await axios.delete(`${URLreScript}/${key}`, headers).then((result) => {
-      fetchData();
-      message.error('Announcement has been deleted successfully.');
-      console.log('delete:', result);
-      return result.status === 200 ? true : false;
-    }).catch((err) => {
-      return false;
-    });
+    await axios
+      .delete(`${URLreScript}/${key}`, headers)
+      .then((result) => {
+        fetchData();
+        message.error('Announcement has been deleted successfully.');
+        console.log('delete:', result);
+        return result.status === 200 ? true : false;
+      })
+      .catch((err) => {
+        return false;
+      });
   };
 
   useEffect(() => {
@@ -201,39 +161,19 @@ function Announcement() {
       lt = `${parseInt(month.split('-')[0]) + 1}-01-01`;
     } else {
       gte = month + '-01';
-      lt = `${month.split('-')[0]}-${
-          parseInt(month.split('-')[1]) + 1 < 10
-              ? `0${parseInt(month.split('-')[1]) + 1}`
-              : `${parseInt(month.split('-')[1]) + 1}`
-      }-01`;
+      lt = `${month.split('-')[0]}-${parseInt(month.split('-')[1]) + 1 < 10 ? `0${parseInt(month.split('-')[1]) + 1}` : `${parseInt(month.split('-')[1]) + 1}`}-01`;
     }
 
-    let url = `${URLreScript}${
-        month === ''
-            ? '?'
-            : `?date_announced_gte=${gte}&date_announced_lt=${lt}&`
-    }_sort=createdAt:desc`;
+    let url = `${URLreScript}${month === '' ? '?' : `?date_announced_gte=${gte}&date_announced_lt=${lt}&`}_sort=createdAt:desc`;
     console.log(url);
     await axios.get(url, headers).then((response) => {
       console.log('data', response.data);
       let originData = [];
       response.data.forEach((announce, index) => {
-        let date_an = format(
-            utcToZonedTime(new Date(announce.date_announced), thTimeZone),
-            'dd MMM yyyy HH:mm',
-            {timeZone: 'Asia/Bangkok'},
-        );
-        let date_ex = format(
-            utcToZonedTime(new Date(announce.date_expired), thTimeZone),
-            'dd MMM yyyy HH:mm',
-            {timeZone: 'Asia/Bangkok'},
-        );
+        let date_an = format(utcToZonedTime(new Date(announce.date_announced), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
+        let date_ex = format(utcToZonedTime(new Date(announce.date_expired), thTimeZone), 'dd MMM yyyy HH:mm', { timeZone: 'Asia/Bangkok' });
         let announceData = {
-          key: index,
-          number: index + 1,
-          date_announced_show: date_an,
-          date_expired_show: date_ex,
-          ...announce,
+          key: index, number: index + 1, date_announced_show: date_an, date_expired_show: date_ex, ...announce,
         };
         originData.push(announceData);
       });
@@ -242,27 +182,17 @@ function Announcement() {
     });
   };
 
-  const EditAnnouncement = ({visible, editValue, onCancel}) => {
+  const EditAnnouncement = ({ visible, editValue, onCancel }) => {
     const [form] = Form.useForm();
     const [publishPicked, setPublishPicked] = useState(editValue.post_status);
     const [postDisable, setPostDisable] = useState(false);
-    const [pickedImage, setPickedImage] = useState(
-        process.env.REACT_APP_API_URL + editValue.image.url,
-    );
+    const [pickedImage, setPickedImage] = useState(process.env.REACT_APP_API_URL + editValue.image.url);
     const [imageFile, setImageFile] = useState(null);
     const [imageBorder, setImageBorder] = useState('inputImage');
     console.log('editValue.id', editValue.id);
 
-    let date_an = format(
-        utcToZonedTime(new Date(editValue.date_announced), thTimeZone),
-        'yyyy-MM-dd HH:mm',
-        {timeZone: 'Asia/Bangkok'},
-    );
-    let date_ex = format(
-        utcToZonedTime(new Date(editValue.date_expired), thTimeZone),
-        'yyyy-MM-dd HH:mm',
-        {timeZone: 'Asia/Bangkok'},
-    );
+    let date_an = format(utcToZonedTime(new Date(editValue.date_announced), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
+    let date_ex = format(utcToZonedTime(new Date(editValue.date_expired), thTimeZone), 'yyyy-MM-dd HH:mm', { timeZone: 'Asia/Bangkok' });
 
     const handleValue = () => {
       form.setFieldsValue({
@@ -270,14 +200,8 @@ function Announcement() {
         detail: editValue.detail,
         link: editValue.link ? editValue.link : '',
         publish_status: editValue.post_status,
-        schedule_date:
-            editValue.post_status === 'Scheduled'
-                ? moment(date_an.split(' ')[0])
-                : '',
-        schedule_time:
-            editValue.post_status === 'Scheduled'
-                ? moment(date_an.split(' ')[1], 'HH:mm')
-                : '',
+        schedule_date: editValue.post_status === 'Scheduled' ? moment(date_an.split(' ')[0]) : '',
+        schedule_time: editValue.post_status === 'Scheduled' ? moment(date_an.split(' ')[1], 'HH:mm') : '',
         expire_date: moment(date_ex.split(' ')[0]),
         expire_time: moment(date_ex.split(' ')[1], 'HH:mm'),
       });
@@ -331,8 +255,8 @@ function Announcement() {
     const onConfirm = (newValues) => {
       Modal.confirm({
         title: 'Are you sure you want to update this Announcement?',
-        okButtonProps: {shape: 'round', size: 'large', type: 'primary'},
-        cancelButtonProps: {shape: 'round', size: 'large'},
+        okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
+        cancelButtonProps: { shape: 'round', size: 'large' },
         icon: null,
         autoFocusButton: null,
         centered: true,
@@ -355,346 +279,269 @@ function Announcement() {
       // console.log('editValue.id', editValue.id);
 
       if (imageFile == null) {
-        axios.put(
-            `${URLreScript}/${editValue.id}`,
-            {
-              title_name: value.title_name,
-              post_status:
-                  value.publish_status === 'Now'
-                      ? 'Published'
-                      : value.publish_status,
-              announcer: session.user.fullname,
-              detail: value.detail,
-              link: value.link,
-              date_announced:
-                  value.publish_status === 'Scheduled'
-                      ? `${
-                          value.schedule_date.format('yyyy-MM-DD') +
-                          'T' +
-                          value.schedule_time.format('HH:mm')
-                      }:00.000+07:00`
-                      : dateNow,
-              date_expired: `${
-                  value.expire_date.format('yyyy-MM-DD') +
-                  'T' +
-                  value.expire_time.format('HH:mm')
-              }:00.000+07:00`,
-            },
-            headers,
-        ).then((res) => {
-          fetchData();
-          closeEditModal();
-          message.success('Announcement has been successfully updated.');
-        }).catch((err) => {
-          console.error('Can\'t add data: ', err);
-        });
-      } else {
-        await axios.post(process.env.REACT_APP_API_URL + '/upload/', dataImage,
-            headers).then((res) => {
-          console.log('res', res);
-          let imageId = res.data[0];
-          axios.put(
-              `${URLreScript}/${editValue.id}`,
-              {
-                title_name: value.title_name,
-                post_status:
-                    value.publish_status === 'Now'
-                        ? 'Published'
-                        : value.publish_status,
-                announcer: session.user.fullname,
-                detail: value.detail,
-                link: value.link,
-                date_announced:
-                    value.publish_status === 'Scheduled'
-                        ? `${
-                            value.schedule_date.format('yyyy-MM-DD') +
-                            'T' +
-                            value.schedule_time.format('HH:mm')
-                        }:00.000+07:00`
-                        : dateNow,
-                date_expired: `${
-                    value.expire_date.format('yyyy-MM-DD') +
-                    'T' +
-                    value.expire_time.format('HH:mm')
-                }:00.000+07:00`,
-                image: imageId,
-              },
-              headers,
-          ).then((res) => {
+        axios
+          .put(`${URLreScript}/${editValue.id}`, {
+            title_name: value.title_name,
+            post_status: value.publish_status === 'Now' ? 'Published' : value.publish_status,
+            announcer: session.user.fullname,
+            detail: value.detail,
+            link: value.link,
+            date_announced: value.publish_status === 'Scheduled' ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+            date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
+          }, headers)
+          .then((res) => {
             fetchData();
             closeEditModal();
             message.success('Announcement has been successfully updated.');
-          }).catch((err) => {
+          })
+          .catch((err) => {
             console.error('Can\'t add data: ', err);
           });
-        }).catch((err) => {
-          console.log('ERROR', err);
-        });
+      } else {
+        await axios
+          .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
+          .then((res) => {
+            console.log('res', res);
+            let imageId = res.data[0];
+            axios
+              .put(`${URLreScript}/${editValue.id}`, {
+                title_name: value.title_name,
+                post_status: value.publish_status === 'Now' ? 'Published' : value.publish_status,
+                announcer: session.user.fullname,
+                detail: value.detail,
+                link: value.link,
+                date_announced: value.publish_status === 'Scheduled' ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+                date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
+                image: imageId,
+              }, headers)
+              .then((res) => {
+                fetchData();
+                closeEditModal();
+                message.success('Announcement has been successfully updated.');
+              })
+              .catch((err) => {
+                console.error('Can\'t add data: ', err);
+              });
+          })
+          .catch((err) => {
+            console.log('ERROR', err);
+          });
       }
     };
 
-    return (
-        <Modal
-            visible={visible}
-            title='Edit Announcement'
-            footer={[
-              <Button
-                  style={{
-                    backgroundColor: '#D8AA81',
-                    color: '#F5F4EC',
-                  }}
-                  className='add-btn'
-                  key='add'
-                  onClick={() => {
-                    form.validateFields().then((values) => {
-                      let newValues = {
-                        ...values,
-                      };
-                      onConfirm(newValues);
-                    }).catch((info) => {
-                      if (!pickedImage) {
-                        setImageBorder('inputNoImage');
-                      }
-                      console.log('Validate Failed:', info);
-                    });
-                  }}
-              >
-                Save
-              </Button>,
-            ]}
-            onCancel={onCancel}
-            width={960}
+    return (<Modal
+        visible={visible}
+        title='Edit Announcement'
+        footer={[<Button
+          style={{
+            backgroundColor: '#D8AA81', color: '#F5F4EC',
+          }}
+          className='add-btn'
+          key='add'
+          onClick={() => {
+            form
+              .validateFields()
+              .then((values) => {
+                let newValues = {
+                  ...values,
+                };
+                onConfirm(newValues);
+              })
+              .catch((info) => {
+                if (!pickedImage) {
+                  setImageBorder('inputNoImage');
+                }
+                console.log('Validate Failed:', info);
+              });
+          }}
         >
-          <Form
-              form={form}
-              layout='vertical'
-              name='form_in_modal'
-              initialValues={{
-                modifier: 'public',
-              }}
-              style={{display: 'flex'}}
-          >
-            <div style={{flex: 1}}>
-              <Form.Item
-                  name='title_name'
-                  label='Title'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input title',
-                    },
-                  ]}
-              >
-                <Input
-                    placeholder='Please input title'
-                    style={{borderRadius: 20}}
-                />
-              </Form.Item>
-              <Form.Item
-                  label={
-                    <div>
+          Save
+        </Button>]}
+        onCancel={onCancel}
+        width={960}
+      >
+        <Form
+          form={form}
+          layout='vertical'
+          name='form_in_modal'
+          initialValues={{
+            modifier: 'public',
+          }}
+          style={{ display: 'flex' }}
+        >
+          <div style={{ flex: 1 }}>
+            <Form.Item
+              name='title_name'
+              label='Title'
+              rules={[{
+                required: true, message: 'Please input title',
+              }]}
+            >
+              <Input
+                placeholder='Please input title'
+                style={{ borderRadius: 20 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<div>
                   <span
-                      style={{
-                        color: '#ff4d4f',
-                        fontSize: 10,
-                        position: 'relative',
-                        bottom: 5,
-                      }}
+                    style={{
+                      color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5,
+                    }}
                   >
                     *{' '}
                   </span>
-                      Image
-                    </div>
-                  }
-              >
-                <div>
-                  {pickedImage ? null : (
-                      <div className={imageBorder}>
-                        <label htmlFor='input'>
-                          <div
-                              class='child'
-                              style={{
-                                width: '100%',
-                                height: '40vh',
-                                textAlign: 'center',
-                              }}
-                          >
-                            <Col>
-                              <PictureOutlined
-                                  style={{
-                                    width: '100%',
-                                    fontSize: 64,
-                                    color: '#818282',
-                                  }}
-                              />
-                              Click to this area to upload
-                            </Col>
-                          </div>
-                        </label>
+                Image
+              </div>}
+            >
+              <div>
+                {pickedImage ? null : (<div className={imageBorder}>
+                    <label htmlFor='input'>
+                      <div
+                        class='child'
+                        style={{
+                          width: '100%', height: '40vh', textAlign: 'center',
+                        }}
+                      >
+                        <Col>
+                          <PictureOutlined
+                            style={{
+                              width: '100%', fontSize: 64, color: '#818282',
+                            }}
+                          />
+                          Click to this area to upload
+                        </Col>
                       </div>
-                  )}
-                  <input
-                      type='file'
-                      id='input'
-                      accept='image/*'
-                      onChange={selectHandle}
-                      onClick={(event) => {
-                        event.target.value = null;
-                      }}
-                      style={{display: 'none', float: 'left'}}
-                  />
-                  {pickedImage ? (
-                      <div>
-                        <img
-                            style={{width: '100%', height: '40vh'}}
-                            src={pickedImage}
-                            alt='test'
-                        />
-                      </div>
-                  ) : null}
-                  {imageBorder === 'inputNoImage' ? (
-                      <span
-                          style={{color: '#ff4d4f'}}>Please input details</span>
-                  ) : null}
-                  <div style={{marginTop: 12}}>
-                    {pickedImage ? (
-                        <div className='delete'>
-                          <Button style={{float: 'right'}}
-                                  onClick={deleteHandle}>
-                            Delete
-                          </Button>
-                        </div>
-                    ) : null}
-                  </div>
+                    </label>
+                  </div>)}
+                <input
+                  type='file'
+                  id='input'
+                  accept='image/*'
+                  onChange={selectHandle}
+                  onClick={(event) => {
+                    event.target.value = null;
+                  }}
+                  style={{ display: 'none', float: 'left' }}
+                />
+                {pickedImage ? (<div>
+                    <img
+                      style={{ width: '100%', height: '40vh' }}
+                      src={pickedImage}
+                      alt='test'
+                    />
+                  </div>) : null}
+                {imageBorder === 'inputNoImage' ? (
+                  <span style={{ color: '#ff4d4f' }}>Please input details</span>) : null}
+                <div style={{ marginTop: 12 }}>
+                  {pickedImage ? (<div className='delete'>
+                      <Button style={{ float: 'right' }} onClick={deleteHandle}>
+                        Delete
+                      </Button>
+                    </div>) : null}
                 </div>
-              </Form.Item>
-            </div>
-            <div style={{width: 45}}></div>
-            <div style={{flex: 1}}>
-              <Form.Item
-                  name='detail'
-                  label='Details'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input details',
-                    },
-                  ]}
+              </div>
+            </Form.Item>
+          </div>
+          <div style={{ width: 45 }}></div>
+          <div style={{ flex: 1 }}>
+            <Form.Item
+              name='detail'
+              label='Details'
+              rules={[{
+                required: true, message: 'Please input details',
+              }]}
+            >
+              <Input.TextArea
+                placeholder='Please input details'
+                style={{ minHeight: '20vh' }}
+              />
+            </Form.Item>
+            <Form.Item name='link' label='Link'>
+              <Input
+                placeholder='https://example.com'
+                style={{ borderRadius: 20 }}
+              />
+            </Form.Item>
+            <Form.Item
+              name='publish_status'
+              label='Publish'
+              rules={[{
+                required: true, message: 'Please select type',
+              }]}
+            >
+              <Select
+                style={{ width: '100%' }}
+                onChange={publishPickedHandle}
+                disabled={postDisable}
               >
-                <Input.TextArea
-                    placeholder='Please input details'
-                    style={{minHeight: '20vh'}}
-                />
-              </Form.Item>
-              <Form.Item name='link' label='Link'>
-                <Input
-                    placeholder='https://example.com'
-                    style={{borderRadius: 20}}
-                />
-              </Form.Item>
-              <Form.Item
-                  name='publish_status'
-                  label='Publish'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select type',
-                    },
-                  ]}
-              >
-                <Select
-                    style={{width: '100%'}}
-                    onChange={publishPickedHandle}
-                    disabled={postDisable}
-                >
-                  {publish.map((type, index) => (
-                      <Option value={type} key={index}>
-                        {type}
-                      </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              {publishPicked === 'Scheduled' ? (
-                  <div className='flex-container'>
-                    <div style={{flex: 1}}>
-                      <Form.Item
-                          name='schedule_date'
-                          label='Scheduled Date'
-                          rules={[
-                            {
-                              type: 'date',
-                              required: true,
-                              message: 'Please select date',
-                            },
-                          ]}
-                      >
-                        <DatePicker
-                            disabledDate={disabledDate}
-                            className='dateTime'
-                        />
-                      </Form.Item>
-                    </div>
-                    <div style={{width: 10}}></div>
-                    <div style={{flex: 1}}>
-                      <Form.Item
-                          name='schedule_time'
-                          label='Scheduled Time'
-                          rules={[
-                            {
-                              type: 'object',
-                              required: true,
-                              message: 'Please select time',
-                            },
-                          ]}
-                      >
-                        <TimePicker className='dateTime' format='HH:mm' />
-                      </Form.Item>
-                    </div>
-                  </div>
-              ) : null}
-              <div className='flex-container'>
-                <div style={{flex: 1}}>
+                {publish.map((type, index) => (<Option value={type} key={index}>
+                    {type}
+                  </Option>))}
+              </Select>
+            </Form.Item>
+            {publishPicked === 'Scheduled' ? (<div className='flex-container'>
+                <div style={{ flex: 1 }}>
                   <Form.Item
-                      name='expire_date'
-                      label='Expiration date'
-                      rules={[
-                        {
-                          type: 'date',
-                          required: true,
-                          message: 'Please select date',
-                        },
-                      ]}
+                    name='schedule_date'
+                    label='Scheduled Date'
+                    rules={[{
+                      type: 'date', required: true, message: 'Please select date',
+                    }]}
                   >
                     <DatePicker
-                        disabledDate={disabledDate}
-                        className='dateTime'
+                      disabledDate={disabledDate}
+                      className='dateTime'
                     />
                   </Form.Item>
                 </div>
-                <div style={{width: 10}} />
-                <div style={{flex: 1}}>
+                <div style={{ width: 10 }}></div>
+                <div style={{ flex: 1 }}>
                   <Form.Item
-                      name='expire_time'
-                      label='Expiration Time'
-                      rules={[
-                        {
-                          type: 'object',
-                          required: true,
-                          message: 'Please select time',
-                        },
-                      ]}
+                    name='schedule_time'
+                    label='Scheduled Time'
+                    rules={[{
+                      type: 'object', required: true, message: 'Please select time',
+                    }]}
                   >
                     <TimePicker className='dateTime' format='HH:mm' />
                   </Form.Item>
                 </div>
+              </div>) : null}
+            <div className='flex-container'>
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name='expire_date'
+                  label='Expiration date'
+                  rules={[{
+                    type: 'date', required: true, message: 'Please select date',
+                  }]}
+                >
+                  <DatePicker
+                    disabledDate={disabledDate}
+                    className='dateTime'
+                  />
+                </Form.Item>
+              </div>
+              <div style={{ width: 10 }} />
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name='expire_time'
+                  label='Expiration Time'
+                  rules={[{
+                    type: 'object', required: true, message: 'Please select time',
+                  }]}
+                >
+                  <TimePicker className='dateTime' format='HH:mm' />
+                </Form.Item>
               </div>
             </div>
-          </Form>
-        </Modal>
-    );
+          </div>
+        </Form>
+      </Modal>);
   };
 
-  const CreateAnnouncement = ({visible, onCancel}) => {
+  const CreateAnnouncement = ({ visible, onCancel }) => {
     const [form] = Form.useForm();
     const [publishPicked, setPublishPicked] = useState();
     const [pickedImage, setPickedImage] = useState(null);
@@ -741,8 +588,8 @@ function Announcement() {
     const onConfirm = (newValues) => {
       Modal.confirm({
         title: 'Are you sure you want to add new Announcement?',
-        okButtonProps: {shape: 'round', size: 'large', type: 'primary'},
-        cancelButtonProps: {shape: 'round', size: 'large'},
+        okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
+        cancelButtonProps: { shape: 'round', size: 'large' },
         icon: null,
         autoFocusButton: null,
         centered: true,
@@ -757,321 +604,267 @@ function Announcement() {
       // console.log("value", value);
       let dateNow = new Date().toISOString();
       // console.log("dateNow", dateNow);
-      console.log(
-          'dateNowEX',
-          `${
-              value.expire_date.format('yyyy-MM-DD') +
-              'T' +
-              value.expire_time.format('HH:mm')
-          }:00.000+07:00`,
-      );
+      console.log('dateNowEX', `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`);
 
       let dataImage = new FormData();
       dataImage.append('files', imageFile);
-      await axios.post(process.env.REACT_APP_API_URL + '/upload/', dataImage,
-          headers).then((res) => {
-        console.log('res', res);
-        let imageId = res.data[0];
-        axios.post(
-            URLreScript,
-            {
+      await axios
+        .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
+        .then((res) => {
+          console.log('res', res);
+          let imageId = res.data[0];
+          axios
+            .post(URLreScript, {
               title_name: value.title_name,
-              post_status:
-                  value.publish_status === 'Now'
-                      ? 'Published'
-                      : value.publish_status,
-              Status_announcements:
-                  value.publish_status === 'Now' ? true : false,
+              post_status: value.publish_status === 'Now' ? 'Published' : value.publish_status,
+              Status_announcements: value.publish_status === 'Now' ? true : false,
+              Status_announcements_noti: false,
               announcer: session.user.fullname,
               detail: value.detail,
               link: value.link,
-              date_announced:
-                  value.publish_status === 'Scheduled'
-                      ? `${
-                          value.schedule_date.format('yyyy-MM-DD') +
-                          'T' +
-                          value.schedule_time.format('HH:mm')
-                      }:00.000+07:00`
-                      : dateNow,
-              date_expired: `${
-                  value.expire_date.format('yyyy-MM-DD') +
-                  'T' +
-                  value.expire_time.format('HH:mm')
-              }:00.000+07:00`,
+              date_announced: value.publish_status === 'Scheduled' ? `${value.schedule_date.format('yyyy-MM-DD') + 'T' + value.schedule_time.format('HH:mm')}:00.000+07:00` : dateNow,
+              date_expired: `${value.expire_date.format('yyyy-MM-DD') + 'T' + value.expire_time.format('HH:mm')}:00.000+07:00`,
               image: imageId,
-            },
-            headers,
-        ).then((res) => {
-          fetchData();
-          closeModal();
-          message.success('Announcement has been added successfully.');
-        }).catch((err) => {
-          console.error('Can\'t add data: ', err);
+            }, headers)
+            .then((res) => {
+              if (value.publish_status === 'Now') {
+                sendTopic();
+              }
+              fetchData();
+              closeModal();
+              message.success('Announcement has been added successfully.');
+            })
+            .catch((err) => {
+              console.error('Can\'t add data: ', err);
+            });
+        })
+        .catch((err) => {
+          console.log('ERROR', err);
         });
-      }).catch((err) => {
-        console.log('ERROR', err);
+    };
+    const sendTopic = async () => {
+      await axios.post('https://noti-dev.ap.ngrok.io/api/message/sendToTopic', {
+        'message': {
+          'notification': {
+            'title': 'Announce', 'body': 'You have bill to pay this month. Notification',
+          }, 'data': {
+            'title': 'Announce', 'body': 'You have bill to pay this month. data',
+          }, 'topic': 'Announce',
+        },
       });
+
     };
 
-    return (
-        <Modal
-            visible={visible}
-            title='Create Announcement'
-            footer={[
-              <Button
-                  style={{
-                    backgroundColor: '#D8AA81',
-                    color: '#F5F4EC',
-                  }}
-                  className='add-btn'
-                  key='add'
-                  onClick={() => {
-                    form.validateFields().then((values) => {
-                      if (pickedImage) {
-                        let newValues = {
-                          ...values,
-                        };
-                        onConfirm(newValues);
-                      } else {
-                        setImageBorder('inputNoImage');
-                      }
-                    }).catch((info) => {
-                      if (!pickedImage) {
-                        setImageBorder('inputNoImage');
-                      }
-                      console.log('Validate Failed:', info);
-                    });
-                  }}
-              >
-                Publish
-              </Button>,
-            ]}
-            onCancel={onCancel}
-            width={960}
+    return (<Modal
+        visible={visible}
+        title='Create Announcement'
+        footer={[<Button
+          style={{
+            backgroundColor: '#D8AA81', color: '#F5F4EC',
+          }}
+          className='add-btn'
+          key='add'
+          onClick={() => {
+            form
+              .validateFields()
+              .then((values) => {
+                if (pickedImage) {
+                  let newValues = {
+                    ...values,
+                  };
+                  onConfirm(newValues);
+                } else {
+                  setImageBorder('inputNoImage');
+                }
+              })
+              .catch((info) => {
+                if (!pickedImage) {
+                  setImageBorder('inputNoImage');
+                }
+                console.log('Validate Failed:', info);
+              });
+          }}
         >
-          <Form
-              form={form}
-              layout='vertical'
-              name='form_in_modal'
-              initialValues={{
-                modifier: 'public',
-              }}
-              style={{display: 'flex'}}
-          >
-            <div style={{flex: 1}}>
-              <Form.Item
-                  name='title_name'
-                  label='Title'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input title',
-                    },
-                  ]}
-              >
-                <Input
-                    placeholder='Please input title'
-                    style={{borderRadius: 20}}
-                />
-              </Form.Item>
-              <Form.Item
-                  label={
-                    <div>
+          Publish
+        </Button>]}
+        onCancel={onCancel}
+        width={960}
+      >
+        <Form
+          form={form}
+          layout='vertical'
+          name='form_in_modal'
+          initialValues={{
+            modifier: 'public',
+          }}
+          style={{ display: 'flex' }}
+        >
+          <div style={{ flex: 1 }}>
+            <Form.Item
+              name='title_name'
+              label='Title'
+              rules={[{
+                required: true, message: 'Please input title',
+              }]}
+            >
+              <Input
+                placeholder='Please input title'
+                style={{ borderRadius: 20 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<div>
                   <span
-                      style={{
-                        color: '#ff4d4f',
-                        fontSize: 10,
-                        position: 'relative',
-                        bottom: 5,
-                      }}
+                    style={{
+                      color: '#ff4d4f', fontSize: 10, position: 'relative', bottom: 5,
+                    }}
                   >
                     *{' '}
                   </span>
-                      Image
-                    </div>
-                  }
-              >
-                <div>
-                  {pickedImage ? null : (
-                      <div className={imageBorder}>
-                        <label htmlFor='input'>
-                          <div
-                              class='child'
-                              style={{
-                                width: '100%',
-                                height: '40vh',
-                                textAlign: 'center',
-                              }}
-                          >
-                            <Col>
-                              <PictureOutlined
-                                  style={{
-                                    width: '100%',
-                                    fontSize: 64,
-                                    color: '#818282',
-                                  }}
-                              />
-                              Click to this area to upload
-                            </Col>
-                          </div>
-                        </label>
+                Image
+              </div>}
+            >
+              <div>
+                {pickedImage ? null : (<div className={imageBorder}>
+                    <label htmlFor='input'>
+                      <div
+                        class='child'
+                        style={{
+                          width: '100%', height: '40vh', textAlign: 'center',
+                        }}
+                      >
+                        <Col>
+                          <PictureOutlined
+                            style={{
+                              width: '100%', fontSize: 64, color: '#818282',
+                            }}
+                          />
+                          Click to this area to upload
+                        </Col>
                       </div>
-                  )}
-                  <input
-                      type='file'
-                      id='input'
-                      accept='image/*'
-                      onChange={selectHandle}
-                      onClick={(event) => {
-                        event.target.value = null;
-                      }}
-                      style={{display: 'none', float: 'left'}}
-                  />
-                  {pickedImage ? (
-                      <div>
-                        <img
-                            style={{width: '100%', height: '40vh'}}
-                            src={pickedImage}
-                            alt='test'
-                        />
-                      </div>
-                  ) : null}
-                  {imageBorder === 'inputNoImage' ? (
-                      <span
-                          style={{color: '#ff4d4f'}}>Please input details</span>
-                  ) : null}
-                  <div style={{marginTop: 12}}>
-                    {pickedImage ? (
-                        <div className='delete'>
-                          <Button style={{float: 'right'}}
-                                  onClick={deleteHandle}>
-                            Delete
-                          </Button>
-                        </div>
-                    ) : null}
-                  </div>
+                    </label>
+                  </div>)}
+                <input
+                  type='file'
+                  id='input'
+                  accept='image/*'
+                  onChange={selectHandle}
+                  onClick={(event) => {
+                    event.target.value = null;
+                  }}
+                  style={{ display: 'none', float: 'left' }}
+                />
+                {pickedImage ? (<div>
+                    <img
+                      style={{ width: '100%', height: '40vh' }}
+                      src={pickedImage}
+                      alt='test'
+                    />
+                  </div>) : null}
+                {imageBorder === 'inputNoImage' ? (
+                  <span style={{ color: '#ff4d4f' }}>Please input details</span>) : null}
+                <div style={{ marginTop: 12 }}>
+                  {pickedImage ? (<div className='delete'>
+                      <Button style={{ float: 'right' }} onClick={deleteHandle}>
+                        Delete
+                      </Button>
+                    </div>) : null}
                 </div>
-              </Form.Item>
-            </div>
-            <div style={{width: 45}}></div>
-            <div style={{flex: 1}}>
-              <Form.Item
-                  name='detail'
-                  label='Details'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input details',
-                    },
-                  ]}
-              >
-                <Input.TextArea
-                    placeholder='Please input details'
-                    style={{minHeight: '20vh'}}
-                />
-              </Form.Item>
-              <Form.Item name='link' label='Link'>
-                <Input
-                    placeholder='https://example.com'
-                    style={{borderRadius: 20}}
-                />
-              </Form.Item>
-              <Form.Item
-                  name='publish_status'
-                  label='Publish'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select type',
-                    },
-                  ]}
-              >
-                <Select style={{width: '100%'}} onChange={publishPickedHandle}>
-                  {publish.map((type, index) => (
-                      <Option value={type} key={index}>
-                        {type}
-                      </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              {publishPicked === 'Scheduled' ? (
-                  <div className='flex-container'>
-                    <div style={{flex: 1}}>
-                      <Form.Item
-                          name='schedule_date'
-                          label='Scheduled Date'
-                          rules={[
-                            {
-                              type: 'date',
-                              required: true,
-                              message: 'Please select date',
-                            },
-                          ]}
-                      >
-                        <DatePicker
-                            disabledDate={disabledDate}
-                            className='dateTime'
-                        />
-                      </Form.Item>
-                    </div>
-                    <div style={{width: 10}}></div>
-                    <div style={{flex: 1}}>
-                      <Form.Item
-                          name='schedule_time'
-                          label='Scheduled Time'
-                          rules={[
-                            {
-                              type: 'object',
-                              required: true,
-                              message: 'Please select time',
-                            },
-                          ]}
-                      >
-                        <TimePicker className='dateTime' format='HH:mm' />
-                      </Form.Item>
-                    </div>
-                  </div>
-              ) : null}
-              <div className='flex-container'>
-                <div style={{flex: 1}}>
+              </div>
+            </Form.Item>
+          </div>
+          <div style={{ width: 45 }}></div>
+          <div style={{ flex: 1 }}>
+            <Form.Item
+              name='detail'
+              label='Details'
+              rules={[{
+                required: true, message: 'Please input details',
+              }]}
+            >
+              <Input.TextArea
+                placeholder='Please input details'
+                style={{ minHeight: '20vh' }}
+              />
+            </Form.Item>
+            <Form.Item name='link' label='Link'>
+              <Input
+                placeholder='https://example.com'
+                style={{ borderRadius: 20 }}
+              />
+            </Form.Item>
+            <Form.Item
+              name='publish_status'
+              label='Publish'
+              rules={[{
+                required: true, message: 'Please select type',
+              }]}
+            >
+              <Select style={{ width: '100%' }} onChange={publishPickedHandle}>
+                {publish.map((type, index) => (<Option value={type} key={index}>
+                    {type}
+                  </Option>))}
+              </Select>
+            </Form.Item>
+            {publishPicked === 'Scheduled' ? (<div className='flex-container'>
+                <div style={{ flex: 1 }}>
                   <Form.Item
-                      name='expire_date'
-                      label='Expiration date'
-                      rules={[
-                        {
-                          type: 'date',
-                          required: true,
-                          message: 'Please select date',
-                        },
-                      ]}
+                    name='schedule_date'
+                    label='Scheduled Date'
+                    rules={[{
+                      type: 'date', required: true, message: 'Please select date',
+                    }]}
                   >
                     <DatePicker
-                        disabledDate={disabledDate}
-                        className='dateTime'
+                      disabledDate={disabledDate}
+                      className='dateTime'
                     />
                   </Form.Item>
                 </div>
-                <div style={{width: 10}} />
-                <div style={{flex: 1}}>
+                <div style={{ width: 10 }}></div>
+                <div style={{ flex: 1 }}>
                   <Form.Item
-                      name='expire_time'
-                      label='Expiration Time'
-                      rules={[
-                        {
-                          type: 'object',
-                          required: true,
-                          message: 'Please select time',
-                        },
-                      ]}
+                    name='schedule_time'
+                    label='Scheduled Time'
+                    rules={[{
+                      type: 'object', required: true, message: 'Please select time',
+                    }]}
                   >
                     <TimePicker className='dateTime' format='HH:mm' />
                   </Form.Item>
                 </div>
+              </div>) : null}
+            <div className='flex-container'>
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name='expire_date'
+                  label='Expiration date'
+                  rules={[{
+                    type: 'date', required: true, message: 'Please select date',
+                  }]}
+                >
+                  <DatePicker
+                    disabledDate={disabledDate}
+                    className='dateTime'
+                  />
+                </Form.Item>
+              </div>
+              <div style={{ width: 10 }} />
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name='expire_time'
+                  label='Expiration Time'
+                  rules={[{
+                    type: 'object', required: true, message: 'Please select time',
+                  }]}
+                >
+                  <TimePicker className='dateTime' format='HH:mm' />
+                </Form.Item>
               </div>
             </div>
-          </Form>
-        </Modal>
-    );
+          </div>
+        </Form>
+      </Modal>);
   };
 
   function onMonthChange(date, dateString) {
@@ -1081,103 +874,71 @@ function Announcement() {
   }
 
   const Loading = () => {
-    return (
-        <div
-            style={{
-              width: '80vw',
-              height: '100vh',
-              textAlign: 'center',
-              paddingTop: 300,
-            }}
-        >
-          <Spin size='large' />
-          <p style={{color: '#20263A', fontSize: 30}}>Loading...</p>
-        </div>
-    );
+    return (<div
+        style={{
+          width: '80vw', height: '100vh', textAlign: 'center', paddingTop: 300,
+        }}
+      >
+        <Spin size='large' />
+        <p style={{ color: '#20263A', fontSize: 30 }}>Loading...</p>
+      </div>);
   };
 
-  return (
-      <>
-        <Heading title='Announcements' />
-        <div className='flex-container'>
-          <div>
-            <MonthPicker
-                style={{
-                  marginTop: 10,
-                  width: 369,
-                  marginBottom: 19,
-                  marginRight: 10,
-                  borderRadius: 20,
-                }}
-                onChange={onMonthChange}
-                placeholder='Select month'
-                // className="search-box"
-            />
-            <Search
-                placeholder='Search by title'
-                allowClear
-                onSearch={handleSearch}
-                style={{
-                  marginTop: 10,
-                  width: 369,
-                  marginBottom: 19,
-                  marginRight: 10,
-                  borderRadius: 20,
-                }}
-                onChange={handleSearchChange}
-                // className="search-box"
-            />
-          </div>
-
-          <div align='right'>
-            <Button
-                size='large'
-                shape='round'
-                icon={<PlusOutlined />}
-                style={{
-                  marginTop: 10,
-                  backgroundColor: '#D8AA81',
-                  color: '#F5F4EC',
-                  alignSelf: 'end',
-                }}
-                onClick={showModal}
-            >
-              Create Announcement
-            </Button>
-          </div>
+  return (<>
+      <Heading title='Announcements' />
+      <div className='flex-container'>
+        <div>
+          <MonthPicker
+            style={{
+              marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20,
+            }}
+            onChange={onMonthChange}
+            placeholder='Select month'
+            // className="search-box"
+          />
+          <Search
+            placeholder='Search by title'
+            allowClear
+            onSearch={handleSearch}
+            style={{
+              marginTop: 10, width: 369, marginBottom: 19, marginRight: 10, borderRadius: 20,
+            }}
+            onChange={handleSearchChange}
+            // className="search-box"
+          />
         </div>
-        {loading ? (
-            <Loading />
-        ) : (
-            <Table
-                columns={columns}
-                scroll={{x: 1200}}
-                dataSource={
-                  searchName === ''
-                      ? data
-                      : data.filter((item) =>
-                          item.title_name.toLowerCase().includes(searchName),
-                      )
-                }
-            />
-        )}
-        {value != null ? (
-            <EditAnnouncement
-                visible={editVisible}
-                editValue={value}
-                onCancel={closeEditModal}
-            />
-        ) : null}
-        {newVisible ? (
-            <CreateAnnouncement
-                visible={newVisible}
-                onCancel={() => {
-                  setNewVisible(false);
-                }}
-            />
-        ) : null}
-      </>
-  );
+
+        <div align='right'>
+          <Button
+            size='large'
+            shape='round'
+            icon={<PlusOutlined />}
+            style={{
+              marginTop: 10, backgroundColor: '#D8AA81', color: '#F5F4EC', alignSelf: 'end',
+            }}
+            onClick={showModal}
+          >
+            Create Announcement
+          </Button>
+        </div>
+      </div>
+      {loading ? (<Loading />) : (<Table
+          columns={columns}
+          scroll={{ x: 1200 }}
+          dataSource={searchName === '' ? data : data.filter((item) => item.title_name.toLowerCase().includes(searchName))}
+        />)}
+      {value != null ? (<EditAnnouncement
+          visible={editVisible}
+          editValue={value}
+          onCancel={closeEditModal}
+        />) : null}
+      {newVisible ? (<CreateAnnouncement
+          visible={newVisible}
+          onCancel={() => {
+            setNewVisible(false);
+          }}
+        />) : null}
+    </>);
 }
 
 export default Announcement;
