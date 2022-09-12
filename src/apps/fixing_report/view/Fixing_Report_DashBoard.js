@@ -10,8 +10,8 @@ import moment from 'moment';
 
 import { encryptStorage } from '../../../utils/encryptStorage';
 
-const session = encryptStorage.getItem('user_session');
 export default function FixingReportDashBoard() {
+  const session = encryptStorage.getItem('user_session');
   const [fixingData, setFixingData] = useState([]);
   const [todayData, setTodayData] = useState([]);
   const [year, setYear] = useState(new Date().getFullYear());

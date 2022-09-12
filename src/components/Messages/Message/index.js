@@ -10,9 +10,9 @@ import { format, utcToZonedTime } from 'date-fns-tz';
 import { Image } from 'antd';
 
 import { encryptStorage } from '../../../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 function Message(props) {
+  const session = encryptStorage.getItem('user_session');
   const thTimeZone = 'Asia/Bangkok';
   const {
     message: { sender_id, type, sender_name, text, time, users_read },

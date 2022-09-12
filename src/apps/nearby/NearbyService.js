@@ -51,13 +51,12 @@ import usePlacesAutocomplete, {
 
 import { encryptStorage } from '../../utils/encryptStorage';
 
-const session = encryptStorage.getItem('user_session');
-
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
 Geocode.setLanguage('th');
 const libraries = ['places'];
 
 function NearbyService() {
+  const session = encryptStorage.getItem('user_session');
   const URLreScrpit = process.env.REACT_APP_API_URL + '/nearby-recommends/';
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const { isLoaded, loadError } = useLoadScript({
@@ -292,7 +291,6 @@ function NearbyService() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-
       } else {
         if (pickedImage) {
           setImageBorder('inputImageNB');
@@ -750,7 +748,6 @@ function NearbyService() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-
       } else {
         if (pickedImage) {
           console.log('inputImageNB');

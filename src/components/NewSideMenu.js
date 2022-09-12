@@ -1,44 +1,32 @@
-import {ExclamationCircleOutlined} from '@ant-design/icons';
-import {Badge, Menu, Modal} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
-
-import authService from '../services/authServices';
-import {encryptStorage} from '../utils/encryptStorage';
-import facilitiesIcon from './assets/facility_reservation.svg';
-import groupIcon from './assets/group.svg';
-
-import {
-  ReactComponent as AnnouncementInActiveIcon,
-} from './assets/icons/announce.svg';
-import {
-  ReactComponent as AnnouncementActiveIcon,
-} from './assets/icons/announce_2.svg';
-import {ReactComponent as ChatActiveIcon} from './assets/icons/chat_active.svg';
-import {
-  ReactComponent as ChatInActiveIcon,
-} from './assets/icons/chat_inactive.svg';
-import {
-  ReactComponent as MonitoringActiveIcon,
-} from './assets/icons/monitoring_active.svg';
-import {
-  ReactComponent as MonitoringInActiveIcon,
-} from './assets/icons/monitoring_inactive.svg';
-import {ReactComponent as NearbyInActiveIcon} from './assets/icons/nearby.svg';
-import {
-  ReactComponent as NearbyActiveIcon,
-} from './assets/icons/nearby_active.svg';
-import logoutIcon from './assets/logout.svg';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, Modal,Badge } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import './styles/side-menu.css';
+import { useSelector, useDispatch } from 'react-redux';
 //icon svg
 import MenuLogo from './assets/menu-logo.svg';
-import paymentIcon from './assets/payment.svg';
 import serviceIcon from './assets/service.svg';
+import facilitiesIcon from './assets/facility_reservation.svg';
+import groupIcon from './assets/group.svg';
+import paymentIcon from './assets/payment.svg';
 import settingIcon from './assets/setting.svg';
-import './styles/side-menu.css';
+import logoutIcon from './assets/logout.svg';
+
+import { ReactComponent as AnnouncementInActiveIcon } from './assets/icons/announce.svg';
+import { ReactComponent as AnnouncementActiveIcon } from './assets/icons/announce_2.svg';
+import { ReactComponent as MonitoringInActiveIcon } from './assets/icons/monitoring_inactive.svg';
+import { ReactComponent as MonitoringActiveIcon } from './assets/icons/monitoring_active.svg';
+import { ReactComponent as ChatActiveIcon } from './assets/icons/chat_active.svg';
+import { ReactComponent as ChatInActiveIcon } from './assets/icons/chat_inactive.svg';
+import { ReactComponent as NearbyInActiveIcon } from './assets/icons/nearby.svg';
+import { ReactComponent as NearbyActiveIcon } from './assets/icons/nearby_active.svg';
+
+import authService from '../services/authServices';
+import { encryptStorage } from '../utils/encryptStorage';
 
 //antd constraints components
-const {SubMenu} = Menu;
+const { SubMenu } = Menu;
 const main_link = '/dashboard';
 let path = window.location.pathname.split('/');
 
@@ -58,11 +46,11 @@ function NewSideMenu() {
 
   useEffect(() => {
     (async () => {
-      const {user} = await encryptStorage.getItem('user_session');
+      const { user } = await encryptStorage.getItem('user_session');
       setUser(user);
       setPaymentNotication(
           `Payments${<Badge count={countFCM > 0 ? countFCM : null}>
-            <div style={{paddingLeft: 15, paddingBottom: 2}} />
+            <div style={{paddingLeft: 15, paddingBottom: 2}}></div>
           </Badge>}`);
     })();
   }, [countFCM]);
@@ -82,7 +70,7 @@ function NewSideMenu() {
       title: 'Do you Want to sign out?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
-
+        console.log('OK');
         await encryptStorage.removeItem('fcm_token_data');
         const dataFCMToken = await encryptStorage.getItem('fcm_token');
         console.log('dataFCM_Token:', dataFCMToken);
@@ -92,11 +80,11 @@ function NewSideMenu() {
         }
         await authService.signOut();
       },
-      okButtonProps: {shape: 'round', size: 'large', type: 'danger'},
+      okButtonProps: { shape: 'round', size: 'large', type: 'danger' },
       onCancel() {
         console.log('Cancel');
       },
-      cancelButtonProps: {shape: 'round', size: 'large'},
+      cancelButtonProps: { shape: 'round', size: 'large' },
       autoFocusButton: null,
     });
   };

@@ -23,7 +23,6 @@ import UsersInfo from './UserInfo';
 import ConfirmModal from '../../../components/Modal/ConfirmModal';
 import { FormOutlined } from '@ant-design/icons';
 
-const session = encryptStorage.getItem('user_session');
 const { TabPane } = Tabs;
 const { Text } = Typography;
 
@@ -39,6 +38,7 @@ export const RoomInfoModal = ({
   qrOpenGate,
   qrCodeSmartLocker,
 }) => {
+  const session = encryptStorage.getItem('user_session');
   const header = {
     headers: {
       Authorization: 'Bearer ' + session.jwt,

@@ -20,11 +20,10 @@ import { encryptStorage } from '../../../utils/encryptStorage';
 import Service from '../../../services/authServices';
 import { socket } from '../../../services/webSocketService';
 
-const session = encryptStorage.getItem('user_session');
-
 const { Option } = Select;
 
 function List(props) {
+  const session = encryptStorage.getItem('user_session');
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -348,7 +347,7 @@ const ChatText = styled.div`
   font-style: SukhumvitSet;
   font-weight: ${(props) => (props.weight ? 'Bold' : null)};
   font-weight: ${(props) => (props.boolRead ? 'Bold' : null)};
-  -webkit-text-stroke:${(props) => (props.boolRead ? '0.5px black' : null)};
+  -webkit-text-stroke: ${(props) => (props.boolRead ? '0.5px black' : null)};
   color: rgba(0, 0, 0, 0.45);
 `;
 const TimeText = styled.div`

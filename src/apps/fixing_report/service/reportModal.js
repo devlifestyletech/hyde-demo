@@ -17,7 +17,6 @@ import moment from 'moment';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import { socket } from '../../../services/webSocketService';
-const session = encryptStorage.getItem('user_session');
 
 export default function ReportModal({
   visible,
@@ -25,6 +24,7 @@ export default function ReportModal({
   fetchData,
   closeModal,
 }) {
+  const session = encryptStorage.getItem('user_session');
   const URLreScript = process.env.REACT_APP_API_URL + '/fixing-reports';
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';

@@ -21,9 +21,8 @@ import { Input, Spin, Tabs, Row } from 'antd';
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
 
-const session = encryptStorage.getItem('user_session');
-
 function ChatRoom(props) {
+  const session = encryptStorage.getItem('user_session');
   const allInput = useRef(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);

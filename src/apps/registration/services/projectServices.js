@@ -1,10 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { encryptStorage } from '../../../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 export default {
   getProjectList: async function () {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(`${process.env.REACT_APP_API_URL}/projects`, {
         headers: {
@@ -17,6 +17,7 @@ export default {
     }
   },
   deleteProject: async function (id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.delete(
         `${process.env.REACT_APP_API_URL}/projects/${id}`,
@@ -32,6 +33,7 @@ export default {
     }
   },
   getProjectData: async function (id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/projects/${id}`,
@@ -47,6 +49,7 @@ export default {
     }
   },
   getResidences: async function (search) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         search
@@ -64,6 +67,7 @@ export default {
     }
   },
   getResidencesBySearch: async function (search) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/addresses?address_number_contains=${search}`,
@@ -79,6 +83,7 @@ export default {
     }
   },
   createProject: async function (value) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.post(
         `${process.env.REACT_APP_API_URL}/projects`,
@@ -95,6 +100,7 @@ export default {
     }
   },
   editProject: async function (value, id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.put(
         `${process.env.REACT_APP_API_URL}/projects/${id}`,
@@ -111,6 +117,7 @@ export default {
     }
   },
   getZoneById: async function () {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(`${process.env.REACT_APP_API_URL}/floors`, {
         headers: {
@@ -123,6 +130,7 @@ export default {
     }
   },
   createProjectZone: async function (value) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.post(
         `${process.env.REACT_APP_API_URL}/floors`,
@@ -139,6 +147,7 @@ export default {
     }
   },
   getResidencesByZoneId: async function (zoneId) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.get(
         `${process.env.REACT_APP_API_URL}/addresses?_where[building_zone]=${zoneId}`,
@@ -154,6 +163,7 @@ export default {
     }
   },
   createRoom: async function (value) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.post(
         `${process.env.REACT_APP_API_URL}/addresses`,
@@ -170,6 +180,7 @@ export default {
     }
   },
   deleteRoom: async function (id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.delete(
         `${process.env.REACT_APP_API_URL}/addresses/${id}`,
@@ -185,6 +196,7 @@ export default {
     }
   },
   deleteZone: async function (id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.delete(
         `${process.env.REACT_APP_API_URL}/floors/${id}`,
@@ -200,6 +212,7 @@ export default {
     }
   },
   editZoneName: async function (value, id) {
+    const session = encryptStorage.getItem('user_session');
     try {
       return await axios.put(
         `${process.env.REACT_APP_API_URL}/floors/${id}`,
