@@ -583,7 +583,7 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+      a.BillsPayment_Invoice !== undefined ?  a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
     },
     {
       title: 'Room Number',
@@ -603,7 +603,7 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined ? a.Address_Customer.localeCompare(b.Address_Customer):null,
     },
     {
       title: 'Name Owner',
@@ -612,7 +612,7 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
     },
     {
       title: 'Due Date',
@@ -636,7 +636,7 @@ export const Table_payment = () => {
       key: 'Total_BillsPayment',
       width: '10%',
 
-      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
     },
     {
       title: 'Status',
@@ -655,7 +655,7 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
     },
     {
       title: 'Export',
@@ -686,7 +686,7 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
     },
     {
       title: 'Room Number',
@@ -695,7 +695,7 @@ export const Table_payment = () => {
       key: 'Address_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
 
       render: (text) => (
         <Highlighter
@@ -716,7 +716,7 @@ export const Table_payment = () => {
       dataIndex: 'Name_Customer',
       key: 'Name_Customer',
       width: '10%',
-      sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
+      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
     },
     {
       title: 'Due Date',
@@ -741,7 +741,7 @@ export const Table_payment = () => {
       key: 'Total_BillsPayment',
       width: '10%',
 
-      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
     },
     {
       title: 'Status',
@@ -760,7 +760,7 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
     },
 
     {
@@ -794,7 +794,7 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
     },
     {
       title: 'Room Number',
@@ -814,7 +814,7 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
     },
     {
       title: 'Name Owner',
@@ -823,7 +823,7 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
+      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
     },
     {
       title: 'Due Date',
@@ -846,7 +846,7 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
     },
     {
       title: 'Status',
@@ -877,7 +877,7 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
     },
     {
       title: 'Detail',
@@ -943,7 +943,7 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.address.localeCompare(b.address),
+      sorter: (a, b) => a.address !== undefined? a.address.localeCompare(b.address):null,
     },
     {
       title: 'Name Owner',
@@ -951,23 +951,9 @@ export const Table_payment = () => {
       dataIndex: 'fullname',
       key: 'fullname',
       width: '10%',
-      // render: (text, record) => (
-      //   <>
-      //   <p>
-      //     {record.fullname}{'\n'}{record.last_Name}
-      //   </p>
-      //   </>
-      // ),
-      sorter: (a, b) => a.fullname.localeCompare(b.fullname),
+      sorter: (a, b) => a.fullname !== undefined? a.fullname.localeCompare(b.fullname):null,
     },
-    // {
-    //   title: "Name Owner",
-    // align: 'center',//
-    // dataIndex: "Name_Customer",
-    //   key: "Name_Customer",
-    //   width: "10%",
-    //   sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
-    // },
+   
     {
       title: 'ฺBilling of the month',
       align: 'center',
@@ -991,7 +977,6 @@ export const Table_payment = () => {
             value={record.address}
             type="Default"
             disabled={record.Receipt_Status}
-            // icon={<PlusOutlined style={{ verticalAlign: "baseline" }} />}
             className="buttom_create"
             loading={loadingCreate[record.address]}
             shape="round"
@@ -1011,7 +996,7 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
     },
     {
       title: 'Room Number',
@@ -1031,7 +1016,7 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
     },
     {
       title: 'Name Owner',
@@ -1040,7 +1025,7 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
+      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
     },
     {
       title: 'Due Date',
@@ -1063,7 +1048,7 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
     },
     {
       title: 'Status',
@@ -1081,7 +1066,7 @@ export const Table_payment = () => {
       dataIndex: 'createdAt',
       key: 'createBill',
       width: '10%',
-      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
     },
     {
       title: 'Detail',
@@ -1112,7 +1097,7 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice),
+        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
     },
     {
       title: 'Room Number',
@@ -1132,7 +1117,7 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer.localeCompare(b.Address_Customer),
+      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
     },
     {
       title: 'Name Owner',
@@ -1141,7 +1126,7 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer.localeCompare(b.Name_Customer),
+      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
     },
     {
       title: 'Due Date',
@@ -1164,7 +1149,7 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment - b.Total_BillsPayment,
+      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
     },
     {
       title: 'Status',
@@ -1182,7 +1167,7 @@ export const Table_payment = () => {
       dataIndex: 'createdAt',
       key: 'createBill',
       width: '10%',
-      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
     },
     {
       title: 'Action',

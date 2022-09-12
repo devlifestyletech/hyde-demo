@@ -646,10 +646,10 @@ function Announcement() {
       await axios.post('https://noti-dev.ap.ngrok.io/api/message/sendToTopic', {
         'message': {
           'notification': {
-            'title': 'Announce', 'body': 'You have bill to pay this month. Notification',
+            'title': 'Announce', 'body': 'There is a new announcement for you, Let\'s check what it is.',
           }, 'data': {
-            'title': 'Announce', 'body': 'You have bill to pay this month. data',
-          }, 'topic': 'Announce',
+            'title': 'Announce', 'body': 'There is a new announcement for you, Let\'s check what it is.',
+          },'topic': 'Announce',
         },
       });
 

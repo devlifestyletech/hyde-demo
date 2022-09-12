@@ -10,7 +10,6 @@ const URLPaymentDashboard = `${process.env.REACT_APP_API_URL}/payment-data`;
 const URLPaymentCountBills = `${process.env.REACT_APP_API_URL}/payments/reportBillingPayment`;
 const URLPaymentCountBillsOfMonth = `${process.env.REACT_APP_API_URL}/payments/getTotalYear`;
 const URLAddress = `${process.env.REACT_APP_API_URL}/addresses`;
-const URLUser = `${process.env.REACT_APP_API_URL}/users`;
 const session = encryptStorage.getItem("user_session");
 const auth = session !== undefined ? session.jwt : null;
 const options = {
