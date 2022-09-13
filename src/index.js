@@ -8,7 +8,7 @@ import Thunk from 'redux-thunk'
 import App from './App'
 import './fonts/SukhumvitSet-Text.ttf'
 import './index.css'
-import { AppReducers } from './reducer'
+import { AppReducers } from './reducers'
 import reportWebVitals from './reportWebVitals'
 
 const middlewares = [Thunk]
