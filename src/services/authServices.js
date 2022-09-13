@@ -2,24 +2,30 @@
 import axios from 'axios';
 import { encryptStorage } from '../utils/encryptStorage';
 require('dotenv').config();
+
+const ExtraApiUrl = 'https://hyde-accounts.ap.ngrok.io';
 export default {
   signIn: async function (value) {
     try {
-      return await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/local`,
-        value
-      );
+      return await axios.post(`${ExtraApiUrl}/api/v1/property/auth`, value);
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
-  registration: async function (value) {
+  registration: async function (value, apt, aptName) {
     const session = await encryptStorage.getItem('user_session');
+    let newValue = {
+      ...value,
+      ...session,
+      Building: 'Hyde Heritage',
+      Apt: apt,
+      AptName: aptName,
+    };
     try {
       return await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/local/register`,
-        value,
+        `${ExtraApiUrl}/api/v1/property/adduser`,
+        newValue,
         {
           headers: { Authorization: 'Bearer ' + session.jwt },
         }

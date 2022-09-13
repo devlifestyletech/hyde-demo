@@ -19,6 +19,7 @@ import { locale } from '../../../utils/locale';
 //import services from "../services"
 import addressService from '../../../services/addressServices';
 import authService from '../../../services/authServices';
+import residentServices from '../services/residentServices';
 
 //import svg icon
 import uploadService from '../../../services/uploadServices';
@@ -54,6 +55,17 @@ function CreateModal({ visible, onCancel }) {
   const [CreateResidentForm] = Form.useForm();
   const [imageFile, setImageFile] = useState(null);
   const [pickedImage, setPickedImage] = useState(null);
+  const [addressesStatic, setAddressesStatic] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const [selectAddressDisable, setSelectAddressDisable] = useState(true);
+  const [apt, setApt] = useState('');
+  const [aptName, setAptName] = useState('');
+
+  useEffect(() => {
+    addressService
+      .getAllAddresses()
+      .then((res) => setAddressesStatic(res.data));
+  }, []);
 
   const selectImage = (e) => {
     setImageFile(e.target.files[0]);
@@ -84,8 +96,18 @@ function CreateModal({ visible, onCancel }) {
                 ...value,
               };
               try {
-                const registered = await authService.registration(new_value);
+                const registered = await authService.registration(
+                  new_value,
+                  apt,
+                  aptName
+                );
                 if (registered) {
+                  let addUserData = {
+                    address: value.address,
+                    users_permissions_user: registered.data.id,
+                    resident_role: value.resident_type,
+                  };
+                  residentServices.addUserToAddress(addUserData);
                   message.success('Registration finished');
                   resolve('Success');
                   onCancel();
@@ -162,6 +184,8 @@ function CreateModal({ visible, onCancel }) {
                   resident_class: value.resident_class,
                   vehicle_type: value.vehicle_type,
                   project: '61b464ff4abbaa01b461bc5f',
+                  address: value.address,
+                  resident_type: value.resident_type,
                 };
                 showConfirm(submit_value, imageData);
               }
@@ -327,34 +351,92 @@ function CreateModal({ visible, onCancel }) {
                 <Form.Item label="Passport Number" name="passport_number">
                   <Input placeholder="Please input passport number" />
                 </Form.Item>
-                {/*<Form.Item*/}
-                {/*  label="Address"*/}
-                {/*  name="address"*/}
-                {/*  rules={[*/}
-                {/*    {*/}
-                {/*      required: true,*/}
-                {/*      message: 'Please select address number!',*/}
-                {/*    },*/}
-                {/*  ]}*/}
-                {/*>*/}
-                {/*  <Select*/}
-                {/*    showSearch*/}
-                {/*    filterOption={(input, option) =>*/}
-                {/*      option.children*/}
-                {/*        .toLowerCase()*/}
-                {/*        .indexOf(input.toLowerCase()) >= 0*/}
-                {/*    }*/}
-                {/*    placeholder="Please select address"*/}
-                {/*  >*/}
-                {/*    {addresses*/}
-                {/*      ? addresses.map((address, idx) => (*/}
-                {/*          <Option key={idx} value={address.id}>*/}
-                {/*            {address.address_number}*/}
-                {/*          </Option>*/}
-                {/*        ))*/}
-                {/*      : null}*/}
-                {/*  </Select>*/}
-                {/*</Form.Item>*/}
+                <Form.Item
+                  label="Resident Type"
+                  name="resident_type"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select resident type!',
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder="Please select resident type"
+                    onSelect={async (val) => {
+                      let result;
+                      if (val === 'Owner') {
+                        result = addressesStatic.filter(
+                          (item) =>
+                            item?.owner === null || item?.owner === undefined
+                        );
+                        setAddresses(result);
+                        setSelectAddressDisable(false);
+                        return;
+                      }
+                      result = addressesStatic.filter(
+                        (item) =>
+                          item?.owner !== null && item?.owner !== undefined
+                      );
+                      setAddresses(result);
+                      setSelectAddressDisable(false);
+                      return;
+                    }}
+                  >
+                    <Select.Option key={'owner'} value="Owner">
+                      Owner
+                    </Select.Option>
+                    <Select.Option key={'inhabitant'} value="Inhabitant">
+                      Inhabitant
+                    </Select.Option>
+                    <Select.Option key={'tenant'} value="Tenant">
+                      Tenant
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label="Address"
+                  name="address"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select address number!',
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                    placeholder="Please select address"
+                    disabled={selectAddressDisable}
+                    onChange={(val, dataVal) => {
+                      if (dataVal.dataValue.room_number.search(/12A/) === 0) {
+                        setApt(dataVal.dataValue.room_number.replace('A', '1'));
+                      } else {
+                        setApt(dataVal.dataValue.room_number);
+                      }
+                      setAptName(
+                        dataVal.dataValue.address_number.replace('1199/', '')
+                      );
+                    }}
+                  >
+                    {addresses
+                      ? addresses.map((address, idx) => (
+                          <Option
+                            key={idx}
+                            dataValue={address}
+                            value={address.id}
+                          >
+                            {address.address_number}
+                          </Option>
+                        ))
+                      : null}
+                  </Select>
+                </Form.Item>
                 <Form.Item
                   label="Resident Class"
                   rules={[
@@ -374,28 +456,6 @@ function CreateModal({ visible, onCancel }) {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-                {/*<Form.Item*/}
-                {/*  label="Resident Type"*/}
-                {/*  name="resident_type"*/}
-                {/*  rules={[*/}
-                {/*    {*/}
-                {/*      required: true,*/}
-                {/*      message: 'Please select resident type!',*/}
-                {/*    },*/}
-                {/*  ]}*/}
-                {/*>*/}
-                {/*  <Select placeholder="Please select resident type">*/}
-                {/*    <Select.Option key={'owner'} value="Owner">*/}
-                {/*      Owner*/}
-                {/*    </Select.Option>*/}
-                {/*    <Select.Option key={'inhabitant'} value="Inhabitant">*/}
-                {/*      Inhabitant*/}
-                {/*    </Select.Option>*/}
-                {/*    <Select.Option key={'tenant'} value="Tenant">*/}
-                {/*      Tenant*/}
-                {/*    </Select.Option>*/}
-                {/*  </Select>*/}
-                {/*</Form.Item>*/}
                 <Form.Item label="Telephone Number" name="tel" rules={telRules}>
                   <Input placeholder="Please input phone number" />
                 </Form.Item>
