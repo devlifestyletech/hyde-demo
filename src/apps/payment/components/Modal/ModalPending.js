@@ -44,7 +44,7 @@ const ModalPendingBill = () => {
       });
     }
   };
-  const rejectCommentaData = ["Invalid uploaded image, Please try again.", "Bill payment slip not match the uploaded image , Please try again.", "other"]
+  const rejectCommentaData = ["Invalid uploaded image, Please try again.", "Bill payment slip not match the uploaded image , Please try again."]
 
   const [value, setValue] = React.useState(null);
   const [visible, setvisible] = React.useState(false);
@@ -105,7 +105,7 @@ await setcommentText(currentTarget.value)
   return (
     <div>
       <Modal
-        title={"Create Payment Receipt"}
+        title={"Payment Review"}
         visible={statusModalPending}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -122,7 +122,7 @@ await setcommentText(currentTarget.value)
             Approve
           </Button>,
         ]}
-        width={"50%"}
+        width='900px'
       >
         {dataBillingAllApprove !== null
           ? dataBillingAllApprove.map((e, i) => {
@@ -276,7 +276,7 @@ await setcommentText(currentTarget.value)
                           <div className="container-fluid">
                             <img
                               src={e.imageURL !== null ? e.imageURL : bill}
-                              style={{ width: "50%", margin: "30%" }}
+                              style={{ width: '300px', height:'500px' ,marginLeft: '70px' ,marginTop:'140px'}}
                             />
                           </div>
                         </div>
