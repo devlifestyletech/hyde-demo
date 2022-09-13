@@ -35,7 +35,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import logo from '../../assets/images/hyde-logo.svg';
-import { encryptStorage } from '../../../utils/encryptStorage'
+import { encryptStorage } from '../../../utils/encryptStorage';
 const { RangePicker } = DatePicker;
 const statePayment = {
   searchText: '',
@@ -54,10 +54,10 @@ export const Table_payment = () => {
     dataSize,
     paramsBilling,
     pageDefault,
-    countFCM
+    countFCM,
   } = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
-  let countTotal=countFCM
+  let countTotal = countFCM;
   const [state, setPayment] = useState(statePayment);
   const [loadingCreate, setloadingCreate] = useState([]);
   const [View, setView] = useState([]);
@@ -67,47 +67,49 @@ export const Table_payment = () => {
 
   const [Export, setExport] = useState([]);
   useEffect(async () => {
-   await getAllnotFCMList()
-   await dispatch({ type: 'CHANGE_PARAMS_BILLING', payload: paramsBillingPayment });
-  await  dispatch(getBillingPayment(paramsBillingPayment));
+    await getAllnotFCMList();
+    await dispatch({
+      type: 'CHANGE_PARAMS_BILLING',
+      payload: paramsBillingPayment,
+    });
+    await dispatch(getBillingPayment(paramsBillingPayment));
   }, []);
-    // setting pagination Option
-    const pageSizeOptions = ['20', '40', '60', '100'];
-    const PaginationConfig = {
-      defaultPageSize: pageSizeOptions[0],
-      pageSizeOptions: pageSizeOptions,
-      current: pageDefault,
-      showSizeChanger: true,
-      total: dataSize,
-    };
-    const paramsBillingPayment = {
-      status: 'Payment successful',
-      defaultPage: 1,
-      sorter: undefined,
-      filters: {
-        Address_Customer: null,
-      },
-      pagesize: PaginationConfig.defaultPageSize,
-    };
+  // setting pagination Option
+  const pageSizeOptions = ['20', '40', '60', '100'];
+  const PaginationConfig = {
+    defaultPageSize: pageSizeOptions[0],
+    pageSizeOptions: pageSizeOptions,
+    current: pageDefault,
+    showSizeChanger: true,
+    total: dataSize,
+  };
+  const paramsBillingPayment = {
+    status: 'Payment successful',
+    defaultPage: 1,
+    sorter: undefined,
+    filters: {
+      Address_Customer: null,
+    },
+    pagesize: PaginationConfig.defaultPageSize,
+  };
   const getAllnotFCMList = async () => {
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
-      let countFCMTotal=0
-      FCMtoken.map((e)=>{
-        if (e.readStatus===false) {
-          countFCMTotal=countFCMTotal+1
+      let countFCMTotal = 0;
+      FCMtoken.map((e) => {
+        if (e.readStatus === false) {
+          countFCMTotal = countFCMTotal + 1;
         }
-      })
-      dispatch({ type: "CHANGE_FCM_COUNT", payload: countFCMTotal });
-      if (countFCMTotal>0) {
-        paramsBillingPayment.status = "Pending review";
-        await dispatch({type:"CHANGE_COUNT",payload:2})
+      });
+      dispatch({ type: 'CHANGE_FCM_COUNT', payload: countFCMTotal });
+      if (countFCMTotal > 0) {
+        paramsBillingPayment.status = 'Pending review';
+        await dispatch({ type: 'CHANGE_COUNT', payload: 2 });
       }
       console.log('====================================');
-      console.log("countFCMTotal:",countFCMTotal);
+      console.log('countFCMTotal:', countFCMTotal);
       console.log('====================================');
       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
-     
     }
   };
   const getTime = (e) => {
@@ -135,8 +137,6 @@ export const Table_payment = () => {
       // onOk={onOk}
     />
   );
-
-
 
   // setting pagination Option
 
@@ -178,29 +178,27 @@ export const Table_payment = () => {
 
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
-      let countFCMTotal=countFCM
-      FCMtoken.map((e)=>{
+      let countFCMTotal = countFCM;
+      FCMtoken.map((e) => {
         console.log('====================================');
-        console.log("billPaymentRef1:",e,result.BillsPayment_Invoice);
+        console.log('billPaymentRef1:', e, result.BillsPayment_Invoice);
         console.log('====================================');
-        if (e.billPaymentRef1===result.BillsPayment_Invoice && e.readStatus===false) {
-          e.readStatus=true
-          countFCMTotal=countFCMTotal-1
+        if (
+          e.billPaymentRef1 === result.BillsPayment_Invoice &&
+          e.readStatus === false
+        ) {
+          e.readStatus = true;
+          countFCMTotal = countFCMTotal - 1;
         }
-      })
-      await encryptStorage.setItem(
-        'fcm_token_data',
-        JSON.stringify(FCMtoken)
-      );
-      dispatch({ type: "CHANGE_FCM_COUNT", payload: countFCMTotal });
-     
+      });
+      await encryptStorage.setItem('fcm_token_data', JSON.stringify(FCMtoken));
+      dispatch({ type: 'CHANGE_FCM_COUNT', payload: countFCMTotal });
+
       console.log('====================================');
-      console.log("countFCMTotal:",countFCMTotal);
+      console.log('countFCMTotal:', countFCMTotal);
       console.log('====================================');
       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
-     
     }
-
   };
   //approve
   const approveBillingModalReject = async ({ currentTarget }) => {
@@ -235,10 +233,11 @@ export const Table_payment = () => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
     if (status_billing !== 'Bill not generated') {
-      Modal.info({
+      Modal.warning({
         title: 'Billing Payment Detail',
-        width: '45%',
-        // icon: <ExclamationCircleOutlined />,
+        width: '820px',
+        hight:'900px',
+        icon: <ExclamationCircleOutlined />,
         content: (
           <div>
             {result !== null
@@ -255,8 +254,9 @@ export const Table_payment = () => {
                               <img
                                 src={logo}
                                 style={{
-                                  width: '6vw',
-                                  marginTop: '6%',
+                                  width: '241px',
+                                  height:'90px',
+                                  marginTop: '4%',
                                   marginLeft: '15%',
                                   paddingBottom: '5%',
                                 }}
@@ -266,16 +266,23 @@ export const Table_payment = () => {
                           <Col span={12}>
                             <div
                               className="col-8"
-                              style={{ textAlign: 'left' }}
+                              style={{ textAlign: 'right' }}
                             >
-                              <h3 style={{ margin: '4%', fontStyle: 'bold' }}>
-                                <b>
-                                  Hyde Heritage at Thonglor Condominium Juristic
-                                  Person 1199 Sukhumvit Rd., Klongton Nua,
-                                  Wattana, Bangkok, 10110
-                                  <br />
-                                  Tel. 0987645822
-                                </b>
+                              <h3 style={{ fontStyle: 'bold' }}>
+                                <span>
+                                  Hyde Heritage at Thonglor Condominium
+                                </span>
+                              </h3>
+                              <h3 style={{ fontStyle: 'bold' }}>
+                                <span>Juristic Person1199 Sukhumvit Rd.</span>
+                              </h3>
+                              <h3 style={{ fontStyle: 'bold' }}>
+                                <span>
+                                  Klongton Nua, Wattana, Bangkok, 10110
+                                </span>
+                              </h3>
+                              <h3 style={{ fontStyle: 'bold' }}>
+                                <span>Tel. 0987635822</span>
                               </h3>
                             </div>
                           </Col>
@@ -286,10 +293,10 @@ export const Table_payment = () => {
                             span={12}
                             style={{
                               textAlign: 'left',
-                              paddingLeft: '5%',
+                              paddingLeft: '',
                             }}
                           >
-                            <b>
+                            <span>
                               Invoice Bill: {e?.BillsPayment_Invoice}
                               <br />
                               Tax number: 0012254
@@ -298,16 +305,16 @@ export const Table_payment = () => {
                               <br />
                               Address: {e?.Address_Customer}
                               <br />
-                            </b>
+                            </span>
                           </Col>
                           <Col
                             span={12}
                             style={{
                               textAlign: 'left',
-                              paddingLeft: '2%',
+                              paddingLeft: '70px',
                             }}
                           >
-                            <b>
+                            <span>
                               Due Date
                               <br />
                               From : {e?.BillsPayment_Date_Start}
@@ -317,7 +324,7 @@ export const Table_payment = () => {
                               {/* Issued by: Admin2*/}
                               Create on : {e?.BillsPayment_Date_Start}
                               <br />
-                            </b>
+                            </span>
                           </Col>
                         </Row>
 
@@ -327,6 +334,7 @@ export const Table_payment = () => {
                               <th
                                 style={{
                                   backgroundColor: '#B8B8B8',
+                                  color: '#000000',
                                   // borderTopLeftRadius: "10px",
                                   width: '30%',
                                   textAlign: 'center',
@@ -337,6 +345,7 @@ export const Table_payment = () => {
                               <th
                                 style={{
                                   backgroundColor: '#B8B8B8',
+                                  color: '#000000',
                                   width: '30%',
                                   textAlign: 'center',
                                 }}
@@ -346,6 +355,7 @@ export const Table_payment = () => {
                               <th
                                 style={{
                                   backgroundColor: '#B8B8B8',
+                                  color: '#000000',
                                   // borderTopRightRadius: "10px",
                                   width: '30%',
                                   textAlign: 'center',
@@ -361,37 +371,45 @@ export const Table_payment = () => {
                                       style={{
                                         textAlign: 'center',
                                         backgroundColor: '#E2E1E1',
+                                        borderBottomWidth: 10,
+                                        borderColor: '#000000',
                                       }}
                                     >
-                                      <td>{j + 1}</td>
-                                      <td>{f.subBilling}</td>
-                                      <td>{f.amount}</td>
+                                      <td
+                                        style={{
+                                          borderBottomWidth: 1,
+                                          borderColor: '#B8B8B8',
+                                        }}
+                                      >
+                                        {j + 1}
+                                      </td>
+                                      <td
+                                        style={{
+                                          borderBottomWidth: 1,
+                                          borderColor: '#B8B8B8',
+                                        }}
+                                      >
+                                        {f.subBilling}
+                                      </td>
+                                      <td
+                                        style={{
+                                          borderBottomWidth: 1,
+                                          borderColor: '#B8B8B8',
+                                        }}
+                                      >
+                                        {f.amount}
+                                      </td>
                                     </tr>
                                   );
                                 })
                               : null}
-                            {/* <tr style={{ textAlign: "center" }}>
-                                  <td>1</td>
-                                  <td>
-                                    {e?.BillsPayment_AllType[0].subBilling}
-                                  </td>
-                                  <td>{e?.BillsPayment_AllType[0].amount}</td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>
-                                    {e?.BillsPayment_AllType[1].subBilling}
-                                  </td>
-                                  <td>{e?.BillsPayment_AllType[1].amount}</td>
-                                </tr> */}
                           </table>
                         </div>
-
                         <div className="container-fluid">
                           <div
                             className="row"
                             style={{
-                              paddingTop: '2vh',
+                              paddingTop: '15%',
                               backgroundColor: '#E2E1E1',
                             }}
                           >
@@ -410,19 +428,23 @@ export const Table_payment = () => {
                                 <br />
                                 Vat:
                                 <br />
-                                <b>
+                                <span
+                                  style={{ WebkitTextStroke: '0.5px black' }}
+                                >
                                   Grand Total:
                                   <br />
-                                </b>
+                                </span>
                               </Col>
-                              <Col span={4} style={{ textAlign: 'left' }}>
+                              <Col span={4} style={{textAlign: 'left' }}>
                                 {e?.Total_BillsPayment}
                                 <br />
-                                0 <br />
-                                <b>
+                                0.00 <br />
+                                <span
+                                  style={{ WebkitTextStroke: '0.5px black' }}
+                                >
                                   {e?.Total_BillsPayment}
                                   <br />
-                                </b>
+                                </span>
                               </Col>
                               <Col span={2} style={{ textAlign: 'left' }}>
                                 {' '}
@@ -430,11 +452,13 @@ export const Table_payment = () => {
                                 <br />
                                 THB.
                                 <br />
-                                <b>
+                                <span
+                                  style={{ WebkitTextStroke: '0.5px black' }}
+                                >
                                   {' '}
                                   THB.
                                   <br />
-                                </b>
+                                </span>
                               </Col>
                             </Row>
                           </div>
@@ -583,7 +607,9 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-      a.BillsPayment_Invoice !== undefined ?  a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
+        a.BillsPayment_Invoice !== undefined
+          ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice)
+          : null,
     },
     {
       title: 'Room Number',
@@ -603,7 +629,10 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer !== undefined ? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
     },
     {
       title: 'Name Owner',
@@ -612,7 +641,10 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
     },
     {
       title: 'Due Date',
@@ -636,7 +668,10 @@ export const Table_payment = () => {
       key: 'Total_BillsPayment',
       width: '10%',
 
-      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
+      sorter: (a, b) =>
+        a.Total_BillsPayment !== undefined
+          ? a.Total_BillsPayment - b.Total_BillsPayment
+          : null,
     },
     {
       title: 'Status',
@@ -655,7 +690,10 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
+      sorter: (a, b) =>
+        a.createdAt !== undefined
+          ? a.createdAt.localeCompare(b.createdAt)
+          : null,
     },
     {
       title: 'Export',
@@ -686,7 +724,9 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
+        a.BillsPayment_Invoice !== undefined
+          ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice)
+          : null,
     },
     {
       title: 'Room Number',
@@ -695,7 +735,10 @@ export const Table_payment = () => {
       key: 'Address_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
 
       render: (text) => (
         <Highlighter
@@ -716,7 +759,10 @@ export const Table_payment = () => {
       dataIndex: 'Name_Customer',
       key: 'Name_Customer',
       width: '10%',
-      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
+      sorter: (a, b) =>
+        a.Name_Customer !== undefined
+          ? a.Name_Customer.localeCompare(b.Name_Customer)
+          : null,
     },
     {
       title: 'Due Date',
@@ -741,7 +787,10 @@ export const Table_payment = () => {
       key: 'Total_BillsPayment',
       width: '10%',
 
-      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
+      sorter: (a, b) =>
+        a.Total_BillsPayment !== undefined
+          ? a.Total_BillsPayment - b.Total_BillsPayment
+          : null,
     },
     {
       title: 'Status',
@@ -760,7 +809,10 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
+      sorter: (a, b) =>
+        a.createdAt !== undefined
+          ? a.createdAt.localeCompare(b.createdAt)
+          : null,
     },
 
     {
@@ -794,7 +846,9 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
+        a.BillsPayment_Invoice !== undefined
+          ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice)
+          : null,
     },
     {
       title: 'Room Number',
@@ -814,7 +868,10 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
     },
     {
       title: 'Name Owner',
@@ -823,7 +880,10 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
+      sorter: (a, b) =>
+        a.Name_Customer !== undefined
+          ? a.Name_Customer.localeCompare(b.Name_Customer)
+          : null,
     },
     {
       title: 'Due Date',
@@ -846,7 +906,10 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
+      sorter: (a, b) =>
+        a.Total_BillsPayment !== undefined
+          ? a.Total_BillsPayment - b.Total_BillsPayment
+          : null,
     },
     {
       title: 'Status',
@@ -877,7 +940,10 @@ export const Table_payment = () => {
       key: 'createBill',
       width: '10%',
 
-      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
+      sorter: (a, b) =>
+        a.createdAt !== undefined
+          ? a.createdAt.localeCompare(b.createdAt)
+          : null,
     },
     {
       title: 'Detail',
@@ -943,7 +1009,8 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.address !== undefined? a.address.localeCompare(b.address):null,
+      sorter: (a, b) =>
+        a.address !== undefined ? a.address.localeCompare(b.address) : null,
     },
     {
       title: 'Name Owner',
@@ -951,9 +1018,10 @@ export const Table_payment = () => {
       dataIndex: 'fullname',
       key: 'fullname',
       width: '10%',
-      sorter: (a, b) => a.fullname !== undefined? a.fullname.localeCompare(b.fullname):null,
+      sorter: (a, b) =>
+        a.fullname !== undefined ? a.fullname.localeCompare(b.fullname) : null,
     },
-   
+
     {
       title: 'ฺBilling of the month',
       align: 'center',
@@ -996,7 +1064,9 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
+        a.BillsPayment_Invoice !== undefined
+          ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice)
+          : null,
     },
     {
       title: 'Room Number',
@@ -1016,7 +1086,10 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
     },
     {
       title: 'Name Owner',
@@ -1025,7 +1098,10 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
+      sorter: (a, b) =>
+        a.Name_Customer !== undefined
+          ? a.Name_Customer.localeCompare(b.Name_Customer)
+          : null,
     },
     {
       title: 'Due Date',
@@ -1048,7 +1124,10 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
+      sorter: (a, b) =>
+        a.Total_BillsPayment !== undefined
+          ? a.Total_BillsPayment - b.Total_BillsPayment
+          : null,
     },
     {
       title: 'Status',
@@ -1066,7 +1145,10 @@ export const Table_payment = () => {
       dataIndex: 'createdAt',
       key: 'createBill',
       width: '10%',
-      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
+      sorter: (a, b) =>
+        a.createdAt !== undefined
+          ? a.createdAt.localeCompare(b.createdAt)
+          : null,
     },
     {
       title: 'Detail',
@@ -1097,7 +1179,9 @@ export const Table_payment = () => {
       key: 'BillsPayment_Invoice',
       width: '10%',
       sorter: (a, b) =>
-        a.BillsPayment_Invoice !== undefined ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice):null,
+        a.BillsPayment_Invoice !== undefined
+          ? a.BillsPayment_Invoice.localeCompare(b.BillsPayment_Invoice)
+          : null,
     },
     {
       title: 'Room Number',
@@ -1117,7 +1201,10 @@ export const Table_payment = () => {
           textToHighlight={text ? text.toString() : ''}
         />
       ),
-      sorter: (a, b) => a.Address_Customer !== undefined? a.Address_Customer.localeCompare(b.Address_Customer):null,
+      sorter: (a, b) =>
+        a.Address_Customer !== undefined
+          ? a.Address_Customer.localeCompare(b.Address_Customer)
+          : null,
     },
     {
       title: 'Name Owner',
@@ -1126,7 +1213,10 @@ export const Table_payment = () => {
       key: 'Name_Customer',
       width: '10%',
 
-      sorter: (a, b) => a.Name_Customer !== undefined? a.Name_Customer.localeCompare(b.Name_Customer):null,
+      sorter: (a, b) =>
+        a.Name_Customer !== undefined
+          ? a.Name_Customer.localeCompare(b.Name_Customer)
+          : null,
     },
     {
       title: 'Due Date',
@@ -1149,7 +1239,10 @@ export const Table_payment = () => {
       dataIndex: 'Total_BillsPayment',
       key: 'Total_BillsPayment',
       width: '10%',
-      sorter: (a, b) => a.Total_BillsPayment !== undefined? a.Total_BillsPayment - b.Total_BillsPayment:null,
+      sorter: (a, b) =>
+        a.Total_BillsPayment !== undefined
+          ? a.Total_BillsPayment - b.Total_BillsPayment
+          : null,
     },
     {
       title: 'Status',
@@ -1167,7 +1260,10 @@ export const Table_payment = () => {
       dataIndex: 'createdAt',
       key: 'createBill',
       width: '10%',
-      sorter: (a, b) => a.createdAt !== undefined ? a.createdAt.localeCompare(b.createdAt):null,
+      sorter: (a, b) =>
+        a.createdAt !== undefined
+          ? a.createdAt.localeCompare(b.createdAt)
+          : null,
     },
     {
       title: 'Action',

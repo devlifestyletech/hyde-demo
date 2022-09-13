@@ -26,8 +26,7 @@ const ModalReject = () => {
   };
   const rejectCommentaData = [
     'Invalid uploaded image, Please try again.',
-    'Bill payment slip not match the uploaded image , Please try again.',
-    'other',
+    'Bill payment slip not match the uploaded image , Please try again.'
   ];
 
   const [value, setValue] = React.useState(null);
@@ -84,7 +83,7 @@ const ModalReject = () => {
   return (
     <div>
       <Modal
-        title={'Create Payment Receipt'}
+        title={'Payment annotation'}
         visible={statusModalReject}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -98,7 +97,7 @@ const ModalReject = () => {
             OK
           </Button>,
         ]}
-        width={'50%'}
+        width='900px'
       >
         {dataBillingAllApprove !== null
           ? dataBillingAllApprove.map((e, i) => {
@@ -263,7 +262,7 @@ const ModalReject = () => {
                             <div className="container-fluid">
                               <img
                                 src={e.imageURL !== null ? e.imageURL : bill}
-                                style={{ width: '50%', margin: '30%' }}
+                                style={{ width: '300px', height:'500px' ,marginLeft: '70px' ,marginTop:'200px'}}
                               />
                             </div>
                           </div>
