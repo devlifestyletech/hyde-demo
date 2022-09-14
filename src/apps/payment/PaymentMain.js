@@ -3,14 +3,14 @@ import { Input, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table_payment as TablePayment } from './components/table_payment';
+import { PaymentTable } from "./components/PaymentTable";
 import {
   getBillingPayment,
   getCustomerList,
 } from './services/thunk-action/payment_thunk';
-import { MenuBillPayment } from './components/menuBillPayment';
+import { MenuBillPayment } from './components/MenuBillPayment';
 import CreateBillModal from './components/Modal/ModalCreateBill';
-import './style/payment.css';
+import './style/Payment.css';
 import Header from '../../components/Header';
 // import io from "socket.io-client";
 // const URL = "https://crud-firestore-swagger-node.herokuapp.com/"
@@ -27,7 +27,7 @@ const nextDate = moment(monthFormat, dateFormat).add(30, 'days');
 let width = window.innerWidth;
 let height = window.innerHeight;
 
-const Payment_success = () => {
+const PaymentMain = () => {
   const dispatch = useDispatch();
   const { status_billing, dataBilling, paramsBilling } = useSelector(
     (state) => state.PaymentActionRedux
@@ -101,9 +101,9 @@ const Payment_success = () => {
       </div>
       <CreateBillModal dataCreateBilling={null} />
       <MenuBillPayment />
-      <TablePayment />
+      <PaymentTable />
     </>
   );
 };
 
-export default Payment_success;
+export default PaymentMain;

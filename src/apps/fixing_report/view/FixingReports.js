@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import Heading from '../../../components/Header';
 import { Button, Image, Input, Table,Tag } from 'antd';
-import ReportModal from '../service/reportModal';
+import ReportModal from '../components/ManageReport';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
 import {MenuFixingReport} from './MenuFixingReport'

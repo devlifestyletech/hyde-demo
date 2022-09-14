@@ -3,14 +3,14 @@ import { Form, Input, Modal, Button, Space, Select, notification } from "antd";
 import {
   addressCustomer,
   postdataRescrpt,
-} from "../../services/API/payment_api";
+} from "../../services/API/PaymentAPI";
 import Momnent from "moment";
 import { getBillingPayment } from "../../services/thunk-action/payment_thunk";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "../style/table.css";
-import "../../style/payment.css";
+import "../../style/Payment.css";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const stateModalCreateBill = {

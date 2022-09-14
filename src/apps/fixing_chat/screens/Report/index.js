@@ -14,7 +14,7 @@ import {
   BoxReport,
 } from './styles';
 import { Spin, Button, Row, Col } from 'antd';
-import ReportModal from '../../../fixing_report/service/reportModal';
+import ReportModal from '../../../fixing_report/components/ManageReport';
 import noImg from '../../../assets/images/noImg.jpg';
 import axios from 'axios';
 import { format, utcToZonedTime } from 'date-fns-tz';

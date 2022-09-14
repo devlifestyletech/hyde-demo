@@ -25,12 +25,12 @@ import Registration from './apps/registration/views/Registration';
 import RoomManagement from './apps/registration/views/ProjectManagement';
 import Nearby from './apps/nearby/NearbyService';
 import Announcement from './apps/announcement/Announcement';
-import FixingReports from './apps/fixing_report/view/Fixing_Reports';
-import FixingReportsDashboard from './apps/fixing_report/view/Fixing_Report_Dashboard';
+import FixingReports from './apps/fixing_report/view/FixingReports';
+import FixingReportsDashboard from './apps/fixing_report/view/FixingReportDashboard';
 import FixingChat from './apps/fixing_chat/screens/ChatRoom';
 import LiveChat from './apps/live_chat/screens/ChatRoom';
-import PaymentSuccess from './apps/payment/Payment_success';
-import PaymentDashboard from './apps/payment/payment_dashbord';
+import PaymentSuccess from './apps/payment/PaymentMain';
+import PaymentDashboard from './apps/payment/PaymentDashboard';
 
 import { signInAnonymously } from 'firebase/auth';
 import NoContent from './components/NoContentPage';

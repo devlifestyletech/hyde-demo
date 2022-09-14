@@ -8,7 +8,7 @@ import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import { socket } from '../../../services/webSocketService';
 import { useSelector, useDispatch } from 'react-redux';
-import { getDataFixReport } from './thunk-action/fix_report_thunk'
+import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
 export default function ReportModal({
 }) {
   const { dataManageReport,statusModalFixReport,paramsDataFixReport } = useSelector((state) => state.FixReportActionRedux);

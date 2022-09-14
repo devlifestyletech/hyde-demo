@@ -2,8 +2,8 @@ import React from "react";
 import { Input, Modal, notification, Button, Radio, Col, Row } from "antd";
 
 import bill from "../../assets/images/bill.jpg";
-import { bankNamecode } from "../../services/bankNamecode";
-import { updateRescrpt, rejectRescrpt } from "../../services/API/payment_api";
+import { bankNamecode } from "../../services/bankNameCode";
+import { updateRescrpt, rejectRescrpt } from "../../services/API/PaymentAPI";
 import { getBillingPayment } from "../../services/thunk-action/payment_thunk";
 import { useDispatch, useSelector } from "react-redux";
 

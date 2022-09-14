@@ -9,7 +9,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { encryptStorage } from '../../../utils/encryptStorage';
 
-export default function FixingReportDashBoard() {
+export default function FixingReportDashboard() {
   const session = encryptStorage.getItem('user_session');
   const [fixingData, setFixingData] = useState([]);
   const [todayData, setTodayData] = useState([]);
