@@ -26,7 +26,7 @@ import RoomManagement from './apps/registration/views/ProjectManagement';
 import Nearby from './apps/nearby/NearbyService';
 import Announcement from './apps/announcement/Announcement';
 import FixingReports from './apps/fixing_report/view/Fixing_Reports';
-import FixingReportsDashboard from './apps/fixing_report/view/Fixing_Report_DashBoard';
+import FixingReportsDashboard from './apps/fixing_report/view/Fixing_Report_Dashboard';
 import FixingChat from './apps/fixing_chat/screens/ChatRoom';
 import LiveChat from './apps/live_chat/screens/ChatRoom';
 import PaymentSuccess from './apps/payment/Payment_success';

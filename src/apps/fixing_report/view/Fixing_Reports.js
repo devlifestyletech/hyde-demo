@@ -1,222 +1,224 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from 'react';
 import Heading from '../../../components/Header';
-import { Button, Image, Input, Table } from 'antd';
+import { Button, Image, Input, Table,Tag } from 'antd';
 import ReportModal from '../service/reportModal';
-import axios from 'axios';
-import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
-
+import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
+import {MenuFixingReport} from './MenuFixingReport'
+import { useSelector, useDispatch } from 'react-redux';
 const FixingReports = () => {
+  const {
+    status_fixReport,
+    dataFixReport,
+    loadingTable,
+    dataSize,
+    paramsFixReport,
+    pageDefault,
+  } = useSelector((state) => state.FixReportActionRedux);
+  const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
-  const [data, setData] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [stateReport, setStateReport] = useState([]);
   const [searchName, setSearchName] = useState('');
-  const [reportValue, setReportValue] = useState(null);
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const thTimeZone = 'Asia/Bangkok';
-  const status = {
-    Pending: '#E86A6B',
-    Repairing: '#EEC84D',
-    Success: '#79CA6C',
-  };
-
+    // setting pagination Option
+    const pageSizeOptions = ['20', '40', '60', '100'];
+    const PaginationConfig = {
+      defaultPageSize: pageSizeOptions[0],
+      pageSizeOptions: pageSizeOptions,
+      current: pageDefault,
+      showSizeChanger: true,
+      total: dataSize,
+    };
+    const paramsDataFixReport = {
+      status: undefined,
+      defaultPage: 1,
+      sorter: undefined,
+      filters: {
+        Address_Customer: null,
+      },
+      pagesize: PaginationConfig.defaultPageSize,
+    };
   const { Search } = Input;
 
-  let columns = [
+  // table change
+  let columnsFix_report = [
     {
       title: 'No.',
       dataIndex: 'number',
       key: 'number',
       align: 'center',
+      width: '10%',
+    },
+    {
+      title: 'Full name',
+      dataIndex: 'owner',
+      key: 'owner',
+      align: 'center',
+      width: '10%',
+
+      sorter: (a, b) => a.owner !== undefined ? a.owner.localeCompare(b.owner):null,
     },
     {
       title: 'Address',
       dataIndex: 'address_number',
       key: 'address_number',
       align: 'center',
-      render: (index, record) => <div>{record.address_number}</div>,
-    },
-    {
-      title: 'Owner',
-      dataIndex: 'owner',
-      key: 'owner',
-      align: 'center',
-      sorter: (a, b) => (a.owner > b.owner ? 1 : -1),
-      render: (index, record) => <div>{record.owner?.fullname}</div>,
-    },
-    {
-      title: 'Tel',
-      dataIndex: 'tel',
-      key: 'tel',
-      align: 'center',
-      render: (index, record) => <div>{record.owner?.tel}</div>,
-    },
-    {
-      title: 'E-Mail',
-      dataIndex: 'email',
-      key: 'email',
-      align: 'center',
-      sorter: (a, b) => (a.email > b.email ? 1 : -1),
-      render: (index, record) => <div>{record.owner?.email}</div>,
-    },
-  ];
-
-  let extendsColumns = [
-    {
-      width: '4vw',
-      title: 'No.',
-      align: 'center',
-      dataIndex: 'number',
-      key: 'number',
-    },
-
-    {
-      width: '8vw',
-      title: 'Submission Date',
-      dataIndex: 'submission_date_show',
-      key: 'submission_date_show',
+      width: '10%',
+      sorter: (a, b) => a.address_number.localeCompare(b.address_number),
     },
     {
       title: 'Problem',
       dataIndex: 'problem',
       key: 'problem',
       align: 'center',
+      width: '10%',
+
+      sorter: (a, b) => a.problem !==undefined? a.problem.localeCompare(b.problem):null,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Tel',
+      dataIndex: 'tel',
+      key: 'tel',
       align: 'center',
+      width: '10%',
+
+      sorter: (a, b) => a.tel !==undefined? a.tel.localeCompare(b.tel):null,
     },
     {
-      hidden: true,
-      title: 'Address',
-      dataIndex: 'address_number',
-      key: 'address_number',
+      title: 'Submission Date',
       align: 'center',
+      dataIndex: 'submission_date',
+      key: 'submission_date',
+      width: '10%',
+      sorter: (a, b) => a.submission_date !==undefined? a.submission_date.localeCompare(b.submission_date):null,
     },
     {
-      hidden: true,
-      title: 'Owner',
-      dataIndex: 'owner',
-      key: 'owner',
-    },
-    {
-      width: '4vw',
       title: 'Status',
-      dataIndex: 'status',
       align: 'center',
+      dataIndex: 'status',
       key: 'status',
-      sorter: (a, b) => (a.status > b.status ? 1 : -1),
-      render: (text) => (
+      width: '10%',
+      sorter: (a, b) => a.status !==undefined? a.status.localeCompare(b.status):null,
+      render: (status) => {
+        switch (status) {
+          case "Pending":    
+            return <Tag color="red">{status}</Tag>;
+            break;
+            case "Repairing":    
+            return <Tag color="orange">{status}</Tag>;
+            break;
+            case "Success":    
+            return <Tag color="green">{status}</Tag>;
+            break;
+          default:
+            break;
+        }
+      },
+    },
+    {
+      title: 'Action',
+      align: 'center',
+      dataIndex: 'action',
+      key: 'BillsPayment_Invoice',
+      width: '10%',
+      render: (text, record) => (
         <>
-          <div style={{ color: status[text] }}>{text}</div>
+          <Button
+            value={record.id}
+            type="Default"
+            shape="round"
+            loading={stateReport[record.id]}
+            onClick={manageReport}
+          >
+            Manage Report
+          </Button>
         </>
       ),
     },
-    {
-      width: '4vw',
-      align: 'center',
-      title: 'Action',
-      key: 'extendsAction',
-      render: (_, record) => (
-        <Button
-          style={{
-            backgroundColor: '#D8AA81',
-            color: '#F5F4EC',
-            borderRadius: 20,
-          }}
-          key="manage_report"
-          onClick={() => {
-            setVisible(true);
-            console.log('record', record);
-            handleEdit(record);
-          }}
-        >
-          Manage Report
-        </Button>
-      ),
-    },
-  ].filter((item) => !item.hidden);
+  ];
 
-  // function
-  const handleEdit = (record) => {
-    setReportValue(record);
-    setVisible(true);
+  const manageReport = async ({ currentTarget }) => {
+    const exportLoading = [...stateReport];
+    exportLoading[currentTarget.value] = true;
+    await setStateReport(exportLoading);
+    const result = dataFixReport.filter((e) => {
+      return e.id === currentTarget.value;
+    });
+    console.log('====================================');
+    console.log("result:",result);
+    console.log('====================================');
+    dispatch({ type: 'CHANGE_STATE_MANAGE_FIX_REPORT', payload: result });
+    dispatch({ type: 'MODAL_FIX_REPORT', payload: true });
+    exportLoading[currentTarget.value] = false;
+    await setStateReport(exportLoading);
   };
+  
 
   const handleSearch = (value) => {
-    setSearchName(value.toLowerCase());
+    value!== undefined?  setSearchName(value.toLowerCase()):null
   };
 
   const handleSearchChange = (value) => {
     if (value.target.value === '') {
       setSearchName('');
+    }else{
+      if (
+        paramsFixReport.filters !== undefined &&
+        paramsFixReport.filters !== null
+      ) {
+        paramsFixReport.filters = {
+          address_number: [value.target.value],
+        };
+        dispatch(getDataFixReport(paramsFixReport));
+      } else {
+        paramsFixReport.filters = {
+          address_number: [value.target.value],
+        };
+      }
     }
   };
 
-  const closeModal = () => {
-    console.log('closeModal');
-    setVisible(false);
-  };
-
-  const fetchData = async () => {
-    let residencesData = [];
-    let combinesData = [];
-
-    await axios
-      .get(process.env.REACT_APP_API_URL + '/addresses?_limit=500', headers)
-      .then((res) => {
-        // console.log('resData', res.data.length);
-        residencesData = res.data;
-        // console.log(
-        //   'residences DATA => ',
-        //   residencesData.filter((item) => item.fixing_reports.length > 0)
-        // );
-        residencesData
-          // .filter((item) => item.owner != null && item.owner !== undefined)
-          .filter((item) => item.fixing_reports.length > 0)
-          .forEach((residence, index) => {
-            let residenceData = {
-              key: index,
-              number: index + 1,
-              ...residence,
-            };
-            residence.fixing_reports.forEach((report, index) => {
-              let date_show = format(
-                utcToZonedTime(new Date(report.submission_date), thTimeZone),
-                'dd MMM yyyy',
-                { timeZone: 'Asia/Bangkok' }
-              );
-              let newReport = {
-                key: residence.fixing_reports[index].id,
-                number: index + 1,
-                submission_date_show: date_show,
-                address_number: residence.address_number,
-                owner: residence.owner?.fullname,
-                ...report,
-              };
-              residence.fixing_reports[index] = newReport;
-            });
-            // console.log('residenceData', residenceData);
-            // console.log(residenceData.fixing_reports);
-            combinesData.push(residenceData);
-          });
-      });
-    setData(combinesData);
-    //console.log('combinesData');
-    //console.log(combinesData);
-  };
 
   // set data
-  useEffect(() => {
-    fetchData();
-    console.log('session', session);
+  useEffect( async() => {
+   
+    await dispatch({ type: 'CHANGE_PARAMS_FIX_REPORT', payload: paramsDataFixReport });
+    await  dispatch(getDataFixReport(paramsDataFixReport));
+   
   }, []);
+  const handleTableChange = async (pagination, filters, sorter) => {
+    console.log('handleTableChange:', sorter);
+    await dispatch({
+      type: 'CHANGE_PAGE_DEFAULT_FIX_REPORT',
+      payload: pagination?.current,
+    });
+    (paramsFixReport.status = status_fixReport),
+      (paramsFixReport.defaultPage = pagination.current),
+      (paramsFixReport.pagesize = pagination.pageSize);
+    paramsFixReport.filters = {
+      address_number:
+        filters?.address_number !== undefined
+          ? filters?.address_number
+          : null,
+    };
 
+    if (sorter.order !== undefined) {
+      paramsFixReport.sorter = {
+        NameSort: sorter.columnKey,
+        orderSort: sorter.order,
+      };
+    } else {
+      paramsFixReport.sorter = sorter.order;
+    }
+    dispatch(getDataFixReport(paramsFixReport));
+  };
   return (
-    <>
+    <div>
+       <ReportModal/>
       <Heading title="Service Center Lists" />
       <Search
         placeholder="Search by address number"
@@ -226,36 +228,17 @@ const FixingReports = () => {
         onChange={handleSearchChange}
         className="search-box"
       />
+      <MenuFixingReport/>
       <Table
-        columns={columns}
+        columns={columnsFix_report}
         className="tableContainer"
-        expandable={{
-          expandedRowRender: (record) => (
-            <div>
-              <Table
-                columns={extendsColumns}
-                dataSource={record?.fixing_reports}
-                pagination={false}
-              />
-            </div>
-          ),
-          rowExpandable: (record) => record.fixing_reports != null,
-        }}
-        dataSource={
-          searchName === ''
-            ? data
-            : data.filter((item) => item.address_number.includes(searchName))
-        }
+        onChange={handleTableChange}
+        loading={loadingTable}
+        pagination={PaginationConfig}
+        dataSource={dataFixReport}
       />
-      {visible ? (
-        <ReportModal
-          visible={visible}
-          reportValue={reportValue}
-          fetchData={fetchData}
-          closeModal={closeModal}
-        />
-      ) : null}
-    </>
+        {/* <ReportModal/> */}
+    </div>
   );
 };
 

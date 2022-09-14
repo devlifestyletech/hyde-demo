@@ -7,7 +7,6 @@ import '../style/fixingStyle.css';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
-
 import { encryptStorage } from '../../../utils/encryptStorage';
 
 export default function FixingReportDashBoard() {
