@@ -1,4 +1,4 @@
-const BankNameCode = (code) => {
+export const BankNamecode = (code) => {
   switch (code) {
     case '002':
       return 'ธนาคารกรุงเทพ';
@@ -14,4 +14,4 @@ const BankNameCode = (code) => {
   }
 };
 
-export { BankNameCode };
+
