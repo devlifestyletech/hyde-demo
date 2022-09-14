@@ -9,7 +9,7 @@ import {
   Row,
 } from 'antd';
 import bill from '../../assets/images/bill.jpg';
-import { bankNamecode } from '../../services/bankNameCode';
+import { BankNameCode } from '../../services/BankNameCode';
 import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -229,7 +229,7 @@ const ModalReject = () => {
                                     style={{ borderRadius: '25px' }}
                                     placeholder="No data form SCB"
                                     disabled={true}
-                                    value={bankNamecode(e?.sendingBankCode)}
+                                    value={BankNameCode(e?.sendingBankCode)}
                                   />
                                 </div>
                                 <div style={{ paddingTop: 10 }}>

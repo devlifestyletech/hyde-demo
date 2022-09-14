@@ -10,7 +10,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "../style/table.css";
-import "../../style/Payment.css";
+import "../../style/payment.css";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const stateModalCreateBill = {
