@@ -34,7 +34,7 @@ function ChatRoom(props) {
   const [userAvatar, setUserAvatar] = useState('');
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
-  console.log(session.jwt);
+  // console.log(session.jwt);
 
   const connectChat = () => {
     if (sender_name && room) {
@@ -49,7 +49,7 @@ function ChatRoom(props) {
       });
 
       socket.emit('join', { sender_id, sender_name, room }, (data) => {
-        console.log('JoinData', data);
+        // console.log('JoinData', data);
       });
       if (messages.length === 0) {
         // console.log("Do Fetch", messages);
@@ -99,7 +99,7 @@ function ChatRoom(props) {
   }, [room]);
 
   const handleCallback = (childData) => {
-    console.log('room', childData.split(',')[1]);
+    // console.log('room', childData.split(',')[1]);
     if (room !== childData.split(',')[1]) {
       setMessages([]);
       setRoom(childData.split(',')[1]);
@@ -161,15 +161,15 @@ function ChatRoom(props) {
 
   const uploadImg = async () => {
     setOnSend(true);
-    console.log('imageFile', imageFile);
+    // console.log('imageFile', imageFile);
     let dataImage = new FormData();
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        console.log('res Upload', res.data[0].url);
+        // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        console.log('type', imageFile.type.split('/')[0]);
+        // console.log('type', imageFile.type.split('/')[0]);
 
         imageFile.type.split('/')[0] === 'image'
           ? socket.emit(

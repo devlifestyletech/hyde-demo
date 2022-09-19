@@ -13,7 +13,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import noImg from '../../assets/images/noImg.jpg';
+import { UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { encryptStorage } from '../../../utils/encryptStorage';
@@ -35,7 +35,7 @@ function List(props) {
   });
 
   function handleChange(value) {
-    console.log(contactList[value]);
+    // console.log(contactList[value]);
     props.handleCallback(
       contactList[value].name +
         ',' +
@@ -52,7 +52,7 @@ function List(props) {
   }
 
   const setRead = (room, adminId, userRole) => {
-    console.log('setRead', room, adminId, userRole);
+    // console.log('setRead', room, adminId, userRole);
     if (adminId)
       socket.emit('setRead', {
         room: room,
@@ -109,11 +109,11 @@ function List(props) {
     Service.getAllResident().then((user) => {
       // console.log("users", user);
       user.data.map((data) => {
-        console.log('users DAa', data.fullname);
-        console.log(
-          'users Address',
-          data.address ? data.address.address_number : 'nodata'
-        );
+        // console.log('users DAa', data.fullname);
+        // console.log(
+        //   'users Address',
+        //   data.address ? data.address.address_number : 'nodata'
+        // );
         if (data.address) {
           setContactList((lists) => [
             ...lists,
@@ -155,6 +155,7 @@ function List(props) {
       }
     }
   };
+
   const History = ({ item }) => {
     const read =
       item.users_read === 'unread' && item.sender_id !== session.user._id;
@@ -162,10 +163,10 @@ function List(props) {
       <AntdList.Item
         key={item.id}
         onClick={() => {
-          setRead(item.room, session.user._id, session.user.role.type);
-          props.handleCallback(item.room_info.fullname + ',' + item.room);
+          setRead(item?.room, session?.user._id, session?.user?.role.type);
+          props.handleCallback(item?.room_info?.fullname + ',' + item?.room);
           props.getAvatar(
-            item.room_info.avatar ? item.room_info.avatar.url : ''
+            item?.room_info?.avatar ? item?.room_info?.avatar?.url : ''
           );
         }}
       >
@@ -175,19 +176,19 @@ function List(props) {
             height: '10vh',
           }}
         >
-          <Row>
+          <Row style={{ flex: 1, height: '100%' }}>
             <Avatar
               style={{
-                width: '3.2vw',
-                height: '3.2vw',
                 alignSelf: 'center',
                 marginLeft: '0.4vw',
               }}
+              size={45}
               src={
                 item?.room_info?.avatar
-                  ? process.env.REACT_APP_API_URL + item.room_info.avatar.url
-                  : noImg
+                  ? process.env.REACT_APP_API_URL + item?.room_info?.avatar?.url
+                  : null
               }
+              icon={<UserOutlined />}
             />
             <div
               style={{
@@ -227,7 +228,7 @@ function List(props) {
                   {`${
                     item?.room_info?.fullname?.length > 20
                       ? item?.room_info?.fullname.substring(0, 20) + '...'
-                      : item?.room_info?.fullname
+                      : item?.room_info?.fullname ?? 'Hyde user'
                   } (${item.room.split(':')[1]})`}
                 </TitleText>
                 <ChatText boolRead={read}>
