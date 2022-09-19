@@ -12,7 +12,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import noImg from '../../assets/images/noImg.jpg';
+import { UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { encryptStorage } from '../../../utils/encryptStorage';
@@ -176,13 +176,13 @@ function List(props) {
         key={item.id}
         onClick={() => {
           setRead(item.room, session.user._id, session.user.role.type);
-          props.handleCallback(item.fixing_info.problem + ',' + item.room);
+          props.handleCallback(item?.fixing_info?.problem + ',' + item?.room);
           props.getAvatar(
-            item.fixing_info.image_pending
-              ? item.fixing_info.image_pending[0]?.url
+            item?.fixing_info?.image_pending
+              ? item?.fixing_info?.image_pending[0]?.url
               : ''
           );
-          props.getStatus(status[item.fixing_info.status]);
+          props.getStatus(status[item?.fixing_info?.status]);
         }}
       >
         <ListComp
@@ -196,22 +196,22 @@ function List(props) {
               style={{
                 width: '0.4vw',
                 height: '10vh',
-                backgroundColor: status[item.fixing_info.status],
+                backgroundColor: status[item?.fixing_info?.status],
               }}
             />
             <Avatar
               style={{
-                width: '3.2vw',
-                height: '3.2vw',
                 alignSelf: 'center',
                 marginLeft: '0.4vw',
               }}
+              size={45}
               src={
-                item.fixing_info.image_pending[0]
+                item?.fixing_info?.image_pending[0]
                   ? process.env.REACT_APP_API_URL +
-                    item.fixing_info.image_pending[0]?.url
-                  : noImg
+                    item?.fixing_info?.image_pending[0]?.url
+                  : null
               }
+              icon={<UserOutlined />}
             />
             <div
               style={{
@@ -249,9 +249,9 @@ function List(props) {
               >
                 <TitleText boolRead={read}>
                   {`${
-                    item.fixing_info.problem.length > 20
-                      ? item.fixing_info.problem.substring(0, 20) + '...'
-                      : item.fixing_info.problem
+                    item?.fixing_info?.problem.length > 20
+                      ? item?.fixing_info?.problem.substring(0, 20) + '...'
+                      : item?.fixing_info?.problem
                   } (${item.room.split('!')[1]})`}
                 </TitleText>
                 <ChatText boolRead={read}>
@@ -326,7 +326,7 @@ function List(props) {
                 props.searchTag === 'All'
                   ? data
                   : data.filter((item) =>
-                      item.fixing_info.status
+                      item?.fixing_info?.status
                         .toLowerCase()
                         .includes(props.searchTag.toLowerCase())
                     )
