@@ -184,7 +184,7 @@ function List(props) {
                 marginLeft: '0.4vw',
               }}
               src={
-                item.room_info.avatar
+                item?.room_info?.avatar
                   ? process.env.REACT_APP_API_URL + item.room_info.avatar.url
                   : noImg
               }
@@ -225,9 +225,9 @@ function List(props) {
               >
                 <TitleText boolRead={read}>
                   {`${
-                    item.room_info.fullname.length > 20
-                      ? item.room_info.fullname.substring(0, 20) + '...'
-                      : item.room_info.fullname
+                    item?.room_info?.fullname?.length > 20
+                      ? item?.room_info?.fullname.substring(0, 20) + '...'
+                      : item?.room_info?.fullname
                   } (${item.room.split(':')[1]})`}
                 </TitleText>
                 <ChatText boolRead={read}>
