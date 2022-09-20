@@ -1,29 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Image,
-  Input,
-  Row,
-  Col,
-  DatePicker,
-  Form,
-  Modal,
-  Select,
-} from 'antd';
+import {Button,Image,Input,Row,Col,DatePicker,Form,Modal,Select} from 'antd';
 import { PictureOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import { socket } from '../../../services/webSocketService';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
 export default function ReportModal({
-  visible,
-  reportValue,
-  fetchData,
-  closeModal,
 }) {
+  const { dataManageReport,statusModalFixReport,paramsDataFixReport } = useSelector((state) => state.FixReportActionRedux);
+  const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
   const URLreScript = process.env.REACT_APP_API_URL + '/fixing-reports';
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
@@ -35,7 +24,6 @@ export default function ReportModal({
     Success: '#79CA6C',
   };
   const [form] = Form.useForm();
-  const [reportStatus, setReportStatus] = useState(reportValue.status);
   const [repairReq, setRepairReq] = useState(true);
   const [successReq, setSuccessReq] = useState(true);
   const [pendingImg, setPendingImg] = useState([]);
@@ -48,57 +36,54 @@ export default function ReportModal({
   function disabledDate(current) {
     return current && current < moment().startOf('day');
   }
-  const handleValue = () => {
-    form.setFieldsValue({
-      pick_up_date: reportValue.pick_up_date
+  const handleValue = async () => {
+  await  form.setFieldsValue({
+      pick_up_date: dataManageReport?.[0]?.pick_up_date
         ? moment(
             format(
-              utcToZonedTime(new Date(reportValue.pick_up_date), thTimeZone),
+              utcToZonedTime(new Date(dataManageReport?.[0]?.pick_up_date), thTimeZone),
               'yyyy-MM-dd',
               { timeZone: 'Asia/Bangkok' }
             )
           )
         : '',
-      opening_date: reportValue.opening_date
+      opening_date: dataManageReport?.[0]?.opening_date
         ? moment(
             format(
-              utcToZonedTime(new Date(reportValue.opening_date), thTimeZone),
+              utcToZonedTime(new Date(dataManageReport?.[0]?.opening_date), thTimeZone),
               'yyyy-MM-dd',
               { timeZone: 'Asia/Bangkok' }
             )
           )
         : '',
-      closing_date: reportValue.closing_date
+      closing_date: dataManageReport?.[0]?.closing_date
         ? moment(
             format(
-              utcToZonedTime(new Date(reportValue.closing_date), thTimeZone),
+              utcToZonedTime(new Date(dataManageReport?.[0]?.closing_date), thTimeZone),
               'yyyy-MM-dd',
               { timeZone: 'Asia/Bangkok' }
             )
           )
         : '',
-      status: reportStatus,
-      cause: reportValue.cause,
-      solution: reportValue.solution,
+      status: dataManageReport?.[0]?.status,
+      cause: dataManageReport?.[0]?.cause,
+      solution: dataManageReport?.[0]?.solution,
     });
   };
 
-  useEffect(() => {
-    handleValue();
-  }, []);
-
-  useEffect(() => {
-    if (reportStatus === 'Repairing') {
+  useEffect(async () => {
+     await handleValue();
+    if (dataManageReport?.[0]?.status === 'Repairing') {
       setRepairReq(false);
       setSuccessReq(true);
-    } else if (reportStatus === 'Success') {
+    } else if (dataManageReport?.[0]?.status === 'Success') {
       setRepairReq(false);
       setSuccessReq(false);
     } else {
       setRepairReq(true);
       setSuccessReq(true);
     }
-  }, [reportStatus]);
+  }, [dataManageReport]);
 
   const imagePreviewSty = {
     border: '1px solid #959595',
@@ -110,7 +95,7 @@ export default function ReportModal({
 
   function statusHandle(status) {
     console.log('statusHandle', status);
-    setReportStatus(status);
+    // setReportStatus(status);
   }
 
   const selectPendingImg = (e) => {
@@ -166,7 +151,7 @@ export default function ReportModal({
 
     axios
       .put(
-        `${URLreScript}/${reportValue.key}`,
+        `${URLreScript}/${dataManageReport?.[0]?.id}`,
         {
           pick_up_date: value.pick_up_date
             ? `${value.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
@@ -177,7 +162,7 @@ export default function ReportModal({
           closing_date: value.closing_date
             ? `${value.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
             : '',
-          status: reportStatus,
+          status: dataManageReport?.[0]?.status,
           cause: value.cause,
           solution: value.solution,
         },
@@ -194,19 +179,20 @@ export default function ReportModal({
           uploadImg();
         } else {
           uploadImg();
-          fetchData();
-          closeModal();
+         
         }
       })
       .catch((err) => {
         console.error("Can't add data: ", err);
       });
+      await  dispatch(getDataFixReport(paramsDataFixReport));
+      await dispatch({ type: 'MODAL_FIX_REPORT', payload: false })
   };
 
   const uploadImg = async () => {
     if (pendingImgFile.length > 0) {
       let arr = [];
-      reportValue.image_pending.map((item) => arr.push(item));
+      dataManageReport?.[0]?.image_pending.map((item) => arr.push(item));
       for (let i = 0; i < pendingImgFile.length; i++) {
         let dataImage = new FormData();
         dataImage.append('files', pendingImgFile[i]);
@@ -226,15 +212,14 @@ export default function ReportModal({
                 console.log('arr', arr);
                 axios
                   .put(
-                    `${URLreScript}/${reportValue.key}`,
+                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
                     {
                       image_pending: arr,
                     },
                     headers
                   )
                   .then((res) => {
-                    fetchData();
-                    closeModal();
+                    
                   })
                   .catch((err) => {
                     console.error("Can't add data: ", err);
@@ -248,7 +233,7 @@ export default function ReportModal({
     }
     if (repairingImgFile.length > 0) {
       let arr = [];
-      reportValue.image_repairing.map((item) => arr.push(item));
+      dataManageReport?.[0]?.image_repairing.map((item) => arr.push(item));
       for (let i = 0; i < repairingImgFile.length; i++) {
         let dataImage = new FormData();
         dataImage.append('files', repairingImgFile[i]);
@@ -268,15 +253,14 @@ export default function ReportModal({
                 console.log('arr', arr);
                 axios
                   .put(
-                    `${URLreScript}/${reportValue.key}`,
+                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
                     {
                       image_repairing: arr,
                     },
                     headers
                   )
                   .then((res) => {
-                    fetchData();
-                    closeModal();
+                    
                   })
                   .catch((err) => {
                     console.error("Can't add data: ", err);
@@ -290,7 +274,7 @@ export default function ReportModal({
     }
     if (successImgFile.length > 0) {
       let arr = [];
-      reportValue.image_success.map((item) => arr.push(item));
+      dataManageReport?.[0]?.image_success.map((item) => arr.push(item));
       for (let i = 0; i < successImgFile.length; i++) {
         let dataImage = new FormData();
         dataImage.append('files', successImgFile[i]);
@@ -310,15 +294,14 @@ export default function ReportModal({
                 console.log('arr', arr);
                 axios
                   .put(
-                    `${URLreScript}/${reportValue.key}`,
+                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
                     {
                       image_success: arr,
                     },
                     headers
                   )
                   .then((res) => {
-                    fetchData();
-                    closeModal();
+                    
                   })
                   .catch((err) => {
                     console.error("Can't add data: ", err);
@@ -335,7 +318,7 @@ export default function ReportModal({
   const PendingImages = () => {
     return (
       <Row>
-        {reportValue.image_pending.map((item, index) => {
+        {dataManageReport?.[0]?.image_pending.map((item, index) => {
           return (
             <Image
               style={imagePreviewSty}
@@ -353,7 +336,7 @@ export default function ReportModal({
             />
           );
         })}
-        {reportValue.image_pending.length + pendingImg.length < 3 ? (
+        {dataManageReport?.[0]?.image_pending.length + pendingImg.length < 3 ? (
           <div className="inputReportImage">
             <label htmlFor="inputPending">
               <div
@@ -387,7 +370,7 @@ export default function ReportModal({
   const RepairingImages = () => {
     return (
       <Row>
-        {reportValue.image_repairing.map((item, index) => {
+        {dataManageReport?.[0]?.image_repairing.map((item, index) => {
           return (
             <Image
               style={imagePreviewSty}
@@ -405,7 +388,7 @@ export default function ReportModal({
             />
           );
         })}
-        {reportValue.image_repairing.length + repairingImg.length < 3 ? (
+        {dataManageReport?.[0]?.image_repairing.length + repairingImg.length < 3 ? (
           <div className="inputReportImage">
             <label htmlFor="inputRepairing">
               <div
@@ -439,7 +422,7 @@ export default function ReportModal({
   const SuccessImages = () => {
     return (
       <Row>
-        {reportValue.image_success.map((item, index) => {
+        {dataManageReport?.[0]?.image_success.map((item, index) => {
           return (
             <Image
               style={imagePreviewSty}
@@ -457,7 +440,7 @@ export default function ReportModal({
             />
           );
         })}
-        {reportValue.image_success.length + successImg.length < 3 ? (
+        {dataManageReport?.[0]?.image_success.length + successImg.length < 3 ? (
           <div className="inputReportImage">
             <label htmlFor="inputSuccess">
               <div
@@ -490,7 +473,7 @@ export default function ReportModal({
 
   return (
     <Modal
-      visible={visible}
+      visible={statusModalFixReport}
       title="Manage Report"
       footer={[
         <Button
@@ -500,7 +483,9 @@ export default function ReportModal({
           }}
           className="add-btn"
           key="add"
-          onClick={closeModal}
+          onClick={ async()=>{
+            dispatch({ type: 'MODAL_FIX_REPORT', payload: false }) 
+            await handleValue()}}
         >
           Cancel
         </Button>,
@@ -529,7 +514,9 @@ export default function ReportModal({
           OK
         </Button>,
       ]}
-      onCancel={closeModal}
+      onCancel={ async()=>{
+        dispatch({ type: 'MODAL_FIX_REPORT', payload: false }) 
+        await handleValue()}}
       width={'70%'}
     >
       <Form
@@ -544,12 +531,12 @@ export default function ReportModal({
         <div className="report-form" style={{ flex: 1 }}>
           <Form.Item label="Owner">
             <div className="divText">
-              <p className="disableText">{reportValue.owner}</p>
+              <p className="disableText">{dataManageReport?.[0]?.owner}</p>
             </div>
           </Form.Item>
           <Form.Item label="Submission Date" name="submission_date">
             <div className="divText">
-              <p className="disableText">{reportValue.submission_date_show}</p>
+              <p className="disableText">{dataManageReport?.[0]?.submission_date_show}</p>
             </div>
           </Form.Item>
           <Form.Item
@@ -588,7 +575,7 @@ export default function ReportModal({
           </Form.Item>
           <Form.Item label="Problem">
             <div className="divText">
-              <p className="disableText">{reportValue.problem}</p>
+              <p className="disableText">{dataManageReport?.[0]?.problem}</p>
             </div>
           </Form.Item>
           <Form.Item label="Pending">
@@ -635,7 +622,7 @@ export default function ReportModal({
         <div className="report-form" style={{ flex: 1 }}>
           <Form.Item label="Address">
             <div className="divText">
-              <p className="disableText">{reportValue.address_number}</p>
+              <p className="disableText">{dataManageReport?.[0]?.address_number}</p>
             </div>
           </Form.Item>
           <Form.Item
@@ -672,12 +659,12 @@ export default function ReportModal({
           </Form.Item>
           <Form.Item label="Type">
             <div className="divText">
-              <p className="disableText">{reportValue.type}</p>
+              <p className="disableText">{dataManageReport?.[0]?.type}</p>
             </div>
           </Form.Item>
           <Form.Item label="Description">
             <div className="divArea">
-              <p className="disableText">{reportValue.description}</p>
+              <p className="disableText">{dataManageReport?.[0]?.description}</p>
             </div>
           </Form.Item>
           <Form.Item

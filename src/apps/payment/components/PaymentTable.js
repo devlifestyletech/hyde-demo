@@ -27,7 +27,7 @@ import {
   getDataSCB,
   deleteBillingPayment,
   getOutDate,
-} from '../services/API/payment_api';
+} from '../services/API/PaymentAPI';
 import {
   getBillingPayment,
   getCustomerList,
@@ -46,7 +46,7 @@ const statePayment = {
   paymentDetail: null,
 };
 
-export const Table_payment = () => {
+export const PaymentTable = () => {
   const {
     status_billing,
     dataBilling,

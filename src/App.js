@@ -1,57 +1,61 @@
-import {signInAnonymously} from 'firebase/auth';
-import React, {useEffect} from 'react';
-import {Navigate, Route, Routes} from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.less';
-import Announcement from './apps/announcement/Announcement';
-import FacilitiesManagementDashboardPage
-  from './apps/facility_management/views/FacilitiesManagementDashboardPage';
-import FacilitiesManage
-  from './apps/facility_management/views/FacilitiesManagePage';
-
-import BookingListsPage from './apps/facility_management/views/ListsPage';
-import Occupation from './apps/facility_management/views/OccupationPage';
-import FixingChat from './apps/fixing_chat/screens/ChatRoom';
-import FixingReportsDashboard
-  from './apps/fixing_report/view/Fixing_Report_DashBoard';
-import FixingReports from './apps/fixing_report/view/Fixing_Reports';
-import LiveChat from './apps/live_chat/screens/ChatRoom';
-import Nearby from './apps/nearby/NearbyService';
-import PaymentDashboard from './apps/payment/payment_dashbord';
-import PaymentSuccess from './apps/payment/Payment_success';
-import MemberDashboardPage from './apps/registration/views/MemberDashboard';
-import RoomManagement from './apps/registration/views/ProjectManagement';
-import Registration from './apps/registration/views/Registration';
-import AdminManagementPage from './apps/settings/views/AdminManagementPage';
-import ChangePasswordPage from './apps/settings/views/ChangePasswordPage';
-import ProfilePage from './apps/settings/views/ProfilePage';
-import ConfirmRegistrationPage from './components/ConfirmRegistrationPage';
-import ForgotPasswordPage from './components/ForgotPasswordPage';
-//Authorized routes
-import MainDashboard from './components/MainDashboardPage';
-import NoContent from './components/NoContentPage';
-import ResetPasswordPage from './components/ResetPasswordPage';
-//Unauthorized routes
-import Signin from './components/SignInPage';
-import {AuthProvider} from './hooks/useAuth';
+import 'devextreme/dist/css/dx.light.css';
+import { AuthProvider } from './hooks/useAuth';
+import { auth } from './utils/firebaseConfig';
 
 //Layout Component
 import MainLayout from './layout/MainLayout';
 import NoAuthLayout from './layout/NoAuthLayout';
-import {auth, messaging, onMessage} from './utils/firebaseConfig';
+//Unauthorized routes
+import Signin from './components/SignInPage';
+import ResetPasswordPage from './components/ResetPasswordPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage';
+import ConfirmRegistrationPage from './components/ConfirmRegistrationPage';
+//Authorized routes
+import MainDashboard from './components/MainDashboardPage';
+import FacilitiesManagementDashboardPage from './apps/facility_management/views/FacilitiesManagementDashboardPage';
+import BookingCalendarPage from './apps/facility_management/views/CalendarPage';
+import BookingListsPage from './apps/facility_management/views/ListsPage';
+import FacilitiesManage from './apps/facility_management/views/FacilitiesManagePage';
+import Occupation from './apps/facility_management/views/OccupationPage';
+import MemberDashboardPage from './apps/registration/views/MemberDashboard';
+import Registration from './apps/registration/views/Registration';
+import RoomManagement from './apps/registration/views/ProjectManagement';
+import Nearby from './apps/nearby/NearbyService';
+import Announcement from './apps/announcement/Announcement';
+import FixingReports from './apps/fixing_report/view/FixingReports';
+import FixingReportsDashboard from './apps/fixing_report/view/FixingReportDashboard';
+import FixingChat from './apps/fixing_chat/screens/ChatRoom';
+import LiveChat from './apps/live_chat/screens/ChatRoom';
+import PaymentSuccess from './apps/payment/PaymentMain';
+import PaymentDashboard from './apps/payment/PaymentDashboard';
+
+import { signInAnonymously } from 'firebase/auth';
+import NoContent from './components/NoContentPage';
+import ProfilePage from './apps/settings/views/ProfilePage';
+import ChangePasswordPage from './apps/settings/views/ChangePasswordPage';
+import AdminManagementPage from './apps/settings/views/AdminManagementPage';
+import { messaging, onMessage } from './utils/firebaseConfig';
+
+
 
 const App = () => {
   useEffect(() => {
-    signInAnonymously(auth).then(() => {
-      // Signed in..
-      console.debug('Firebase signed in succcessfully');
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error('error: ', errorCode, errorMessage);
-    });
-    onMessage(messaging, (payload) => {
-      // (payload);
-    });
+    signInAnonymously(auth)
+      .then(() => {
+        // Signed in..
+        console.debug('Firebase signed in succcessfully');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('error: ', errorCode, errorMessage);
+      });
+      onMessage(messaging, (payload) => {
+        // (payload);
+      });
   }, []);
 
   return (

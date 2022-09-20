@@ -1,6 +1,6 @@
 import { message, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-const AlertNotication = () => {
+const AlertNotification = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { alert_notification } = useSelector((state) => state.PaymentActionRedux);
   // const DataAlert ={
@@ -23,4 +23,4 @@ const AlertNotication = () => {
   );
 };
 
-export default AlertNotication;
+export default AlertNotification;

@@ -9,8 +9,8 @@ import {
   Row,
 } from 'antd';
 import bill from '../../assets/images/bill.jpg';
-import { bankNamecode } from '../../services/bankNamecode';
-import { updateRescrpt, rejectRescrpt } from '../../services/API/payment_api';
+import { BankNamecode } from '../../services/BankNamecode';
+import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -187,13 +187,13 @@ const ModalReject = () => {
                             : null}
                           <div style={{ paddingTop: 20 }}>
                             <h3>Annotation</h3>
-                           
+
                             <TextArea
                              style={{ borderRadius: '25px' }}
                               rows={3}
                              disabled={true}
         placeholder={e?.annotation_payment}
-       
+
       ></TextArea>
                           </div>
 
@@ -229,7 +229,7 @@ const ModalReject = () => {
                                     style={{ borderRadius: '25px' }}
                                     placeholder="No data form SCB"
                                     disabled={true}
-                                    value={bankNamecode(e?.sendingBankCode)}
+                                    value={BankNamecode(e?.sendingBankCode)}
                                   />
                                 </div>
                                 <div style={{ paddingTop: 10 }}>

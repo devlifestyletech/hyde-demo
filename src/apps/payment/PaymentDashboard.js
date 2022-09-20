@@ -8,7 +8,6 @@ import GraphReserves from './components/chart/GraphReserves';
 import { getDashboard } from './services/thunk-action/payment_thunk';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { exportExcel } from './services/API/payment_api';
 import { CSVLink } from 'react-csv';
 
 const columns = [
@@ -68,7 +67,7 @@ const columns = [
   },
 ];
 
-const Payment_dashbord = () => {
+const PaymentDashboard = () => {
   const { dataPaymentDashboard } = useSelector(
     (state) => state.PaymentActionRedux
   );
@@ -138,10 +137,6 @@ const Payment_dashbord = () => {
     }
   }
 
-  const exportExcelPayment = async () => {
-    await exportExcel(month);
-  };
-
   return (
     <>
       <Header title="Payment Dashboard" />
@@ -199,7 +194,6 @@ const Payment_dashbord = () => {
                 size="large"
                 shape="round"
                 style={{ float: 'right' }}
-                // onClick={exportExcelPayment}
               >
                 Export All
               </Button>
@@ -219,4 +213,4 @@ const Payment_dashbord = () => {
     </>
   );
 };
-export default Payment_dashbord;
+export default PaymentDashboard;
