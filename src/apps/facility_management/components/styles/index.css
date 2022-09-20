@@ -1,17 +1,19 @@
-.facilities-card .ant-card {
+/* Facility Card */
+.facility-card .ant-card {
     border-radius: 20px !important;
     margin: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 400px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 390px;
 }
 
 .facility-title {
-    font-weight: 900;
+    font-size: 22px;
+    font-weight: bolder;
     float: left;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 1; /* number of lines to show */
     line-clamp: 1;
     -webkit-box-orient: vertical;
 }
@@ -21,7 +23,7 @@
 }
 
 .facility-detail {
-    font-size: 18px;
+    font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -31,8 +33,9 @@
 }
 
 .facility-limit {
-    font-size: 18px;
-    line-height: 15px;
+    font-size: 16px;
+    marginTop: 10px;
+    /*float: right;*/
 }
 
 .facility-image {

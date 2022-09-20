@@ -4,7 +4,7 @@ const AuthState = {
   token: null,
 }
 
-const AuthReducer = (state, action) => {
+const AuthReducer = (state = AuthState, action) => {
   switch (action.type) {
     case 'UPDATE_AUTH_STATE':
       return {

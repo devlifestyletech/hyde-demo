@@ -1,27 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import Heading from '../../../components/Header';
-import { Button, Image, Input, Table } from 'antd';
-import ReportModal from '../service/reportModal';
-import axios from 'axios';
-import { format, utcToZonedTime } from 'date-fns-tz';
-import { encryptStorage } from '../../../utils/encryptStorage';
+import { Button, Input, Table } from 'antd'
+import axios from 'axios'
+import { format, utcToZonedTime } from 'date-fns-tz'
+import React, { useEffect, useState } from 'react'
+import Heading from '../../../components/Header'
+import { encryptStorage } from '../../../utils/encryptStorage'
+import ReportModal from '../service/reportModal'
 
 const FixingReports = () => {
-  const session = encryptStorage.getItem('user_session');
-  const [data, setData] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [searchName, setSearchName] = useState('');
-  const [reportValue, setReportValue] = useState(null);
-  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
-  const thTimeZone = 'Asia/Bangkok';
+  const session = encryptStorage.getItem('user_session')
+  const [data, setData] = useState([])
+  const [visible, setVisible] = useState(false)
+  const [searchName, setSearchName] = useState('')
+  const [reportValue, setReportValue] = useState(null)
+  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } }
+  const thTimeZone = 'Asia/Bangkok'
   const status = {
     Pending: '#E86A6B',
     Repairing: '#EEC84D',
     Success: '#79CA6C',
-  };
+  }
 
-  const { Search } = Input;
+  const { Search } = Input
 
   let columns = [
     {
@@ -60,7 +60,7 @@ const FixingReports = () => {
       sorter: (a, b) => (a.email > b.email ? 1 : -1),
       render: (index, record) => <div>{record.owner?.email}</div>,
     },
-  ];
+  ]
 
   let extendsColumns = [
     {
@@ -127,108 +127,107 @@ const FixingReports = () => {
             color: '#F5F4EC',
             borderRadius: 20,
           }}
-          key="manage_report"
+          key='manage_report'
           onClick={() => {
-            setVisible(true);
-            console.log('record', record);
-            handleEdit(record);
+            setVisible(true)
+            console.log('record', record)
+            handleEdit(record)
           }}
         >
           Manage Report
         </Button>
       ),
     },
-  ].filter((item) => !item.hidden);
+  ].filter((item) => !item.hidden)
 
-  // function
+  // functions
   const handleEdit = (record) => {
-    setReportValue(record);
-    setVisible(true);
-  };
+    setReportValue(record)
+    setVisible(true)
+  }
 
   const handleSearch = (value) => {
-    setSearchName(value.toLowerCase());
-  };
+    setSearchName(value.toLowerCase())
+  }
 
   const handleSearchChange = (value) => {
     if (value.target.value === '') {
-      setSearchName('');
+      setSearchName('')
     }
-  };
+  }
 
   const closeModal = () => {
-    console.log('closeModal');
-    setVisible(false);
-  };
+    console.log('closeModal')
+    setVisible(false)
+  }
 
   const fetchData = async () => {
-    let residencesData = [];
-    let combinesData = [];
+    let residencesData = []
+    let combinesData = []
 
-    await axios
-      .get(process.env.REACT_APP_API_URL + '/addresses?_limit=500', headers)
-      .then((res) => {
-        // console.log('resData', res.data.length);
-        residencesData = res.data;
-        // console.log(
-        //   'residences DATA => ',
-        //   residencesData.filter((item) => item.fixing_reports.length > 0)
-        // );
-        residencesData
-          // .filter((item) => item.owner != null && item.owner !== undefined)
-          .filter((item) => item.fixing_reports.length > 0)
-          .forEach((residence, index) => {
-            let residenceData = {
-              key: index,
+    await axios.get(process.env.REACT_APP_API_URL + '/addresses?_limit=500',
+      headers).then((res) => {
+      // console.log('resData', res.data.length);
+      residencesData = res.data
+      // console.log(
+      //   'residences DATA => ',
+      //   residencesData.filter((item) => item.fixing_reports.length > 0)
+      // );
+      residencesData
+        // .filter((item) => item.owner != null && item.owner !== undefined)
+        .filter((item) => item.fixing_reports.length > 0).
+        forEach((residence, index) => {
+          let residenceData = {
+            key: index,
+            number: index + 1,
+            ...residence,
+          }
+          residence.fixing_reports.forEach((report, index) => {
+            let date_show = format(
+              utcToZonedTime(new Date(report.submission_date), thTimeZone),
+              'dd MMM yyyy',
+              { timeZone: 'Asia/Bangkok' },
+            )
+            let newReport = {
+              key: residence.fixing_reports[index].id,
               number: index + 1,
-              ...residence,
-            };
-            residence.fixing_reports.forEach((report, index) => {
-              let date_show = format(
-                utcToZonedTime(new Date(report.submission_date), thTimeZone),
-                'dd MMM yyyy',
-                { timeZone: 'Asia/Bangkok' }
-              );
-              let newReport = {
-                key: residence.fixing_reports[index].id,
-                number: index + 1,
-                submission_date_show: date_show,
-                address_number: residence.address_number,
-                owner: residence.owner?.fullname,
-                ...report,
-              };
-              residence.fixing_reports[index] = newReport;
-            });
-            // console.log('residenceData', residenceData);
-            // console.log(residenceData.fixing_reports);
-            combinesData.push(residenceData);
-          });
-      });
-    setData(combinesData);
+              submission_date_show: date_show,
+              address_number: residence.address_number,
+              owner: residence.owner?.fullname,
+              ...report,
+            }
+            residence.fixing_reports[index] = newReport
+          })
+          // console.log('residenceData', residenceData);
+          // console.log(residenceData.fixing_reports);
+          combinesData.push(residenceData)
+        })
+    })
+    setData(combinesData)
     //console.log('combinesData');
     //console.log(combinesData);
-  };
+  }
 
   // set data
   useEffect(() => {
-    fetchData();
-    console.log('session', session);
-  }, []);
+    fetchData()
+    console.log('session', session)
+  }, [])
 
   return (
     <>
-      <Heading title="Service Center Lists" />
+      <Heading title='Service Center Lists' />
       <Search
-        placeholder="Search by address number"
+        placeholder='Search by address number'
         allowClear
         onSearch={handleSearch}
         style={{ width: 250, marginBottom: 19, marginTop: 10 }}
         onChange={handleSearchChange}
-        className="search-box"
+        className='search-box'
       />
       <Table
         columns={columns}
-        className="tableContainer"
+        className='tableContainer'
         expandable={{
           expandedRowRender: (record) => (
             <div>
@@ -256,7 +255,7 @@ const FixingReports = () => {
         />
       ) : null}
     </>
-  );
-};
+  )
+}
 
-export default FixingReports;
+export default FixingReports

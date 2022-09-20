@@ -1,28 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import Heading from '../../../components/Header';
-import { Button, Card, Col, DatePicker, Row, Table } from 'antd';
-import { G2, Pie } from '@ant-design/charts';
-import '../style/fixingStyle.css';
-import { VerticalAlignBottomOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import moment from 'moment';
+import { G2, Pie } from '@ant-design/charts'
+import { VerticalAlignBottomOutlined } from '@ant-design/icons'
+import { Button, Card, Col, DatePicker, Row, Table } from 'antd'
+import axios from 'axios'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
+import Heading from '../../../components/Header'
 
-import { encryptStorage } from '../../../utils/encryptStorage';
+import { encryptStorage } from '../../../utils/encryptStorage'
+import '../style/fixingStyle.css'
 
-export default function FixingReportDashBoard() {
-  const session = encryptStorage.getItem('user_session');
-  const [fixingData, setFixingData] = useState([]);
-  const [todayData, setTodayData] = useState([]);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const day = new Date().setHours(0, 0, 0, 0);
-  const [monthData, setMonthData] = useState([]);
-  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
+export default function FixingReportDashBoard () {
+  const session = encryptStorage.getItem('user_session')
+  const [fixingData, setFixingData] = useState([])
+  const [todayData, setTodayData] = useState([])
+  const [year, setYear] = useState(new Date().getFullYear())
+  const day = new Date().setHours(0, 0, 0, 0)
+  const [monthData, setMonthData] = useState([])
+  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } }
 
-  const { registerTheme } = G2;
+  const { registerTheme } = G2
   registerTheme('custom-theme', {
     colors10: ['#E86A6B', '#EEC84D', '#79CA6C'],
-  });
+  })
 
   let data = [
     {
@@ -38,7 +38,7 @@ export default function FixingReportDashBoard() {
       type: 'Success',
       value: fixingData.filter((item) => item.status === 'Success').length || 0,
     },
-  ];
+  ]
   let dataToday = [
     {
       type: 'Pending',
@@ -53,7 +53,7 @@ export default function FixingReportDashBoard() {
       type: 'Success',
       value: todayData.filter((item) => item.status === 'Success').length || 0,
     },
-  ];
+  ]
 
   let configPieChart = {
     appendPadding: 10,
@@ -64,9 +64,9 @@ export default function FixingReportDashBoard() {
     label: {
       type: 'inner',
       offset: '-30%',
-      content: function content(_ref) {
-        var percent = _ref.percent;
-        return ''.concat((percent * 100).toFixed(0), '%');
+      content: function content (_ref) {
+        var percent = _ref.percent
+        return ''.concat((percent * 100).toFixed(0), '%')
       },
       style: {
         fontSize: 14,
@@ -75,7 +75,7 @@ export default function FixingReportDashBoard() {
     },
     interactions: [{ type: 'element-active' }],
     theme: 'custom-theme',
-  };
+  }
   let todayPieChart = {
     appendPadding: 10,
     data: dataToday,
@@ -85,9 +85,9 @@ export default function FixingReportDashBoard() {
     label: {
       type: 'inner',
       offset: '-30%',
-      content: function content(_ref) {
-        var percent = _ref.percent;
-        return ''.concat((percent * 100).toFixed(0), '%');
+      content: function content (_ref) {
+        var percent = _ref.percent
+        return ''.concat((percent * 100).toFixed(0), '%')
       },
       style: {
         fontSize: 14,
@@ -96,13 +96,13 @@ export default function FixingReportDashBoard() {
     },
     interactions: [{ type: 'element-active' }],
     theme: 'custom-theme',
-  };
+  }
 
   let headStyle = {
     textAlign: 'center',
     fontSize: 30,
     color: '#1D1C1C',
-  };
+  }
 
   let bodyStyle = {
     textAlign: 'center',
@@ -111,7 +111,7 @@ export default function FixingReportDashBoard() {
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     padding: 5,
-  };
+  }
 
   let mockData = [
     {
@@ -198,7 +198,7 @@ export default function FixingReportDashBoard() {
       repairing: 0,
       success: 0,
     },
-  ];
+  ]
 
   let columns = [
     {
@@ -231,75 +231,73 @@ export default function FixingReportDashBoard() {
       dataIndex: 'success',
       key: 'success',
     },
-  ];
+  ]
 
-  // function
+  // functions
   const fetchData = async () => {
-    console.log('========== FETCHING ==========');
-    await axios
-      .get(
-        `${
-          process.env.REACT_APP_API_URL
-        }/fixing-reports?submission_date_gte=${year}-01-01&submission_date_lt=${
-          parseInt(year) + 1
-        }-01-01`,
-        headers
-      )
-      .then((res) => {
-        console.log('res', res.data);
-        console.log('new', new Date().toISOString().slice(0, 10));
-        setFixingData(res.data);
-        let todayTemp = [];
-        res.data.forEach((data) => {
-          let month = parseInt(data.submission_date.substring(5, 7)) - 1;
+    console.log('========== FETCHING ==========')
+    await axios.get(
+      `${
+        process.env.REACT_APP_API_URL
+      }/fixing-reports?submission_date_gte=${year}-01-01&submission_date_lt=${
+        parseInt(year) + 1
+      }-01-01`,
+      headers,
+    ).then((res) => {
+      console.log('res', res.data)
+      console.log('new', new Date().toISOString().slice(0, 10))
+      setFixingData(res.data)
+      let todayTemp = []
+      res.data.forEach((data) => {
+        let month = parseInt(data.submission_date.substring(5, 7)) - 1
 
-          if (
-            data.submission_date.split('T')[0] ===
-            new Date().toISOString().slice(0, 10)
-          ) {
-            todayTemp.push(data);
-          }
+        if (
+          data.submission_date.split('T')[0] ===
+          new Date().toISOString().slice(0, 10)
+        ) {
+          todayTemp.push(data)
+        }
 
-          for (let i = 0; i < 12; i++) {
-            console.log('month', month, i);
+        for (let i = 0; i < 12; i++) {
+          console.log('month', month, i)
 
-            if (month === i) {
-              if (data.status === 'Pending') {
-                console.log('Pending');
-                mockData[i].total += 1;
-                mockData[i].pending += 1;
-              } else if (data.status === 'Repairing') {
-                console.log('Repairing');
-                mockData[i].total += 1;
-                mockData[i].repairing += 1;
-              } else if (data.status === 'Success') {
-                console.log('Success');
-                mockData[i].total += 1;
-                mockData[i].success += 1;
-              }
-              break;
+          if (month === i) {
+            if (data.status === 'Pending') {
+              console.log('Pending')
+              mockData[i].total += 1
+              mockData[i].pending += 1
+            } else if (data.status === 'Repairing') {
+              console.log('Repairing')
+              mockData[i].total += 1
+              mockData[i].repairing += 1
+            } else if (data.status === 'Success') {
+              console.log('Success')
+              mockData[i].total += 1
+              mockData[i].success += 1
             }
+            break
           }
-        });
-        setTodayData(todayTemp);
-        setMonthData(mockData);
-      });
-  };
+        }
+      })
+      setTodayData(todayTemp)
+      setMonthData(mockData)
+    })
+  }
 
   const onChange = (value, dateString) => {
-    setYear(dateString);
-  };
+    setYear(dateString)
+  }
 
   // action
   useEffect(() => {
-    fetchData();
-    console.log('year', year, new Date(`01-01-${year}`).getTime());
-    console.log('day', day);
-  }, [year]);
+    fetchData()
+    console.log('year', year, new Date(`01-01-${year}`).getTime())
+    console.log('day', day)
+  }, [year])
 
   return (
     <>
-      <Heading title="Service Center Dashboard" />
+      <Heading title='Service Center Dashboard' />
       {/* Card View */}
       <Row gutter={16} style={{ paddingTop: 18 }}>
         <Col span={6}>
@@ -309,7 +307,7 @@ export default function FixingReportDashBoard() {
               '0'
             }
             bordered={false}
-            className="card"
+            className='card'
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -327,7 +325,7 @@ export default function FixingReportDashBoard() {
               '0'
             }
             bordered={false}
-            className="card"
+            className='card'
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -344,7 +342,7 @@ export default function FixingReportDashBoard() {
               '0'
             }
             bordered={false}
-            className="card"
+            className='card'
             headStyle={headStyle}
             bodyStyle={{ ...bodyStyle, background: '#79CA6C' }}
           >
@@ -355,7 +353,7 @@ export default function FixingReportDashBoard() {
           <Card
             title={fixingData.length || '0'}
             bordered={false}
-            className="card"
+            className='card'
             headStyle={headStyle}
             bodyStyle={{
               ...bodyStyle,
@@ -369,7 +367,7 @@ export default function FixingReportDashBoard() {
 
       {/* Year Picker */}
       <div
-        className="flex-container"
+        className='flex-container'
         style={{ marginTop: 30, marginBottom: 30 }}
       >
         <Row>
@@ -377,16 +375,16 @@ export default function FixingReportDashBoard() {
           <DatePicker
             style={{ width: 250 }}
             onChange={onChange}
-            picker="year"
+            picker='year'
             defaultValue={moment()}
           />
         </Row>
 
         <Button
           icon={<VerticalAlignBottomOutlined />}
-          type="primary"
-          size="large"
-          shape="round"
+          type='primary'
+          size='large'
+          shape='round'
           style={{ float: 'right' }}
         >
           Export
@@ -394,12 +392,12 @@ export default function FixingReportDashBoard() {
       </div>
 
       {/* Chart View */}
-      <Row gutter={[16, 16]} align="top">
+      <Row gutter={[16, 16]} align='top'>
         <Col span={12}>
           <Card
             title="Today's service status"
             bordered={false}
-            className="card"
+            className='card'
             headStyle={{
               backgroundColor: '#D3D3D3',
               height: 20,
@@ -422,7 +420,7 @@ export default function FixingReportDashBoard() {
           <Card
             title={`${year}'s service status`}
             bordered={false}
-            className="card"
+            className='card'
             style={{ marginTop: 28 }}
             headStyle={{
               backgroundColor: '#D3D3D3',
@@ -447,7 +445,7 @@ export default function FixingReportDashBoard() {
 
         <Col span={12}>
           <Table
-            className="styTableControl"
+            className='styTableControl'
             columns={columns}
             title={() => 'Status of service sorted by month'}
             dataSource={monthData}
@@ -457,5 +455,5 @@ export default function FixingReportDashBoard() {
         </Col>
       </Row>
     </>
-  );
+  )
 }

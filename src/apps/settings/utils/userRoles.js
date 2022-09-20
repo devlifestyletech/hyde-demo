@@ -24,7 +24,7 @@ export const admin_access = [
     remove: true,
   },
   {
-    function_name: 'Facilities Reservation',
+    function_name: 'RenderFacility Reservation',
     full_access: true,
     create: true,
     read: true,
@@ -71,7 +71,7 @@ export const admin_access = [
     update: true,
     remove: true,
   },
-];
+]
 
 export const juristic_access = [
   {
@@ -99,7 +99,7 @@ export const juristic_access = [
     remove: true,
   },
   {
-    function_name: 'Facilities Reservation',
+    function_name: 'RenderFacility Reservation',
     full_access: true,
     create: true,
     read: true,
@@ -146,4 +146,4 @@ export const juristic_access = [
     update: true,
     remove: true,
   },
-];
+]
