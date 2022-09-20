@@ -26,7 +26,7 @@ const FacilityCard = ({ facility, editPress }) => {
             resolve('Success')
           }).catch((error) => {
             console.error(error)
-            reject('Error')
+            reject('Error => ', error)
           })
         })
       },
@@ -38,9 +38,7 @@ const FacilityCard = ({ facility, editPress }) => {
       <Card cover={
         <img src={facility.cover}
              alt={facility.name}
-             className='facility-cover'
-        />
-      }
+             className='facility-cover' />}
       >
         <Row>
           <Col span={22}>
@@ -59,8 +57,9 @@ const FacilityCard = ({ facility, editPress }) => {
         <div className='facility-limit'>
           <Row>
             <img src={peopleIcon} alt='people' />
-            <div
-              style={{ marginLeft: 5 }}>{` ${facility.max_users} Reserves/Slot`}</div>
+            <div style={{ marginLeft: 5 }}>
+              {` ${facility.maxReserves} Reserves/Slot`}
+            </div>
           </Row>
         </div>
         <Divider size={'large'} />

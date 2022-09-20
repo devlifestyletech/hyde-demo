@@ -1,8 +1,14 @@
 import { DeleteOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Form, Input, InputNumber, Modal, Select, Space } from 'antd'
-import React, { useState } from 'react'
+import { Button, Form, Input, InputNumber, message, Modal, Select, Space } from 'antd'
+import { doc, updateDoc } from 'firebase/firestore'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { db } from '../../../utils/firebaseConfig'
 import imgIcon from '../assets/img.svg'
+
+// File Reader ready State
+const [EMPTY, LOADING, DONE] = [0, 1, 2]
 
 const EditFacilityModal = ({ visible, value, onExit }) => {
   const [pickedImage, setPickedImage] = useState(null)
@@ -14,27 +20,86 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
 
   const [editFacilityForm] = Form.useForm()
 
-  if (value) {
-    console.log({ value })
-    let formValue = {
-      ...value,
-      accommodates: value.accommodates.map((accommodate) => ({ item: accommodate })),
-      rules: value.rules.map((rule) => ({ item: rule })),
+  useEffect(() => {
+    if (value?.timeSlot) {
+      setTimeSlots(value.timeSlot)
     }
-    console.log({ formValue })
+  }, [value])
+
+  const handleSuccess = () => {
+    setTimeSlots([])
+    editFacilityForm.resetFields()
+    setDailyStart()
+    setDailyStop()
+    message.success('Save Change Successfully')
+    onExit()
   }
 
-  const submitHandler = async (e) => {
-    await editFacilityForm.validateFields()
-                          .then((v) => console.log('submit', v))
-    // await onExit()
+  const submitHandler = async () => {
+    Modal.confirm({
+      title: 'Are you sure you want to edit facilities?',
+      okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
+      cancelButtonProps: { shape: 'round', size: 'large' },
+      icon: null,
+      autoFocusButton: null,
+      centered: true,
+      onOk () {
+        return new Promise(async (resolve, reject) => {
+          await editFacilityForm.validateFields()
+                                .then(async (formValue) => {
+                                  const documentRef = doc(db, 'facilities', value?.id)
+                                  if (pickedImage) {
+                                    let file = imageFile
+                                    const storage = getStorage()
+                                    const storageRef = ref(storage, 'facilities_image/' + file.name)
+                                    const snapshot = uploadBytes(storageRef, file)
+                                    if (snapshot) {
+                                      const downloadUrl = getDownloadURL(snapshot.ref)
+                                      let value = {
+                                        ...formValue,
+                                        cover: downloadUrl,
+                                        timeSlot: timeSlots,
+                                      }
+                                      updateDoc(documentRef, value)
+                                        .catch((err) => {
+                                          reject(err)
+                                        })
+                                        .then(() => {
+                                          resolve('SUCCESS')
+                                          handleSuccess()
+                                        })
+                                    }
+                                  } else {
+                                    let value = {
+                                      ...formValue,
+                                      timeSlot: timeSlots,
+                                    }
+                                    updateDoc(documentRef, value)
+                                      .catch((err) => {
+                                        reject(err)
+                                      })
+                                      .then(() => {
+                                        resolve('SUCCESS')
+                                        handleSuccess()
+                                      })
+                                  }
+                                })
+        })
+      },
+      async onCancel () {
+        editFacilityForm.resetFields()
+        setTimeSlots([])
+        await onExit()
+      },
+    })
+
   }
 
   const selectImage = (e) => {
     setImageFile(e.target.files[0])
     const reader = new FileReader()
     reader.onload = () => {
-      if (reader.readyState === 2) {
+      if (reader.readyState === DONE) {
         setPickedImage(reader.result)
       }
     }
@@ -51,7 +116,7 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
   }
 
   const createTimeSlot = () => {
-    let slot = [...timeSlots]
+    let slots = [...timeSlots] ?? []
     let st = value.daily_start.toString()
     let et = (value.daily_start + 1).toString()
     let startSlotName = st.length < 2
@@ -62,13 +127,13 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
       : et + ':00'
 
     let slotData = {
-      slotId: uuidv4(),
+      key: uuidv4(),
       startTime: value?.daily_start,
       endTime: value?.daily_start + 1,
       slot: startSlotName + '-' + endSlotName,
     }
-    slot.push(slotData)
-    setTimeSlots(slot)
+    slots.push(slotData)
+    setTimeSlots(slots)
   }
 
   const handleSlotChange = (index, digit, v) => {
@@ -99,6 +164,15 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
     setTimeSlots(totalSlot)
   }
 
+  const initialFormValue = {
+    name: value?.name,
+    detail: value?.detail,
+    description: value?.description,
+    accommodates: value?.accommodates,
+    rules: value?.rules,
+    maxReserves: value?.maxReserves,
+  }
+
   return (
     <Modal key={value?.id}
            visible={visible}
@@ -115,15 +189,22 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
              </Button>,
            ]}
     >
-      <Form form={editFacilityForm} layout={'vertical'}>
-        <Form.Item label='Room Name' name='name'>
+      <Form form={editFacilityForm} layout={'vertical'} initialValues={initialFormValue}>
+        <Form.Item label='Room Name' name='name'
+                   rules={[{ required: true, message: 'Facility name is required' }]}>
           <Input />
         </Form.Item>
-        <Form.Item label='Room Name Detail' name='detail'>
+        <Form.Item label='Room Name Detail' name='detail'
+                   rules={[{ required: true, message: 'Facility detail is required' }]}>
           <Input />
         </Form.Item>
 
-        <Form.Item label='Description' name='description'>
+        <Form.Item label='Description' name='description'
+                   rules={[
+                     {
+                       required: true, message: 'Facility description is required',
+                     },
+                   ]}>
           <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
         <Form.Item label='Daily Hours'>
@@ -137,16 +218,16 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
           }}>
             From
             <Select style={{ width: 180 }}
-                    value={dailyStart}
-                    initialValues={value ? value.daily_start : null}
+                    value={dailyStart ?? value?.daily_start}
+                    initialValues={value ?? value?.daily_start}
                     onChange={setDailyStart}
             >
               {hours}
             </Select>
             To
             <Select style={{ width: 180 }}
-                    value={dailyStop}
-                    initialValues={value ? value.daily_stop : null}
+                    value={dailyStop ?? value?.daily_stop}
+                    initialValues={value ?? value?.daily_stop}
                     onChange={setDailyStop}
             >
               {hours}
@@ -226,7 +307,7 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
                        style={{ display: 'inline' }}
                        align='baseline'
                 >
-                  <Form.Item name={[name, 'item']}{...restField}
+                  <Form.Item name={[name]}{...restField}
                              rules={[
                                {
                                  required: true,
@@ -260,7 +341,7 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
                        style={{ display: 'inline' }}
                        align='baseline'
                 >
-                  <Form.Item name={[name, 'item']} {...restField}
+                  <Form.Item name={[name]} {...restField}
                              rules={[
                                {
                                  required: true,
@@ -283,16 +364,19 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
             </>
           )}
         </Form.List>
-        <Form.Item label='Reserves per Time-Slot' name='max_users'>
+        <Form.Item label='Reserves per Time-Slot' name='maxReserves'
+                   rules={[{ required: true, message: 'Max reserves is required' }]}>
           <InputNumber initialValues={1}
                        min={1}
                        style={{ width: '100%', borderRadius: 20 }}
           />
         </Form.Item>
-        <div style={{ marginBottom: 10 }}>Time Slot</div>
+        <div style={{ marginBottom: 10 }}>Time Slot
+          <div style={{ color: 'red' }}>*Time-Slot mustn't duplicate or empty</div>
+        </div>
         {timeSlots.length > 0
           ? timeSlots.map((timeSlot, idx) => (
-            <div key={timeSlot.slotId}
+            <div key={timeSlot.key}
                  style={{
                    width: '100%',
                    flexDirection: 'row',
@@ -323,6 +407,7 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
         <Button type='dashed'
                 onClick={() => createTimeSlot()}
                 block
+                disabled={timeSlots.length <= 0}
                 icon={
                   <PlusOutlined />
                 }>

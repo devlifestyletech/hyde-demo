@@ -1,5 +1,5 @@
-import { collection, onSnapshot, query } from 'firebase/firestore'
-import { db } from '../../../../utils/firebaseConfig'
+import { collection, onSnapshot, query, updateDoc } from 'firebase/firestore'
+import { db } from '../../../utils/firebaseConfig'
 
 const getAllFacilitiesData = () =>
   async (dispatch) => {
@@ -29,4 +29,14 @@ const getAllReserves = () => async (dispatch) => {
   })
 }
 
-export { getAllFacilitiesData, getAllReserves }
+const updateFacility = async (docRef, value) => {
+  try {
+    await updateDoc(docRef, value)
+    await getAllFacilitiesData()
+    return { success: true, errorMsg: null }
+  } catch (e) {
+    return { success: false, errorMsg: e }
+  }
+}
+
+export { getAllFacilitiesData, getAllReserves, updateFacility }

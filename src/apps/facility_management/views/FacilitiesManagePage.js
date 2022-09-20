@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../../components/Header'
 import EditFacilityModal from '../components/EditFacilityModal'
 import FacilityCard from '../components/FacilityCard'
-import { getAllFacilitiesData } from '../services/functions'
+import { getAllFacilitiesData } from '../services'
 
 export default function FacilitiesManagePage () {
   const { facilities } = useSelector(
