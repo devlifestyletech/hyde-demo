@@ -614,16 +614,16 @@ const uploadImg = async () => {
           </Form.Item>
           <Form.Item label="Submission Date" name="submission_date">
             <div className="divText">
-              <p className="disableText">{dataManageReport?.[0]?.submission_date_show}</p>
+              <p className="disableText">{dataManageReport?.[0]?.submission_date}</p>
             </div>
           </Form.Item>
           <Form.Item
             name="opening_date"
-            label="Opening Date"
+            label="Action Date"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select opening date',
+                message: 'Please select Action date',
               },
             ]}
           >
@@ -671,7 +671,7 @@ const uploadImg = async () => {
           </Form.Item> */}
             <div className="col-sm" style={{paddingTop: 10}}>
                         <p>
-                            Upload
+                        Pending 
                             {fileListPending !== null && fileListPending?.length > 0
                                 ? `: ${fileListPending.length} of 3`
                                 : null}
@@ -695,7 +695,7 @@ const uploadImg = async () => {
          {/* reparing */}
          <div className="col-sm" style={{paddingTop: 10}}>
                         <p>
-                            Upload
+                        Reparing
                             {fileListRepairing !== null && fileListRepairing?.length > 0
                                 ? `: ${fileListRepairing.length} of 3`
                                 : null}
@@ -719,7 +719,7 @@ const uploadImg = async () => {
                     {/* success */}
                     <div className="col-sm" style={{paddingTop: 10}}>
                         <p>
-                            Upload
+                            Success
                             {fileListSuccess !== null && fileListSuccess?.length > 0
                                 ? `: ${fileListSuccess.length} of 3`
                                 : null}
@@ -750,11 +750,11 @@ const uploadImg = async () => {
           </Form.Item>
           <Form.Item
             name="pick_up_date"
-            label="Receive Date"
+            label="Acknowledge Date"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select receive date',
+                message: 'Please select Acknowledge date',
               },
             ]}
           >
@@ -766,11 +766,11 @@ const uploadImg = async () => {
           </Form.Item>
           <Form.Item
             name="closing_date"
-            label="Closing Date"
+            label="Complete Date"
             rules={[
               {
                 required: successReq ? false : true,
-                message: 'Please select closing date',
+                message: 'Please select Complete date',
               },
             ]}
           >
@@ -780,11 +780,11 @@ const uploadImg = async () => {
               disabled={successReq ? true : false}
             />
           </Form.Item>
-          <Form.Item label="Type">
+          {/* <Form.Item label="Type">
             <div className="divText">
               <p className="disableText">{dataManageReport?.[0]?.type}</p>
             </div>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="Description">
             <div className="divArea">
               <p className="disableText">{dataManageReport?.[0]?.description}</p>

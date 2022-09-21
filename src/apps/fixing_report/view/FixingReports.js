@@ -209,13 +209,13 @@ const FixingReports = () => {
       render: (status) => {
         switch (status) {
           case "Pending":    
-            return <Tag style={{borderRadius:'0px'}} color="red">{status}</Tag>;
+            return <Tag color="red">{status}</Tag>;
             break;
             case "Repairing":    
-            return <Tag  style={{borderRadius:'0px'}} color="orange">{status}</Tag>;
+            return <Tag color="orange">{status}</Tag>;
             break;
             case "Success":    
-            return <Tag style={{borderRadius:'0px'}}  color="green">{status}</Tag>;
+            return <Tag  color="green">{status}</Tag>;
             break;
           default:
             break;
@@ -230,8 +230,7 @@ const FixingReports = () => {
       width: '10%',
       render: (text, record) => (
         <>
-          <span
-          style={{color:'#D8AA81' }}
+          <Button
             value={record.id}
             type="Default"
             shape="round"
@@ -239,7 +238,7 @@ const FixingReports = () => {
             onClick={manageReport}
           >
             Manage Report
-          </span>
+          </Button>
         </>
       ),
     },
