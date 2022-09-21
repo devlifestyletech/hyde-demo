@@ -184,21 +184,20 @@ const FixingReports = () => {
       sorter: (a, b) => a.problem !==undefined? a.problem.localeCompare(b.problem):null,
     },
     {
-      title: 'Tel',
-      dataIndex: 'tel',
-      key: 'tel',
-      align: 'center',
-      width: '10%',
-
-      sorter: (a, b) => a.tel !==undefined? a.tel.localeCompare(b.tel):null,
-    },
-    {
       title: 'Submission Date',
       align: 'center',
       dataIndex: 'submission_date',
       key: 'submission_date',
       width: '10%',
       sorter: (a, b) => a.submission_date !==undefined? a.submission_date.localeCompare(b.submission_date):null,
+    },
+    {
+      title: 'Tel',
+      dataIndex: 'tel',
+      key: 'tel',
+      align: 'center',
+      width: '10%',
+      sorter: (a, b) => a.tel !==undefined? a.tel.localeCompare(b.tel):null,
     },
     {
       title: 'Status',
@@ -210,13 +209,13 @@ const FixingReports = () => {
       render: (status) => {
         switch (status) {
           case "Pending":    
-            return <Tag color="red">{status}</Tag>;
+            return <Tag style={{borderRadius:'0px'}} color="red">{status}</Tag>;
             break;
             case "Repairing":    
-            return <Tag color="orange">{status}</Tag>;
+            return <Tag  style={{borderRadius:'0px'}} color="orange">{status}</Tag>;
             break;
             case "Success":    
-            return <Tag color="green">{status}</Tag>;
+            return <Tag style={{borderRadius:'0px'}}  color="green">{status}</Tag>;
             break;
           default:
             break;
@@ -231,7 +230,8 @@ const FixingReports = () => {
       width: '10%',
       render: (text, record) => (
         <>
-          <Button
+          <span
+          style={{color:'#D8AA81' }}
             value={record.id}
             type="Default"
             shape="round"
@@ -239,7 +239,7 @@ const FixingReports = () => {
             onClick={manageReport}
           >
             Manage Report
-          </Button>
+          </span>
         </>
       ),
     },
