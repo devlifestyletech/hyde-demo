@@ -22,7 +22,7 @@ const GetBillinglist = async (params) => {
   let resultData;
   console.log(`${URLreScrpit}?${params}`)
   resultData = await Axios.get(`${URLreScrpit}?${params}`, options)
-    .then((result) => {
+    .then(async (result) => {
       if (result.status === 200) {
         result.data.map(async (e) => {
           const resutlDate = await moment(e.createdAt).format(
@@ -32,6 +32,9 @@ const GetBillinglist = async (params) => {
             .toFixed(2)
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           e.createdAt = resutlDate;
+          if (e.BillsPayment_Status==="Pending review") {
+            e.readStatus=await checkNotification(e.BillsPayment_Invoice)
+          }
         });
         return result.data;
       } else {
@@ -44,6 +47,24 @@ const GetBillinglist = async (params) => {
   return resultData;
 };
 
+const checkNotification = async (id) => {
+  const FCMtoken = await encryptStorage.getItem('fcm_token_data');
+  let status = false
+  if (FCMtoken !== null && FCMtoken !== undefined) {
+    await FCMtoken.find((e) => {
+      if(e.title === 'Payments'){
+        if (
+          e.billPaymentRef1 === id &&
+          e.readStatus === false
+        ) {
+       status=true
+         
+        }
+      }
+    });
+  }
+  return status
+}
 // get out date
 const getOutDate = async (param) => {
   let resultData;

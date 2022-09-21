@@ -45,8 +45,8 @@ let path = window.location.pathname.split('/');
 function NewSideMenu() {
   const [user, setUser] = useState();
   const [openKeys, setOpenKeys] = useState([path[2]]);
-  const [paymentNotication, setPaymentNotication] = useState('Payments');
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
+  const {countFCMFixReport} = useSelector((state) => state.FixReportActionRedux);
   const {countFCM} = useSelector((state) => state.PaymentActionRedux);
   const rootSubmenuKeys = [
     'facilities',
@@ -60,12 +60,8 @@ function NewSideMenu() {
     (async () => {
       const {user} = await encryptStorage.getItem('user_session');
       setUser(user);
-      setPaymentNotication(
-          `Payments${<Badge count={countFCM > 0 ? countFCM : null}>
-            <div style={{paddingLeft: 15, paddingBottom: 2}}></div>
-          </Badge>}`);
     })();
-  }, [countFCM]);
+  }, [countFCM,countFCMFixReport]);
 
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -259,7 +255,13 @@ function NewSideMenu() {
               <SubMenu
                   key='services'
                   icon={<img src={serviceIcon} alt='chat' />}
-                  title='Service Center'
+                  // title='Service Center'
+                  title={countFCMFixReport > 0
+                    ? <div style={{color: '#fff', paddingBottom: 5}}>
+                      <text style={{paddingRight: 10}}>Service Center</text>
+                      <Badge count={countFCMFixReport > 0 ? countFCMFixReport : null}></Badge>
+                    </div>
+                    : 'Service Center'}
               >
                 <Menu.Item key={`${main_link}/services/dashboard`}>
                   <Link to={`${main_link}/services/dashboard`}>
@@ -268,7 +270,10 @@ function NewSideMenu() {
                 </Menu.Item>
                 <Menu.Item key={`${main_link}/services/reports`}>
                   <Link to={`${main_link}/services/reports`}>
-                    Service Center List
+                    Service Center List<Badge
+                      count={countFCMFixReport > 0 ? countFCMFixReport : null}>
+                    <div style={{paddingLeft: 15, paddingBottom: 2}}></div>
+                  </Badge>
                   </Link>
                 </Menu.Item>
                 <Menu.Item key={`${main_link}/services/chat`}>

@@ -1,40 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useRef, useState, useEffect } from 'react';
-import {
-  Table,
-  Input,
-  Button,
-  Space,
-  Tag,
-  Modal,
-  notification,
-  DatePicker,
-  Row,
-  Col,
-} from 'antd';
-import {
-  DeleteFilled,
-  SearchOutlined,
-  ExclamationCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import React, {useState, useEffect } from 'react';
+import {Table,Button,Space,Tag,Modal,notification,DatePicker,Row, Col,} from 'antd';
+import {DeleteFilled,ExclamationCircleOutlined,} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import ModalExportBilling from './Modal/ModalExportBilling';
 import ModalPendingBill from './Modal/ModalPending';
 import ModalReject from './Modal/ModalReject';
-import {
-  getDataSCB,
-  deleteBillingPayment,
-  getOutDate,
-} from '../services/API/PaymentAPI';
-import {
-  getBillingPayment,
-  getCustomerList,
-} from '../services/thunk-action/payment_thunk';
+import {getDataSCB,deleteBillingPayment,getOutDate,} from '../services/API/PaymentAPI';
+import {getBillingPayment,getCustomerList} from '../services/thunk-action/payment_thunk';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import logo from '../../assets/images/hyde-logo.svg';
+import './style/table.css'
 import { encryptStorage } from '../../../utils/encryptStorage';
 const { RangePicker } = DatePicker;
 const statePayment = {
@@ -47,25 +25,16 @@ const statePayment = {
 };
 
 export const PaymentTable = () => {
-  const {
-    status_billing,
-    dataBilling,
-    loadingTable,
-    dataSize,
-    paramsBilling,
-    pageDefault,
-    countFCM,
-  } = useSelector((state) => state.PaymentActionRedux);
+  const {status_billing,dataBilling,loadingTable,dataSize,paramsBilling,pageDefault,countFCM} = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
-  let countTotal = countFCM;
   const [state, setPayment] = useState(statePayment);
   const [loadingCreate, setloadingCreate] = useState([]);
   const [View, setView] = useState([]);
   const [Del, setDel] = useState([]);
   const [Verify, setVerify] = useState([]);
   const [VerifyReject, setVerifyReject] = useState([]);
-
   const [Export, setExport] = useState([]);
+  const [notication, setnotication] = useState(countFCM);
   useEffect(async () => {
     await getAllnotFCMList();
     await dispatch({
@@ -73,7 +42,13 @@ export const PaymentTable = () => {
       payload: paramsBillingPayment,
     });
     await dispatch(getBillingPayment(paramsBillingPayment));
-  }, []);
+  }, [notication]);
+
+  useEffect( async() => {
+   if (countFCM>=notication) {
+   await setnotication(countFCM)
+   }
+  }, [countFCM]);
   // setting pagination Option
   const pageSizeOptions = ['20', '40', '60', '100'];
   const PaginationConfig = {
@@ -96,8 +71,10 @@ export const PaymentTable = () => {
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
       let countFCMTotal = 0;
-      FCMtoken.map((e) => {
-        if (e.readStatus === false) {
+      FCMtoken.find((e) => {
+        if(e.title === 'Payments' 
+        && e.readStatus === false
+        ){
           countFCMTotal = countFCMTotal + 1;
         }
       });
@@ -106,37 +83,9 @@ export const PaymentTable = () => {
         paramsBillingPayment.status = 'Pending review';
         await dispatch({ type: 'CHANGE_COUNT', payload: 2 });
       }
-      console.log('====================================');
-      console.log('countFCMTotal:', countFCMTotal);
-      console.log('====================================');
       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
     }
   };
-  const getTime = (e) => {
-    let Time = [];
-    e.map((e) => {
-      Time.push(moment(e).format('YYYY-MM-DD HH:mm:ss'));
-    });
-
-    paramsBilling.filters = {
-      createBill: Time,
-    };
-  };
-
-  const dateImeRender = (
-    <RangePicker
-      ranges={{
-        Today: [moment().startOf('day'), moment().endOf('day')],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-      }}
-      size={'small'}
-      style={{ marginBottom: 8 }}
-      showTime={{ format: 'HH:mm' }}
-      format="DD/MM/YYYY HH:mm"
-      onChange={getTime}
-      // onOk={onOk}
-    />
-  );
 
   // setting pagination Option
 
@@ -161,16 +110,20 @@ export const PaymentTable = () => {
     await setVerify(verifyLoading);
     let resultSCB = {};
     const [result] = dataBilling.filter((e) => {
-      return e.BillsPayment_Invoice === currentTarget.value;
+      if (e.BillsPayment_Invoice === currentTarget.value) {
+        e.readStatus=false
+        return e
+      }
     });
     resultSCB = await getDataSCB(currentTarget.value);
-    resultSCB === undefined ? (resultSCB = {}) : null;
-    resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
-    resultSCB.Address_Customer = result.Address_Customer;
-    resultSCB.Name_Customer = result.Name_Customer;
-    resultSCB.idBilling = result.id;
-    resultSCB.imageURL = result.imageURL;
-    resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
+    resultSCB === undefined ? (resultSCB = {
+      BillsPayment_Invoice : result.BillsPayment_Invoice,
+      Address_Customer : result.Address_Customer,
+      Name_Customer : result.Name_Customer,
+      idBilling : result.id,
+      imageURL : result.imageURL,
+      BillsPayment_AllType : result.BillsPayment_AllType
+    }) : null;
     dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
     dispatch({ type: 'MODAL_PENDING', payload: true });
     verifyLoading[currentTarget.value] = false;
@@ -179,24 +132,20 @@ export const PaymentTable = () => {
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
       let countFCMTotal = countFCM;
-      FCMtoken.map((e) => {
-        console.log('====================================');
-        console.log('billPaymentRef1:', e, result.BillsPayment_Invoice);
-        console.log('====================================');
-        if (
-          e.billPaymentRef1 === result.BillsPayment_Invoice &&
-          e.readStatus === false
-        ) {
-          e.readStatus = true;
-          countFCMTotal = countFCMTotal - 1;
+      FCMtoken.find((e) => {
+        if(e.title === 'Payments'){
+
+          if (
+            e.billPaymentRef1 === result.BillsPayment_Invoice &&
+            e.readStatus === false
+          ) {
+            e.readStatus = true;
+            countFCMTotal = countFCMTotal - 1;
+          }
         }
       });
       await encryptStorage.setItem('fcm_token_data', JSON.stringify(FCMtoken));
       dispatch({ type: 'CHANGE_FCM_COUNT', payload: countFCMTotal });
-
-      console.log('====================================');
-      console.log('countFCMTotal:', countFCMTotal);
-      console.log('====================================');
       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
     }
   };
@@ -210,14 +159,15 @@ export const PaymentTable = () => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
     resultSCB = await getDataSCB(currentTarget.value);
-    resultSCB === undefined ? (resultSCB = {}) : null;
-    resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice;
-    resultSCB.Address_Customer = result.Address_Customer;
-    resultSCB.Name_Customer = result.Name_Customer;
-    resultSCB.idBilling = result.id;
-    resultSCB.imageURL = result.imageURL;
-    resultSCB.BillsPayment_AllType = result.BillsPayment_AllType;
-    resultSCB.annotation_payment = result.annotation_payment;
+    resultSCB === undefined ? (resultSCB = {
+     BillsPayment_Invoice : result.BillsPayment_Invoice,
+     Address_Customer : result.Address_Customer,
+     Name_Customer : result.Name_Customer,
+     idBilling : result.id,
+     imageURL : result.imageURL,
+     BillsPayment_AllType : result.BillsPayment_AllType,
+     annotation_payment : result.annotation_payment
+    }) : null;
     dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
     dispatch({ type: 'MODAL_REJECT', payload: true });
     verifyLoadingReject[currentTarget.value] = false;
@@ -228,7 +178,6 @@ export const PaymentTable = () => {
     const viewLoadings = [...View];
     viewLoadings[currentTarget.value] = true;
     await setView(viewLoadings);
-
     const result = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
@@ -470,12 +419,13 @@ export const PaymentTable = () => {
               : null}
           </div>
         ),
-        async onOk() {
-          viewLoadings[currentTarget.value] = false;
-          await setView(viewLoadings);
+       async onOk() {
+          View[currentTarget.value] = false;
+          await setView(View);
         },
       });
     }
+
   };
   // showDetail
 
@@ -492,13 +442,13 @@ export const PaymentTable = () => {
       okText: 'Yes',
       async onOk() {
         await deleteID(currentTarget.value);
-        delLoading[currentTarget.value] = false;
-        await setDel(delLoading);
+        Del[currentTarget.value] = false;
+        await setDel(Del);
       },
       cancelText: 'No',
       async onCancel() {
-        delLoading[currentTarget.value] = false;
-        await setDel(delLoading);
+        Del[currentTarget.value] = false;
+        await setDel(Del);
       },
     });
   };
@@ -1318,6 +1268,7 @@ export const PaymentTable = () => {
         pagination={PaginationConfig}
         onChange={handleTableChange}
         dataSource={dataBilling}
+        rowClassName={ (record, index) => (record.readStatus===true?"red":null)}
       />
       <ModalExportBilling paymentDetail={state.paymentDetail} />
       <ModalPendingBill />

@@ -16,7 +16,7 @@ const fixReportData = {
     statusModalFixReport: false,
     statusModalReject: false,
     dataPaymentDashboard:[],
-    countFCM:0
+    countFCMFixReport:0
 };
 
 const FixReportActionRedux = (state = fixReportData, action) => {
@@ -56,7 +56,7 @@ const FixReportActionRedux = (state = fixReportData, action) => {
         case "CHANGE_LOADING_CREATE":
             return {...state, loadingCreate: action.payload};
         case "CHANGE_FCM_COUNT_FIX_REPORT":
-            return{...state,countFCM: action.payload}
+            return{...state,countFCMFixReport: action.payload}
         default:
             return state;
     }

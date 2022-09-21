@@ -3,27 +3,31 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from 'react';
 import Heading from '../../../components/Header';
-import { Button, Image, Input, Table,Tag } from 'antd';
+import { Button,Input, Table,Tag } from 'antd';
 import ReportModal from '../components/ManageReport';
-import { encryptStorage } from '../../../utils/encryptStorage';
 import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
 import {MenuFixingReport} from './MenuFixingReport'
 import { useSelector, useDispatch } from 'react-redux';
+import Highlighter from 'react-highlight-words';
+import { encryptStorage } from '../../../utils/encryptStorage';
+import '../style/fixingStyle.css'
 const FixingReports = () => {
-  const {
-    status_fixReport,
-    dataFixReport,
-    loadingTable,
-    dataSize,
-    paramsFixReport,
-    pageDefault,
-  } = useSelector((state) => state.FixReportActionRedux);
+  const {status_fixReport,dataFixReport,loadingTable,dataSize,paramsFixReport,pageDefault,countFCMFixReport} = useSelector((state) => state.FixReportActionRedux);
   const dispatch = useDispatch();
-  const session = encryptStorage.getItem('user_session');
   const [stateReport, setStateReport] = useState([]);
   const [searchName, setSearchName] = useState('');
-  const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
-  const thTimeZone = 'Asia/Bangkok';
+  const [notication, setnotication] = useState(countFCMFixReport);
+    // set data
+    useEffect( async() => {
+      await dispatch({ type: 'CHANGE_PARAMS_FIX_REPORT', payload: paramsDataFixReport });
+      await  dispatch(getDataFixReport(paramsDataFixReport));
+     
+    }, [notication]);
+    useEffect( async() => {
+      if (countFCMFixReport>=notication) {
+      await setnotication(countFCMFixReport)
+      }
+     }, [countFCMFixReport]);
     // setting pagination Option
     const pageSizeOptions = ['20', '40', '60', '100'];
     const PaginationConfig = {
@@ -36,15 +40,103 @@ const FixingReports = () => {
     const paramsDataFixReport = {
       status: undefined,
       defaultPage: 1,
-      sorter: undefined,
+      sorter: {
+        NameSort: "submission_date",
+        orderSort: "descend",
+      },
       filters: {
-        Address_Customer: null,
+        address_number: null,
       },
       pagesize: PaginationConfig.defaultPageSize,
     };
   const { Search } = Input;
 
   // table change
+  const handleSearchChange = (value) => {
+    if (value.target.value === '') {
+      paramsFixReport.filters = {
+        address_number: null,
+      };
+      dispatch(getDataFixReport(paramsFixReport));
+      setSearchName('');
+    }
+  };
+
+  const manageReport = async ({ currentTarget }) => {
+    const exportLoading = [...stateReport];
+    exportLoading[currentTarget.value] = true;
+    await setStateReport(exportLoading);
+    const result = dataFixReport.filter((e) => {
+      if (e.id === currentTarget.value) {
+        e.readStatus=false
+        return e
+      }
+    });
+    const FCMtoken = await encryptStorage.getItem('fcm_token_data');
+    if (FCMtoken !== null && FCMtoken !== undefined) {
+      let countFCMTotal = countFCMFixReport;
+      FCMtoken.map((e) => {
+        if(e.title === 'ServiceCenter'){
+          if (
+            e.userID === result[0]?.id &&
+            e.readStatus === false
+          ) {
+            e.readStatus = true;
+            countFCMTotal = countFCMTotal - 1;
+          }
+        }
+      });
+      await encryptStorage.setItem('fcm_token_data', JSON.stringify(FCMtoken));
+      dispatch({ type: 'CHANGE_FCM_COUNT_FIX_REPORT', payload: countFCMTotal });
+      FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
+    }
+    dispatch({ type: 'CHANGE_STATE_MANAGE_FIX_REPORT', payload: result });
+    dispatch({ type: 'MODAL_FIX_REPORT', payload: true });
+    exportLoading[currentTarget.value] = false;
+    await setStateReport(exportLoading);
+  };
+
+  const handleSearch = (value) => {
+    if (value) {
+      if (paramsFixReport.filters !== undefined &&paramsFixReport.filters !== null) {
+        paramsFixReport.filters = {
+          address_number: [value],
+        };
+        dispatch(getDataFixReport(paramsFixReport));
+      } else {
+        paramsFixReport.filters = {
+          address_number: [value],
+        };
+      }
+    }
+    value!== undefined?  setSearchName(value.toLowerCase()):null
+  };
+
+  const handleTableChange = async (pagination, filters, sorter) => {
+    await dispatch({
+      type: 'CHANGE_PAGE_DEFAULT_FIX_REPORT',
+      payload: pagination?.current,
+    });
+    (paramsFixReport.status = status_fixReport),
+      (paramsFixReport.defaultPage = pagination.current),
+      (paramsFixReport.pagesize = pagination.pageSize);
+    paramsFixReport.filters = {
+      address_number:
+        filters?.address_number !== undefined
+          ? filters?.address_number
+          : null,
+    };
+
+    if (sorter.order !== undefined) {
+      paramsFixReport.sorter = {
+        NameSort: sorter.columnKey,
+        orderSort: sorter.order,
+      };
+    } else {
+      paramsFixReport.sorter = sorter.order;
+    }
+    dispatch(getDataFixReport(paramsFixReport));
+  };
   let columnsFix_report = [
     {
       title: 'No.',
@@ -68,6 +160,18 @@ const FixingReports = () => {
       key: 'address_number',
       align: 'center',
       width: '10%',
+      render: (text) => (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#D8AA81', padding: 0 }}
+          searchWords={
+            paramsFixReport.filters.address_number !== null
+              ? paramsFixReport.filters.address_number
+              : ['']
+          }
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ),
       sorter: (a, b) => a.address_number.localeCompare(b.address_number),
     },
     {
@@ -140,82 +244,6 @@ const FixingReports = () => {
       ),
     },
   ];
-
-  const manageReport = async ({ currentTarget }) => {
-    const exportLoading = [...stateReport];
-    exportLoading[currentTarget.value] = true;
-    await setStateReport(exportLoading);
-    const result = dataFixReport.filter((e) => {
-      return e.id === currentTarget.value;
-    });
-    console.log('====================================');
-    console.log("result:",result);
-    console.log('====================================');
-    dispatch({ type: 'CHANGE_STATE_MANAGE_FIX_REPORT', payload: result });
-    dispatch({ type: 'MODAL_FIX_REPORT', payload: true });
-    exportLoading[currentTarget.value] = false;
-    await setStateReport(exportLoading);
-  };
-  
-
-  const handleSearch = (value) => {
-    value!== undefined?  setSearchName(value.toLowerCase()):null
-  };
-
-  const handleSearchChange = (value) => {
-    if (value.target.value === '') {
-      setSearchName('');
-    }else{
-      if (
-        paramsFixReport.filters !== undefined &&
-        paramsFixReport.filters !== null
-      ) {
-        paramsFixReport.filters = {
-          address_number: [value.target.value],
-        };
-        dispatch(getDataFixReport(paramsFixReport));
-      } else {
-        paramsFixReport.filters = {
-          address_number: [value.target.value],
-        };
-      }
-    }
-  };
-
-
-  // set data
-  useEffect( async() => {
-   
-    await dispatch({ type: 'CHANGE_PARAMS_FIX_REPORT', payload: paramsDataFixReport });
-    await  dispatch(getDataFixReport(paramsDataFixReport));
-   
-  }, []);
-  const handleTableChange = async (pagination, filters, sorter) => {
-    console.log('handleTableChange:', sorter);
-    await dispatch({
-      type: 'CHANGE_PAGE_DEFAULT_FIX_REPORT',
-      payload: pagination?.current,
-    });
-    (paramsFixReport.status = status_fixReport),
-      (paramsFixReport.defaultPage = pagination.current),
-      (paramsFixReport.pagesize = pagination.pageSize);
-    paramsFixReport.filters = {
-      address_number:
-        filters?.address_number !== undefined
-          ? filters?.address_number
-          : null,
-    };
-
-    if (sorter.order !== undefined) {
-      paramsFixReport.sorter = {
-        NameSort: sorter.columnKey,
-        orderSort: sorter.order,
-      };
-    } else {
-      paramsFixReport.sorter = sorter.order;
-    }
-    dispatch(getDataFixReport(paramsFixReport));
-  };
   return (
     <div>
        <ReportModal/>
@@ -236,6 +264,8 @@ const FixingReports = () => {
         loading={loadingTable}
         pagination={PaginationConfig}
         dataSource={dataFixReport}
+        rowClassName={ (record, index) => (record.readStatus===true?"red":null)
+        }
       />
         {/* <ReportModal/> */}
     </div>

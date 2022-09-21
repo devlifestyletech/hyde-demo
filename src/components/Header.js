@@ -63,13 +63,24 @@ function Header({title}) {
   const getAllnotFCMList = async () => {
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
-      let countFCMTotal = 0;
+      let countFCMTotal=0,countFixreportTotal = 0;
       FCMtoken.map((e) => {
         if (e.readStatus === false) {
-          countFCMTotal = countFCMTotal + 1;
-        }
-      });
-      dispatch({type: 'CHANGE_FCM_COUNT', payload: countFCMTotal});
+          switch (e.title) {
+            case "Payments":
+              countFCMTotal = countFCMTotal + 1;
+              break;
+              case "ServiceCenter":
+                countFixreportTotal = countFixreportTotal + 1;
+                break;
+                default:
+                  break;
+                }
+              }
+            });
+            dispatch({type: 'CHANGE_FCM_COUNT', payload: countFCMTotal});
+            dispatch({type: 'CHANGE_FCM_COUNT_FIX_REPORT', payload: countFixreportTotal});
+    
       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
       await setNotiFCMList(FCMtoken);
     }

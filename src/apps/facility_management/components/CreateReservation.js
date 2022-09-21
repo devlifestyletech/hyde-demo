@@ -66,6 +66,7 @@ export default function CreateReservation({
           note: val.note ? val.note : '',
           booked: 'Juristic',
           status: 0,
+          statusNotification:false
         };
         let timeSlot = {
           start: new Date(val.range[0]),

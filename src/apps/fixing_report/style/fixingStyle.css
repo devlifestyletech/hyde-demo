@@ -105,3 +105,10 @@
 .ant-table-wrapper.styTableControl {
   border-radius: 20px;
 }
+
+.red{
+  color: red; 
+}
+.green {
+   color :green;
+}

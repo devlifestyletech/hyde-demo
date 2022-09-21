@@ -58,7 +58,6 @@ const ModalPendingBill = () => {
     setValue(e.target.value);
   };
   const handleCancel = () => {
-    // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
     dispatch({ type: 'MODAL_PENDING', payload: false });
   };
 
