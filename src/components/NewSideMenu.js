@@ -147,11 +147,6 @@ function NewSideMenu() {
                     Facility Dashboard
                   </Link>
                 </Menu.Item>
-                <Menu.Item key={`${main_link}/facilities/reservation-calendar`}>
-                  <Link to={`${main_link}/facilities/reservation-calendar`}>
-                    Reservation Calendar
-                  </Link>
-                </Menu.Item>
                 <Menu.Item key={`${main_link}/facilities/reservation-list`}>
                   <Link to={`${main_link}/facilities/reservation-list`}>
                     Reservation List

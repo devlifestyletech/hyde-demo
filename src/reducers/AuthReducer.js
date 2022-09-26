@@ -2,6 +2,7 @@ const AuthState = {
   isAuthenticated: false,
   userData: null,
   token: null,
+  residents: null,
 }
 
 const AuthReducer = (state = AuthState, action) => {
@@ -12,6 +13,12 @@ const AuthReducer = (state = AuthState, action) => {
         isAuthenticated: action.payload.isAuthenticated,
         userData: action.payload.userData,
         token: action.payload.token,
+      }
+
+    case 'UPDATE_RESIDENTIAL':
+      return {
+        ...state,
+        residents: action.payload.residents
       }
     default:
       return state
