@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Empty, Space } from 'antd';
-import './styles/building_zone.css';
-import Addresses from './Addresses';
+import React, { useState, useEffect } from 'react'
+import { Empty, Space } from 'antd'
+import './styles/building_zone.css'
+import Addresses from './Addresses'
 
 export default function BuildingZone({ floorsData, refresh }) {
-  const [residences, setResidences] = useState(null);
+  const [residences, setResidences] = useState(null)
 
   const updateFloorsData = async (id, val) => {
     // let floors = floorsData;
@@ -12,12 +12,13 @@ export default function BuildingZone({ floorsData, refresh }) {
     // floors[objIndex] = val;
     // console.log(floors);
     // setResidences(floors);
-    refresh();
-  };
+    refresh()
+  }
 
   useEffect(() => {
-    setResidences(floorsData);
-  }, [floorsData]);
+    // console.log(floorsData)
+    setResidences(floorsData)
+  }, [floorsData])
 
   return (
     <>
@@ -35,5 +36,5 @@ export default function BuildingZone({ floorsData, refresh }) {
         )}
       </div>
     </>
-  );
+  )
 }
