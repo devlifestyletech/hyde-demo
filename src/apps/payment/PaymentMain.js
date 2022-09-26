@@ -4,21 +4,11 @@ import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { PaymentTable } from "./components/PaymentTable";
-import {
-  getBillingPayment,
-  getCustomerList,
-} from './services/thunk-action/payment_thunk';
+import {getBillingPayment,getCustomerList,} from './services/thunk-action/payment_thunk';
 import { MenuBillPayment } from './components/MenuBillPayment';
 import CreateBillModal from './components/Modal/ModalCreateBill';
 import './style/payment.css';
 import Header from '../../components/Header';
-// import io from "socket.io-client";
-// const URL = "https://crud-firestore-swagger-node.herokuapp.com/"
-// const URL ="http://localhost:8080/test"
-// const socket = io.connect(URL);
-// socket.on('notication',data =>{
-//     console.log("datafromSocketio:",data);
-// })
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 const monthFormat = moment().format();

@@ -8,9 +8,7 @@ const fixReportQuery = (params) => {
     coditionData.content = `submission_date_gte=${nowYear}-01-01&submission_date_lt=${
       parseInt(nowYear) + 1
     }-01-01`
-    // if (params.Status_Billpayment !== undefined) {
-    //   coditionData.content = `users_permissions_user.Status_Billpayment=true`;
-    // }
+   
     if (params.status !== undefined) {
       coditionData.content = `status=${params.status}`;
     }
@@ -42,7 +40,7 @@ const fixReportQuery = (params) => {
         createBill,
       } = params.filters;
       if (address_number !== null &&address_number !== undefined) {
-        coditionData.content += `&address_number_contains=${address_number}`;
+        coditionData.content += `&address.address_number_contains=${address_number}`;
       }
       if (Name_Customer !== null &&Name_Customer !== undefined) {
         coditionData.content += `&Name_Customer_contains=${Name_Customer}`;
@@ -71,7 +69,6 @@ const fixReportQuery = (params) => {
           coditionData.content += `&_sort=${params.sorter.NameSort}:${params.sorter.orderSort.slice(0, -3)}`;
           break;
       }
-      
     }
 
     coditionData.status = true;

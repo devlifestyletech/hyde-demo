@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Input,
-  Modal,
-  notification,
-  Button,
-  Radio,
-  Col,
-  Row,
-} from 'antd';
+import {Input,Modal,notification,Button,Radio,Col,Row} from 'antd';
 import bill from '../../assets/images/bill.jpg';
 import { BankNamecode } from '../../services/BankNamecode';
 import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';

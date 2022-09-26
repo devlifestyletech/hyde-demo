@@ -1,17 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import {Button,Image,Input,Row,Col,DatePicker,Form,Modal,Select} from 'antd';
-import { PictureOutlined } from '@ant-design/icons';
+import {Button,Image,Input,Row,Col,DatePicker,Form,Modal,Select,Upload,notification} from 'antd';
+import { editFixReport } from '../api/fix_report_api'
 import axios from 'axios';
 import moment from 'moment';
+import ImgCrop from 'antd-img-crop';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import { socket } from '../../../services/webSocketService';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
-export default function ReportModal({
-}) {
-  const { dataManageReport,statusModalFixReport,paramsDataFixReport } = useSelector((state) => state.FixReportActionRedux);
+const previewImage = {
+  previewVisible: false,
+  previewImage: "",
+  previewTitle: "",
+};
+export default function ReportModal() {
+  const { dataManageReport,statusModalFixReport,paramsFixReport } = useSelector((state) => state.FixReportActionRedux);
   const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
   const URLreScript = process.env.REACT_APP_API_URL + '/fixing-reports';
@@ -26,13 +31,22 @@ export default function ReportModal({
   const [form] = Form.useForm();
   const [repairReq, setRepairReq] = useState(true);
   const [successReq, setSuccessReq] = useState(true);
-  const [pendingImg, setPendingImg] = useState([]);
-  const [repairingImg, setRepairingImg] = useState([]);
-  const [successImg, setSuccessImg] = useState([]);
   const [pendingImgFile, setPendingImgFile] = useState([]);
   const [repairingImgFile, setRepairingImgFile] = useState([]);
   const [successImgFile, setSuccessImgFile] = useState([]);
-
+  const [PreviewImg, setPreviewImg] = useState(previewImage);
+  //pendingImg
+  const [fileListPending, setFileListPending] = useState(null);
+  const [oldFilePending, setoldFilePending] = useState(null);
+  const [pendingImg, setpendingImg] = useState(true);
+    //RepairImg
+    const [fileListRepairing, setFileListRepairing] = useState(null);
+    const [oldFileRepairing, setoldFileRepairing] = useState(null);
+    const [RepairingImg, setRepairingImg] = useState(true);
+      //pendingImg
+  const [fileListSuccess, setFileListSuccess] = useState(null);
+  const [oldFileSuccess, setoldFileSuccess] = useState(null);
+  const [SuccessImg, setSuccessImg] = useState(true);
   function disabledDate(current) {
     return current && current < moment().startOf('day');
   }
@@ -69,20 +83,34 @@ export default function ReportModal({
       cause: dataManageReport?.[0]?.cause,
       solution: dataManageReport?.[0]?.solution,
     });
+  switch (dataManageReport?.[0]?.status) {
+    case "Pending":
+      setRepairReq(true);
+      setSuccessReq(true);
+      setpendingImg(false)
+      break;
+    case "Repairing":
+      setRepairReq(false);
+      setSuccessReq(true);
+      setRepairingImg(false)
+      break;
+    case "Success":
+      setRepairReq(false);
+      setSuccessReq(false);
+      setSuccessImg(false)
+      break;
+  
+    default:
+      break;
+  }
+    await setFileListPending( dataManageReport?.[0]?.image_pending)
+    await setFileListRepairing( dataManageReport?.[0]?.image_repairing)
+    await setFileListSuccess( dataManageReport?.[0]?.image_success)
   };
 
   useEffect(async () => {
      await handleValue();
-    if (dataManageReport?.[0]?.status === 'Repairing') {
-      setRepairReq(false);
-      setSuccessReq(true);
-    } else if (dataManageReport?.[0]?.status === 'Success') {
-      setRepairReq(false);
-      setSuccessReq(false);
-    } else {
-      setRepairReq(true);
-      setSuccessReq(true);
-    }
+  
   }, [dataManageReport]);
 
   const imagePreviewSty = {
@@ -95,381 +123,436 @@ export default function ReportModal({
 
   function statusHandle(status) {
     console.log('statusHandle', status);
-    // setReportStatus(status);
   }
-
-  const selectPendingImg = (e) => {
-    setPendingImgFile([...pendingImgFile, e.target.files[0]]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2 && pendingImg.length < 4) {
-        console.log('indexOf', pendingImg.indexOf(reader.result));
-        if (pendingImg.indexOf(reader.result) < 0) {
-          setPendingImg([...pendingImg, reader.result]);
-        } else {
-          alert('This image is repeated.');
+  //repairingImg
+  const removeImageRepairing = async (file) => {
+    let totalImage2 = [], removeImage2 = []
+    fileListRepairing?.map((e) => {
+        if (e.uid !== file.uid) {
+            totalImage2.push(e)
         }
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
-  const selectRepairingImg = (e) => {
-    setRepairingImgFile([...repairingImgFile, e.target.files[0]]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2 && repairingImg.length < 4) {
-        console.log('indexOf', repairingImg.indexOf(reader.result));
-        if (repairingImg.indexOf(reader.result) < 0) {
-          setRepairingImg([...repairingImg, reader.result]);
-        } else {
-          alert('This image is repeated.');
+        if (e.uid === file.uid && e.id !== undefined) {
+            removeImage2.push(e)
         }
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+    });
+    await setFileListRepairing(totalImage2.length === 0 ? null : totalImage2);
+    if (oldFileRepairing !== null) {
+        let result = oldFileRepairing.concat(removeImage2)
+        setoldFileRepairing(result)
+    } else {
+        setoldFileRepairing(removeImage2)
+    }
+};
 
-  const selectSuccessImg = (e) => {
-    setSuccessImgFile([...successImgFile, e.target.files[0]]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2 && successImg.length < 4) {
-        console.log('indexOf', successImg.indexOf(reader.result));
-        if (successImg.indexOf(reader.result) < 0) {
-          setSuccessImg([...successImg, reader.result]);
-        } else {
-          alert('This image is repeated.');
+const handleChangeRepairing = async ({fileList}) => {
+    
+    let data = [];
+    const result = fileList.filter(async (e, i) => {
+        if (e.status !== "error") {
+            data.push(e);
+            return e;
         }
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+      
+    });
 
-  const handleEditReport = async (value) => {
-    console.log('value', value, value.key);
+    await setFileListRepairing(data);
+};
 
-    axios
-      .put(
-        `${URLreScript}/${dataManageReport?.[0]?.id}`,
-        {
-          pick_up_date: value.pick_up_date
-            ? `${value.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
-            : '',
-          opening_date: value.opening_date
-            ? `${value.opening_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
-            : '',
-          closing_date: value.closing_date
-            ? `${value.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
-            : '',
-          status: dataManageReport?.[0]?.status,
-          cause: value.cause,
-          solution: value.solution,
-        },
-        headers
-      )
-      .then((res) => {
-        socket.emit('reportStatus', {});
-        console.log('res', res);
-        if (
-          pendingImgFile.length > 0 &&
-          repairingImgFile.length > 0 &&
-          successImgFile.length > 0
-        ) {
-          uploadImg();
-        } else {
-          uploadImg();
-         
-        }
-      })
-      .catch((err) => {
-        console.error("Can't add data: ", err);
+const dummyRequestRepairing = ({file, onSuccess, onError}) => {
+    if (file.size > 209715200) {
+        notification["error"]({
+            duration: 2,
+            message: "Upload image",
+            description: "image size more than 200 MB.",
+            style: {borderRadius: "25px"},
+        });
+        setTimeout(() => {
+            onError("error");
+        }, 0);
+        //209715200 = 200mb
+    } else {
+        setTimeout(() => {
+            onSuccess("ok");
+        }, 0);
+    }
+};
+  //repairingImg
+
+    //successImg
+    const removeImageSuccess = async (file) => {
+      let totalImage2 = [], removeImage2 = []
+      fileListSuccess?.map((e) => {
+          if (e.uid !== file.uid) {
+              totalImage2.push(e)
+          }
+          if (e.uid === file.uid && e.id !== undefined) {
+              removeImage2.push(e)
+          }
       });
-      await  dispatch(getDataFixReport(paramsDataFixReport));
-      await dispatch({ type: 'MODAL_FIX_REPORT', payload: false })
-  };
-
-  const uploadImg = async () => {
-    if (pendingImgFile.length > 0) {
-      let arr = [];
-      dataManageReport?.[0]?.image_pending.map((item) => arr.push(item));
-      for (let i = 0; i < pendingImgFile.length; i++) {
-        let dataImage = new FormData();
-        dataImage.append('files', pendingImgFile[i]);
-        console.log('dataImage', dataImage);
-        console.log('pendingImgFile', i, pendingImgFile[i]);
-        dataImage
-          ? await axios
-              .post(
-                process.env.REACT_APP_API_URL + '/upload/',
-                dataImage,
-                headers
-              )
-              .then((res) => {
-                let imageId = res.data[0];
-                console.log('imageId', imageId);
-                arr.push(imageId);
-                console.log('arr', arr);
-                axios
-                  .put(
-                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
-                    {
-                      image_pending: arr,
-                    },
-                    headers
-                  )
-                  .then((res) => {
-                    
-                  })
-                  .catch((err) => {
-                    console.error("Can't add data: ", err);
-                  });
-              })
-              .catch((err) => {
-                //console.log("ERROR", err);
-              })
-          : alert('noImage');
+      await setFileListSuccess(totalImage2.length === 0 ? null : totalImage2);
+      if (oldFileSuccess !== null) {
+          let result = oldFileSuccess.concat(removeImage2)
+          setoldFileSuccess(result)
+      } else {
+          setoldFileSuccess(removeImage2)
       }
-    }
-    if (repairingImgFile.length > 0) {
-      let arr = [];
-      dataManageReport?.[0]?.image_repairing.map((item) => arr.push(item));
-      for (let i = 0; i < repairingImgFile.length; i++) {
-        let dataImage = new FormData();
-        dataImage.append('files', repairingImgFile[i]);
-        console.log('dataImage', dataImage);
-        console.log('repairingImgFile', i, repairingImgFile[i]);
-        dataImage
-          ? await axios
-              .post(
-                process.env.REACT_APP_API_URL + '/upload/',
-                dataImage,
-                headers
-              )
-              .then((res) => {
-                let imageId = res.data[0];
-                console.log('imageId', imageId);
-                arr.push(imageId);
-                console.log('arr', arr);
-                axios
-                  .put(
-                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
-                    {
-                      image_repairing: arr,
-                    },
-                    headers
-                  )
-                  .then((res) => {
-                    
-                  })
-                  .catch((err) => {
-                    console.error("Can't add data: ", err);
-                  });
-              })
-              .catch((err) => {
-                console.log('ERROR', err);
-              })
-          : alert('noImage');
+  };
+  
+  const handleChangeSuccess = async ({fileList}) => {
+      let data = [];
+      const result = fileList.filter(async (e, i) => {
+          if (e.status !== "error") {
+              data.push(e);
+              return e;
+          }
+        
+      });
+      await setFileListSuccess(data);
+  };
+  
+  const dummyRequestSuccess = ({file, onSuccess, onError}) => {
+     
+      if (file.size > 209715200) {
+          notification["error"]({
+              duration: 2,
+              message: "Upload image",
+              description: "image size more than 200 MB.",
+              style: {borderRadius: "25px"},
+          });
+          setTimeout(() => {
+              onError("error");
+          }, 0);
+          //209715200 = 200mb
+      } else {
+          setTimeout(() => {
+              onSuccess("ok");
+          }, 0);
       }
+  };
+    //successImg
+
+      //pendingImg
+  const removeImagePending = async (file) => {
+    let totalImage2 = [], removeImage2 = []
+    fileListPending?.map((e) => {
+        if (e.uid !== file.uid) {
+            totalImage2.push(e)
+        }
+        if (e.uid === file.uid && e.id !== undefined) {
+            removeImage2.push(e)
+        }
+    });
+    await setFileListPending(totalImage2.length === 0 ? null : totalImage2);
+    if (oldFilePending !== null) {
+        let result = oldFilePending.concat(removeImage2)
+        setoldFilePending(result)
+    } else {
+        setoldFilePending(removeImage2)
     }
-    if (successImgFile.length > 0) {
-      let arr = [];
-      dataManageReport?.[0]?.image_success.map((item) => arr.push(item));
-      for (let i = 0; i < successImgFile.length; i++) {
-        let dataImage = new FormData();
-        dataImage.append('files', successImgFile[i]);
-        console.log('dataImage', dataImage);
-        console.log('successImgFile', i, successImgFile[i]);
-        dataImage
-          ? await axios
-              .post(
-                process.env.REACT_APP_API_URL + '/upload/',
-                dataImage,
-                headers
-              )
-              .then((res) => {
-                let imageId = res.data[0];
-                console.log('imageId', imageId);
-                arr.push(imageId);
-                console.log('arr', arr);
-                axios
-                  .put(
-                    `${URLreScript}/${dataManageReport?.[0]?.id}`,
-                    {
-                      image_success: arr,
-                    },
-                    headers
-                  )
-                  .then((res) => {
-                    
-                  })
-                  .catch((err) => {
-                    console.error("Can't add data: ", err);
-                  });
-              })
-              .catch((err) => {
-                console.log('ERROR', err);
-              })
-          : alert('noImage');
+};
+
+const handleChangePending = async ({fileList}) => {
+   
+    let data = [];
+    const result = fileList.filter(async (e, i) => {
+        if (e.status !== "error") {
+            data.push(e);
+            return e;
+        }
+        
+    });
+  
+    await setFileListPending(data);
+};
+
+const dummyRequestPending = ({file, onSuccess, onError}) => {
+    
+    if (file.size > 209715200) {
+        notification["error"]({
+            duration: 2,
+            message: "Upload image",
+            description: "image size more than 200 MB.",
+            style: {borderRadius: "25px"},
+        });
+        setTimeout(() => {
+            onError("error");
+        }, 0);
+        //209715200 = 200mb
+    } else {
+        setTimeout(() => {
+            onSuccess("ok");
+        }, 0);
+    }
+};
+  //pendingImg
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
+
+const onPreview = async (file) => {
+    if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+    }
+    await setPreviewImg((prevState) => {
+        return {
+            ...prevState,
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+            previewTitle:
+                file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+        };
+    });
+};
+
+const handlerOk=async () => {
+ await form
+    .validateFields()
+    .then(async (values) => {
+    
+      const newValues = {
+        pick_up_date:values.pick_up_date
+        ? `${values.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+        : '',
+      opening_date:values.opening_date
+        ? `${values.opening_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+        : '',
+      closing_date:values.closing_date
+        ? `${values.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+        : '',
+      oldStatus: dataManageReport?.[0]?.status,
+      status: values.status,
+      cause:values.cause,
+      solution:values.solution,
+      };
+      switch (dataManageReport?.[0]?.status) {
+        case "Pending":
+          newValues.imageprogress= fileListPending
+          newValues.imageDefult= dataManageReport?.[0]?.image_pending
+          newValues.oldImages= oldFilePending !== null ? oldFilePending : null
+          newValues.image_repairing=dataManageReport?.[0]?.image_repairing
+          newValues.image_success=dataManageReport?.[0]?.image_success
+          break;
+        case "Repairing":
+          newValues.imageprogress= fileListRepairing
+          newValues.imageDefult= dataManageReport?.[0]?.image_repairing
+          newValues.oldImages= oldFileRepairing !== null ? oldFileRepairing : null
+          newValues.image_pending= dataManageReport?.[0]?.image_pending
+          newValues.image_success=dataManageReport?.[0]?.image_success
+          break;
+        case "Success":
+          newValues.imageprogress= fileListSuccess
+          newValues.imageDefult= dataManageReport?.[0]?.image_success
+          newValues.oldImages= oldFileSuccess !== null ? oldFileSuccess : null
+          newValues.image_pending= dataManageReport?.[0]?.image_pending
+          newValues.image_repairing=dataManageReport?.[0]?.image_repairing
+          break;
+      
+        default:
+          break;
       }
+      const resultPostData = await editFixReport(dataManageReport?.[0].id, newValues);
+      if (resultPostData) {
+          notification["success"]({
+              duration: 2,
+              message: "Fixreport",
+              description: "Edit fix report successfully.",
+              style: {borderRadius: "25px"},
+          });
+          await form.resetFields();
+          await setpendingImg(true)
+          await setRepairingImg(true)
+          await setSuccessImg(true)
+           dispatch(getDataFixReport(paramsFixReport));
+           dispatch({ type: 'MODAL_FIX_REPORT', payload: false })
+      } else {
+
+          notification["error"]({
+              duration: 2,
+              message: "Fixreport",
+              description: "Edit fix report failed.",
+              style: {borderRadius: "25px"},
+          });
+      }
+    })
+    .catch((info) => {
+      console.log('Validate Failed:', info);
+    });
+}
+
+const handleEditReport = async (value) => {
+  console.log('value', value, value.key);
+
+  axios
+    .put(
+      `${URLreScript}/${dataManageReport?.[0]?.id}`,
+      {
+        pick_up_date: value.pick_up_date
+          ? `${value.pick_up_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+          : '',
+        opening_date: value.opening_date
+          ? `${value.opening_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+          : '',
+        closing_date: value.closing_date
+          ? `${value.closing_date.format('yyyy-MM-DD')}T00:00:00.000+07:00`
+          : '',
+        status: dataManageReport?.[0]?.status,
+        cause: value.cause,
+        solution: value.solution,
+      },
+      headers
+    )
+    .then((res) => {
+      socket.emit('reportStatus', {});
+      console.log('res', res);
+      if (
+        pendingImgFile.length > 0 &&
+        repairingImgFile.length > 0 &&
+        successImgFile.length > 0
+      ) {
+        uploadImg();
+      } else {
+        uploadImg();
+       
+      }
+    })
+    .catch((err) => {
+      console.error("Can't add data: ", err);
+    });
+    await  dispatch(getDataFixReport(paramsFixReport));
+    await dispatch({ type: 'MODAL_FIX_REPORT', payload: false })
+};
+
+const uploadImg = async () => {
+  if (pendingImgFile.length > 0) {
+    let arr = [];
+    dataManageReport?.[0]?.image_pending.map((item) => arr.push(item));
+    for (let i = 0; i < pendingImgFile.length; i++) {
+      let dataImage = new FormData();
+      dataImage.append('files', pendingImgFile[i]);
+      console.log('dataImage', dataImage);
+      console.log('pendingImgFile', i, pendingImgFile[i]);
+      dataImage
+        ? await axios
+            .post(
+              process.env.REACT_APP_API_URL + '/upload/',
+              dataImage,
+              headers
+            )
+            .then((res) => {
+              let imageId = res.data[0];
+              console.log('imageId', imageId);
+              arr.push(imageId);
+              console.log('arr', arr);
+              axios
+                .put(
+                  `${URLreScript}/${dataManageReport?.[0]?.id}`,
+                  {
+                    image_pending: arr,
+                  },
+                  headers
+                )
+                .then((res) => {
+                  
+                })
+                .catch((err) => {
+                  console.error("Can't add data: ", err);
+                });
+            })
+            .catch((err) => {
+              //console.log("ERROR", err);
+            })
+        : alert('noImage');
     }
-  };
-
-  const PendingImages = () => {
-    return (
-      <Row>
-        {dataManageReport?.[0]?.image_pending.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={process.env.REACT_APP_API_URL + item.url}
-              alt={'reportPendingImg' + index}
-            />
-          );
-        })}
-        {pendingImg.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={item}
-              alt={'pendingImg' + index}
-            />
-          );
-        })}
-        {dataManageReport?.[0]?.image_pending.length + pendingImg.length < 3 ? (
-          <div className="inputReportImage">
-            <label htmlFor="inputPending">
-              <div
-                class="child"
-                style={{
-                  width: '16vh',
-                  height: '16vh',
-                  textAlign: 'center',
-                  fontSize: 10,
-                }}
-              >
-                <Col>
-                  <PictureOutlined
-                    style={{
-                      width: '16vh',
-                      height: '20px',
-                      fontSize: 32,
-                      color: '#818282',
-                    }}
-                  />
-                  Click to this area to upload
-                </Col>
-              </div>
-            </label>
-          </div>
-        ) : null}
-      </Row>
-    );
-  };
-
-  const RepairingImages = () => {
-    return (
-      <Row>
-        {dataManageReport?.[0]?.image_repairing.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={process.env.REACT_APP_API_URL + item.url}
-              alt={'reportRepairingImg' + index}
-            />
-          );
-        })}
-        {repairingImg.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={item}
-              alt={'repairingImg' + index}
-            />
-          );
-        })}
-        {dataManageReport?.[0]?.image_repairing.length + repairingImg.length < 3 ? (
-          <div className="inputReportImage">
-            <label htmlFor="inputRepairing">
-              <div
-                class="child"
-                style={{
-                  width: '16vh',
-                  height: '16vh',
-                  textAlign: 'center',
-                  fontSize: 10,
-                }}
-              >
-                <Col>
-                  <PictureOutlined
-                    style={{
-                      width: '16vh',
-                      height: '20px',
-                      fontSize: 32,
-                      color: '#818282',
-                    }}
-                  />
-                  Click to this area to upload
-                </Col>
-              </div>
-            </label>
-          </div>
-        ) : null}
-      </Row>
-    );
-  };
-
-  const SuccessImages = () => {
-    return (
-      <Row>
-        {dataManageReport?.[0]?.image_success.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={process.env.REACT_APP_API_URL + item.url}
-              alt={'reportSuccessImg' + index}
-            />
-          );
-        })}
-        {successImg.map((item, index) => {
-          return (
-            <Image
-              style={imagePreviewSty}
-              src={item}
-              alt={'successImg' + index}
-            />
-          );
-        })}
-        {dataManageReport?.[0]?.image_success.length + successImg.length < 3 ? (
-          <div className="inputReportImage">
-            <label htmlFor="inputSuccess">
-              <div
-                class="child"
-                style={{
-                  width: '16vh',
-                  height: '16vh',
-                  textAlign: 'center',
-                  fontSize: 10,
-                }}
-              >
-                <Col>
-                  <PictureOutlined
-                    style={{
-                      width: '16vh',
-                      height: '20px',
-                      fontSize: 32,
-                      color: '#818282',
-                    }}
-                  />
-                  Click to this area to upload
-                </Col>
-              </div>
-            </label>
-          </div>
-        ) : null}
-      </Row>
-    );
-  };
+  }
+  if (repairingImgFile.length > 0) {
+    let arr = [];
+    dataManageReport?.[0]?.image_repairing.map((item) => arr.push(item));
+    for (let i = 0; i < repairingImgFile.length; i++) {
+      let dataImage = new FormData();
+      dataImage.append('files', repairingImgFile[i]);
+      console.log('dataImage', dataImage);
+      console.log('repairingImgFile', i, repairingImgFile[i]);
+      dataImage
+        ? await axios
+            .post(
+              process.env.REACT_APP_API_URL + '/upload/',
+              dataImage,
+              headers
+            )
+            .then((res) => {
+              let imageId = res.data[0];
+              console.log('imageId', imageId);
+              arr.push(imageId);
+              console.log('arr', arr);
+              axios
+                .put(
+                  `${URLreScript}/${dataManageReport?.[0]?.id}`,
+                  {
+                    image_repairing: arr,
+                  },
+                  headers
+                )
+                .then((res) => {
+                  
+                })
+                .catch((err) => {
+                  console.error("Can't add data: ", err);
+                });
+            })
+            .catch((err) => {
+              console.log('ERROR', err);
+            })
+        : alert('noImage');
+    }
+  }
+  if (successImgFile.length > 0) {
+    let arr = [];
+    dataManageReport?.[0]?.image_success.map((item) => arr.push(item));
+    for (let i = 0; i < successImgFile.length; i++) {
+      let dataImage = new FormData();
+      dataImage.append('files', successImgFile[i]);
+      console.log('dataImage', dataImage);
+      console.log('successImgFile', i, successImgFile[i]);
+      dataImage
+        ? await axios
+            .post(
+              process.env.REACT_APP_API_URL + '/upload/',
+              dataImage,
+              headers
+            )
+            .then((res) => {
+              let imageId = res.data[0];
+              console.log('imageId', imageId);
+              arr.push(imageId);
+              console.log('arr', arr);
+              axios
+                .put(
+                  `${URLreScript}/${dataManageReport?.[0]?.id}`,
+                  {
+                    image_success: arr,
+                  },
+                  headers
+                )
+                .then((res) => {
+                  
+                })
+                .catch((err) => {
+                  console.error("Can't add data: ", err);
+                });
+            })
+            .catch((err) => {
+              console.log('ERROR', err);
+            })
+        : alert('noImage');
+    }
+  }
+};
 
   return (
     <Modal
@@ -485,7 +568,11 @@ export default function ReportModal({
           key="add"
           onClick={ async()=>{
             dispatch({ type: 'MODAL_FIX_REPORT', payload: false }) 
-            await handleValue()}}
+            await handleValue()
+          await setpendingImg(true)
+          await setRepairingImg(true)
+          await setSuccessImg(true)
+        }}
         >
           Cancel
         </Button>,
@@ -496,27 +583,18 @@ export default function ReportModal({
           }}
           className="add-btn"
           key="add"
-          onClick={() => {
-            form
-              .validateFields()
-              .then((values) => {
-                let newValues = {
-                  ...values,
-                };
-                form.resetFields();
-                handleEditReport(newValues);
-              })
-              .catch((info) => {
-                console.log('Validate Failed:', info);
-              });
-          }}
+          onClick={handlerOk}
         >
           OK
         </Button>,
       ]}
       onCancel={ async()=>{
         dispatch({ type: 'MODAL_FIX_REPORT', payload: false }) 
-        await handleValue()}}
+        await handleValue()
+        await setpendingImg(true)
+          await setRepairingImg(true)
+          await setSuccessImg(true)
+      }}
       width={'70%'}
     >
       <Form
@@ -536,16 +614,16 @@ export default function ReportModal({
           </Form.Item>
           <Form.Item label="Submission Date" name="submission_date">
             <div className="divText">
-              <p className="disableText">{dataManageReport?.[0]?.submission_date_show}</p>
+              <p className="disableText">{dataManageReport?.[0]?.submission_date}</p>
             </div>
           </Form.Item>
           <Form.Item
             name="opening_date"
-            label="Opening Date"
+            label="Action Date"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select opening date',
+                message: 'Please select Action date',
               },
             ]}
           >
@@ -578,7 +656,7 @@ export default function ReportModal({
               <p className="disableText">{dataManageReport?.[0]?.problem}</p>
             </div>
           </Form.Item>
-          <Form.Item label="Pending">
+          {/* <Form.Item label="Pending">
             <input
               type="file"
               id="inputPending"
@@ -590,33 +668,78 @@ export default function ReportModal({
               style={{ display: 'none', float: 'left' }}
             />
             <PendingImages />
-          </Form.Item>
-          <Form.Item label="Repairing">
-            <input
-              type="file"
-              id="inputRepairing"
-              accept="image/*"
-              onChange={selectRepairingImg}
-              onClick={(event) => {
-                event.target.value = null;
-              }}
-              style={{ display: 'none', float: 'left' }}
-            />
-            <RepairingImages />
-          </Form.Item>
-          <Form.Item label="Success">
-            <input
-              type="file"
-              id="inputSuccess"
-              accept="image/*"
-              onChange={selectSuccessImg}
-              onClick={(event) => {
-                event.target.value = null;
-              }}
-              style={{ display: 'none', float: 'left' }}
-            />
-            <SuccessImages />
-          </Form.Item>
+          </Form.Item> */}
+            <div className="col-sm" style={{paddingTop: 10}}>
+                        <p>
+                        Pending 
+                            {fileListPending !== null && fileListPending?.length > 0
+                                ? `: ${fileListPending.length} of 3`
+                                : null}
+                        </p>
+
+                        <ImgCrop rotate>
+                            <Upload
+                                customRequest={dummyRequestPending}
+                                accept=".png, .jpg"
+                                listType="picture-card"
+                                disabled={pendingImg}
+                                fileList={fileListPending}
+                                onChange={handleChangePending}
+                                onRemove={removeImagePending}
+                                onPreview={onPreview}
+                            >
+                                {fileListPending == null || fileListPending.length < 3 ? "+ Upload" : null}
+                            </Upload>
+                        </ImgCrop>
+                    </div>
+         {/* reparing */}
+         <div className="col-sm" style={{paddingTop: 10}}>
+                        <p>
+                        Reparing
+                            {fileListRepairing !== null && fileListRepairing?.length > 0
+                                ? `: ${fileListRepairing.length} of 3`
+                                : null}
+                        </p>
+
+                        <ImgCrop rotate>
+                            <Upload
+                                customRequest={dummyRequestRepairing}
+                                accept=".png, .jpg"
+                                listType="picture-card"
+                                disabled={RepairingImg}
+                                fileList={fileListRepairing}
+                                onChange={handleChangeRepairing}
+                                onRemove={removeImageRepairing}
+                                onPreview={onPreview}
+                            >
+                                {fileListRepairing == null || fileListRepairing.length < 3 ? "+ Upload" : null}
+                            </Upload>
+                        </ImgCrop>
+                    </div>
+                    {/* success */}
+                    <div className="col-sm" style={{paddingTop: 10}}>
+                        <p>
+                            Success
+                            {fileListSuccess !== null && fileListSuccess?.length > 0
+                                ? `: ${fileListSuccess.length} of 3`
+                                : null}
+                        </p>
+
+                        <ImgCrop rotate>
+                            <Upload
+                                customRequest={dummyRequestSuccess}
+                                accept=".png, .jpg"
+                                listType="picture-card"
+                                disabled={SuccessImg}
+                                fileList={fileListSuccess}
+                                onChange={handleChangeSuccess}
+                                onRemove={removeImageSuccess}
+                                onPreview={onPreview}
+                            >
+                                {fileListSuccess == null || fileListSuccess.length < 3 ? "+ Upload" : null}
+                            </Upload>
+                        </ImgCrop>
+                    </div>
         </div>
         <div style={{ width: 45 }}></div>
         <div className="report-form" style={{ flex: 1 }}>
@@ -627,11 +750,11 @@ export default function ReportModal({
           </Form.Item>
           <Form.Item
             name="pick_up_date"
-            label="Receive Date"
+            label="Acknowledge Date"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select receive date',
+                message: 'Please select Acknowledge date',
               },
             ]}
           >
@@ -643,11 +766,11 @@ export default function ReportModal({
           </Form.Item>
           <Form.Item
             name="closing_date"
-            label="Closing Date"
+            label="Complete Date"
             rules={[
               {
                 required: successReq ? false : true,
-                message: 'Please select closing date',
+                message: 'Please select Complete date',
               },
             ]}
           >
@@ -657,11 +780,11 @@ export default function ReportModal({
               disabled={successReq ? true : false}
             />
           </Form.Item>
-          <Form.Item label="Type">
+          {/* <Form.Item label="Type">
             <div className="divText">
               <p className="disableText">{dataManageReport?.[0]?.type}</p>
             </div>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="Description">
             <div className="divArea">
               <p className="disableText">{dataManageReport?.[0]?.description}</p>
@@ -709,6 +832,26 @@ export default function ReportModal({
           </Form.Item>
         </div>
       </Form>
+       <Modal
+          visible={PreviewImg?.previewVisible}
+          title={PreviewImg?.previewTitle}
+          footer={null}
+          onCancel={async () => {
+              await setPreviewImg((prevState) => {
+                      return {
+                        ...prevState,
+                        // totalAmount: sum.toFixed(2),
+                        previewVisible: false,
+                        };
+                      });
+                  }}
+          >
+          <img
+            alt="example"
+            style={{width: "100%"}}
+            src={PreviewImg?.previewImage}
+                    />
+                </Modal>
     </Modal>
   );
 }

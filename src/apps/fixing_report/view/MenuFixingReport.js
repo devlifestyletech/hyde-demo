@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Menu,Badge } from "antd";
 import { getDataFixReport } from '../service/thunk-action/fix_report_thunk'
 export const MenuFixingReport= () => {
-  const { count, paramsFixReport,countFCM } = useSelector(
+  const { count, paramsFixReport,countFCMFixReport } = useSelector(
     (state) => state.FixReportActionRedux
   );
 
@@ -49,7 +49,7 @@ export const MenuFixingReport= () => {
               
               <text style={{ fontWeight: "bold", fontSize: "1rem" }}>
                 {e.title || e.titleText}
-                {e.title === "Pending review" &&countFCM !==0 ? <Badge count={countFCM}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+                {(e.title === "Pending"|| e.title==="All") &&countFCMFixReport !==0 ? <Badge count={countFCMFixReport}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
                
               </text>
             </Menu.Item>
