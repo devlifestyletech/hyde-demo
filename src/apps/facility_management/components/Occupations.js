@@ -1,7 +1,7 @@
-import {Button, Card, Col, Row, Space} from 'antd';
+import { Button, Card, Col, Row, Space } from 'antd';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {encryptStorage} from '../../../utils/encryptStorage';
+import React, { useEffect, useState } from 'react';
+import { encryptStorage } from '../../../utils/encryptStorage';
 
 //components
 import editIcon from '../assets/edit.svg';
@@ -21,7 +21,7 @@ export default function Occupations() {
   const [id, setId] = useState(null);
   const [occupations, setOccupations] = useState([]);
   const [editOccupationModalVisibility, setEditOccupationModalVisibility] =
-      useState(false);
+            useState(false);
   const [roomName, setRoomName] = useState('');
   const [roomDetail, setRoomDetail] = useState('');
   const [mediumAt, setMediumAt] = useState(null);
@@ -29,36 +29,36 @@ export default function Occupations() {
   const [image, setImage] = useState('');
   const [opened, setOpened] = useState(null);
   const [closed, setClosed] = useState(null);
-
+  
   // functions
   const fetchData = async () => {
     await axios.get(`${process.env.REACT_APP_API_URL}/occupations`)
-        .then((res) => {
-          setOccupations(res.data);
-        })
-        .catch((err) => {
-          console.debug(err);
-        });
+               .then((res) => {
+                 setOccupations(res.data);
+               })
+               .catch((err) => {
+                 console.debug(err);
+               });
   };
-
+  
   const editOccupation = async (value, files, id) => {
     let dataImage = new FormData();
     let imageId = [];
     if (files) {
       dataImage.append('files', files[0]);
       await axios.post(process.env.REACT_APP_API_URL + '/upload/', dataImage,
-          headers).then((res) => {
+                       headers).then((res) => {
         imageId = res.data[0];
         axios.put(
             `${process.env.REACT_APP_API_URL}/occupations/${id}`,
             {
-              room_name: value.roomName,
-              room_detail: value.roomDetail,
-              low_status_people: value.mediumAt,
+              room_name           : value.roomName,
+              room_detail         : value.roomDetail,
+              low_status_people   : value.mediumAt,
               medium_status_people: value.highAt,
-              opened: value.opened,
-              closed: value.closed,
-              image: imageId,
+              opened              : value.opened,
+              closed              : value.closed,
+              image               : imageId,
             },
             headers,
         ).then((res) => {
@@ -74,12 +74,12 @@ export default function Occupations() {
       axios.put(
           `${process.env.REACT_APP_API_URL}/occupations/${id}`,
           {
-            room_name: value.roomName,
-            room_detail: value.roomDetail,
-            low_status_people: value.mediumAt,
+            room_name           : value.roomName,
+            room_detail         : value.roomDetail,
+            low_status_people   : value.mediumAt,
             medium_status_people: value.highAt,
-            opened: value.opened,
-            closed: value.closed,
+            opened              : value.opened,
+            closed              : value.closed,
           },
           headers,
       ).then((res) => {
@@ -90,17 +90,17 @@ export default function Occupations() {
       });
     }
   };
-
+  
   // actions
   useEffect(() => {
     (async () => {
       fetchData();
     })();
   }, []);
-
+  
   return (
       <>
-        <Space style={{justifyContent: 'center'}} wrap>
+        <Space style={{ justifyContent: 'center' }} wrap>
           {occupations ? (
               occupations.map((occupation, index) => (
                   <div key={index} className='facilities-card'>
@@ -109,23 +109,23 @@ export default function Occupations() {
                           <img
                               src={
                                 occupation.image
-                                    ? `${process.env.REACT_APP_API_URL}${occupation.image.url}`
-                                    : noImg
+                                ? `${process.env.REACT_APP_API_URL}${occupation.image.url}`
+                                : noImg
                               }
                               alt='place'
                               style={{
-                                width: '100%',
-                                height: 285,
-                                borderTopLeftRadius: 20,
+                                width               : '100%',
+                                height              : 285,
+                                borderTopLeftRadius : 20,
                                 borderTopRightRadius: 20,
                               }}
                           />
                         }
-                        style={{width: 435}}
+                        style={{ width: 435 }}
                     >
                       <Row>
                         <Col span={22}>
-                          <div style={{fontSize: 18, fontWeight: 'bold'}}>
+                          <div style={{ fontSize: 18, fontWeight: 'bold' }}>
                             {occupation.room_name}
                           </div>
                         </Col>
@@ -150,48 +150,48 @@ export default function Occupations() {
                       </Row>
                       <div>
                         {occupation.current_people <
-                        occupation.low_status_people ? (
-                            <Row>
-                              <div>
-                                <img
-                                    src={lowIcon}
-                                    alt='low'
-                                    style={{marginRight: 10}}
-                                />
-                                Low
-                              </div>
-                            </Row>
-                        ) : occupation.current_people <
-                        occupation.medium_status_people ? (
-                            <Row>
-                              <div>
-                                <img
-                                    src={mediumIcon}
-                                    alt='low'
-                                    style={{marginRight: 10}}
-                                />
-                                Medium
-                              </div>
-                            </Row>
-                        ) : (
-                            <Row>
-                              <div>
-                                <img
-                                    src={highIcon}
-                                    alt='low'
-                                    style={{marginRight: 10}}
-                                />
-                                High
-                              </div>
-                            </Row>
-                        )}
+                         occupation.low_status_people ? (
+                             <Row>
+                               <div>
+                                 <img
+                                     src={lowIcon}
+                                     alt='low'
+                                     style={{ marginRight: 10 }}
+                                 />
+                                 Low
+                               </div>
+                             </Row>
+                         ) : occupation.current_people <
+                             occupation.medium_status_people ? (
+                                 <Row>
+                                   <div>
+                                     <img
+                                         src={mediumIcon}
+                                         alt='low'
+                                         style={{ marginRight: 10 }}
+                                     />
+                                     Medium
+                                   </div>
+                                 </Row>
+                             ) : (
+                                 <Row>
+                                   <div>
+                                     <img
+                                         src={highIcon}
+                                         alt='low'
+                                         style={{ marginRight: 10 }}
+                                     />
+                                     High
+                                   </div>
+                                 </Row>
+                             )}
                       </div>
                     </Card>
                   </div>
               ))
           ) : (
-              <div></div>
-          )}
+               <div></div>
+           )}
         </Space>
         <EditOccupation
             visible={editOccupationModalVisibility}

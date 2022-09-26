@@ -33,7 +33,7 @@
 		"react-dom": "^17.0.2",
 		"react-geocode": "^0.2.3",
 		"react-google-maps": "^9.4.5",
-		"react-highlight-words": "^0.17.0",
+		"react-highlight-words": "^0.18.0",
 		"react-infinite-scroll-component": "^6.1.0",
 		"react-redux": "^7.2.4",
 		"react-router-dom": "^6.0.2",

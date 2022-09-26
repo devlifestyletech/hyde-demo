@@ -76,7 +76,6 @@ export default {
   },
   deleteUser: async function (id) {
     const session = await encryptStorage.getItem('user_session')
-
     try {
       return await axios.delete(
         `${process.env.REACT_APP_API_URL}/users/${id}`,
