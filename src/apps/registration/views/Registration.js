@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Button, Input, Tabs } from 'antd';
 import TableRender from '../components/TableRender';
 import Header from '../../../components/Header';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import './styles/registration.css';
 import authService from '../../../services/authServices';
 import CreateModal from '../components/CreateModal';
+import { CSVLink } from 'react-csv';
 
 const { TabPane } = Tabs;
 
@@ -16,6 +17,30 @@ function Registration() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [searchResident, setSearchResident] = useState([]);
+  const [fileNameExcel, setFileNameExcel] = useState('Export user data');
+
+  const headers = [
+    { label: 'Email', key: 'email' },
+    { label: 'First name', key: 'firstname' },
+    { label: 'Last name', key: 'lastname' },
+    { label: 'Tel', key: 'tel' },
+    { label: 'Birth day', key: 'birth_day' },
+    { label: 'Nationality', key: 'nationality' },
+    { label: 'Id number', key: 'id_number' },
+  ];
+
+  const handleSearch = (value) => {
+    setSearch(value);
+    let data = [];
+    residents.forEach((res) => {
+      if (res.fullname.includes(value)) {
+        data.push(res);
+      }
+    });
+    setSearchResident(data);
+  };
+
+  const handleExport = () => {};
 
   useEffect(() => {
     (async () => {
@@ -38,17 +63,6 @@ function Registration() {
       }
     })();
   }, [refresh]);
-
-  const handleSearch = (value) => {
-    setSearch(value);
-    let data = [];
-    residents.forEach((res) => {
-      if (res.fullname.includes(value)) {
-        data.push(res);
-      }
-    });
-    setSearchResident(data);
-  };
 
   return (
     <>
@@ -73,6 +87,26 @@ function Registration() {
         >
           Add new
         </Button>
+        <CSVLink
+          filename={fileNameExcel}
+          data={residents.filter(
+            (item) =>
+              item.developement_consent === true &&
+              item.business_partner_consent === true
+          )}
+          headers={headers}
+        >
+          <Button
+            shape="round"
+            type="primary"
+            icon={<VerticalAlignBottomOutlined />}
+            className="btn-create"
+            size="large"
+            onClick={handleExport}
+          >
+            Export
+          </Button>
+        </CSVLink>
       </div>
       <div className="regis-table">
         <TableRender
