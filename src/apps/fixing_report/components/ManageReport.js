@@ -35,6 +35,7 @@ export default function ReportModal() {
   const [repairingImgFile, setRepairingImgFile] = useState([]);
   const [successImgFile, setSuccessImgFile] = useState([]);
   const [PreviewImg, setPreviewImg] = useState(previewImage);
+  const [statusFixreportList, setstatusFixreportList] = useState(null);
   //pendingImg
   const [fileListPending, setFileListPending] = useState(null);
   const [oldFilePending, setoldFilePending] = useState(null);
@@ -83,16 +84,19 @@ export default function ReportModal() {
       cause: dataManageReport?.[0]?.cause,
       solution: dataManageReport?.[0]?.solution,
     });
+    const {Repairing,Success}=status
   switch (dataManageReport?.[0]?.status) {
     case "Pending":
       setRepairReq(true);
       setSuccessReq(true);
       setpendingImg(false)
+      setstatusFixreportList({Repairing,Success})
       break;
     case "Repairing":
       setRepairReq(false);
       setSuccessReq(true);
       setRepairingImg(false)
+      setstatusFixreportList({Success})
       break;
     case "Success":
       setRepairReq(false);
@@ -329,7 +333,9 @@ const handlerOk=async () => {
       status: values.status,
       cause:values.cause,
       solution:values.solution,
-      };
+      owner:dataManageReport?.[0]?.address.owner,
+      problem:dataManageReport?.[0]?.problem
+      }
       switch (dataManageReport?.[0]?.status) {
         case "Pending":
           newValues.imageprogress= fileListPending
@@ -356,6 +362,10 @@ const handlerOk=async () => {
         default:
           break;
       }
+      // console.log('====================================');
+      // console.log("newvalues:",values);
+      // console.log('====================================');
+      // return
       const resultPostData = await editFixReport(dataManageReport?.[0].id, newValues);
       if (resultPostData) {
           notification["success"]({
@@ -619,11 +629,11 @@ const uploadImg = async () => {
           </Form.Item>
           <Form.Item
             name="opening_date"
-            label="Action Date"
+            label="Resolution Due By"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select Action date',
+                message: 'Please select Resolution Due By',
               },
             ]}
           >
@@ -643,12 +653,12 @@ const uploadImg = async () => {
               },
             ]}
           >
-            <Select style={{ width: '100%' }} onChange={statusHandle}>
-              {Object.keys(status).map((type, index) => (
+            <Select   disabled={dataManageReport?.[0]?.status ==="Success"? true :false} style={{ width: '100%' }} onChange={statusHandle}>
+              { statusFixreportList !== null ?Object.keys(statusFixreportList).map((type, index) => (
                 <Option value={type} key={index}>
                   {type}
                 </Option>
-              ))}
+              )):null}
             </Select>
           </Form.Item>
           <Form.Item label="Problem">
@@ -671,9 +681,9 @@ const uploadImg = async () => {
           </Form.Item> */}
             <div className="col-sm" style={{paddingTop: 10}}>
                         <p>
-                        Pending 
+                        Pending
                             {fileListPending !== null && fileListPending?.length > 0
-                                ? `: ${fileListPending.length} of 3`
+                                ? ` : ${fileListPending.length} of 3`
                                 : null}
                         </p>
 
@@ -695,9 +705,9 @@ const uploadImg = async () => {
          {/* reparing */}
          <div className="col-sm" style={{paddingTop: 10}}>
                         <p>
-                        Reparing
+                        Repairing
                             {fileListRepairing !== null && fileListRepairing?.length > 0
-                                ? `: ${fileListRepairing.length} of 3`
+                                ? ` : ${fileListRepairing.length} of 3`
                                 : null}
                         </p>
 
@@ -721,7 +731,7 @@ const uploadImg = async () => {
                         <p>
                             Success
                             {fileListSuccess !== null && fileListSuccess?.length > 0
-                                ? `: ${fileListSuccess.length} of 3`
+                                ? ` : ${fileListSuccess.length} of 3`
                                 : null}
                         </p>
 
@@ -750,27 +760,27 @@ const uploadImg = async () => {
           </Form.Item>
           <Form.Item
             name="pick_up_date"
-            label="Acknowledge Date"
+            label="First Response"
             rules={[
               {
                 required: repairReq ? false : true,
-                message: 'Please select Acknowledge date',
+                message: 'Please select First Response',
               },
             ]}
           >
             <DatePicker
               disabledDate={disabledDate}
               className="dateTime"
-              disabled={repairReq ? true : false}
+              disabled={ pendingImg ? true : false}
             />
           </Form.Item>
           <Form.Item
             name="closing_date"
-            label="Complete Date"
+            label="Closing Case"
             rules={[
               {
                 required: successReq ? false : true,
-                message: 'Please select Complete date',
+                message: 'Please select Closing Case',
               },
             ]}
           >
