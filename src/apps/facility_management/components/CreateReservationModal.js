@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import authService from '../../../services/authServices';
 import { db } from '../../../utils/firebaseConfig';
 import QrModal from './QrModal';
+import './styles/create_modal.css';
 
 const CreateReservationModal = ({ visible, id, onExit }) => {
   const [createReservationForm] = Form.useForm();
@@ -124,10 +125,10 @@ const CreateReservationModal = ({ visible, id, onExit }) => {
           <Form form={createReservationForm}
                 layout={'vertical'}>
             <Form.Item label={'Facility'}>
-              <div>{facility?.name}</div>
+              <div className={'input-tel'}>{facility?.name}</div>
             </Form.Item>
             <Form.Item label={'Booked By'}>
-              <div>{'Juristic'}</div>
+              <div className={'input-tel'}>{'Juristic'}</div>
             </Form.Item>
             <Form.Item label={'Resident'}
                        name={'userId'}
