@@ -37,62 +37,62 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
   
   const submitHandler = async () => {
     Modal.confirm({
-                    title            : 'Are you sure you want to edit facilities?',
-                    okButtonProps    : { shape: 'round', size: 'large', type: 'primary' },
-                    cancelButtonProps: { shape: 'round', size: 'large' },
-                    icon             : null,
-                    autoFocusButton  : null,
-                    centered         : true,
-                    onOk() {
-                      return new Promise(async (resolve, reject) => {
-                        await editFacilityForm
-                        .validateFields()
-                        .then(async (formValue) => {
-                          const documentRef = doc(db, 'facilities', value?.id);
-                          if (pickedImage) {
-                            let file = imageFile;
-                            const storage = getStorage();
-                            const storageRef = ref(storage, 'facilities_image/' + file.name);
-                            const snapshot = uploadBytes(storageRef, file);
-                            if (snapshot) {
-                              const downloadUrl = getDownloadURL(snapshot.ref);
-                              let value = {
-                                ...formValue,
-                                cover   : downloadUrl,
-                                timeSlot: timeSlots,
-                              };
-                              updateDoc(documentRef, value)
-                              .catch((err) => {
-                                reject(err);
-                              })
-                              .then(() => {
-                                resolve('SUCCESS');
-                                handleSuccess();
-                              });
-                            }
-                          } else {
-                            let value = {
-                              ...formValue,
-                              timeSlot: timeSlots,
-                            };
-                            updateDoc(documentRef, value)
-                            .catch((err) => {
-                              reject(err);
-                            })
-                            .then(() => {
-                              resolve('SUCCESS');
-                              handleSuccess();
-                            });
-                          }
-                        });
-                      });
-                    },
-                    async onCancel() {
-                      editFacilityForm.resetFields();
-                      setTimeSlots([]);
-                      await onExit();
-                    },
-                  });
+      title: 'Are you sure you want to edit facilities?',
+      okButtonProps: { shape: 'round', size: 'large', type: 'primary' },
+      cancelButtonProps: { shape: 'round', size: 'large' },
+      icon: null,
+      autoFocusButton: null,
+      centered: true,
+      onOk () {
+        return new Promise(async (resolve, reject) => {
+          await editFacilityForm
+          .validateFields()
+          .then(async (formValue) => {
+            const documentRef = doc(db, 'facilities', value?.id);
+            if (pickedImage) {
+              let file = imageFile;
+              const storage = getStorage();
+              const storageRef = ref(storage, 'facilities_image/' + file.name);
+              const snapshot = uploadBytes(storageRef, file);
+              if (snapshot) {
+                const downloadUrl = getDownloadURL(snapshot.ref);
+                let value = {
+                  ...formValue,
+                  cover: downloadUrl,
+                  timeSlot: timeSlots,
+                };
+                updateDoc(documentRef, value)
+                .catch((err) => {
+                  reject(err);
+                })
+                .then(() => {
+                  resolve('SUCCESS');
+                  handleSuccess();
+                });
+              }
+            } else {
+              let value = {
+                ...formValue,
+                timeSlot: timeSlots,
+              };
+              updateDoc(documentRef, value)
+              .catch((err) => {
+                reject(err);
+              })
+              .then(() => {
+                resolve('SUCCESS');
+                handleSuccess();
+              });
+            }
+          });
+        });
+      },
+      async onCancel () {
+        editFacilityForm.resetFields();
+        setTimeSlots([]);
+        await onExit();
+      },
+    });
     
   };
   
@@ -110,9 +110,9 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
   const hours = [];
   for (let i = 0; i < 24; i++) {
     hours.push(
-        <Select.Option key={i.toString()} value={i}>
-          {i.toString().length < 2 ? '0' + i.toString() : i.toString()}:00
-        </Select.Option>,
+      <Select.Option key={i.toString()} value={i}>
+        {i.toString().length < 2 ? '0' + i.toString() : i.toString()}:00
+      </Select.Option>,
     );
   }
   
@@ -128,10 +128,10 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
                       : et + ':00';
     
     let slotData = {
-      key      : uuidv4(),
+      key: uuidv4(),
       startTime: value?.daily_start,
-      endTime  : value?.daily_start + 1,
-      slot     : startSlotName + '-' + endSlotName,
+      endTime: value?.daily_start + 1,
+      slot: startSlotName + '-' + endSlotName,
     };
     slots.push(slotData);
     setTimeSlots(slots);
@@ -165,257 +165,258 @@ const EditFacilityModal = ({ visible, value, onExit }) => {
     setTimeSlots(totalSlot);
   };
   
-  const initialFormValue = {
-    name        : value?.name,
-    detail      : value?.detail,
-    description : value?.description,
-    accommodates: value?.accommodates,
-    rules       : value?.rules,
-    maxReserves : value?.maxReserves,
-  };
+  if (value) {
+    editFacilityForm.setFieldsValue({
+      name: value?.name,
+      detail: value?.detail,
+      description: value?.description,
+      accommodates: value?.accommodates,
+      rules: value?.rules,
+      maxReserves: value?.maxReserves,
+    });
+  }
   
   return (
-      <Modal key={value?.id}
-             visible={visible}
-             centered
-             onCancel={() => onExit()}
-             title={'Edit Facility'}
-             footer={[
-               <Button type='primary'
-                       size='large'
-                       shape='round'
-                       onClick={() => submitHandler()}
-               >
-                 Save
-               </Button>,
-             ]}
-      >
-        <Form form={editFacilityForm} layout={'vertical'} initialValues={initialFormValue}>
-          <Form.Item label='Room Name' name='name'
-                     rules={[{ required: true, message: 'Facility name is required' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label='Room Name Detail' name='detail'
-                     rules={[{ required: true, message: 'Facility detail is required' }]}>
-            <Input />
-          </Form.Item>
-          
-          <Form.Item label='Description' name='description'
-                     rules={[
-                       {
-                         required: true, message: 'Facility description is required',
-                       },
-                     ]}>
-            <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
-          </Form.Item>
-          <Form.Item label='Daily Hours'>
-            <div style={{
-              width         : '100%',
-              flexDirection : 'row',
-              marginBottom  : 20,
-              display       : 'flex',
-              justifyContent: 'space-between',
-              alignItems    : 'center',
-            }}>
-              From
-              <Select style={{ width: 180 }}
-                      value={dailyStart ?? value?.daily_start}
-                      initialValues={value ?? value?.daily_start}
-                      onChange={setDailyStart}
-              >
-                {hours}
-              </Select>
-              To
-              <Select style={{ width: 180 }}
-                      value={dailyStop ?? value?.daily_stop}
-                      initialValues={value ?? value?.daily_stop}
-                      onChange={setDailyStop}
-              >
-                {hours}
-              </Select>
-            </div>
-          </Form.Item>
-          <Form.Item label='Image'>
-            <div>
-              {img ? (
-                  <>
-                    <img className='facility-image'
-                         src={value ? value.cover : null}
-                         alt='bg'
-                    />
-                    <Button icon={<DeleteOutlined />}
-                            type='link'
-                            style={{ float: 'right' }}
-                            onClick={() => setImg(false)}
-                    >
-                      Change Image
-                    </Button>
-                  </>
-              ) : (
-                   <>
-                     {!pickedImage ? (
-                         <>
-                           <label htmlFor='input'>
-                             <div className='facility-image'>
-                               <img src={imgIcon}
-                                    alt='bg'
-                                    style={{ marginTop: 80 }}
-                               />
-                               <p>Click to upload image</p>
-                             </div>
-                           </label>
-                           <input type='file'
-                                  id='input'
-                                  accept='image/*'
-                                  onChange={selectImage}
-                                  onClick={(event) => {
-                                    event.target.value = null;
-                                  }}
-                                  style={{
-                                    display: 'none',
-                                    float  : 'left',
-                                  }}
-                           />
-                           <p style={{ color: 'red' }}>
-                             * Please upload image
-                           </p>
-                         </>
-                     ) : (
-                          <div>
-                            <img className='facility-image'
-                                 src={pickedImage}
-                                 alt='picked'
-                            />
-                            <Button type='link'
-                                    icon={<DeleteOutlined />}
-                                    onClick={() => setPickedImage(null)}
-                                    style={{ float: 'right' }}
-                            >
-                              Change image
-                            </Button>
-                          </div>
-                      )}
-                   </>
-               )}
-            </div>
-          </Form.Item>
-          <div style={{ marginBottom: 10 }}>Accommodates</div>
-          <Form.List name='accommodates'>
-            {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key}
-                             style={{ display: 'inline' }}
-                             align='baseline'
-                      >
-                        <Form.Item name={[name]}{...restField}
-                                   rules={[
-                                     {
-                                       required: true,
-                                       message : 'Missing accommodate item',
-                                     },
-                                   ]}
-                        >
-                          <Input placeholder='accommodate item'
-                                 suffix={
-                                   <MinusCircleOutlined
-                                       onClick={() => remove(name)} />
-                                 } />
-                        </Form.Item>
-                      </Space>
-                  ))}
-                  <Form.Item>
-                    <Button type='dashed' onClick={() => add()} block
-                            icon={<PlusOutlined />}>
-                      Add accommodates
-                    </Button>
-                  </Form.Item>
-                </>
-            )}
-          </Form.List>
-          <div style={{ marginBottom: 10 }}>Rules</div>
-          <Form.List name='rules'>
-            {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key}
-                             style={{ display: 'inline' }}
-                             align='baseline'
-                      >
-                        <Form.Item name={[name]} {...restField}
-                                   rules={[
-                                     {
-                                       required: true,
-                                       message : 'Missing rule item',
-                                     },
-                                   ]}
-                        >
-                          <Input placeholder='rule item' suffix={
-                            <MinusCircleOutlined onClick={() => remove(name)} />
-                          } />
-                        </Form.Item>
-                      </Space>
-                  ))}
-                  <Form.Item>
-                    <Button type='dashed' onClick={() => add()} block
-                            icon={<PlusOutlined />}>
-                      Add rules
-                    </Button>
-                  </Form.Item>
-                </>
-            )}
-          </Form.List>
-          <Form.Item label='Reserves per Time-Slot' name='maxReserves'
-                     rules={[{ required: true, message: 'Max reserves is required' }]}>
-            <InputNumber initialValues={1}
-                         min={1}
-                         style={{ width: '100%', borderRadius: 20 }}
-            />
-          </Form.Item>
-          <div style={{ marginBottom: 10 }}>Time Slot
-            <div style={{ color: 'red' }}>*Time-Slot mustn't duplicate or empty</div>
+    <Modal key={value?.id}
+           visible={visible}
+           centered
+           onCancel={() => onExit()}
+           title={'Edit Facility'}
+           footer={[
+             <Button type='primary'
+                     size='large'
+                     shape='round'
+                     onClick={() => submitHandler()}
+             >
+               Save
+             </Button>,
+           ]}
+    >
+      <Form form={editFacilityForm} layout={'vertical'}>
+        <Form.Item label='Room Name' name='name'
+                   rules={[{ required: true, message: 'Facility name is required' }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label='Room Name Detail' name='detail'
+                   rules={[{ required: true, message: 'Facility detail is required' }]}>
+          <Input />
+        </Form.Item>
+        
+        <Form.Item label='Description' name='description'
+                   rules={[
+                     {
+                       required: true, message: 'Facility description is required',
+                     },
+                   ]}>
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
+        </Form.Item>
+        <Form.Item label='Daily Hours'>
+          <div style={{
+            width: '100%',
+            flexDirection: 'row',
+            marginBottom: 20,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            From
+            <Select style={{ width: 180 }}
+                    value={dailyStart ?? value?.daily_start}
+                    initialValues={value ?? value?.daily_start}
+                    onChange={setDailyStart}
+            >
+              {hours}
+            </Select>
+            To
+            <Select style={{ width: 180 }}
+                    value={dailyStop ?? value?.daily_stop}
+                    initialValues={value ?? value?.daily_stop}
+                    onChange={setDailyStop}
+            >
+              {hours}
+            </Select>
           </div>
-          {timeSlots.length > 0
-           ? timeSlots.map((timeSlot, idx) => (
-                  <div key={timeSlot.key}
-                       style={{
-                         width         : '100%',
-                         flexDirection : 'row',
-                         marginBottom  : 20,
-                         display       : 'flex',
-                         justifyContent: 'space-between',
-                         alignItems    : 'center',
-                       }}>
-                    {`Slot ${idx + 1} :`}
-                    <Select style={{ width: 180 }}
-                            value={timeSlot.startTime}
-                            initialValues={timeSlot.startTime}
-                            onChange={(v) => handleSlotChange(idx, 0, v)}
-                    >
-                      {hours}
-                    </Select>to
-                    <Select style={{ width: 180 }}
-                            value={timeSlot.endTime}
-                            initialValues={timeSlot.endTime}
-                            onChange={(v) => handleSlotChange(idx, 1, v)}
-                    >
-                      {hours}
-                    </Select>
-                    <MinusCircleOutlined onClick={() => handleRemoveSlot(idx)} />
-                  </div>
-              ))
-           : null}
-          <Button type='dashed'
-                  onClick={() => createTimeSlot()}
-                  block
-                  disabled={timeSlots.length <= 0}
-                  icon={
-                    <PlusOutlined />
-                  }>
-            Add slot
-          </Button>
-        </Form>
-      </Modal>
+        </Form.Item>
+        <Form.Item label='Image'>
+          <div>
+            {img ? (
+              <>
+                <img className='facility-image'
+                     src={value ? value.cover : null}
+                     alt='bg'
+                />
+                <Button icon={<DeleteOutlined />}
+                        type='link'
+                        style={{ float: 'right' }}
+                        onClick={() => setImg(false)}
+                >
+                  Change Image
+                </Button>
+              </>
+            ) : (
+               <>
+                 {!pickedImage ? (
+                   <>
+                     <label htmlFor='input'>
+                       <div className='facility-image'>
+                         <img src={imgIcon}
+                              alt='bg'
+                              style={{ marginTop: 80 }}
+                         />
+                         <p>Click to upload image</p>
+                       </div>
+                     </label>
+                     <input type='file'
+                            id='input'
+                            accept='image/*'
+                            onChange={selectImage}
+                            onClick={(event) => {
+                              event.target.value = null;
+                            }}
+                            style={{
+                              display: 'none',
+                              float: 'left',
+                            }}
+                     />
+                     <p style={{ color: 'red' }}>
+                       * Please upload image
+                     </p>
+                   </>
+                 ) : (
+                    <div>
+                      <img className='facility-image'
+                           src={pickedImage}
+                           alt='picked'
+                      />
+                      <Button type='link'
+                              icon={<DeleteOutlined />}
+                              onClick={() => setPickedImage(null)}
+                              style={{ float: 'right' }}
+                      >
+                        Change image
+                      </Button>
+                    </div>
+                  )}
+               </>
+             )}
+          </div>
+        </Form.Item>
+        <div style={{ marginBottom: 10 }}>Accommodates</div>
+        <Form.List name='accommodates'>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key}
+                       style={{ display: 'inline' }}
+                       align='baseline'
+                >
+                  <Form.Item name={[name]}{...restField}
+                             rules={[
+                               {
+                                 required: true,
+                                 message: 'Missing accommodate item',
+                               },
+                             ]}
+                  >
+                    <Input placeholder='accommodate item'
+                           suffix={
+                             <MinusCircleOutlined
+                               onClick={() => remove(name)} />
+                           } />
+                  </Form.Item>
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type='dashed' onClick={() => add()} block
+                        icon={<PlusOutlined />}>
+                  Add accommodates
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+        <div style={{ marginBottom: 10 }}>Rules</div>
+        <Form.List name='rules'>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key}
+                       style={{ display: 'inline' }}
+                       align='baseline'
+                >
+                  <Form.Item name={[name]} {...restField}
+                             rules={[
+                               {
+                                 required: true,
+                                 message: 'Missing rule item',
+                               },
+                             ]}
+                  >
+                    <Input placeholder='rule item' suffix={
+                      <MinusCircleOutlined onClick={() => remove(name)} />
+                    } />
+                  </Form.Item>
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type='dashed' onClick={() => add()} block
+                        icon={<PlusOutlined />}>
+                  Add rules
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+        <Form.Item label='Reserves per Time-Slot' name='maxReserves'
+                   rules={[{ required: true, message: 'Max reserves is required' }]}>
+          <InputNumber initialValues={1}
+                       min={1}
+                       style={{ width: '100%', borderRadius: 20 }}
+          />
+        </Form.Item>
+        <div style={{ marginBottom: 10 }}>Time Slot
+          <div style={{ color: 'red' }}>*Time-Slot mustn't duplicate or empty</div>
+        </div>
+        {timeSlots.length > 0
+         ? timeSlots.map((timeSlot, idx) => (
+            <div key={timeSlot.key}
+                 style={{
+                   width: '100%',
+                   flexDirection: 'row',
+                   marginBottom: 20,
+                   display: 'flex',
+                   justifyContent: 'space-between',
+                   alignItems: 'center',
+                 }}>
+              {`Slot ${idx + 1} :`}
+              <Select style={{ width: 180 }}
+                      value={timeSlot.startTime}
+                      initialValues={timeSlot.startTime}
+                      onChange={(v) => handleSlotChange(idx, 0, v)}
+              >
+                {hours}
+              </Select>to
+              <Select style={{ width: 180 }}
+                      value={timeSlot.endTime}
+                      initialValues={timeSlot.endTime}
+                      onChange={(v) => handleSlotChange(idx, 1, v)}
+              >
+                {hours}
+              </Select>
+              <MinusCircleOutlined onClick={() => handleRemoveSlot(idx)} />
+            </div>
+          ))
+         : null}
+        <Button type='dashed'
+                onClick={() => createTimeSlot()}
+                block
+                icon={
+                  <PlusOutlined />
+                }>
+          Add slot
+        </Button>
+      </Form>
+    </Modal>
   );
 };
 

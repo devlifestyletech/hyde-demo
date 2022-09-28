@@ -40,19 +40,19 @@ const CreateReservationModal = ({ visible, id, onExit }) => {
     createReservationForm.validateFields().then(async (v) => {
       let formValue = {
         ...v,
-        bookedBy          : 'Juristic',
-        bookedDate        : createTimeStamp(selectSlot?.startTime),
-        facilityName      : facility?.name,
-        date              : format(new Date(selectedDate), 'yyyy-MM-dd'),
-        note              : v.note ? v.note : '',
-        topic             : v.topic ? v.topic : '',
-        facilityId        : facility.id,
-        facilityCover     : facility.cover,
+        bookedBy: 'Juristic',
+        bookedDate: createTimeStamp(selectSlot?.startTime),
+        facilityName: facility?.name,
+        date: format(new Date(selectedDate), 'yyyy-MM-dd'),
+        note: v.note ? v.note : '',
+        topic: v.topic ? v.topic : '',
+        facilityId: facility.id,
+        facilityCover: facility.cover,
         statusNotification: false,
-        userFullName      : selectedResident.fullname,
-        userTel           : selectedResident.tel,
-        status            : 0,
-        slot              : selectSlot?.slot,
+        userFullName: selectedResident.fullname,
+        userTel: selectedResident.tel,
+        status: 0,
+        slot: selectSlot?.slot,
       };
       const result = await addDoc(collection(db, 'reserves'), formValue);
       if (result) {
@@ -74,11 +74,11 @@ const CreateReservationModal = ({ visible, id, onExit }) => {
     
     //* For filter only this block was improve by querySnapshot or use this function properly.
     const countReserve = dateReserves.reduce(
-        (prev, curr) => ({
-          ...prev,
-          [curr.slot]: (prev[curr.slot] || 0) + 1,
-        }),
-        {},
+      (prev, curr) => ({
+        ...prev,
+        [curr.slot]: (prev[curr.slot] || 0) + 1,
+      }),
+      {},
     );
     setCountReserves(countReserve);
   };
@@ -101,106 +101,106 @@ const CreateReservationModal = ({ visible, id, onExit }) => {
   };
   
   return (
-      <div>
-        <QrModal data={handleId}
-                 visible={qrModalVisible}
-                 onCancel={() => setQrModalVisible(prevState => !prevState)} />
-        <Modal visible={visible}
-               centered title={'Create Reservation'}
-               footer={[
-                 <Button size='large'
-                         shape='round'
-                         type='primary'
-                         onClick={(e) =>
-                             handleCreateReservation(e)
-                         }
-                 >
-                   Create
-                 </Button>,
-               ]}
-               onCancel={() => {
-                 createReservationForm.resetFields();
-                 onExit();
-               }}>
-          <Form form={createReservationForm}
-                layout={'vertical'}>
-            <Form.Item label={'Facility'}>
-              <div className={'input-tel'}>{facility?.name}</div>
-            </Form.Item>
-            <Form.Item label={'Booked By'}>
-              <div className={'input-tel'}>{'Juristic'}</div>
-            </Form.Item>
-            <Form.Item label={'Resident'}
-                       name={'userId'}
-                       rules={[
-                         {
-                           required: true,
-                           message : 'Please pick a resident!',
-                         },
-                       ]}>
-              <Select showSearch
-                      onChange={onChange}
-                      placeholder='Select a person'
-                      optionFilterProp='children'
-                      filterOption={(input, option) => option.children.toLowerCase()
-                                                             .includes(input.toLowerCase())}
-              >
-                {residents
-                 ? residents.map(
-                        (user) => (
-                            <Select.Option key={user.id}
-                                           value={user.fullName}
-                            >
-                              {user.fullname}
-                            </Select.Option>))
-                 : null}
-              </Select>
-            </Form.Item>
-            <Form.Item name={'topic'}
-                       label={'Topic'}>
-              <Input initialvalues={''} />
-            </Form.Item>
-            <Form.Item name={'note'}
-                       label={'Note'}>
-              <Input.TextArea allowClear={true} initialvalues={''} />
-            </Form.Item>
-            <Form.Item name={'date'}
-                       label={'Date'}
-                       rules={[
-                         {
-                           required: true,
-                           message : 'Please pick a date!',
-                         },
-                       ]}>
-              <Calendar fullscreen={false}
-                        onChange={(v) => onSelectDate(v)} />
-            </Form.Item>
-            <Form.Item name='slot'
-                       label='Pick a slot'
-                       rules={[
-                         {
-                           required: true,
-                           message : 'Please pick a slot!',
-                         },
-                       ]}
+    <div>
+      <QrModal data={handleId}
+               visible={qrModalVisible}
+               onCancel={() => setQrModalVisible(prevState => !prevState)} />
+      <Modal visible={visible}
+             centered title={'Create Reservation'}
+             footer={[
+               <Button size='large'
+                       shape='round'
+                       type='primary'
+                       onClick={(e) =>
+                         handleCreateReservation(e)
+                       }
+               >
+                 Create
+               </Button>,
+             ]}
+             onCancel={() => {
+               createReservationForm.resetFields();
+               onExit();
+             }}>
+        <Form form={createReservationForm}
+              layout={'vertical'}>
+          <Form.Item label={'Facility'}>
+            <div className={'input-tel'}>{facility?.name}</div>
+          </Form.Item>
+          <Form.Item label={'Booked By'}>
+            <div className={'input-tel'}>{'Juristic'}</div>
+          </Form.Item>
+          <Form.Item label={'Resident'}
+                     name={'userId'}
+                     rules={[
+                       {
+                         required: true,
+                         message: 'Please pick a resident!',
+                       },
+                     ]}>
+            <Select showSearch
+                    onChange={onChange}
+                    placeholder='Select a person'
+                    optionFilterProp='children'
+                    filterOption={(input, option) => option.children.toLowerCase()
+                    .includes(input.toLowerCase())}
             >
-              <Radio.Group onChange={(e) => pressSlotEvent(e)}>
-                {facility ? facility.timeSlot.map(slot =>
-                                                      (<Radio.Button value={slot.key}
-                                                                     disabled={
-                                                                         countReserves[slot.slot] ===
-                                                                         facility.maxReserves ||
-                                                                         differenceInMinutes(
-                                                                             createTimeStamp(
-                                                                                 slot.endTime),
-                                                                             new Date()) < 0
-                                                                     }>{slot.slot}</Radio.Button>),
-                ) : null}
-              </Radio.Group>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
+              {residents
+               ? residents.map(
+                  (user) => (
+                    <Select.Option key={user.id}
+                                   value={user.fullName}
+                    >
+                      {user.fullname}
+                    </Select.Option>))
+               : null}
+            </Select>
+          </Form.Item>
+          <Form.Item name={'topic'}
+                     label={'Topic'}>
+            <Input initialvalues={''} />
+          </Form.Item>
+          <Form.Item name={'note'}
+                     label={'Note'}>
+            <Input.TextArea allowClear={true} initialvalues={''} />
+          </Form.Item>
+          <Form.Item name={'date'}
+                     label={'Date'}
+                     rules={[
+                       {
+                         required: true,
+                         message: 'Please pick a date!',
+                       },
+                     ]}>
+            <Calendar fullscreen={false}
+                      onChange={(v) => onSelectDate(v)} />
+          </Form.Item>
+          <Form.Item name='slot'
+                     label='Pick a slot'
+                     rules={[
+                       {
+                         required: true,
+                         message: 'Please pick a slot!',
+                       },
+                     ]}
+          >
+            <Radio.Group onChange={(e) => pressSlotEvent(e)}>
+              {facility ? facility?.timeSlot?.map(slot =>
+                (<Radio.Button value={slot.key}
+                               disabled={
+                                 countReserves[slot.slot] ===
+                                 facility.maxReserves ||
+                                 differenceInMinutes(
+                                   createTimeStamp(
+                                     slot.endTime),
+                                   new Date()) < 0
+                               }>{slot.slot}</Radio.Button>),
+              ) : null}
+            </Radio.Group>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
   );
 };
 
