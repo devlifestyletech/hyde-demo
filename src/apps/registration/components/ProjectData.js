@@ -102,7 +102,14 @@ export default function ProjectData({ projectName, search = '' }) {
           <div className="zone-name">{projectName}</div>
           {floors ? (
             Object.keys(floors)
-              .sort()
+              .sort((a, b) => {
+                let tempA = a;
+                let tempB = b;
+                if(a === '12A') tempA = '13'
+                if(parseInt(tempA) > parseInt(tempB)) return 1;
+                if(parseInt(tempA) < parseInt(tempB)) return -1;
+                return 0;
+              })
               .map(
                 (floor, index) =>
                   index >= minIndex &&
