@@ -20,7 +20,6 @@ export function AuthProvider({ children }) {
   const signin = async () => {
     const from = location.state?.from || '/dashboard/summary';
     setIsSignIn(true);
-    console.log('from: ', from);
     navigate(from, { replace: true });
   };
 

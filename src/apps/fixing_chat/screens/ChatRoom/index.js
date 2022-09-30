@@ -1,11 +1,11 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // import styled from "styled-components";
-import { socket } from '../../../../services/web-sockets';
-import Heading from '../../../../components/header';
+import { socket } from '../../../../services/webSocketService';
+import Heading from '../../../../components/Header';
 import Header from '../../Header';
-import Messages from '../../Messages';
+import Messages from '../../../../components/Messages';
 import List from '../../List';
 import ReportDetail from '../Report';
 import {
@@ -20,9 +20,10 @@ import { Input, Spin, Tabs, Row } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-const session = encryptStorage.getItem('user_session');
 
 function ChatRoom(props) {
+  const session = encryptStorage.getItem('user_session');
+  const allInput = useRef(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
@@ -45,9 +46,12 @@ function ChatRoom(props) {
     if (sender_name && room) {
       let sender_id = session.user._id;
       let sender_name = session.user.fullname;
+      let sender_role = session.user.role.type;
+      console.log('Role', session.user.role.type);
       setChatData({
         sender_id: sender_id,
         sender_name: sender_name,
+        sender_role: sender_role,
         room: room,
       });
 
@@ -55,8 +59,8 @@ function ChatRoom(props) {
         console.log('JoinData', data);
       });
       if (messages.length === 0) {
-        setLoading(true);
-        fetchData();
+        // setLoading(true);
+        // fetchData();
       }
     }
   };
@@ -66,7 +70,8 @@ function ChatRoom(props) {
       if (room) {
         await axios
           .get(
-            process.env.REACT_APP_API_URL + '/chats?_where[room]=' + room,
+            process.env.REACT_APP_API_URL +
+              `/chats?_where[room]=${room}&_sort=time`,
             headers
           )
           .then((res) => {
@@ -80,9 +85,11 @@ function ChatRoom(props) {
                   type: data.type,
                   sender_id: data.sender_id,
                   sender_name: data.sender_name,
+                  users_read: data.users_read,
                 },
               ]);
             });
+            // setMessages(res.data);
             setLoading(false);
           })
           .catch((err) => {
@@ -96,10 +103,19 @@ function ChatRoom(props) {
 
   useEffect(() => {
     connectChat();
+    socket.off('message');
   }, [room]);
 
+  useEffect(() => {
+    socket.on('message', (newMessage) => {
+      if (newMessage.room === room) {
+        console.log('newMessage', newMessage);
+        setMessages((msgs) => [...msgs, newMessage]);
+      }
+    });
+  }, [socket, room]);
+
   const handleCallback = (childData) => {
-    // console.log('ReportId', childData.split(',')[1].split('!')[0]);
     if (room !== childData.split(',')[1]) {
       setMessages([]);
       setRoom(childData.split(',')[1]);
@@ -107,32 +123,18 @@ function ChatRoom(props) {
       setFixingReportId(childData.split(',')[1].split('!')[0]);
     }
   };
+  const handleSetMessage = (data) => {
+    console.log('room', room);
+    console.log('data', data);
+    setMessages(data.mess);
+  };
 
   const getAvatar = (avatar) => {
-    // console.log('room', avatar);
     setUserAvatar(avatar);
   };
   const getStatus = (status) => {
-    // console.log('status', status);
     setFixingStatus(status);
   };
-
-  const handleDisconnect = () => {
-    setMessages([]);
-    setRoom('');
-  };
-
-  useEffect(() => {
-    socket.off('message');
-  }, [room]);
-
-  useEffect(() => {
-    socket.on('message', (newMessage, error) => {
-      if (newMessage.room === room) {
-        setMessages((msgs) => [...msgs, newMessage]);
-      }
-    });
-  }, [socket, room]);
 
   const handleChange = (e) => {
     socket.emit('typing', {
@@ -143,6 +145,7 @@ function ChatRoom(props) {
   };
 
   const handleClick = (e) => {
+    console.log('RoomSend', room);
     if (room !== '') {
       if (message) sendMessage(message);
     } else {
@@ -151,7 +154,6 @@ function ChatRoom(props) {
   };
 
   const deleteHandle = () => {
-    // setPickedImage(null);
     setImageFile(null);
   };
 
@@ -163,46 +165,58 @@ function ChatRoom(props) {
     if (imageFile) uploadImg();
   }, [imageFile]);
 
+  const handleClickOutside = (e) => {
+    if (!allInput.current.contains(e.target)) {
+      console.log('Click outside.', room);
+    } else {
+      console.log('RoomInside', room);
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
   const uploadImg = async () => {
     setOnSend(true);
-    // console.log('File', imageFile);
     let dataImage = new FormData();
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
       .then((res) => {
-        // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
-        // console.log('type',imageFile.type.split('/')[0])
-
-        imageFile.type.split('/')[0]==='image'?
-        socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'image',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        ):socket.emit(
-          'sendMessage',
-          {
-            userData: chatData,
-            type: 'file',
-            message: imageUrl,
-            time: new Date().toISOString(),
-          },
-          (error) => {
-            if (error) {
-              alert(error);
-            }
-          }
-        )
+        imageFile.type.split('/')[0] === 'image'
+          ? socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'image',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            )
+          : socket.emit(
+              'sendMessage',
+              {
+                userData: chatData,
+                type: 'file',
+                message: imageUrl,
+                time: new Date().toISOString(),
+              },
+              (error) => {
+                if (error) {
+                  alert(error);
+                }
+              }
+            );
         deleteHandle();
         setOnSend(false);
       })
@@ -270,23 +284,28 @@ function ChatRoom(props) {
         <ChatContainer>
           <StyledContainer>
             <List
+              handleSetMessage={handleSetMessage}
               handleCallback={handleCallback}
               getAvatar={getAvatar}
               getStatus={getStatus}
               searchTag={searchTag}
             />
-            <ChatBox>
+            <ChatBox ref={allInput}>
               <Header
                 avatar={userAvatar}
                 status={fixingStatus}
                 username={receiver}
                 room={room}
-                handleDisconnect={handleDisconnect}
               />
               {loading ? (
                 <Loading />
               ) : (
-                <Messages room={room} messages={messages} />
+                <Messages
+                  room={room}
+                  messages={messages}
+                  userId={session.user._id}
+                  userRole={session.user.role.type}
+                />
               )}
               <InputBar>
                 {room !== '' && !onSend ? (

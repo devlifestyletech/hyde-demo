@@ -3,7 +3,7 @@ import { Form, Input, Modal, Button, Space, Select, notification } from "antd";
 import {
   addressCustomer,
   postdataRescrpt,
-} from "../../services/API/payment_api";
+} from "../../services/API/PaymentAPI";
 import Momnent from "moment";
 import { getBillingPayment } from "../../services/thunk-action/payment_thunk";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -99,7 +99,7 @@ const ModalCreateBill = () => {
           notification["success"]({
             duration: 2,
             message: "CreateBillingPayment",
-            description: "Create billing payment successfully.",
+            description: "Create billing payment successful.",
             style: { borderRadius: "25px" },
           });
           form.resetFields();

@@ -1,0 +1,58 @@
+/* Facility Card */
+.facility-card .ant-card {
+    border-radius: 20px !important;
+    margin: 20px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 390px;
+}
+
+.facility-title {
+    font-size: 22px;
+    font-weight: bolder;
+    float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.facilities-edit {
+    float: right;
+}
+
+.facility-detail {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.facility-limit {
+    font-size: 16px;
+    marginTop: 10px;
+    /*float: right;*/
+}
+
+.facility-image {
+    width: 100%;
+    height: 250px;
+    border: 1px solid #dddddd;
+    color: #adadad;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.facility-cover {
+    border-radius: 20px 20px 0px 0px !important;
+    height: 250px !important;
+}
+
+.btn-create {
+    float: right;
+    margin-bottom: 20px;
+}

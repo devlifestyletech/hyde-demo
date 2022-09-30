@@ -1,24 +1,28 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
-import Heading from '../../components/header';
+import Heading from '../../components/Header';
 import {
-	AutoComplete,
-	Button,
-	Col,
-	Divider,
-	Form,
-	Image,
-	Input,
-	message,
-	Modal,
-	Row,
-	Select,
-	Spin,
-	Table,
-	Tabs,
+  AutoComplete,
+  Button,
+  Col,
+  Divider,
+  Form,
+  Image,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Spin,
+  Table,
+  Tabs,
 } from 'antd';
-import { DeleteOutlined, PictureOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  PictureOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 
 import editIcon from './assets/icons/edit.svg';
 import trashIcon from './assets/icons/trash.svg';
@@ -28,23 +32,31 @@ import './style/nearbyStyle.css';
 
 import axios from 'axios';
 
-import { GoogleMap, InfoWindow, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
+import {
+  GoogleMap,
+  InfoWindow,
+  Marker,
+  withGoogleMap,
+  withScriptjs,
+} from 'react-google-maps';
 
 import Geocode from 'react-geocode';
 
 import { useLoadScript } from '@react-google-maps/api';
 
-import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from 'use-places-autocomplete';
 
 import { encryptStorage } from '../../utils/encryptStorage';
-
-const session = encryptStorage.getItem('user_session');
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_KEY);
 Geocode.setLanguage('th');
 const libraries = ['places'];
 
 function NearbyService() {
+  const session = encryptStorage.getItem('user_session');
   const URLreScrpit = process.env.REACT_APP_API_URL + '/nearby-recommends/';
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   const { isLoaded, loadError } = useLoadScript({
@@ -279,7 +291,6 @@ function NearbyService() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-        return;
       } else {
         if (pickedImage) {
           setImageBorder('inputImageNB');
@@ -737,7 +748,6 @@ function NearbyService() {
     useEffect(() => {
       if (isFirstRun.current) {
         isFirstRun.current = false;
-        return;
       } else {
         if (pickedImage) {
           console.log('inputImageNB');

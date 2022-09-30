@@ -1,16 +1,8 @@
 import React from 'react';
-import {
-  Input,
-  Modal,
-  notification,
-  Button,
-  Radio,
-  Col,
-  Row,
-} from 'antd';
+import {Input,Modal,notification,Button,Radio,Col,Row} from 'antd';
 import bill from '../../assets/images/bill.jpg';
-import { bankNamecode } from '../../services/bankNamecode';
-import { updateRescrpt, rejectRescrpt } from '../../services/API/payment_api';
+import { BankNamecode } from '../../services/BankNamecode';
+import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -26,8 +18,7 @@ const ModalReject = () => {
   };
   const rejectCommentaData = [
     'Invalid uploaded image, Please try again.',
-    'Bill payment slip not match the uploaded image , Please try again.',
-    'other',
+    'Bill payment slip not match the uploaded image , Please try again.'
   ];
 
   const [value, setValue] = React.useState(null);
@@ -64,7 +55,7 @@ const ModalReject = () => {
       notification['warning']({
         duration: 2,
         message: 'RejectBillingPayment',
-        description: 'Reject billing payment successfully.',
+        description: 'Reject billing payment successful.',
         style: { borderRadius: '25px' },
       });
       setvisible(!visible);
@@ -84,7 +75,7 @@ const ModalReject = () => {
   return (
     <div>
       <Modal
-        title={'Create Payment Receipt'}
+        title={'Payment annotation'}
         visible={statusModalReject}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -98,7 +89,7 @@ const ModalReject = () => {
             OK
           </Button>,
         ]}
-        width={'50%'}
+        width='900px'
       >
         {dataBillingAllApprove !== null
           ? dataBillingAllApprove.map((e, i) => {
@@ -188,13 +179,13 @@ const ModalReject = () => {
                             : null}
                           <div style={{ paddingTop: 20 }}>
                             <h3>Annotation</h3>
-                           
+
                             <TextArea
                              style={{ borderRadius: '25px' }}
                               rows={3}
                              disabled={true}
         placeholder={e?.annotation_payment}
-       
+
       ></TextArea>
                           </div>
 
@@ -230,7 +221,7 @@ const ModalReject = () => {
                                     style={{ borderRadius: '25px' }}
                                     placeholder="No data form SCB"
                                     disabled={true}
-                                    value={bankNamecode(e?.sendingBankCode)}
+                                    value={BankNamecode(e?.sendingBankCode)}
                                   />
                                 </div>
                                 <div style={{ paddingTop: 10 }}>
@@ -263,7 +254,7 @@ const ModalReject = () => {
                             <div className="container-fluid">
                               <img
                                 src={e.imageURL !== null ? e.imageURL : bill}
-                                style={{ width: '50%', margin: '30%' }}
+                                style={{ width: '300px', height:'500px' ,marginLeft: '70px' ,marginTop:'200px'}}
                               />
                             </div>
                           </div>

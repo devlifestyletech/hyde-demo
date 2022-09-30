@@ -6,18 +6,19 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import editIcon from '../assets/icons/edit.svg';
 import trashIcon from '../assets/icons/trash.svg';
 import EditModal from './EditModal';
-import authService from '../../../services/auth.service';
+import authService from '../../../services/authServices';
 
-export default function TableRender({ data, key, onEvent }) {
-  const [user, setUser] = useState();
+export default function TableRender({ data, key, onEvent, loading }) {
+  const [user, setUser] = useState(null);
   const [EditModalVisibility, setEditModalVisibility] = useState(false);
   const [handleId, setHandleId] = useState(null);
 
   useEffect(() => {
     (async () => {
-      authService.getUserData(handleId).then((res) => {
-        setUser(res.data);
-      });
+      const { data } = await authService.getUserData(handleId);
+      if (data) {
+        setUser(data);
+      }
     })();
   }, [handleId]);
 
@@ -27,22 +28,23 @@ export default function TableRender({ data, key, onEvent }) {
   };
 
   function handleClickDelete(id) {
-    Modal.confirm({
+    return Modal.confirm({
+      autoFocusButton: null,
       maskStyle: {
         borderRadius: 20,
       },
       title: 'Do you Want to delete this user?',
       icon: <ExclamationCircleOutlined />,
       content: 'This user has been deleted from the database',
-      okType: 'danger',
       okText: 'Confirm',
-      okButtonProps: { shape: 'round' },
+      okButtonProps: { shape: 'round', type: 'danger' },
       cancelButtonProps: { shape: 'round' },
-      onOk() {
-        authService.deleteUser(id).then((res) => {
+      async onOk() {
+        const deleted = await authService.deleteUser(id);
+        if (deleted) {
           message.success('Delete success!');
           onEvent();
-        });
+        }
       },
       onCancel() {
         return null;
@@ -57,28 +59,17 @@ export default function TableRender({ data, key, onEvent }) {
       key: 'idx',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'idx',
-      render: (address, idx) => <div key={idx}>{address.address_number}</div>,
-    },
-    {
-      title: 'Owner',
+      title: 'Full Name',
       dataIndex: 'fullname',
       key: 'idx',
+      render: (fullname, idx) => (
+        <div key={idx}>{fullname ? fullname : null}</div>
+      ),
     },
     {
       title: 'Nationality',
       dataIndex: 'nationality',
       key: 'idx',
-    },
-    {
-      title: 'Type',
-      dataIndex: 'project',
-      key: 'idx',
-      render: (project, idx) => (
-        <div key={idx}>{project ? project.project_type : null}</div>
-      ),
     },
     {
       title: 'Tel',
@@ -114,12 +105,20 @@ export default function TableRender({ data, key, onEvent }) {
 
   return (
     <React.Fragment key={key}>
-      <Table dataSource={data} columns={columns} />
+      <Table
+        dataSource={data}
+        columns={columns}
+        loading={loading}
+        pagination={{
+          pageSize: 50,
+        }}
+      />
       <EditModal
         visible={EditModalVisibility}
         onCancel={() => {
+          setUser(null);
           setEditModalVisibility(false);
-          setUser();
+          onEvent();
         }}
         user={user}
       />

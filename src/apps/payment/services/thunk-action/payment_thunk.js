@@ -1,5 +1,5 @@
 
-import {GetBillinglist,addressCustomer,GetCountBillinglist,getDataPaymentDashboard,getCountaddressCustomer} from '../API/payment_api'
+import {GetBillinglist,addressCustomer,GetCountBillinglist,getDataPaymentDashboard,getCountaddressCustomer} from '../API/PaymentAPI'
 import {paymentQuery,CustomerQuery,paymentDashboardQuery} from './payment_query'
 const getBillingPayment = (params) =>{
     return async (dispatch) => {
