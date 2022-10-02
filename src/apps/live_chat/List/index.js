@@ -23,7 +23,7 @@ import {  useDispatch,useSelector } from 'react-redux';
 const { Option } = Select;
 
 const List=(props)=> {
-  const {countNoticationChat} = useSelector((state) => state.FixReportActionRedux);
+  const {countNoticationChat,focuschat} = useSelector((state) => state.FixReportActionRedux);
   const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
   const [contactList, setContactList] = useState([]);
@@ -52,9 +52,30 @@ const List=(props)=> {
       session.user.role.type
     );
   }
-
-  const setRead = (room, adminId, userRole) => {
-    if (countNoticationChat>0) dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticationChat-1 })
+  const getChat= async(room) => { 
+    let countData=0
+    try {
+      
+   const resultChat=await axios.get(
+        process.env.REACT_APP_API_URL +
+          `/chats?users_read=unread&room=${room}&_sort=time:desc`,
+        headers)
+        countData=resultChat?.data?.length
+    } catch (error) {
+      
+    }
+    return countData
+   }
+  const setRead =  async(room, adminId, userRole) => {
+  const resultcountChat= await getChat(room)
+  console.log('====================================');
+  console.warn("resultcountChat:",resultcountChat);
+  console.log('====================================');
+   const countChat= countNoticationChat
+   
+    if (resultcountChat>0) dispatch(
+      ({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload:countNoticationChat-1})
+      )
     // console.log('setRead', room, adminId, userRole);
     if (adminId)
       socket.emit('setRead', {
@@ -77,7 +98,6 @@ const List=(props)=> {
           headers
         )
         .then((res) => {
-          let countNoticatonChat=countNoticationChat
           var flags = [],
             output = [],
             l = res.data.length,
@@ -85,13 +105,8 @@ const List=(props)=> {
           for (i = 0; i < l; i++) {
             if (flags[res.data[i].room]) continue;
             flags[res.data[i].room] = true;
-            if(res.data[i].users_read==="unread" )  {
-              countNoticatonChat=countNoticatonChat+1 
-            }
             output.push(res.data[i]);
           }
-           if(countNoticatonChat >0)dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticatonChat });
-          
           setData(output);
           setLoading(false);
         })
