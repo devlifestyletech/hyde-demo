@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Modal, Button, Space, Select, notification } from "antd";
 import {
-  addressCustomer,
-  postdataRescrpt,
+  GetAddressCustomer,
+  PostDataReceipt,
 } from "../../services/API/PaymentAPI";
 import Momnent from "moment";
 import { getBillingPayment } from "../../services/thunk-action/payment_thunk";
@@ -94,7 +94,7 @@ const ModalCreateBill = () => {
         }
 
         console.log("allValuesForm:", dataCreateBilling);
-        const resultPostData = await postdataRescrpt(allValuesForm);
+        const resultPostData = await PostDataReceipt(allValuesForm);
         if (resultPostData) {
           notification["success"]({
             duration: 2,

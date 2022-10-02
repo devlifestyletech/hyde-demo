@@ -1,5 +1,5 @@
 
-import {getDataEMS,addressCustomer,getCountDataEMS} from '../API/EmergencyAPI'
+import {getDataEMS,GetAddressCustomer,getCountDataEMS} from '../API/EmergencyAPI'
 import {EmergencyQuery} from './Emergency_query'
 const getEmergency = (params) =>{
     return async (dispatch) => {

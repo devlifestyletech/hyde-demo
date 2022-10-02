@@ -2,7 +2,7 @@ import React from 'react';
 import {Input,Modal,notification,Button,Radio,Col,Row} from 'antd';
 import bill from '../../assets/images/bill.jpg';
 import { BankNamecode } from '../../services/BankNamecode';
-import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
+import { UpdateReceipt, RejectReceipt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -50,7 +50,7 @@ const ModalReject = () => {
   };
   const rejcetOK = async () => {
     const result = dataBillingAllApprove;
-    const status = await rejectRescrpt(result[0], value);
+    const status = await RejectReceipt(result[0], value);
     if (status) {
       notification['warning']({
         duration: 2,

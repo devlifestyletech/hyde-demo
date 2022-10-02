@@ -1,5 +1,5 @@
 
-import {getFixReport,getCountFixReport} from '../../api/fix_report_api'
+import {GetFixReport,GetCountFixReport} from '../../api/fix_report_api'
 import {fixReportQuery} from './fix_report_query'
 const getDataFixReport = (params) =>{
     return async (dispatch) => {
@@ -7,11 +7,11 @@ const getDataFixReport = (params) =>{
         const resultParams=await fixReportQuery(params)
         if (resultParams.status) {
             dispatch({type:"CHANGE_LOADING_TABLE_FIX_REPORT"})
-            const count = await getCountFixReport(resultParams.content)
+            const count = await GetCountFixReport(resultParams.content)
             // eslint-disable-next-line no-unused-expressions
             count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE_FIX_REPORT",payload:count}):0
-            const data = await getFixReport(resultParams.content)
-            console.log("getFixReport:",resultParams.content);
+            const data = await GetFixReport(resultParams.content)
+            console.log("GetFixReport:",resultParams.content);
             if (data !== undefined) {
                 dispatch({
                     payload:data ,

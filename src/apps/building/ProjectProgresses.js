@@ -61,7 +61,7 @@ function ProjectProgresses() {
     if (resultDelete) {
       notification["success"]({
         duration: 2,
-        message: "DeleteBillingPayment",
+        message: "DeleteBillsPayment",
         description: "Delete billing payment by ID successfully.",
         style: { borderRadius: "25px" },
       });
@@ -69,7 +69,7 @@ function ProjectProgresses() {
     } else {
       notification["error"]({
         duration: 2,
-        message: "DeleteBillingPayment",
+        message: "DeleteBillsPayment",
         description: "Delete billing payment by ID failed.",
         style: { borderRadius: "25px" },
       });

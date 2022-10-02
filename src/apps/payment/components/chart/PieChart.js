@@ -1,11 +1,11 @@
 import React,{useEffect,useState} from "react";
 // import { pie_data } from "./utils/graph.data";
 import { Pie } from "@ant-design/charts";
-import{getCountBills} from '../../services/API/PaymentAPI'
+import{GetCountBills} from '../../services/API/PaymentAPI'
 export default function PieChart() {
 	const[pie_data,setPie_data]=useState(null)
 	useEffect(async () => {
-		const data=await getCountBills()
+		const data=await GetCountBills()
  await	setPie_data(data)
 	  }, []);
 	const config = {

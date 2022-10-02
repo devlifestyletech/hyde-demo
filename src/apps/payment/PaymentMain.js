@@ -7,6 +7,7 @@ import { PaymentTable } from "./components/PaymentTable";
 import {getBillingPayment,getCustomerList,} from './services/thunk-action/payment_thunk';
 import { MenuBillPayment } from './components/MenuBillPayment';
 import CreateBillModal from './components/Modal/ModalCreateBill';
+import { encryptStorage } from '../../utils/encryptStorage';
 import './style/payment.css';
 import Header from '../../components/Header';
 const { RangePicker } = DatePicker;
@@ -18,6 +19,7 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 const PaymentMain = () => {
+  const session = encryptStorage.getItem('user_session');
   const dispatch = useDispatch();
   const { status_billing, dataBilling, paramsBilling } = useSelector(
     (state) => state.PaymentActionRedux

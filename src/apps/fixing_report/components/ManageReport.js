@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {Button,Image,Input,Row,Col,DatePicker,Form,Modal,Select,Upload,notification} from 'antd';
-import { editFixReport } from '../api/fix_report_api'
+import { EditFixReport } from '../api/fix_report_api'
 import axios from 'axios';
 import moment from 'moment';
 import ImgCrop from 'antd-img-crop';
@@ -366,7 +366,7 @@ const handlerOk=async () => {
       // console.log("newvalues:",values);
       // console.log('====================================');
       // return
-      const resultPostData = await editFixReport(dataManageReport?.[0].id, newValues);
+      const resultPostData = await EditFixReport(dataManageReport?.[0].id, newValues);
       if (resultPostData) {
           notification["success"]({
               duration: 2,

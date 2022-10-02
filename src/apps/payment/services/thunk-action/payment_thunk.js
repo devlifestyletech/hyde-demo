@@ -1,5 +1,5 @@
 
-import {GetBillinglist,addressCustomer,GetCountBillinglist,getDataPaymentDashboard,getCountaddressCustomer} from '../API/PaymentAPI'
+import {GetBillsList,GetAddressCustomer,GetCountBillsList,GetDataPaymentDashboard,GetCountGetAddressCustomer} from '../API/PaymentAPI'
 import {paymentQuery,CustomerQuery,paymentDashboardQuery} from './payment_query'
 const getBillingPayment = (params) =>{
     return async (dispatch) => {
@@ -7,11 +7,11 @@ const getBillingPayment = (params) =>{
         console.log("getBillingPayment:",params);
         if (resultParams.status) {
             dispatch({type:"CHANGE_LOADING_TABLE"})
-            const count = await GetCountBillinglist(resultParams.content)
+            const count = await GetCountBillsList(resultParams.content)
             // eslint-disable-next-line no-unused-expressions
             count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE",payload:count}):0
-            const data = await GetBillinglist(resultParams.content)
-            console.log("GetBillinglist:",data);
+            const data = await GetBillsList(resultParams.content)
+            console.log("GetBillsList:",data);
             if (data !== undefined) {
 
                 dispatch({
@@ -36,8 +36,8 @@ const getCustomerList=(params) =>{
         console.log("getCustomerList:",params);
         if (resultParams.status) {
             dispatch({type:"CHANGE_LOADING_TABLE"})
-            const count = await getCountaddressCustomer(resultParams.content)
-            const data = await addressCustomer(resultParams.content)
+            const count = await GetCountGetAddressCustomer(resultParams.content)
+            const data = await GetAddressCustomer(resultParams.content)
             if (data !== undefined) {
                 // eslint-disable-next-line no-unused-expressions
                 count !== undefined ? dispatch({type:"CHANGE_DATA_SIZE",payload:count}):0
@@ -62,7 +62,7 @@ const getDashboard=(params) =>{
             const resultParams=await paymentDashboardQuery(params)
                 // eslint-disable-next-line no-unused-expressions
                 if (resultParams.status) {
-                const data = await getDataPaymentDashboard(resultParams.content)
+                const data = await GetDataPaymentDashboard(resultParams.content)
                 dispatch({
                     payload:data ,
                     type:"DISPLAY_DASHBOARD"
@@ -74,7 +74,7 @@ const getDashboard=(params) =>{
                 });
             }
         } else {
-            const data = await getDataPaymentDashboard()
+            const data = await GetDataPaymentDashboard()
             dispatch({
                 payload:data ,
                 type:"DISPLAY_DASHBOARD"

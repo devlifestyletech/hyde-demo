@@ -2,14 +2,15 @@ import Axios from "axios";
 import moment from "moment";
 import { encryptStorage } from "../../../../utils/encryptStorage";
 require("dotenv").config();
-const URLreScrpit = `${process.env.REACT_APP_API_URL}/payments`;
-const URLreScrpit2 = `${process.env.REACT_APP_API_URL}/payments/createBillingPayment`;
-const URLreScrpit3 = `${process.env.REACT_APP_API_URL}/payments/updatePayment`;
-const URLreScrpit4 = `${process.env.REACT_APP_API_URL}/payments/rejectReceipt`;
+const URLGetPayments = `${process.env.REACT_APP_API_URL}/payments`;
+const URLCreateBillingPayment = `${process.env.REACT_APP_API_URL}/payments/createBillingPayment`;
+const URLUpdatePayment = `${process.env.REACT_APP_API_URL}/payments/updatePayment`;
+const URLRejectReceipt = `${process.env.REACT_APP_API_URL}/payments/rejectReceipt`;
 const URLPaymentDashboard = `${process.env.REACT_APP_API_URL}/payment-data`;
 const URLPaymentCountBills = `${process.env.REACT_APP_API_URL}/payments/reportBillingPayment`;
 const URLPaymentCountBillsOfMonth = `${process.env.REACT_APP_API_URL}/payments/getTotalYear`;
 const URLAddress = `${process.env.REACT_APP_API_URL}/addresses`;
+const GetBillsList = async (params) => {
 const session = encryptStorage.getItem("user_session");
 const auth = session !== undefined ? session.jwt : null;
 const options = {
@@ -18,10 +19,9 @@ const options = {
     Authorization: `Bearer ${auth}`,
   },
 };
-const GetBillinglist = async (params) => {
   let resultData;
-  console.log(`${URLreScrpit}?${params}`)
-  resultData = await Axios.get(`${URLreScrpit}?${params}`, options)
+  console.log(`${URLGetPayments}?${params}`)
+  resultData = await Axios.get(`${URLGetPayments}?${params}`, options)
     .then(async (result) => {
       if (result.status === 200) {
         result.data.map(async (e) => {
@@ -33,7 +33,7 @@ const GetBillinglist = async (params) => {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           e.createdAt = resutlDate;
           if (e.BillsPayment_Status==="Pending review") {
-            e.readStatus=await checkNotification(e.BillsPayment_Invoice)
+            e.readStatus=await CheckNotification(e.BillsPayment_Invoice)
           }
         });
         return result.data;
@@ -43,11 +43,19 @@ const GetBillinglist = async (params) => {
     .catch((err) => {
       console.log("error:", err);
     });
-  // console.log(`${URLreScrpit}?${params}`);
+  // console.log(`${URLGetPayments}?${params}`);
   return resultData;
 };
 
-const checkNotification = async (id) => {
+const CheckNotification = async (id) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   const FCMtoken = await encryptStorage.getItem('fcm_token_data');
   let status = false
   if (FCMtoken !== null && FCMtoken !== undefined) {
@@ -66,11 +74,19 @@ const checkNotification = async (id) => {
   return status
 }
 // get out date
-const getOutDate = async (param) => {
+const GetOutDate = async (param) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let resultData;
 
   resultData = await Axios.get(
-    `${URLreScrpit}?&BillsPayment_Status=Out Date&Address_Customer_contains=${param}`,
+    `${URLGetPayments}?&BillsPayment_Status=Out Date&Address_Customer_contains=${param}`,
     options
   )
     .then((result) => {
@@ -93,9 +109,17 @@ const getOutDate = async (param) => {
   return resultData;
 };
 // get out date
-const GetCountBillinglist = async (params) => {
+const GetCountBillsList = async (params) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let resultData;
-  resultData = await Axios.get(`${URLreScrpit}/count?${params}`, options)
+  resultData = await Axios.get(`${URLGetPayments}/count?${params}`, options)
     .then((result) => {
       if (result.status === 200) {
         return result.data;
@@ -107,7 +131,15 @@ const GetCountBillinglist = async (params) => {
   return resultData;
 };
 
-const getDataSCB = async (billingId) => {
+const GetDataSCB = async (billingId) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let resultDataSCB;
   if (billingId !== null) {
     await Axios.get(`${process.env.REACT_APP_API_URL}/sc-bsilps`)
@@ -127,10 +159,18 @@ const getDataSCB = async (billingId) => {
 };
 
 //update status rescript
-const updateRescrpt = async (data) => {
+const UpdateReceipt = async (data) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let result = null;
   result = await Axios.put(
-    `${URLreScrpit3}/${data.idBilling}`,
+    `${URLUpdatePayment}/${data.idBilling}`,
     { BillsPayment_Status: "Payment successful" },
     options
   )
@@ -141,10 +181,10 @@ const updateRescrpt = async (data) => {
       console.error(err);
       return false;
     });
-  const resultOutdate = await getOutDate(data.Address_Customer);
+  const resultOutdate = await GetOutDate(data.Address_Customer);
   if (resultOutdate !== undefined && resultOutdate.length > 0) {
     resultOutdate.map(async (e) => {
-      result = await Axios.delete(`${URLreScrpit}/${e.id}`, options)
+      result = await Axios.delete(`${URLGetPayments}/${e.id}`, options)
         .then((resultData) => {
           return resultData.status === 200 ? true : false;
         })
@@ -157,10 +197,18 @@ const updateRescrpt = async (data) => {
 };
 
 //update status rescript
-const rejectRescrpt = async (data, annotaion) => {
+const RejectReceipt = async (data, annotaion) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   console.log("update:", annotaion,data.idBilling);
   const result = await Axios.put(
-    `${URLreScrpit4}/${data.idBilling}`,
+    `${URLRejectReceipt}/${data.idBilling}`,
     { BillsPayment_Status: "Payment annotation", annotation_payment: annotaion },
     options
   )
@@ -175,7 +223,15 @@ const rejectRescrpt = async (data, annotaion) => {
 };
 
 //update status rescript
-const editAddress = async (address_id, value) => {
+const EditAddress = async (address_id, value) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   const statusResult = await Axios.put(
     `${URLAddress}/${address_id}`,
     { Status_billpayment: value === undefined ? true : false },
@@ -187,11 +243,19 @@ const editAddress = async (address_id, value) => {
     .catch((err) => {
       return false;
     });
-  console.log("editAddress:", statusResult);
+  console.log("EditAddress:", statusResult);
   return statusResult;
 };
 
-const postdataRescrpt = async (data) => {
+const PostDataReceipt = async (data) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   const postData = {
     BillsPayment_Invoice: data.invoice_id,
     BillsPayment_Status: "Wait for payment",
@@ -206,11 +270,11 @@ const postdataRescrpt = async (data) => {
     annotation_payment: "",
     Receipt_Status_Export: false,
   };
-  const result = await Axios.post(`${URLreScrpit2}`, postData, options)
+  const result = await Axios.post(`${URLCreateBillingPayment}`, postData, options)
     .then(async (res) => {
       console.log("payment", res);
       return res.status === 200
-        ? await editAddress(data.address_id, false)
+        ? await EditAddress(data.address_id, false)
         : false;
     })
     .catch((err) => {
@@ -220,7 +284,15 @@ const postdataRescrpt = async (data) => {
 };
 
 // get count not billing gen
-const getCountaddressCustomer = async (params) => {
+const GetCountGetAddressCustomer = async (params) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let resultData;
   // resultData = await Axios.get(`${URLAddress}/count?Status_billpayment=true`, options)
   console.log(`${URLAddress}/count?${params}`);
@@ -237,7 +309,15 @@ const getCountaddressCustomer = async (params) => {
 };
 //get count not billing gen
 
-const addressCustomer = async (params) => {
+const GetAddressCustomer = async (params) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   console.log(`${URLAddress}?${params}`, options);
   let resultData = [];
   await Axios.get(`${URLAddress}?${params}`, options)
@@ -267,10 +347,18 @@ const addressCustomer = async (params) => {
 };
 
 // delete billingPayment by id
-const deleteBillingPayment = async (paymentID) => {
+const DeleteBillsPayment = async (paymentID) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   let resultDataByID = null;
   let resultDataAddressId = null;
-  await Axios.get(`${URLreScrpit}/${paymentID}`, options)
+  await Axios.get(`${URLGetPayments}/${paymentID}`, options)
     .then((result) => {
       resultDataByID =
         result.data.BillsPayment_Status === "Wait for payment"
@@ -285,11 +373,11 @@ const deleteBillingPayment = async (paymentID) => {
       console.error(err);
     });
   if (resultDataByID !== null && resultDataAddressId !== null) {
-    const result = await Axios.delete(`${URLreScrpit}/${paymentID}`, options)
+    const result = await Axios.delete(`${URLGetPayments}/${paymentID}`, options)
       .then(async (result) => {
         // console.log("delete:", result);
         if (result.status === 200) {
-          const resultAdress = await editAddress(resultDataAddressId);
+          const resultAdress = await EditAddress(resultDataAddressId);
           if (resultAdress) {
             return true;
           } else {
@@ -305,7 +393,15 @@ const deleteBillingPayment = async (paymentID) => {
   }
 };
 // delete billingPayment by id
-const getDataPaymentDashboard = async (params) => {
+const GetDataPaymentDashboard = async (params) => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   console.log('params',params)
   let url=URLPaymentDashboard
   if(params!== undefined && params !== null){
@@ -325,7 +421,15 @@ const getDataPaymentDashboard = async (params) => {
     return dataDashBorad
 };
 
-const getCountBills = async () => {
+const GetCountBills = async () => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   const dataDashBorad= await Axios.get(URLPaymentCountBills, options)
      .then((result) => {
        if (result.status === 200) 
@@ -341,7 +445,15 @@ const getCountBills = async () => {
      );
      return dataDashBorad
  };
- const getCountBillsOfmonth = async () => {
+ const GetCountBillsOfMonth = async () => {
+  const session = encryptStorage.getItem("user_session");
+const auth = session !== undefined ? session.jwt : null;
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${auth}`,
+  },
+};
   const dataBillsOfMonth= await Axios.get(URLPaymentCountBillsOfMonth, options)
      .then((result) => {
        if (result.status === 200) 
@@ -357,40 +469,19 @@ const getCountBills = async () => {
      );
      return dataBillsOfMonth
  };
- const exportExcel = async (param) => {
-  console.log("param",param)
-   let URLExcel='https://1app-dev.ap.ngrok.io/payments/exportexcel'
-  if (param!=='') {
-    URLExcel=`${URLExcel}/${param}`
-  } else {
-    URLExcel=`${URLExcel}/all`
-  }
-  Axios({
-    url: URLExcel,
-    method: 'GET',
-    responseType: 'blob', // important
-  }).then((response) => {
-     const url = window.URL.createObjectURL(new Blob([response.data]));
-     const link = document.createElement('a');
-     link.href = url;
-     link.setAttribute('download', `report payment ${moment().format('DD/MM/YYYY')}.xlsx`); //or any other extension
-     document.body.appendChild(link);
-     link.click();
-  });
- };
+
 export {
-  GetBillinglist,
-  GetCountBillinglist,
-  getDataSCB,
-  updateRescrpt,
-  rejectRescrpt,
-  postdataRescrpt,
-  addressCustomer,
-  deleteBillingPayment,
-  getOutDate,
-  getCountaddressCustomer,
-  getDataPaymentDashboard,
-  getCountBills,
-  getCountBillsOfmonth,
-  exportExcel
+  GetBillsList,
+  GetCountBillsList,
+  GetDataSCB,
+  UpdateReceipt,
+  RejectReceipt,
+  PostDataReceipt,
+  GetAddressCustomer,
+  DeleteBillsPayment,
+  GetOutDate,
+  GetCountGetAddressCustomer,
+  GetDataPaymentDashboard,
+  GetCountBills,
+  GetCountBillsOfMonth
 };

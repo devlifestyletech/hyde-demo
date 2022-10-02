@@ -7,7 +7,7 @@ const billingPaymentData = {
     paramsBilling :null,
     dataCreateBilling: null,
     loadingTable:false,
-    count: 3,
+    count: 0,
     dataSize:0,
     pageDefault:1,
     loadingCreate:false,

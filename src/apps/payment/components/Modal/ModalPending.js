@@ -3,7 +3,7 @@ import { Input, Modal, notification, Button, Radio, Col, Row } from 'antd';
 
 import bill from '../../assets/images/hyde_logo.png';
 import { BankNamecode } from '../../services/BankNamecode';
-import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
+import { UpdateReceipt, RejectReceipt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -23,7 +23,7 @@ const ModalPendingBill = () => {
     // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
     const result = dataBillingAllApprove;
     console.log('resultUPdate:', result);
-    const status = await updateRescrpt(result[0]);
+    const status = await UpdateReceipt(result[0]);
     if (status) {
       notification['success']({
         duration: 2,
@@ -79,7 +79,7 @@ const ModalPendingBill = () => {
   const rejcetOK = async () => {
     // dispatch({ type: "CHANGE_FCM_COUNT", payload: countTotal });
     const result = dataBillingAllApprove;
-    const status = await rejectRescrpt(result[0], value);
+    const status = await RejectReceipt(result[0], value);
     if (status) {
       notification['warning']({
         duration: 2,

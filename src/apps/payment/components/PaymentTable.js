@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import ModalExportBilling from './Modal/ModalExportBilling';
 import ModalPendingBill from './Modal/ModalPending';
 import ModalReject from './Modal/ModalReject';
-import {getDataSCB,deleteBillingPayment,getOutDate,} from '../services/API/PaymentAPI';
+import {GetDataSCB,DeleteBillsPayment,GetOutDate,} from '../services/API/PaymentAPI';
 import {getBillingPayment,getCustomerList} from '../services/thunk-action/payment_thunk';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -25,6 +25,7 @@ const statePayment = {
 };
 
 export const PaymentTable = () => {
+  const session = encryptStorage.getItem('user_session');
   const {status_billing,dataBilling,loadingTable,dataSize,paramsBilling,pageDefault,countFCM} = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
   const [state, setPayment] = useState(statePayment);
@@ -34,39 +35,26 @@ export const PaymentTable = () => {
   const [Verify, setVerify] = useState([]);
   const [VerifyReject, setVerifyReject] = useState([]);
   const [Export, setExport] = useState([]);
-  const [notication, setnotication] = useState(countFCM);
+  const [notifcation, setnotification] = useState(countFCM);
+
   useEffect(async () => {
     await getAllnotFCMList();
     await dispatch({
       type: 'CHANGE_PARAMS_BILLING',
       payload: paramsBillingPayment,
     });
-    await dispatch(getBillingPayment(paramsBillingPayment));
-  }, [notication]);
+    // if (status_billing === 'Bill not generated') {
+     await dispatch(getCustomerList(paramsBillingPayment));
+    // }
+    // await dispatch(getBillingPayment(paramsBillingPayment));
+  }, [notifcation]);
 
   useEffect( async() => {
-   if (countFCM>=notication) {
-   await setnotication(countFCM)
+   if (countFCM>=notifcation) {
+   await setnotification(countFCM)
    }
   }, [countFCM]);
-  // setting pagination Option
-  const pageSizeOptions = ['20', '40', '60', '100'];
-  const PaginationConfig = {
-    defaultPageSize: pageSizeOptions[0],
-    pageSizeOptions: pageSizeOptions,
-    current: pageDefault,
-    showSizeChanger: true,
-    total: dataSize,
-  };
-  const paramsBillingPayment = {
-    status: 'Payment successful',
-    defaultPage: 1,
-    sorter: undefined,
-    filters: {
-      Address_Customer: null,
-    },
-    pagesize: PaginationConfig.defaultPageSize,
-  };
+
   const getAllnotFCMList = async () => {
     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
     if (FCMtoken !== null && FCMtoken !== undefined) {
@@ -115,7 +103,7 @@ export const PaymentTable = () => {
         return e
       }
     });
-    resultSCB = await getDataSCB(currentTarget.value);
+    resultSCB = await GetDataSCB(currentTarget.value);
     resultSCB === undefined ? (resultSCB = {
       BillsPayment_Invoice : result.BillsPayment_Invoice,
       Address_Customer : result.Address_Customer,
@@ -129,7 +117,7 @@ export const PaymentTable = () => {
     resultSCB.Name_Customer = result.Name_Customer,
     resultSCB.idBilling = result.id,
     resultSCB.imageURL = result.imageURL;
-    
+
     dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
     dispatch({ type: 'MODAL_PENDING', payload: true });
     verifyLoading[currentTarget.value] = false;
@@ -164,7 +152,7 @@ export const PaymentTable = () => {
     const [result] = dataBilling.filter((e) => {
       return e.BillsPayment_Invoice === currentTarget.value;
     });
-    resultSCB = await getDataSCB(currentTarget.value);
+    resultSCB = await GetDataSCB(currentTarget.value);
     resultSCB === undefined ? (resultSCB = {
      BillsPayment_Invoice : result.BillsPayment_Invoice,
      Address_Customer : result.Address_Customer,
@@ -459,11 +447,11 @@ export const PaymentTable = () => {
     });
   };
   const deleteID = async (id) => {
-    const resultDelete = await deleteBillingPayment(id);
+    const resultDelete = await DeleteBillsPayment(id);
     if (resultDelete) {
       notification['success']({
         duration: 2,
-        message: 'DeleteBillingPayment',
+        message: 'DeleteBillsPayment',
         description: 'Delete billing payment by ID successfully.',
         style: { borderRadius: '25px' },
       });
@@ -474,7 +462,7 @@ export const PaymentTable = () => {
     } else {
       notification['error']({
         duration: 2,
-        message: 'DeleteBillingPayment',
+        message: 'DeleteBillsPayment',
         description: 'Delete billing payment by ID failed.',
         style: { borderRadius: '25px' },
       });
@@ -492,7 +480,7 @@ export const PaymentTable = () => {
     const [result] = dataBilling.filter((e) => {
       return e.address === currentTarget.value;
     });
-    const dataOutdate = await getOutDate(currentTarget.value);
+    const dataOutdate = await GetOutDate(currentTarget.value);
     if (dataOutdate.length > 0) {
       dataOutdate.map((e) => {
         total += parseFloat(e.Total_BillsPayment);
@@ -555,6 +543,27 @@ export const PaymentTable = () => {
     }
   };
   // table change
+
+  // setting pagination Option
+  const pageSizeOptions = ['20', '40', '60', '100'];
+  const PaginationConfig = {
+    defaultPageSize: pageSizeOptions[0],
+    pageSizeOptions: pageSizeOptions,
+    current: pageDefault,
+    showSizeChanger: true,
+    total: dataSize,
+  };
+
+  const paramsBillingPayment = {
+    status: 'Bill not generated',
+    defaultPage: 1,
+    sorter: undefined,
+    filters: {
+      Address_Customer: null,
+    },
+    pagesize: PaginationConfig.defaultPageSize,
+  };
+
   let columns = [
     {
       title: 'Invoice Bill',
@@ -672,6 +681,7 @@ export const PaymentTable = () => {
       ),
     },
   ];
+
   const PendingReview = [
     {
       title: 'Invoice Bill',
