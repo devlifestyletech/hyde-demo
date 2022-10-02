@@ -123,7 +123,13 @@ export const PaymentTable = () => {
       idBilling : result.id,
       imageURL : result.imageURL,
       BillsPayment_AllType : result.BillsPayment_AllType
-    }) : null;
+    }) : 
+    resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice,
+    resultSCB.Address_Customer = result.Address_Customer,
+    resultSCB.Name_Customer = result.Name_Customer,
+    resultSCB.idBilling = result.id,
+    resultSCB.imageURL = result.imageURL;
+    
     dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
     dispatch({ type: 'MODAL_PENDING', payload: true });
     verifyLoading[currentTarget.value] = false;

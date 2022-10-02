@@ -19,7 +19,7 @@ function Header({title}) {
   let navigate = useNavigate();
   const [noti, setNoti] = useState(false);
   const [NotiFCMList, setNotiFCMList] = useState([]);
-  const {countFCM} = useSelector((state) => state.PaymentActionRedux);
+  // const {countFCM} = useSelector((state) => state.PaymentActionRedux);
   const dispatch = useDispatch();
   useEffect(() => {
     onMessageListener();

@@ -158,7 +158,7 @@ const updateRescrpt = async (data) => {
 
 //update status rescript
 const rejectRescrpt = async (data, annotaion) => {
-  console.log("update:", annotaion);
+  console.log("update:", annotaion,data.idBilling);
   const result = await Axios.put(
     `${URLreScrpit4}/${data.idBilling}`,
     { BillsPayment_Status: "Payment annotation", annotation_payment: annotaion },

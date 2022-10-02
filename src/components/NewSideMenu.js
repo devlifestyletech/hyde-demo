@@ -46,7 +46,8 @@ function NewSideMenu() {
   const [user, setUser] = useState();
   const [openKeys, setOpenKeys] = useState([path[2]]);
   const [activeKeys, setActiveKeys] = useState(window.location.pathname);
-  const {countFCMFixReport} = useSelector((state) => state.FixReportActionRedux);
+  const {countFCMFixReport,countNoticationChat} = useSelector((state) => state.FixReportActionRedux);
+  const {countAll} = useSelector((state) => state.ChatFixReportActionRedux);
   const {countFCM} = useSelector((state) => state.PaymentActionRedux);
   const rootSubmenuKeys = [
     'facilities',
@@ -55,13 +56,12 @@ function NewSideMenu() {
     'payment',
     'settings',
   ];
-
   useEffect(() => {
     (async () => {
       const {user} = await encryptStorage.getItem('user_session');
       setUser(user);
     })();
-  }, [countFCM,countFCMFixReport]);
+  }, [countFCM,countFCMFixReport,countNoticationChat,countAll]);
 
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -244,7 +244,11 @@ function NewSideMenu() {
                     )
                   }
               >
-                <Link to={`${main_link}/live-chat`}>Chat</Link>
+                <Link to={`${main_link}/live-chat`}>Chat<Badge
+                      count={countNoticationChat > 0 ? countNoticationChat : null}>
+                    <div style={{paddingLeft: 15, paddingBottom: 2}}></div>
+                  </Badge>
+                  </Link>
               </Menu.Item>
               <div className={'group-name'}>Maintenance</div>
               <SubMenu
@@ -272,7 +276,11 @@ function NewSideMenu() {
                   </Link>
                 </Menu.Item>
                 <Menu.Item key={`${main_link}/services/chat`}>
-                  <Link to={`${main_link}/services/chat`}>Message</Link>
+                  <Link to={`${main_link}/services/chat`}>Message 
+                  <Badge count={countAll > 0 ? countAll : null}>
+                  <div style={{paddingLeft: 15, paddingBottom: 2}}></div>
+                    </Badge>
+                    </Link>
                 </Menu.Item>
               </SubMenu>
               <div className='group-name'>Settings</div>

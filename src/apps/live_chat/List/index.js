@@ -19,10 +19,12 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import Service from '../../../services/authServices';
 import { socket } from '../../../services/webSocketService';
-
+import {  useDispatch,useSelector } from 'react-redux';
 const { Option } = Select;
 
-function List(props) {
+const List=(props)=> {
+  const {countNoticationChat} = useSelector((state) => state.FixReportActionRedux);
+  const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -52,6 +54,7 @@ function List(props) {
   }
 
   const setRead = (room, adminId, userRole) => {
+    if (countNoticationChat>0) dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticationChat-1 })
     // console.log('setRead', room, adminId, userRole);
     if (adminId)
       socket.emit('setRead', {
@@ -74,6 +77,7 @@ function List(props) {
           headers
         )
         .then((res) => {
+          let countNoticatonChat=countNoticationChat
           var flags = [],
             output = [],
             l = res.data.length,
@@ -81,8 +85,13 @@ function List(props) {
           for (i = 0; i < l; i++) {
             if (flags[res.data[i].room]) continue;
             flags[res.data[i].room] = true;
+            if(res.data[i].users_read==="unread" )  {
+              countNoticatonChat=countNoticatonChat+1 
+            }
             output.push(res.data[i]);
           }
+           if(countNoticatonChat >0)dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticatonChat });
+          
           setData(output);
           setLoading(false);
         })

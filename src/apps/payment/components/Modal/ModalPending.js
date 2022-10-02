@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Modal, notification, Button, Radio, Col, Row } from 'antd';
 
-import bill from '../../assets/images/bill.jpg';
+import bill from '../../assets/images/hyde_logo.png';
 import { BankNamecode } from '../../services/BankNamecode';
 import { updateRescrpt, rejectRescrpt } from '../../services/API/PaymentAPI';
 import { getBillingPayment } from '../../services/thunk-action/payment_thunk';
@@ -269,7 +269,6 @@ const ModalPendingBill = () => {
                           <h1>No data transaction</h1>
                         )}
                       </Col>
-
                       <Col span={12}>
                         <div className='col-sm'>
                           <div className='container-fluid'>
