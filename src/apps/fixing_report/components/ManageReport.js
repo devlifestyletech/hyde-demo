@@ -16,6 +16,7 @@ const previewImage = {
   previewTitle: "",
 };
 export default function ReportModal() {
+  const {openModal} = useSelector((state) => state.ChatFixReportActionRedux);  
   const { dataManageReport,statusModalFixReport,paramsFixReport } = useSelector((state) => state.FixReportActionRedux);
   const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
@@ -378,7 +379,11 @@ const handlerOk=async () => {
           await setpendingImg(true)
           await setRepairingImg(true)
           await setSuccessImg(true)
-           dispatch(getDataFixReport(paramsFixReport));
+          if (openModal===false) {
+            dispatch(getDataFixReport(paramsFixReport));
+          }else{
+            dispatch({ type: 'CHANGE_OPEN_MODAL_FIXCHAT', payload: false })
+          }
            dispatch({ type: 'MODAL_FIX_REPORT', payload: false })
       } else {
 
@@ -577,6 +582,9 @@ const uploadImg = async () => {
           className="add-btn"
           key="add"
           onClick={ async()=>{
+            if (openModal===true) {
+              dispatch({ type: 'CHANGE_OPEN_MODAL_FIXCHAT', payload: false })
+            }
             dispatch({ type: 'MODAL_FIX_REPORT', payload: false }) 
             await handleValue()
           await setpendingImg(true)

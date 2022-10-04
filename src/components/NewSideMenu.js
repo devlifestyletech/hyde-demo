@@ -255,10 +255,10 @@ function NewSideMenu() {
                   key='services'
                   icon={<img src={serviceIcon} alt='chat' />}
                   // title='Service Center'
-                  title={countFCMFixReport > 0
+                  title={(countAll+countFCMFixReport) > 0
                     ? <div style={{color: '#fff', paddingBottom: 5}}>
                       <text style={{paddingRight: 10}}>Service Center</text>
-                      <Badge count={countFCMFixReport > 0 ? countFCMFixReport : null}></Badge>
+                      <Badge count={(countAll+countFCMFixReport) > 0 ? (countAll+countFCMFixReport) : null}></Badge>
                     </div>
                     : 'Service Center'}
               >

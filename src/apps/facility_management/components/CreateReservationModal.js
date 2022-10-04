@@ -1,3 +1,4 @@
+import { flow } from '@ant-design/plots';
 import { Button, Calendar, Form, Input, Modal, Radio, Select } from 'antd';
 import { differenceInMinutes, format } from 'date-fns';
 import { addDoc, collection } from 'firebase/firestore';
@@ -49,6 +50,7 @@ const CreateReservationModal = ({ visible, id, onExit }) => {
         facilityId: facility.id,
         facilityCover: facility.cover,
         statusNotification: false,
+        statusNotification30Min:false,
         userFullName: selectedResident.fullname,
         userTel: selectedResident.tel,
         status: 0,

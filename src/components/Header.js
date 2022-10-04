@@ -22,28 +22,36 @@ function Header({ title }) {
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } }
   const [noti, setNoti] = useState(false)
   const [NotiFCMList, setNotiFCMList] = useState([])
+  const {countAll ,countPending, countRepairing,countSuccess} = useSelector((state) => state.ChatFixReportActionRedux);
   const { countNoticationChat, focuschat } = useSelector((state) => state.FixReportActionRedux)
   const dispatch = useDispatch()
   useEffect(async () => {
     let countNoticatonChat = countNoticationChat
+    let countFixChat=countAll
     const countData = await getChat()
-    countNoticatonChat = countData.countData
+    countNoticatonChat = countData.countDataChat
+    countFixChat=countData.countFixChatAll
     socket.on('message', (newMessage) => {
       console.log('newMessageHeader:', newMessage)
     })
     socket.on('fetchHistory', async (dataRoom) => {
       const countData = await getChat()
-      if (focuschat !== null && countData.data.includes(focuschat.data)) {
-        countData.countData = countData.countData - 1
+      if (focuschat !== null && countData.dataChat.includes(focuschat.data)) {
+        countData.countDataChat = countData.countDataChat - 1
       }
-      countNoticatonChat = countData.countData
+      countNoticatonChat = countData.countDataChat
+      countFixChat=countData.countFixChatAll
       console.log('fetchHistory', dataRoom)
+      if (countFixChat > 0)
+      dispatch({ type: 'CHANGE_COUNT_ALL', payload: countFixChat })
       if (countNoticatonChat > 0)
         dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticatonChat })
     })
     socket.on('typing', (data) => {
       // console.log('typingX', data)
     })
+    if (countFixChat > 0)
+    dispatch({ type: 'CHANGE_COUNT_ALL', payload: countFixChat })
     if (countNoticatonChat > 0)
       dispatch({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload: countNoticatonChat })
     onMessageListener()
@@ -51,8 +59,17 @@ function Header({ title }) {
   }, [noti])
 
   const getChat = async () => {
-    let data = []
-    let countData = 0
+    const alldata = { 
+      countDataChat:0,
+      dataChat:[], 
+      countFixChatPending:0,
+      dataFixChatPending:[],
+      countFixChatRepairing:0,
+      dataFixChatRepairing:[],
+      countFixChatSuccess:0,
+      dataFixChatSuccess:[],
+      countFixChatAll:0, 
+    }
     try {
       const resultChat = await axios.get(
         process.env.REACT_APP_API_URL + '/chats?users_read=unread&_sort=time:desc',
@@ -61,24 +78,95 @@ function Header({ title }) {
 
       resultChat?.data?.map((e) => {
         if (e.fixing_info === null) {
-          if (data.length === 0) {
-            countData = countData + 1
-            data.push(e.room)
+          if (alldata.dataChat.length === 0) {
+            alldata.countDataChat = alldata.countDataChat + 1
+            alldata.dataChat.push(e.room)
           } else {
-            switch (data.includes(e.room)) {
+            switch (alldata.dataChat.includes(e.room)) {
               case false:
-                data.push(e.room)
-                countData = countData + 1
+                alldata.dataChat.push(e.room)
+                alldata.countDataChat = alldata.countDataChat + 1
                 break
 
               default:
                 break
             }
           }
+        }else{
+        
+          switch (e.fixing_info.status) {
+            case "Pending":
+            
+          //  alldata.countFixChatPending=countPending
+            if ( alldata.dataFixChatPending.length === 0) {
+              alldata.countFixChatPending = alldata.countFixChatPending + 1
+              alldata.dataFixChatPending.push(e.room)
+            } else {
+              switch (alldata.dataFixChatPending.includes(e.room)) {
+                case false:
+                  alldata.dataFixChatPending.push(e.room)
+                  alldata.countFixChatPending = alldata.countFixChatPending + 1
+                  break
+  
+                default:
+                  break
+              }
+            }
+              break;
+              case "Repairing":
+                if ( alldata.dataFixChatRepairing.length === 0) {
+                  alldata.countFixChatRepairing = alldata.countFixChatRepairing + 1
+                  alldata.dataFixChatRepairing.push(e.room)
+                } else {
+                  switch (alldata.dataFixChatRepairing.includes(e.room)) {
+                    case false:
+                      alldata.dataFixChatRepairing.push(e.room)
+                      alldata.countFixChatRepairing = alldata.countFixChatRepairing + 1
+                      break
+      
+                    default:
+                      break
+                  }
+                }
+              break;
+              case "Success":
+          
+                if ( alldata.dataFixChatSuccess.length === 0) {
+                  alldata.countFixChatSuccess = alldata.countFixChatSuccess + 1
+                  alldata.dataFixChatSuccess.push(e.room)
+                } else {
+                  switch (alldata.dataFixChatSuccess.includes(e.room)) {
+                    case false:
+                      alldata.dataFixChatSuccess.push(e.room)
+                      alldata.countFixChatSuccess = alldata.countFixChatSuccess + 1
+                      break
+      
+                    default:
+                      break
+                  }
+                }
+             
+              
+              break;
+          
+            default:
+              break;
+          }
         }
       })
+      if(alldata.countFixChatPending>0){
+         dispatch({ type: 'CHANGE_COUNT_PENDING', payload:  alldata.countFixChatPending })
+       }
+       if(alldata.countFixChatRepairing>0){
+        dispatch({ type: 'CHANGE_COUNT_REPAIRING', payload:  alldata.countFixChatRepairing })
+      }
+      if(alldata.countFixChatSuccess>0) {
+        dispatch({ type: 'CHANGE_COUNT_SUCCESS', payload: alldata.countFixChatSuccess })
+      }
+      const {countFixChatPending,countFixChatRepairing,countFixChatSuccess}=alldata
+      alldata.countFixChatAll=countFixChatPending+countFixChatRepairing+countFixChatSuccess
     } catch (error) {}
-    const alldata = { countData, data }
+    
     return alldata
   }
   const onMessageListener = () => {

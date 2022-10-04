@@ -2,7 +2,8 @@ const chatFixReporttData = {
     countAll:0,
     countPending:0, 
     countRepairing:0,
-    countSuccess:0
+    countSuccess:0,
+    openModal:false
 };
 
 const ChatFixReportActionRedux = (state = chatFixReporttData, action) => {
@@ -15,6 +16,8 @@ const ChatFixReportActionRedux = (state = chatFixReporttData, action) => {
             return{...state,countRepairing: action.payload}
         case "CHANGE_COUNT_SUCCESS":
             return{...state,countSuccess: action.payload}
+        case "CHANGE_OPEN_MODAL_FIXCHAT":
+            return{...state,openModal: action.payload}
         default:
             return state;
     }

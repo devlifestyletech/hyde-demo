@@ -19,8 +19,9 @@ import noImg from '../../../assets/images/noImg.jpg';
 import axios from 'axios';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-
+import { useDispatch, useSelector } from "react-redux";
 export default function ReportDetail({ reportId }) {
+  const dispatch = useDispatch()
   const session = encryptStorage.getItem('user_session');
   const [reportData, setReportData] = useState();
   const [loading, setLoading] = useState(false);
@@ -114,8 +115,10 @@ export default function ReportDetail({ reportId }) {
               width: '80%',
             }}
             key="manage_report"
-            onClick={() => {
-              setVisible(true);
+            onClick={async () => {
+             await dispatch({ type: 'CHANGE_OPEN_MODAL_FIXCHAT', payload: true })
+            await  dispatch({ type: 'MODAL_FIX_REPORT', payload: true });
+             await setVisible(true);
             }}
           >
             Manage Report

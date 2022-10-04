@@ -24,6 +24,10 @@ export const MenuBillPayment = () => {
       // paramsBilling.pagesize = 5
       dispatch(getCustomerList(paramsBilling));
     } else {
+      paramsBilling.sorter=  {
+        NameSort: 'createdAt',
+        orderSort: 'descend',
+      }
       paramsBilling.defaultPage = 1
       dispatch({type:"CHANGE_PAGE_DEFAULT",payload:1})
         paramsBilling.status = item.props.title;

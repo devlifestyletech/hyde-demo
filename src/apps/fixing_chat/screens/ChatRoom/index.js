@@ -16,14 +16,49 @@ import {
   SendIcon,
   InputBar,
 } from './styles';
-import { Input, Spin, Tabs, Row } from 'antd';
-
+import { Input, Spin, Tabs, Row,Badge,Menu } from 'antd';
+import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-
+const Menuchat=(props) => {
+  const {countAll ,countPending, countRepairing,countSuccess} = useSelector((state) => state.ChatFixReportActionRedux);  
+  useEffect(() => {
+   
+  }, [countAll ,countPending, countRepairing,countSuccess]);
+  const MenuFixChat = [
+    { title: "All", titleText: "All" },
+    { title: "Pending", titleText: "Pending" },
+    { title: "Repairing", titleText: "Repairing" },
+    { title: "Success", titleText: "Success" },
+  ];
+ return <div style={{ paddingBottom: "5vh" }}>
+  <Menu
+    mode="horizontal"
+     onClick={props.callback}
+    selectedKeys={[`${props?.positonMenu}`]}
+  >
+    {MenuFixChat.map((e, i) => {
+      return (
+        <Menu.Item key={i} title={e.title}>
+          
+          <text style={{ fontWeight: "bold", fontSize: "1rem" }}>
+            {e.title || e.titleText}
+           
+            {e.title==="All" &&countAll !==0 ? <Badge count={countAll}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+            {e.title==="Pending" &&countPending !==0 ? <Badge count={countPending}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+            {e.title==="Repairing" &&countRepairing !==0 ? <Badge count={countRepairing}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+            {e.title==="Success" &&countSuccess !==0 ? <Badge count={countSuccess}><div style={{paddingLeft:15 ,paddingBottom:5}}></div></Badge>:null}
+          </text>
+        </Menu.Item>
+      );
+    })}
+  </Menu>
+</div>
+}
 function ChatRoom(props) {
   const session = encryptStorage.getItem('user_session');
   const allInput = useRef(null);
+  const [positonMenu, setpositonMenu] = useState(0);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState([]);
   const [chatData, setChatData] = useState();
@@ -40,8 +75,6 @@ function ChatRoom(props) {
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
 
   const types = ['All', 'Pending', 'Repairing', 'Success'];
-  const { TabPane } = Tabs;
-
   const connectChat = () => {
     if (sender_name && room) {
       let sender_id = session.user._id;
@@ -249,8 +282,8 @@ function ChatRoom(props) {
     }
   };
 
-  const callback = (key) => {
-    // console.log(types[parseInt(key)]);
+  const callback = async({key}) => {
+  await  setpositonMenu(key)
     setSearchTag(types[parseInt(key)]);
   };
 
@@ -274,11 +307,7 @@ function ChatRoom(props) {
     <>
       <Heading title="Messages" />
       <div className="regis-table">
-        <Tabs defaultActiveKey="All Service" onChange={callback}>
-          {types.map((type, index) => (
-            <TabPane tab={type} key={index} />
-          ))}
-        </Tabs>
+      <Menuchat callback={callback}positonMenu={positonMenu}/>
       </div>
       <Row>
         <ChatContainer>

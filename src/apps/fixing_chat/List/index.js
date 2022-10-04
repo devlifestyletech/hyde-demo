@@ -18,10 +18,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { encryptStorage } from '../../../utils/encryptStorage';
 import Service from '../../../services/authServices';
 import { socket } from '../../../services/webSocketService';
-
+import { useDispatch, useSelector } from "react-redux";
+import { GetFixReportByID } from '../../fixing_report/api/fix_report_api'
+import moment from "moment";
 const { Option } = Select;
 
 function List(props) {
+  const dispatch = useDispatch()
+  const {countFCMFixReport} = useSelector((state) => state.FixReportActionRedux);
   const session = encryptStorage.getItem('user_session');
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -51,19 +55,101 @@ function List(props) {
     setRead(
       element.id + '!' + element.room,
       session.user._id,
-      session.user.role.type
+      session.user.role.type,null
     );
     // setCurRoom()
   }
+  const getChat= async(room,status) => { 
+    let countData=0
+    let dataStatus=null
+    try {
+      
+   const resultChat=await axios.get(
+        process.env.REACT_APP_API_URL +
+          `/chats?users_read=unread&room=${room}&fixing_info.status=${status}&_sort=time:desc`,
+        headers)
+        resultChat?.data?.map(e=>{
+          if (e?.fixing_info?.status !== null) {
+            countData=1
+            dataStatus=e?.fixing_info?.status
 
-  const setRead = (room, adminId, userRole) => {
-    console.log('setRead', room, adminId, userRole);
-    if (adminId)
+        }})
+    } catch (error) {
+      
+    }
+    return {countData,dataStatus}
+   }
+  const setRead = async (room, adminId, userRole,fix_info) => {
+    console.log('setRead555:', room, adminId, userRole);
+    if (adminId){
+      const resultcountChat= await getChat(room,fix_info.status)
+   if (fix_info !== null) {
+     const dataFix_info=await GetFixReportByID(fix_info.id)
+     console.warn("dataFix_info:",dataFix_info);
+     const FCMtoken = await encryptStorage.getItem('fcm_token_data');
+     if (FCMtoken !== null && FCMtoken !== undefined) {
+       let countFCMTotal = countFCMFixReport;
+       FCMtoken.map((e) => {
+         if(e.title === 'ServiceCenter'){
+           if (
+             e.userID === dataFix_info[0]?.id &&
+             e.readStatus === false
+           ) {
+             e.readStatus = true;
+             countFCMTotal = countFCMTotal - 1;
+           }
+         }
+       });
+       await encryptStorage.setItem('fcm_token_data', JSON.stringify(FCMtoken));
+       dispatch({ type: 'CHANGE_FCM_COUNT_FIX_REPORT', payload: countFCMTotal });
+       FCMtoken.sort((a, b) => b.receriveTime.localeCompare(a.receriveTime));
+     }
+     dispatch({ type: 'CHANGE_STATE_MANAGE_FIX_REPORT', payload: dataFix_info });
+
+   }
+ 
+      switch (resultcountChat.dataStatus) {
+        case 'Pending':
+          if (resultcountChat.countData>0) {
+           
+            dispatch(
+              ({ type: 'CHANGE_COUNT_PENDING', payload:resultcountChat.countData-1})
+              )
+              dispatch(
+                ({ type: 'CHANGE_COUNT_ALL', payload:resultcountChat.countData-1})
+                )
+          }
+          break;
+        case 'Repairing':
+            if (resultcountChat.countData>0) {
+             
+              dispatch(
+                ({ type: 'CHANGE_COUNT_REPAIRING', payload:resultcountChat.countData-1})
+                )
+              dispatch(
+                ({ type: 'CHANGE_COUNT_ALL', payload:resultcountChat.countData-1})
+                )
+            }
+          break;
+        case 'Success':
+            if (resultcountChat.countData>0){
+              dispatch(
+                ({ type: 'CHANGE_COUNT_SUCCESS', payload:resultcountChat.countData-1})
+                )
+              dispatch(
+                ({ type: 'CHANGE_COUNT_ALL', payload:resultcountChat.countData-1})
+                )
+            } 
+            break;
+        default:
+          break;
+      }
       socket.emit('setRead', {
         room: room,
         userId: adminId,
         userRole: userRole,
       });
+    }   
   };
 
   const fetchData = async (dataRoom) => {
@@ -175,7 +261,7 @@ function List(props) {
       <AntdList.Item
         key={item.id}
         onClick={() => {
-          setRead(item.room, session.user._id, session.user.role.type);
+          setRead(item.room, session.user._id, session.user.role.type,item.fixing_info);
           props.handleCallback(item?.fixing_info?.problem + ',' + item?.room);
           props.getAvatar(
             item?.fixing_info?.image_pending
