@@ -23,7 +23,7 @@ import {  useDispatch,useSelector } from 'react-redux';
 const { Option } = Select;
 
 const List=(props)=> {
-  const {countNoticationChat,focuschat} = useSelector((state) => state.FixReportActionRedux);
+  const {countNotificationChat,focusChat} = useSelector((state) => state.FixReportActionRedux);
   const dispatch = useDispatch();
   const session = encryptStorage.getItem('user_session');
   const [contactList, setContactList] = useState([]);
@@ -71,10 +71,10 @@ const List=(props)=> {
   console.log('====================================');
   console.warn("resultcountChat:",resultcountChat);
   console.log('====================================');
-   const countChat= countNoticationChat
+   const countChat= countNotificationChat
    
     if (resultcountChat>0) dispatch(
-      ({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload:countNoticationChat-1})
+      ({ type: 'CHANGE_COUNT_NOTICATION_CHAT', payload:countNotificationChat-1})
       )
     // console.log('setRead', room, adminId, userRole);
     if (adminId)

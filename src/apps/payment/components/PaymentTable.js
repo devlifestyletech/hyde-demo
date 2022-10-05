@@ -43,10 +43,12 @@ export const PaymentTable = () => {
       type: 'CHANGE_PARAMS_BILLING',
       payload: paramsBillingPayment,
     });
-    // if (status_billing === 'Bill not generated') {
+    if (paramsBillingPayment.status  === 'Bill not generated') {
      await dispatch(getCustomerList(paramsBillingPayment));
-    // }
-    // await dispatch(getBillingPayment(paramsBillingPayment));
+     await dispatch({ type: 'CHANGE_COUNT', payload: 0 });
+    }else{
+      await dispatch(getBillingPayment(paramsBillingPayment));
+    }
   }, [notifcation]);
 
   useEffect( async() => {
@@ -110,13 +112,14 @@ export const PaymentTable = () => {
       Name_Customer : result.Name_Customer,
       idBilling : result.id,
       imageURL : result.imageURL,
-      BillsPayment_AllType : result.BillsPayment_AllType
+      BillsPayment_AllType : result.BillsPayment_AllType,
     }) : 
     resultSCB.BillsPayment_Invoice = result.BillsPayment_Invoice,
     resultSCB.Address_Customer = result.Address_Customer,
     resultSCB.Name_Customer = result.Name_Customer,
     resultSCB.idBilling = result.id,
-    resultSCB.imageURL = result.imageURL;
+    resultSCB.imageURL = result.imageURL,
+    resultSCB.BillsPayment_AllType = result.BillsPayment_AllType,
 
     dispatch({ type: 'CHANGE_STATE_EXPORT_APPROVE', payload: [resultSCB] });
     dispatch({ type: 'MODAL_PENDING', payload: true });

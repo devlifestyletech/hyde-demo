@@ -20,7 +20,7 @@ import { Spin } from 'antd';
 
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
-
+import { SendNotificationLiveChat } from '../../API/LiveChatAPI'
 function ChatRoom(props) {
   const session = encryptStorage.getItem('user_session');
   const [messages, setMessages] = useState([]);
@@ -33,6 +33,7 @@ function ChatRoom(props) {
   const [imageFile, setImageFile] = useState();
   const [userAvatar, setUserAvatar] = useState('');
   const sender_name = session.user.fullname;
+  const [residenID, setResidenID] = useState(null);
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
   // console.log(session.jwt);
 
@@ -68,8 +69,8 @@ function ChatRoom(props) {
             headers
           )
           .then((res) => {
-            res.data.map((data) => {
-              // console.log("data", data.room, data.text, data.time, data.user);
+            res.data.map( (data) => {
+             if (data.sender_role ==="resident") setResidenID(data.sender_id)
               setMessages((msgs) => [
                 ...msgs,
                 {
@@ -139,9 +140,16 @@ function ChatRoom(props) {
     console.log('FoCUS');
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     if (room !== '') {
-      if (message) sendMessage(message);
+      if (message) {
+        const data={
+         user: session?.user?.role.type,
+         messages:message
+        }
+       if(residenID) await SendNotificationLiveChat(residenID,data)
+        sendMessage(message);
+      }
     } else {
       alert('Please select room to connect');
     }
@@ -166,40 +174,52 @@ function ChatRoom(props) {
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
-      .then((res) => {
+      .then(async (res) => {
         // console.log('res Upload', res.data[0].url);
         let imageUrl = res.data[0].url;
         // console.log('type', imageFile.type.split('/')[0]);
 
-        imageFile.type.split('/')[0] === 'image'
-          ? socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'image',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+        if(imageFile.type.split('/')[0] === 'image'){
+          const data={
+            user: session?.user?.role.type,
+            messages:"images"
+           }
+          if(residenID) await SendNotificationLiveChat(residenID,data)
+          socket.emit(
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'image',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            )
-          : socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'file',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+            }
+          )
+        }else{
+          const data={
+            user: session?.user?.role.type,
+            messages:"files"
+           }
+          if(residenID) await SendNotificationLiveChat(residenID,data)
+          socket.emit(
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'file',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            );
+            }
+          );
+        }      
         deleteHandle();
         setOnSend(false);
       })

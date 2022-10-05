@@ -17,8 +17,8 @@ const fixReportData = {
     statusModalReject: false,
     dataPaymentDashboard:[],
     countFCMFixReport:0,
-    countNoticationChat:0,
-    focuschat:null
+    countNotificationChat:0,
+    focusChat:null
 };
 
 const FixReportActionRedux = (state = fixReportData, action) => {
@@ -60,9 +60,9 @@ const FixReportActionRedux = (state = fixReportData, action) => {
         case "CHANGE_FCM_COUNT_FIX_REPORT":
             return{...state,countFCMFixReport: action.payload}
         case "CHANGE_COUNT_NOTICATION_CHAT":
-            return{...state,countNoticationChat: action.payload}
+            return{...state,countNotificationChat: action.payload}
             case "CHANGE_CHAT_FOCUS":
-                return{...state,focuschat: action.payload}
+                return{...state,focusChat: action.payload}
         default:
             return state;
     }

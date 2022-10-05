@@ -20,6 +20,7 @@ import { Input, Spin, Tabs, Row,Badge,Menu } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import { encryptStorage } from '../../../../utils/encryptStorage';
+import { SendNotificationFixChat } from '../../API/FixChatAPI'
 const Menuchat=(props) => {
   const {countAll ,countPending, countRepairing,countSuccess} = useSelector((state) => state.ChatFixReportActionRedux);  
   useEffect(() => {
@@ -73,7 +74,7 @@ function ChatRoom(props) {
   const [searchTag, setSearchTag] = useState('All');
   const sender_name = session.user.fullname;
   const headers = { headers: { Authorization: 'Bearer ' + session.jwt } };
-
+  const [residenID, setResidenID] = useState(null);
   const types = ['All', 'Pending', 'Repairing', 'Success'];
   const connectChat = () => {
     if (sender_name && room) {
@@ -93,7 +94,7 @@ function ChatRoom(props) {
       });
       if (messages.length === 0) {
         // setLoading(true);
-        // fetchData();
+        fetchData();
       }
     }
   };
@@ -109,21 +110,9 @@ function ChatRoom(props) {
           )
           .then((res) => {
             res.data.map((data) => {
-              setMessages((msgs) => [
-                ...msgs,
-                {
-                  room: data.room,
-                  text: data.text,
-                  time: data.time,
-                  type: data.type,
-                  sender_id: data.sender_id,
-                  sender_name: data.sender_name,
-                  users_read: data.users_read,
-                },
-              ]);
+              if (data.sender_role ==="resident") setResidenID(data.sender_id)
+             
             });
-            // setMessages(res.data);
-            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
@@ -177,10 +166,17 @@ function ChatRoom(props) {
     setMessage(e.target.value);
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     console.log('RoomSend', room);
     if (room !== '') {
-      if (message) sendMessage(message);
+      if (message) {
+        const data={
+          user: session?.user?.role.type,
+          messages:message
+         }
+        if(residenID) await SendNotificationFixChat(residenID,data)
+        sendMessage(message);
+      }
     } else {
       alert('Please select room to connect');
     }
@@ -219,37 +215,50 @@ function ChatRoom(props) {
     dataImage.append('files', imageFile);
     await axios
       .post(process.env.REACT_APP_API_URL + '/upload/', dataImage, headers)
-      .then((res) => {
+      .then(async (res) => {
         let imageUrl = res.data[0].url;
-        imageFile.type.split('/')[0] === 'image'
-          ? socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'image',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+        if(imageFile.type.split('/')[0] === 'image'){
+          const data={
+            user: session?.user?.role.type,
+            messages:"images"
+           }
+          if(residenID) await SendNotificationFixChat(residenID,data)
+          socket.emit(
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'image',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            )
-          : socket.emit(
-              'sendMessage',
-              {
-                userData: chatData,
-                type: 'file',
-                message: imageUrl,
-                time: new Date().toISOString(),
-              },
-              (error) => {
-                if (error) {
-                  alert(error);
-                }
+            }
+          )
+        }else{
+          const data={
+            user: session?.user?.role.type,
+            messages:"files"
+           }
+          if(residenID) await SendNotificationFixChat(residenID,data)
+          socket.emit(
+            'sendMessage',
+            {
+              userData: chatData,
+              type: 'file',
+              message: imageUrl,
+              time: new Date().toISOString(),
+            },
+            (error) => {
+              if (error) {
+                alert(error);
               }
-            );
+            }
+          )
+        }
+         
         deleteHandle();
         setOnSend(false);
       })

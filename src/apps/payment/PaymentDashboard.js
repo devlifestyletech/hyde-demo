@@ -173,7 +173,7 @@ const PaymentDashboard = () => {
             <MonthPicker
               style={{
                 color: '#fff',
-                width: 410,
+                width: 300,
                 borderRadius: 20,
                 backgroundColor: '#fff',
               }}
