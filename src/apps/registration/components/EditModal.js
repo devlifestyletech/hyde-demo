@@ -1,39 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Select,
-  message,
-  DatePicker,
-  Spin,
-} from 'antd';
-import './styles/modal_style.css';
-import moment from 'moment';
-import { ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import ImageIcon from '../assets/icons/image.svg';
-import { locale } from '../../../utils/locale';
-import addressService from '../../../services/addressServices';
-import authService from '../../../services/authServices';
-import uploadService from '../../../services/uploadServices';
+import React, { useState, useEffect } from 'react'
+import { Modal, Button, Form, Input, Row, Col, Select, message, DatePicker, Spin } from 'antd'
+import './styles/modal_style.css'
+import moment from 'moment'
+import { ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons'
+import ImageIcon from '../assets/icons/image.svg'
+import { locale } from '../../../utils/locale'
+import addressService from '../../../services/addressServices'
+import authService from '../../../services/authServices'
+import uploadService from '../../../services/uploadServices'
 
-const { Option } = Select;
+const { Option } = Select
 
 export default function EditModal({ user, visible, onCancel }) {
-  const [EditResidentForm] = Form.useForm();
-  const [pickedImage, setPickedImage] = useState(null);
-  const [img, setImg] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
+  const [EditResidentForm] = Form.useForm()
+  const [pickedImage, setPickedImage] = useState(null)
+  const [img, setImg] = useState(false)
+  const [imageFile, setImageFile] = useState(null)
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (user?.image) {
-        setImg(true);
+        setImg(true)
       }
-    })();
-  }, [user]);
+    })()
+  }, [user])
 
   if (user) {
     EditResidentForm.setFieldsValue({
@@ -49,19 +38,19 @@ export default function EditModal({ user, visible, onCancel }) {
       resident_class: user.resident_class,
       vehicle_type: user.vehicle_type,
       email: user.email,
-    });
+    })
   }
 
   const selectImage = (e) => {
-    setImageFile(e.target.files[0]);
-    const reader = new FileReader();
+    setImageFile(e.target.files[0])
+    const reader = new FileReader()
     reader.onload = (e) => {
       if (reader.readyState === 2) {
-        setPickedImage(reader.result);
+        setPickedImage(reader.result)
       }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
 
   function showConfirm(value, imageData) {
     return Modal.confirm({
@@ -80,41 +69,38 @@ export default function EditModal({ user, visible, onCancel }) {
         return new Promise(async (resolve, reject) => {
           if (pickedImage) {
             try {
-              const uploadImage = await uploadService.uploadImage(imageData);
+              const uploadImage = await uploadService.uploadImage(imageData)
               if (uploadImage) {
-                let new_value = { image: uploadImage.data[0], ...value };
-                const edited = await authService.editUserData(
-                  user.id,
-                  new_value
-                );
+                let new_value = { image: uploadImage.data[0], ...value }
+                const edited = await authService.editUserData(user.id, new_value)
                 if (edited) {
-                  message.success('Save finished');
-                  resolve('Success');
-                  onCancel();
+                  message.success('Save finished')
+                  resolve('Success')
+                  onCancel()
                 }
               }
             } catch (e) {
-              reject(e);
+              reject(e)
             }
           } else {
-            let new_value = { image: '61bab50dbbf38e05d8a666fd', ...value };
+            let new_value = { image: '61bab50dbbf38e05d8a666fd', ...value }
             try {
-              const edited = await authService.editUserData(user.id, new_value);
+              const edited = await authService.editUserData(user.id, new_value)
               if (edited) {
-                message.success('Save finished');
-                resolve('Success');
-                onCancel();
+                message.success('Save finished')
+                resolve('Success')
+                onCancel()
               }
             } catch (e) {
-              reject(e);
+              reject(e)
             }
           }
-        });
+        })
       },
       onCancel() {
-        onCancel();
+        onCancel()
       },
-    });
+    })
   }
 
   return (
@@ -123,9 +109,9 @@ export default function EditModal({ user, visible, onCancel }) {
         title="Edit resident"
         visible={visible}
         onCancel={() => {
-          onCancel();
-          setPickedImage(null);
-          setImg(false);
+          onCancel()
+          setPickedImage(null)
+          setImg(false)
         }}
         width={950}
         footer={[
@@ -137,8 +123,8 @@ export default function EditModal({ user, visible, onCancel }) {
               color: 'rgba(255, 255, 255,1)',
             }}
             onClick={() => {
-              let imageData = new FormData();
-              imageData.append('files', imageFile);
+              let imageData = new FormData()
+              imageData.append('files', imageFile)
               EditResidentForm.validateFields().then((value) => {
                 let submit_value = {
                   email: value.email,
@@ -156,9 +142,9 @@ export default function EditModal({ user, visible, onCancel }) {
                   resident_type: value.resident_type,
                   resident_class: value.resident_class,
                   vehicle_type: value.vehicle_type,
-                };
-                showConfirm(submit_value, imageData);
-              });
+                }
+                showConfirm(submit_value, imageData)
+              })
             }}
           >
             Save Change
@@ -177,9 +163,7 @@ export default function EditModal({ user, visible, onCancel }) {
                           <div className="picked-avatar">
                             <img
                               className="picked-avatar-image"
-                              src={
-                                process.env.REACT_APP_API_URL + user?.image?.url
-                              }
+                              src={process.env.REACT_APP_API_URL + user?.image?.url}
                               alt="picked"
                             />
                             <Button
@@ -196,11 +180,7 @@ export default function EditModal({ user, visible, onCancel }) {
                             {pickedImage ? null : (
                               <div className="avatar">
                                 <label htmlFor="input">
-                                  <img
-                                    src={ImageIcon}
-                                    alt="upload"
-                                    className="img-upload"
-                                  />
+                                  <img src={ImageIcon} alt="upload" className="img-upload" />
                                   <p
                                     style={{
                                       color: 'white',
@@ -218,7 +198,7 @@ export default function EditModal({ user, visible, onCancel }) {
                               accept="image/*"
                               onChange={selectImage}
                               onClick={(event) => {
-                                event.target.value = null;
+                                event.target.value = null
                               }}
                               style={{
                                 display: 'none',
@@ -243,9 +223,7 @@ export default function EditModal({ user, visible, onCancel }) {
                               </div>
                             ) : null}
                             {!pickedImage ? (
-                              <p style={{ color: 'red' }}>
-                                * Please upload image
-                              </p>
+                              <p style={{ color: 'red' }}>* Please upload image</p>
                             ) : null}
                           </div>
                         )}
@@ -300,10 +278,7 @@ export default function EditModal({ user, visible, onCancel }) {
                         },
                       ]}
                     >
-                      <Select
-                        placeholder="Please select gender"
-                        style={{ borderRadius: 20 }}
-                      >
+                      <Select placeholder="Please select gender" style={{ borderRadius: 20 }}>
                         <Select.Option key={'male'} value="Male">
                           Male
                         </Select.Option>
@@ -330,9 +305,7 @@ export default function EditModal({ user, visible, onCancel }) {
                         placeholder="Type to search and select country"
                         showSearch
                         filterOption={(input, option) =>
-                          option.children
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
                       >
                         {locale.map((country, index) => (
@@ -356,6 +329,19 @@ export default function EditModal({ user, visible, onCancel }) {
                     </Form.Item>
                     <Form.Item label="Passport Number" name="passport_number">
                       <Input placeholder="Please input passport number" />
+                    </Form.Item>
+                    <Form.Item label="Resident Type" name="resident_type">
+                      <Select placeholder={user?.resident_type} disabled={true}></Select>
+                    </Form.Item>
+                    <Form.Item label="Address" name="address">
+                      <Select
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        placeholder={user?.address?.address_number}
+                        disabled={true}
+                      ></Select>
                     </Form.Item>
 
                     <Form.Item
@@ -428,5 +414,5 @@ export default function EditModal({ user, visible, onCancel }) {
         )}
       </Modal>
     </div>
-  );
+  )
 }

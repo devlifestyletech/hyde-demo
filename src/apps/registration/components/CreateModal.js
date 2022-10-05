@@ -1,33 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 //import antd components
-import {
-  Modal,
-  Button,
-  Form,
-  Row,
-  Col,
-  Input,
-  message,
-  DatePicker,
-  Select,
-} from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Modal, Button, Form, Row, Col, Input, message, DatePicker, Select } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 
-import './styles/modal_style.css';
-import { locale } from '../../../utils/locale';
+import './styles/modal_style.css'
+import { locale } from '../../../utils/locale'
 
 //import services from "../services"
-import addressService from '../../../services/addressServices';
-import authService from '../../../services/authServices';
-import residentServices from '../services/residentServices';
+import addressService from '../../../services/addressServices'
+import authService from '../../../services/authServices'
+import residentServices from '../services/residentServices'
 
 //import svg icon
-import uploadService from '../../../services/uploadServices';
-import ImageIcon from '../assets/icons/image.svg';
+import uploadService from '../../../services/uploadServices'
+import ImageIcon from '../assets/icons/image.svg'
 
 //antd variable constraints
-const { Option } = Select;
-const { confirm } = Modal;
+const { Option } = Select
+const { confirm } = Modal
 
 // rules
 const normalRules = [
@@ -39,7 +29,7 @@ const normalRules = [
     pattern: new RegExp(/^[ก-๏a-zA-Z0-9 ]+$/i),
     message: 'ไม่สามารถใช้ตัวอักษรพิเศษ',
   },
-];
+]
 const telRules = [
   {
     required: true,
@@ -49,34 +39,32 @@ const telRules = [
     pattern: new RegExp(/^0[1-9][0-9]{8}/),
     message: 'เบอร์ติดต่อไม่ถูกต้อง',
   },
-];
+]
 
 function CreateModal({ visible, onCancel }) {
-  const [CreateResidentForm] = Form.useForm();
-  const [imageFile, setImageFile] = useState(null);
-  const [pickedImage, setPickedImage] = useState(null);
-  const [addressesStatic, setAddressesStatic] = useState([]);
-  const [addresses, setAddresses] = useState([]);
-  const [selectAddressDisable, setSelectAddressDisable] = useState(true);
-  const [apt, setApt] = useState('');
-  const [aptName, setAptName] = useState('');
+  const [CreateResidentForm] = Form.useForm()
+  const [imageFile, setImageFile] = useState(null)
+  const [pickedImage, setPickedImage] = useState(null)
+  const [addressesStatic, setAddressesStatic] = useState([])
+  const [addresses, setAddresses] = useState([])
+  const [selectAddressDisable, setSelectAddressDisable] = useState(true)
+  const [apt, setApt] = useState('')
+  const [aptName, setAptName] = useState('')
 
   useEffect(() => {
-    addressService
-      .getAllAddresses()
-      .then((res) => setAddressesStatic(res.data));
-  }, []);
+    addressService.getAllAddresses().then((res) => setAddressesStatic(res.data))
+  }, [])
 
   const selectImage = (e) => {
-    setImageFile(e.target.files[0]);
-    const reader = new FileReader();
+    setImageFile(e.target.files[0])
+    const reader = new FileReader()
     reader.onload = (e) => {
       if (reader.readyState === 2) {
-        setPickedImage(reader.result);
+        setPickedImage(reader.result)
       }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
 
   function showConfirm(value, imageData) {
     return confirm({
@@ -87,60 +75,59 @@ function CreateModal({ visible, onCancel }) {
       cancelButtonProps: { shape: 'round', size: 'large' },
       onOk() {
         return new Promise(async (resolve, reject) => {
-          message.loading('Action in progress please wait...');
+          message.loading('Action in progress please wait...')
           try {
-            const uploadImage = await uploadService.uploadImage(imageData);
+            const uploadImage = await uploadService.uploadImage(imageData)
             if (uploadImage) {
               const new_value = {
                 image: uploadImage.data[0],
                 ...value,
-              };
+              }
               try {
-                const registered = await authService.registration(
-                  new_value,
-                  apt,
-                  aptName
-                );
-                if (registered) {
+                const { data } = await authService.registration(new_value, apt, aptName)
+                const { result, error_message } = data
+                if (!result) {
                   let addUserData = {
                     address: value.address,
-                    users_permissions_user: registered.data.id,
+                    users_permissions_user: data.id,
                     resident_role: value.resident_type,
-                  };
-                  residentServices.addUserToAddress(addUserData);
-                  message.success('Registration finished');
-                  resolve('Success');
-                  onCancel();
+                  }
+                  residentServices.addUserToAddress(addUserData)
+                  message.success('Registration finished')
+                  resolve('Success')
+                  onCancel()
+                } else {
+                  reject(error_message)
+                  message.error(error_message)
                 }
               } catch (e) {
-                console.error(e);
-                reject(e);
+                console.error(e)
+                reject(e)
               }
             }
           } catch (e) {
-            console.error(e);
-            reject(e);
+            console.error(e)
+            reject(e)
           }
-        });
+        })
       },
       onCancel() {
-        return null;
+        return null
       },
       bodyStyle: { borderRadius: 20 },
       maskStyle: { borderRadius: 20 },
       autoFocusButton: null,
-    });
+    })
   }
 
   function makeUname(length) {
-    let result = '';
-    let characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let charactersLength = characters.length;
+    let result = ''
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let charactersLength = characters.length
     for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
-    return result;
+    return result
   }
 
   return (
@@ -149,8 +136,8 @@ function CreateModal({ visible, onCancel }) {
         title="Add New"
         visible={visible}
         onCancel={() => {
-          onCancel();
-          setPickedImage(null);
+          onCancel()
+          setPickedImage(null)
         }}
         width={950}
         footer={[
@@ -162,9 +149,9 @@ function CreateModal({ visible, onCancel }) {
               color: 'rgba(255, 255, 255,1)',
             }}
             onClick={async () => {
-              let imageData = new FormData();
-              imageData.append('files', imageFile);
-              const value = await CreateResidentForm.validateFields();
+              let imageData = new FormData()
+              imageData.append('files', imageFile)
+              const value = await CreateResidentForm.validateFields()
               if (value) {
                 let submit_value = {
                   username: 'hyde_' + makeUname(8),
@@ -186,8 +173,8 @@ function CreateModal({ visible, onCancel }) {
                   project: '61b464ff4abbaa01b461bc5f',
                   address: value.address,
                   resident_type: value.resident_type,
-                };
-                showConfirm(submit_value, imageData);
+                }
+                showConfirm(submit_value, imageData)
               }
             }}
           >
@@ -204,14 +191,8 @@ function CreateModal({ visible, onCancel }) {
                     {pickedImage ? null : (
                       <div className="avatar">
                         <label htmlFor="input">
-                          <img
-                            src={ImageIcon}
-                            alt="upload"
-                            className="img-upload"
-                          />
-                          <p style={{ color: 'white', fontSize: 18 }}>
-                            Click to upload image
-                          </p>
+                          <img src={ImageIcon} alt="upload" className="img-upload" />
+                          <p style={{ color: 'white', fontSize: 18 }}>Click to upload image</p>
                         </label>
                       </div>
                     )}
@@ -221,7 +202,7 @@ function CreateModal({ visible, onCancel }) {
                       accept="image/*"
                       onChange={selectImage}
                       onClick={(event) => {
-                        event.target.value = null;
+                        event.target.value = null
                       }}
                       style={{
                         display: 'none',
@@ -230,11 +211,7 @@ function CreateModal({ visible, onCancel }) {
                     />
                     {pickedImage ? (
                       <div className="picked-avatar">
-                        <img
-                          className="picked-avatar-image"
-                          src={pickedImage}
-                          alt="picked"
-                        />
+                        <img className="picked-avatar-image" src={pickedImage} alt="picked" />
                         <Button
                           type="link"
                           icon={<DeleteOutlined />}
@@ -245,24 +222,14 @@ function CreateModal({ visible, onCancel }) {
                         </Button>
                       </div>
                     ) : null}
-                    {!pickedImage ? (
-                      <p style={{ color: 'red' }}>* Please upload image</p>
-                    ) : null}
+                    {!pickedImage ? <p style={{ color: 'red' }}>* Please upload image</p> : null}
                   </div>
                 </Form.Item>
 
-                <Form.Item
-                  label="First Name"
-                  name="firstname"
-                  rules={normalRules}
-                >
+                <Form.Item label="First Name" name="firstname" rules={normalRules}>
                   <Input placeholder="Please input first name" />
                 </Form.Item>
-                <Form.Item
-                  label="Last Name"
-                  name="lastname"
-                  rules={normalRules}
-                >
+                <Form.Item label="Last Name" name="lastname" rules={normalRules}>
                   <Input placeholder="Please input last name" />
                 </Form.Item>
                 <Form.Item
@@ -290,10 +257,7 @@ function CreateModal({ visible, onCancel }) {
                     },
                   ]}
                 >
-                  <Select
-                    placeholder="Please select gender"
-                    style={{ borderRadius: 20 }}
-                  >
+                  <Select placeholder="Please select gender" style={{ borderRadius: 20 }}>
                     <Select.Option key={'male'} value="Male">
                       Male
                     </Select.Option>
@@ -320,9 +284,7 @@ function CreateModal({ visible, onCancel }) {
                     placeholder="Type to search and select country"
                     showSearch
                     filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                   >
                     {locale.map((country, idx) => (
@@ -364,23 +326,21 @@ function CreateModal({ visible, onCancel }) {
                   <Select
                     placeholder="Please select resident type"
                     onSelect={async (val) => {
-                      let result;
+                      let result
                       if (val === 'Owner') {
                         result = addressesStatic.filter(
-                          (item) =>
-                            item?.owner === null || item?.owner === undefined
-                        );
-                        setAddresses(result);
-                        setSelectAddressDisable(false);
-                        return;
+                          (item) => item?.owner === null || item?.owner === undefined
+                        )
+                        setAddresses(result)
+                        setSelectAddressDisable(false)
+                        return
                       }
                       result = addressesStatic.filter(
-                        (item) =>
-                          item?.owner !== null && item?.owner !== undefined
-                      );
-                      setAddresses(result);
-                      setSelectAddressDisable(false);
-                      return;
+                        (item) => item?.owner !== null && item?.owner !== undefined
+                      )
+                      setAddresses(result)
+                      setSelectAddressDisable(false)
+                      return
                     }}
                   >
                     <Select.Option key={'owner'} value="Owner">
@@ -407,30 +367,22 @@ function CreateModal({ visible, onCancel }) {
                   <Select
                     showSearch
                     filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                     placeholder="Please select address"
                     disabled={selectAddressDisable}
                     onChange={(val, dataVal) => {
                       if (dataVal.dataValue.room_number.search(/12A/) === 0) {
-                        setApt(dataVal.dataValue.room_number.replace('A', '1'));
+                        setApt(dataVal.dataValue.room_number.replace('A', '1'))
                       } else {
-                        setApt(dataVal.dataValue.room_number);
+                        setApt(dataVal.dataValue.room_number)
                       }
-                      setAptName(
-                        dataVal.dataValue.address_number.replace('1199/', '')
-                      );
+                      setAptName(dataVal.dataValue.address_number.replace('1199/', ''))
                     }}
                   >
                     {addresses
                       ? addresses.map((address, idx) => (
-                          <Option
-                            key={idx}
-                            dataValue={address}
-                            value={address.id}
-                          >
+                          <Option key={idx} dataValue={address} value={address.id}>
                             {address.address_number}
                           </Option>
                         ))
@@ -494,7 +446,7 @@ function CreateModal({ visible, onCancel }) {
         </Form>
       </Modal>
     </div>
-  );
+  )
 }
 
-export default CreateModal;
+export default CreateModal
